@@ -1,0 +1,73 @@
+.popPostContainer {
+  overflow: hidden;
+}
+.popPostLayoutCont {
+  visibility: hidden;
+}
+.popPostSection {
+  padding: 20px;
+  /* background: linear-gradient(269.69deg, #1a2225 5.03%, #00171f 98.08%); */
+  background-color: #00171f;
+  overflow: hidden;
+}
+.popPostSection > h2 {
+  text-align: center;
+  padding: 20px 0 30px;
+  margin: 0px;
+  color: #f95f0b;
+  color: var(--orange);
+}
+.popPostScroll > div:first-child {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+}
+
+@media (max-width: 1050px) {
+  .popPostSection {
+    height: calc(60vw / 1.3 + 80px);
+    padding-left: 40px;
+  }
+  .popPostSection h2 {
+    text-align: left;
+    padding: 0 0 10px 0;
+    margin-left: -10px;
+  }
+  .popPostLayoutCont {
+    overflow-x: scroll;
+    visibility: visible;
+  }
+  .popPostContainer {
+    overflow: hidden;
+    height: 38vh;
+    width: 20000px; /*cambiar en jcript*/
+  }
+  .popPostContainer > div {
+    /* width: 50vw; */
+    float: left;
+    margin-right: 30px;
+  }
+  .popPostScroll > div:first-child {
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .popPostSection {
+    padding: 5px 10px;
+    height: calc(75vw / 1.3 + 15vh);
+  }
+  .popPostSection h2 {
+    margin-left: 0px;
+    padding: 10px 0 10px 0;
+  }
+  .popPostContainer {
+    height: calc((60vw / 1.3) + 10px + 1.8rem + 1.2vh) !important ;
+  }
+  .popPostContainer > div {
+    margin-right: 10px;
+  }
+  /* .popPostContainer > div {
+    width: 60vw;
+  } */
+}

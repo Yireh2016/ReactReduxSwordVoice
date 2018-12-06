@@ -1,0 +1,82 @@
+.categories {
+  padding: 5px 20px;
+}
+.categories div {
+  color: #024259;
+  font-weight: 500;
+  background-color: #b3e8ff;
+  border: 1px transparent;
+  border-radius: 20px;
+  padding: 5px;
+  font-size: 0.5rem;
+  margin: 5px 5px 5px 0;
+  float: left;
+}
+.summaryTitle {
+  font-size: 20px;
+  color: #024259;
+  font-weight: bold;
+  margin: 0;
+  padding: 20px 0 6px 20px;
+}
+.summaryTextCont {
+  font-size: 15px;
+  margin: 0;
+  padding: 0 20px 0 20px;
+  margin-top: 20px;
+  color: #024259;
+}
+.summaryDate {
+  font-size: 15px;
+  float: right;
+  padding: 0 20px 0 20px;
+  color: #024259;
+}
+.summaryAvatar {
+  background-size: cover;
+  height: 50px;
+  width: 50px;
+  border: 1px solid transparent;
+  border-radius: 100%;
+}
+.summaryAuthor {
+  padding-left: 10px;
+  font-size: 15px;
+  font-weight: bold;
+}
+@media (max-width: 1050px) {
+  .summaryTitle {
+    font-size: calc(2rem * 0.8);
+  }
+
+  .categories div {
+    font-size: 1rem;
+    padding: 5px 10px 5px 10px;
+  }
+  .summaryDate {
+    font-size: 20px;
+  }
+  .summaryAvatar {
+    background-size: cover;
+    height: 50px;
+    width: 50px;
+  }
+  .summaryAuthor {
+    font-size: 21px;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .summaryTitle {
+    padding: 10px 0 5px 20px;
+    font-size: 1rem;
+  }
+  .categories div {
+    font-size: 0.6rem;
+  }
+  .summaryDate,
+  .summaryAuthor {
+    font-size: 0.8rem;
+  }
+}

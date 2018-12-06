@@ -1,0 +1,203 @@
+.swordVoice {
+  width: 100%;
+}
+
+#S {
+  stroke-dashoffset: 435.91497802734375;
+  stroke-dasharray: 435.91497802734375;
+  stroke: white;
+  stroke-width: 40px;
+}
+@keyframes animS {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#w {
+  stroke-dashoffset: 637.7830810546875;
+  stroke-dasharray: 637.7830810546875;
+  stroke: white;
+  stroke-width: 22px;
+}
+
+@keyframes animW {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#o1,
+#o2 {
+  stroke-dashoffset: 324.7279968261719;
+  stroke-dasharray: 324.7279968261719;
+  stroke: white;
+  stroke-width: 22px;
+}
+
+@keyframes animO {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#r > path:nth-child(1) {
+  stroke-dashoffset: 170.7401885986328;
+  stroke-dasharray: 170.7401885986328;
+  stroke: white;
+  stroke-width: 22px;
+}
+
+@keyframes animR1 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#r > path:nth-child(2) {
+  stroke-dashoffset: 205;
+  stroke-dasharray: 200;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animR2 0.1s linear forwards 3.7s; */
+}
+
+@keyframes animR2 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#d > path:nth-child(1) {
+  stroke-dashoffset: 214.1115264892578;
+  stroke-dasharray: 214.1115264892578;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animD1 0.1s linear forwards 3.8s; */
+}
+
+@keyframes animD1 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#d > path:nth-child(2) {
+  stroke-dashoffset: 232.3880615234375;
+  stroke-dasharray: 232.3880615234375;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animD2 0.1s linear forwards 3.9s; */
+}
+
+@keyframes animD2 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#V {
+  stroke-dashoffset: 375.0325927734375;
+  stroke-dasharray: 375.0325927734375;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animV 0.2s linear forwards 4s; */
+}
+
+@keyframes animV {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* #o2 {
+  stroke-dashoffset: 324.72821044921875;
+  stroke-dasharray: 324.72821044921875;
+  stroke: white;
+  stroke-width: 22px;
+  
+} */
+
+#i {
+  stroke-dashoffset: 148.06924438476562;
+  stroke-dasharray: 148.06924438476562;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animI 0.2s linear forwards 4.4s; */
+}
+
+@keyframes animI {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#c {
+  stroke-dashoffset: 310.1953125;
+  stroke-dasharray: 310.1953125;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animC 0.2s linear forwards 4.6s; */
+}
+
+@keyframes animC {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#e line {
+  stroke-dashoffset: 32.579742431640625;
+  stroke-dasharray: 32.579742431640625;
+  stroke: white;
+  stroke-width: 14px;
+  /* animation: animE1 0.05s linear forwards 4.8s; */
+}
+
+@keyframes animE1 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#e > path:nth-child(2) {
+  stroke-dashoffset: 78.72579193115234;
+  stroke-dasharray: 78.72579193115234;
+  stroke: white;
+  stroke-width: 15px;
+  /* animation: animE2 0.08s linear forwards 4.85s; */
+}
+
+@keyframes animE2 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#e > path:nth-child(3) {
+  stroke-dashoffset: 245.5;
+  stroke-dasharray: 245.44171142578125;
+  stroke: white;
+  stroke-width: 28;
+  /* animation: animE3 0.07s linear forwards 4.93s; */
+}
+
+@keyframes animE3 {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#punto {
+  stroke-dashoffset: 30.805843353271484;
+  stroke-dasharray: 30.805843353271484;
+  stroke: white;
+  stroke-width: 22px;
+  /* animation: animPunto 0.02s linear forwards 5.2s; */
+}
+
+@keyframes animPunto {
+  to {
+    stroke-dashoffset: 0;
+  }
+}

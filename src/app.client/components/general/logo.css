@@ -1,0 +1,18 @@
+#svg857 {
+  /*	width: 90px;*/
+  float: left;
+}
+
+@media (max-width: 1050px) /*and (orientation: portrait) */ {
+  /* #svg857 {
+		/*width: 120px;
+		margin-right: 0;
+	} */
+}
+
+@media (max-width: 700px) /* and (orientation: portrait) */ {
+  /* #svg857 {
+		/*width: 90px;
+		margin-right: 0;
+	} */
+}

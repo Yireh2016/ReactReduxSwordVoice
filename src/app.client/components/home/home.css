@@ -1,0 +1,242 @@
+.appear {
+  opacity: 0;
+  margin-bottom: 100px;
+  -webkit-animation: animFill 1s ease 1s normal forwards;
+  -o-animation: animFill 1s ease 1s normal forwards;
+  animation: animFill 1s ease 1s normal forwards;
+}
+@keyframes animFill {
+  to {
+    opacity: 1;
+    margin-bottom: 0;
+  }
+}
+
+/* Fondos*/
+#contenedorFondo,
+#imgFondo,
+.fondoMdSm {
+  height: 100vh;
+}
+#contenedorFondo {
+  transform: scale(0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#imgFondo {
+  display: block;
+  margin-top: 15px;
+}
+#path {
+  animation-delay: 1s;
+  fill: url(#img1);
+}
+#path2 {
+  fill: none;
+  stroke-dasharray: 4288.38916015625;
+  stroke-dashoffset: 4288.38916015625;
+  stroke: #f95f0b;
+  stroke: var(--orange);
+  stroke-width: 2px;
+}
+
+#imgFondoMd,
+#imgFondoSm {
+  display: none;
+}
+
+.fondoMdSm {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+.orangeStroke {
+  stroke: #f95f0b;
+  stroke: var(--orange);
+  stroke-width: 2px;
+}
+
+.home-hero {
+  clear: left;
+  color: #ffffff;
+  color: var(--white);
+  -webkit-animation: bounce 2s cubic-bezier(1, 0, 0.445, 1.435) 1s normal
+    forwards;
+  -o-animation: bounce 2s cubic-bezier(1, 0, 0.445, 1.435) 1s normal forwards;
+  animation: bounce 2s cubic-bezier(1, 0, 0.445, 1.435) 1s normal forwards;
+  transform: translate(-50%, -500%);
+}
+@keyframes bounce {
+  from {
+    transform: translate(-50%, -500%);
+  }
+  to {
+    transform: translate(-50%, -50%);
+  }
+  /*66.6% {transform: translate(-50%,-70%);}
+	100% {transform: translate(-50%,-50%);}*/
+}
+
+.home-hero h1 span {
+  visibility: hidden;
+}
+
+.home-hero h2 {
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  font-size: 6vh;
+  text-align: right;
+  margin-right: 18px;
+}
+
+.home-hero * {
+  margin: 0;
+}
+#tarjetaAnimada {
+  position: absolute;
+  background: #ffffff;
+  background: var(--white);
+  width: 200%;
+  height: calc(100% + 10px);
+  -webkit-animation: bounceCont 1s cubic-bezier(0.87, -0.19, 0.975, 0.67) 3s
+    normal forwards;
+  -o-animation: bounceCont 1s cubic-bezier(0.87, -0.19, 0.975, 0.67) 3s normal
+    forwards;
+  animation: bounceCont 1s cubic-bezier(0.87, -0.19, 0.975, 0.67) 3s normal
+    forwards;
+}
+@keyframes bounceCont {
+  to {
+    transform: translate(-50%, 500%);
+  }
+}
+
+.call2Action-home {
+  animation-delay: 3.5s;
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.redesSociales-home {
+  width: 32px;
+}
+@media (max-width: 1050px) /*and (orientation: portrait) */ {
+  #imgFondo,
+  #imgFondoSm {
+    display: none;
+  }
+  #imgFondoMd {
+    display: block;
+  }
+
+  #imgFondoMd svg {
+    position: fixed;
+  }
+
+  #imgFondoMd path {
+    fill: white;
+  }
+
+  #imgFondoMd svg:nth-child(2) {
+    top: 0;
+  }
+  #imgFondoMd svg:nth-child(3) {
+    bottom: 0;
+  }
+  #imgFondoMd svg:nth-child(2) path {
+    stroke-dasharray: 1760.89697265625;
+    stroke-dashoffset: 1760.89697265625;
+  }
+  #imgFondoMd svg:nth-child(3) path {
+    stroke-dasharray: 1648.5621337890625;
+    stroke-dashoffset: 1648.5621337890625;
+  }
+  .home-hero {
+    top: 45%;
+    width: 90%;
+  }
+
+  .home-hero h1 {
+    font-size: 5rem;
+  }
+  .home-hero h2 {
+    font-size: 2.3rem;
+    margin-right: 18px;
+    margin-top: 40px;
+    font-weight: 400;
+  }
+  .call2Action-home {
+    bottom: 20%;
+  }
+  .redesSociales-home {
+    width: 5vw;
+  }
+}
+
+@media (max-width: 700px) /* and (orientation: portrait) */ {
+  #imgFondo,
+  #imgFondoMd {
+    display: none;
+  }
+
+  #imgFondoSm {
+    display: block;
+  }
+  #imgFondoSm {
+    height: 100vh;
+    width: 100%;
+    z-index: -1;
+  }
+  #imgFondoSm svg {
+    position: fixed;
+  }
+
+  #imgFondoSm svg:nth-child(even) {
+    top: 0;
+  }
+  #imgFondoSm svg:nth-child(odd) {
+    width: 40%;
+    bottom: 0;
+  }
+  #imgFondoSm svg:nth-child(2) path {
+    stroke-dasharray: 1242.18212890625;
+    stroke-dashoffset: 1242.18212890625;
+  }
+
+  #imgFondoSm svg:nth-child(3) path {
+    stroke-dasharray: 684.4244384765625;
+    stroke-dashoffset: 684.4244384765625;
+  }
+
+  #imgFondoSm path {
+    fill: white;
+  }
+
+  .home-hero h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 0.5rem;
+  }
+  .home-hero h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin: 10px 0 20px 0;
+  }
+  .call2Action-home {
+    bottom: 20%;
+  }
+  .redesSociales-home {
+    fill: #f95f0b !important;
+    width: 10vw;
+  }
+
+  .redesSociales-home path {
+    stroke: none !important;
+  }
+}
