@@ -5,16 +5,19 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 //reducer
-import reducer from "./store/reducer";
+import reducer from "../app.redux.store/store/reducer";
 
 //components
 import App from "./app";
 //main store
-const store = createStore(reducer);
+const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 hydrate(
   <Provider store={store}>
     <Router>
-      <App {...window.__APP_INITIAL_STATE__} />
+      <App />
     </Router>
   </Provider>,
   document.getElementById("root")

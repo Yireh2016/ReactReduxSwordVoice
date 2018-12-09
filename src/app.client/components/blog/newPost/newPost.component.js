@@ -34,16 +34,6 @@ class NewPost extends React.Component {
 
   changeHeight = height => {
     this.setState({ postHeight: height });
-    const newPostSectionH = this.newPostSectionHeight.current.clientHeight;
-    const newPostaddingTop = (newPostSectionH - height) / 2;
-
-    if (this.props.offset) {
-      this.setState({
-        newPostTitleContStyle: {
-          paddingTop: `${newPostaddingTop}px`
-        }
-      });
-    }
   };
   render() {
     const newPostJSX = this.props.newPost.map((newPostArrayContent, i) => {
@@ -90,17 +80,19 @@ class NewPost extends React.Component {
           ref={this.newPostSectionHeight}
           className="newPost grid col-8 col-12-md"
         >
-          <div
-            className="newPostTitleCont grid "
-            style={this.state.newPostTitleContStyle}
-          >
-            {newPostJSX}
-          </div>
-          <div
-            style={this.state.newPostTitleContStyle}
-            className="newPostSummaryCont  grid"
-          >
-            {newPostSummaryJSX}
+          <div className="fila newPostTitleLayout">
+            <div
+              className="newPostTitleCont grid "
+              style={this.state.newPostTitleContStyle}
+            >
+              {newPostJSX}
+            </div>
+            <div
+              style={this.state.newPostTitleContStyle}
+              className="newPostSummaryCont  grid"
+            >
+              {newPostSummaryJSX}
+            </div>
           </div>
         </section>
       </div>

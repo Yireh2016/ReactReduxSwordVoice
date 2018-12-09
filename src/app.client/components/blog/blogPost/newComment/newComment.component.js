@@ -1,4 +1,6 @@
+//modules
 import React from "react";
+//css
 import "./newComment.css";
 
 const NewComment = props => {

@@ -38,8 +38,6 @@ class Post extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("componentDidUpdate");
-
     this.checkPostTitleOverflow();
   }
   checkPostTitleOverflow() {
@@ -51,15 +49,12 @@ class Post extends React.Component {
       return false;
     }
 
-    console.log("hasOverflowingChildren", hasOverflowingChildren);
     let title = this.state.postTitle;
-    console.log("title", title);
 
     title = this.spaceThreeDots(title, title.length - 5);
     this.setState({ postTitle: title });
   }
   componentDidMount() {
-    console.log("componentDidMount");
     // this.checkPostTitleOverflow();
     this.handleResize();
 

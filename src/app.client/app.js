@@ -9,11 +9,11 @@ import About from "./components/about/about.component";
 import Blog from "./components/blog/blog.component";
 import Portolio from "./components/portfolio/portfolio.component";
 import Contact from "./components/contact/contact.component";
-import BlogPost from "./components/blog/blogPost/blogPost.component";
+import BlogArticle from "./components/blog/blogPost/blogPost.component";
 
 export default class App extends Component {
   render() {
-    const { isMobile } = this.props;
+    // const { isMobile } = this.props;
 
     return (
       <div>
@@ -24,7 +24,7 @@ export default class App extends Component {
           <Route exact path="/blog" component={Blog} />
           <Route exact path="/portfolio" component={Portolio} />
           <Route exact path="/contact" component={Contact} />
-          <Route exact path="/blog/post" component={BlogPost} />
+          <Route exact path="/blog/post" component={BlogArticle} />
         </div>
       </div>
     );

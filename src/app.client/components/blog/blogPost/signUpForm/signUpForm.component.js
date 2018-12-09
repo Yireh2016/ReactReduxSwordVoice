@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Compressor from "compressorjs";
 import axios from "axios";
 import SimpleBar from "simplebar-react";
+import { connect } from "react-redux";
 
 //services
 import { saveToken } from "../../../../services/auth";
@@ -11,7 +12,7 @@ import "./signUpForm.css";
 //components
 import CustomScrollBar from "../../../general/customScrollBar.component";
 
-export default class SignUpForm extends Component {
+class SignUpForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -452,7 +453,7 @@ export default class SignUpForm extends Component {
       userName,
       userPassword
     };
-    //se verifica que la ultima etapa del sign in form este lleba y validada
+    //se verifica que la ultima etapa del sign in form este llena y validada
     if (
       termAcepted &&
       passwordConfirmIsValid === true &&
@@ -491,6 +492,13 @@ export default class SignUpForm extends Component {
             }
 
             this.props.onCancelClick(); //se cierra el modal de signup
+            console.log("this.props on singUpform before ditpathc", this.props);
+
+            this.props.onLogIn({
+              loggedUserAvatar: userAvatar,
+              ...userData
+            });
+            console.log("this.props on singUpform", this.props);
             this.props.onSuccessSignUp({
               //se ejecuta funcion del componente padre para cambiar la vista luego del sign up enviando la data obtenida de la DB y el avatar del cliente
               userAvatar: userAvatar,
@@ -1370,3 +1378,31 @@ export default class SignUpForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    loggedUserName: state.loggedUserName,
+    isUserLoggedIn: state.isUserLoggedIn,
+    loggedUserAvata: state.loggedUserAvatar
+
+    /*   isUserLoggedIn: false,
+  loggedUserAvatar: undefined,
+  loggedUserName: undefined
+          
+          */
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(SignUpForm);
+
+// export default SignUpForm;

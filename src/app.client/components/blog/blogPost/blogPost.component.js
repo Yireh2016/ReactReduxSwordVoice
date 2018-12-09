@@ -1,5 +1,5 @@
 //modulos
-import React from "react";
+import React, { Component } from "react";
 import JsxParser from "react-jsx-parser";
 import axios from "axios";
 import b64toBlob from "b64-to-blob";
@@ -34,10 +34,24 @@ import {
 
 // import CustomScrollBar from "../../general/customScrollBar.component";
 
-class BlogArticle extends React.Component {
+class BlogArticle extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      device: "",
+      summaryTextHeight: null,
+      similPostSectionHeight: "200vh ",
+      similPostContWidth: null,
+      isUserLoggedIn: false,
+      showSignUp: false,
+      showLogIn: false,
+      similPostsArray: [],
+      loggedUserAvatar: "",
+      loggedUserName: ""
+    };
+  }
+  componentDidMount() {
     const winWidth = window.innerWidth;
     let device;
 
@@ -49,23 +63,12 @@ class BlogArticle extends React.Component {
       device = "pc";
     }
 
-    this.state = {
-      device: device,
-      summaryTextHeight: null,
-      similPostSectionHeight: "200vh ",
-      similPostContWidth: null,
-      isUserLogged: false,
-      showSignUp: false,
-      showLogIn: false,
-      similPostsArray: [],
-      loggedUserAvatar: "",
-      loggedUserName: ""
-    };
-  }
-  componentDidMount() {
+    this.setState({ device: device });
+    console.log("props.user", this.props.loggedUserName);
     const similDataArray = this.fetchData();
 
     if (getToken() && isLoggedIn()) {
+      // this.props.onLogIn();
       const token = getToken();
       const userId = getUserFromToken(token);
       this.setUserFromId(userId);
@@ -74,7 +77,7 @@ class BlogArticle extends React.Component {
     const win = window.innerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
     this.setState({
-      // isUserLogged: isLoggedIn(),
+      // isUserLoggedIn: isLoggedIn(),
       similPostContWidth:
         this.state.device === "pc"
           ? "100%"
@@ -82,6 +85,15 @@ class BlogArticle extends React.Component {
 
       similPostsArray: similDataArray
     });
+  }
+  componentWillReceiveProps() {
+    console.log(
+      " componentWillReceiveProps  this.props.isUserLoggedIn",
+      this.props.isUserLoggedIn
+    );
+  }
+  componentDidUpdate() {
+    console.log("componentDidUpdate this.props", this.props);
   }
   fetchData() {
     return [
@@ -320,7 +332,7 @@ class BlogArticle extends React.Component {
   handleSuccessSignUp = userData => {
     //Redux: cambiar state en el compoenente SignUpForm
     this.setState({
-      isUserLogged: true,
+      isUserLoggedIn: true,
       loggedUserAvatar: userData.userAvatar,
       loggedUserName: userData.userName
     });
@@ -336,11 +348,21 @@ class BlogArticle extends React.Component {
       .get(`/api/users/${userId}`)
       .then(res => {
         let imgBlob = b64toBlob(res.data.userAvatar, "image/jpeg");
-        //REDUX: despachar acciones redux que modifiquen el estado loggedUserAvatar,loggedUserName, isUserLogged
+        //REDUX: despachar acciones redux que modifiquen el estado loggedUserAvatar,loggedUserName, isUserLoggedIn
+
+        console.log("dispatch LOGGED_IN");
+        // this.props.onLogIn();
+
+        // this.props.onLogIn({
+        //   loggedUserAvatar: res.data.userAvatar,
+        //   userName: res.data.userName
+        // });
+        console.log("this.props", this.props);
+
         this.setState({
           loggedUserAvatar: imgBlob,
           loggedUserName: res.data.userName,
-          isUserLogged: true
+          isUserLoggedIn: true
         });
       })
       .catch(err => {
@@ -464,10 +486,10 @@ class BlogArticle extends React.Component {
           <section>
             <h2>Leave your comments:</h2>
 
-            {this.state.isUserLogged ? (
+            {this.props.isUserLoggedIn ? (
               <NewComment
-                loggedUserName={this.state.loggedUserName}
-                loggedUserAvatar={this.state.loggedUserAvatar}
+                loggedUserName={this.props.loggedUserName}
+                loggedUserAvatar={this.props.loggedUserAvatar}
               />
             ) : (
               <EnableComment
@@ -520,18 +542,25 @@ class BlogArticle extends React.Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return {};
+const mapStateToProps2 = state => {
+  console.log("mapStateToProps state", state);
+  return {
+    // loggedUserName: state.loggedUserName
+    isUserLoggedIn: state.isUserLoggedIn
+    // loggedUserAvata: state.loggedUserAvatar
+  };
 };
 const mapDispachToProps = dispach => {
   return {
     //acciones
+    // onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
     onLogIn: () => dispach({ type: "LOGGED_IN" }),
     onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps2,
   mapDispachToProps
 )(BlogArticle);
+// export default BlogArticle;

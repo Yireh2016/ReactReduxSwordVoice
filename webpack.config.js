@@ -6,12 +6,11 @@ var nodeExternals = require("webpack-node-externals");
 var isProduction = process.env.NODE_ENV === "production";
 var productionPluginDefine = isProduction
   ? [
-    new webpack.DefinePlugin({
-      "process.env": { NODE_ENV: JSON.stringify("production") }
-    })
-  ]
+      new webpack.DefinePlugin({
+        "process.env": { NODE_ENV: JSON.stringify("production") }
+      })
+    ]
   : [];
-
 
 // const env = dotenv.config().parsed;
 
@@ -35,23 +34,16 @@ var productionPluginDefine = isProduction
 
 var clientLoaders = isProduction
   ? productionPluginDefine.concat([
-
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
-      sourceMap: false
-    })
-  ])
+      new webpack.optimize.DedupePlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: { warnings: false },
+        sourceMap: false
+      })
+    ])
   : [];
 
-
-
-
-
-
 module.exports = [
-
   /////////////////
   ////////SERVER WEBPACK
   ////////////////////
@@ -116,10 +108,12 @@ module.exports = [
         },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,
-          use: [{
-            loader: "file-loader",
-            options: { emitFile: false }
-          }]
+          use: [
+            {
+              loader: "file-loader",
+              options: { emitFile: false }
+            }
+          ]
         }
       ]
     }
@@ -135,7 +129,7 @@ module.exports = [
       publicPath: "/",
       filename: "bundle.js"
     },
-    devtool: 'source-map',
+    devtool: "eval",
     plugins: clientLoaders.concat([
       new ExtractTextPlugin("index.css", {
         allChunks: true
@@ -175,13 +169,11 @@ module.exports = [
         },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,
-          use:
-            [
-              {
-                loader: 'file-loader',
-
-              }
-            ]
+          use: [
+            {
+              loader: "file-loader"
+            }
+          ]
         }
       ]
     },

@@ -1,5 +1,8 @@
 import express from "express";
 import React from "react";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "../app.redux.store/store/reducer";
 require("dotenv").config();
 import { renderToString } from "react-dom/server";
 import { StaticRouter as Router } from "react-router-dom";
@@ -27,20 +30,27 @@ server.use(passport.initialize());
 server.use("/api", routerAPI);
 
 server.get("/*", (req, res) => {
-  const isMobile = false;
+  //Redux on server side
+  const store = createStore(reducer);
+  // const isMobile = false;
   const context = {};
-  const initialState = { isMobile };
+  // const initialState = { isMobile };
   const appString = renderToString(
-    <Router location={req.url} context={context}>
-      <App {...initialState} />
-    </Router>
+    <Provider store={store}>
+      <Router location={req.url} context={context}>
+        {/* <App {...initialState} /> */}
+        <App />
+      </Router>
+    </Provider>
   );
+
+  const preloadedState = store.getState();
 
   res.send(
     template({
       body: appString,
       title: "Hello World from the server",
-      initialState: JSON.stringify(initialState)
+      initialState: safeStringify(preloadedState)
     })
   );
 });
@@ -48,3 +58,12 @@ server.get("/*", (req, res) => {
 //starting server
 server.listen(8080);
 console.log("listening");
+
+//Note: For each of these examples, to avoid XSS attacks (as per Ben Alpert's blog post), you should use a safeStringify function, rather than JSON.stringify
+function safeStringify(obj) {
+  return JSON.stringify(obj)
+    .replace(/<\/(script)/gi, "<\\/$1")
+    .replace(/<!--/g, "<\\!--")
+    .replace(/\u2028/g, "\\u2028") // Only necessary if interpreting as JS, which we do
+    .replace(/\u2029/g, "\\u2029"); // Ditto
+}
