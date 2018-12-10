@@ -64,7 +64,7 @@ class BlogArticle extends Component {
     }
 
     this.setState({ device: device });
-    console.log("props.user", this.props.loggedUserName);
+
     const similDataArray = this.fetchData();
 
     if (getToken() && isLoggedIn()) {
@@ -86,14 +86,8 @@ class BlogArticle extends Component {
       similPostsArray: similDataArray
     });
   }
-  componentWillReceiveProps() {
-    console.log(
-      " componentWillReceiveProps  this.props.isUserLoggedIn",
-      this.props.isUserLoggedIn
-    );
-  }
-  componentDidUpdate() {
-    console.log("componentDidUpdate this.props", this.props);
+  componentWillUpdate() {
+    console.log("componentWillUpdate", this.props);
   }
   fetchData() {
     return [
@@ -351,12 +345,11 @@ class BlogArticle extends Component {
         //REDUX: despachar acciones redux que modifiquen el estado loggedUserAvatar,loggedUserName, isUserLoggedIn
 
         console.log("dispatch LOGGED_IN");
-        // this.props.onLogIn();
 
-        // this.props.onLogIn({
-        //   loggedUserAvatar: res.data.userAvatar,
-        //   userName: res.data.userName
-        // });
+        this.props.onLogIn({
+          loggedUserAvatar: imgBlob,
+          userName: res.data.userName
+        });
         console.log("this.props", this.props);
 
         this.setState({
@@ -545,16 +538,15 @@ class BlogArticle extends Component {
 const mapStateToProps2 = state => {
   console.log("mapStateToProps state", state);
   return {
-    // loggedUserName: state.loggedUserName
-    isUserLoggedIn: state.isUserLoggedIn
-    // loggedUserAvata: state.loggedUserAvatar
+    loggedUserName: state.loggedUserName,
+    isUserLoggedIn: state.isUserLoggedIn,
+    loggedUserAvatar: state.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    // onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
-    onLogIn: () => dispach({ type: "LOGGED_IN" }),
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
     onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };

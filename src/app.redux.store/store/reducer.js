@@ -12,12 +12,11 @@ const reducer = (state = initialState, action) => {
   if (action.type === "LOGGED_IN") {
     // logear al usuario
     newState.isUserLoggedIn = true;
-    // newState.loggedUserAvatar = action.payload.loggedUserAvatar;
-    // newState.loggedUserName = action.payload.userName;
+    newState.loggedUserAvatar = action.payload.loggedUserAvatar;
+    newState.loggedUserName = action.payload.userName;
 
-    console.log("payload", action.payload);
+    console.log("action", action);
     // console.log("action.payload.loggedUserName", action.payload.loggedUserName);
-    console.log(`LOGGED_IN action newState`, newState);
   }
 
   if (action.type === "LOGGED_OUT") {
@@ -27,6 +26,7 @@ const reducer = (state = initialState, action) => {
     // newState.loggedUserName = "";
   }
 
+  console.log(`LOGGED_IN action newState`, newState);
   return newState;
 };
 

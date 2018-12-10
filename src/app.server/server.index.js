@@ -45,6 +45,7 @@ server.get("/*", (req, res) => {
   );
 
   const preloadedState = store.getState();
+  console.log("preloadedState", preloadedState);
 
   res.send(
     template({
