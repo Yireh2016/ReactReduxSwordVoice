@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
 import { Route, Switch } from "react-router-dom";
+// import { withCookies } from "react-cookie";
 import "./app.css";
 import "./index.css";
 
@@ -21,20 +21,50 @@ import Test from "./components/test";
 //   }
 // }
 
-export default class App extends Component {
+class App extends Component {
   render() {
     // const { isMobile } = this.props;
 
     return (
       <Switch>
-        <Route exact path="/home" component={Home} />{" "}
-        <Route exact path="/" component={Home} />
-        <Route exact path="/about" component={About} />
-        <Route exact path="/blog" component={Blog} />
-        <Route exact path="/portfolio" component={Portolio} />
-        <Route exact path="/contact" component={Contact} />
-        <Route exact path="/blog/post" component={BlogArticle} />
+        <Route
+          exact
+          path="/home"
+          render={() => <Home cookies={this.props.cookies} />}
+        />{" "}
+        <Route
+          exact
+          path="/"
+          render={() => <Home cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/about"
+          render={() => <About cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/blog"
+          render={() => <Blog cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/portfolio"
+          render={() => <Portolio cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/contact"
+          render={() => <Contact cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/blog/post"
+          render={() => <BlogArticle cookies={this.props.cookies} />}
+        />
       </Switch>
     );
   }
 }
+
+export default App;

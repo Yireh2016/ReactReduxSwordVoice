@@ -3,7 +3,7 @@ import NavBar from "../navbar/navbar.component.js";
 import "./contact.css";
 //components
 import SwordVoice from "../general/swordVoice/swordVoice.component.js";
-import MyScrollBar from "../general/myScrollBar/myScrollbar.component";
+//services
 
 export default class ContactComponent extends React.Component {
   constructor(props) {
@@ -28,38 +28,31 @@ export default class ContactComponent extends React.Component {
                 overflow: "hidden"
               }}
             >
-              <MyScrollBar
-                scrollWidth={5}
-                barWidth={8}
-                className="contactScrollBar"
-              >
-                <p>
-                  {" "}
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Molestiae nesciunt eaque est voluptas facere itaque commodi
-                  saepe atque possimus, aliquid vel molestias sapiente quos
-                  optio, quia quam. Aspernatur, nostrum, veniam. Lorem ipsum
-                  dolor sit amet, consectetur adipisicing elit. Molestiae
-                  nesciunt eaque est voluptas facere itaque commodi saepe atque
-                  possimus, aliquid vel molestias sapiente quos optio, quia
-                  quam. Aspernatur, nostrum, veniam. Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit. Molestiae nesciunt eaque est
-                  voluptas facere itaque commodi saepe atque possimus, aliquid
-                  vel molestias sapiente quos optio, quia quam. Aspernatur,
-                  nostrum, veniam. Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit. Molestiae nesciunt eaque est voluptas facere
-                  itaque commodi saepe atque possimus, aliquid vel molestias
-                  sapiente quos optio, quia quam. Aspernatur, nostrum, veniam.
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Molestiae nesciunt eaque est voluptas facere itaque commodi
-                  saepe atque possimus, aliquid vel molestias sapiente quos
-                  optio, quia quam. Aspernatur, nostrum, veniam. Lorem ipsum
-                  dolor sit amet, consectetur adipisicing elit. Molestiae
-                  nesciunt eaque est voluptas facere itaque commodi saepe atque
-                  possimus, aliquid vel molestias sapiente quos optio, quia
-                  quam. Aspernatur, nostrum, veniam.
-                </p>
-              </MyScrollBar>
+              <p>
+                {" "}
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Molestiae nesciunt eaque est voluptas facere itaque commodi
+                saepe atque possimus, aliquid vel molestias sapiente quos optio,
+                quia quam. Aspernatur, nostrum, veniam. Lorem ipsum dolor sit
+                amet, consectetur adipisicing elit. Molestiae nesciunt eaque est
+                voluptas facere itaque commodi saepe atque possimus, aliquid vel
+                molestias sapiente quos optio, quia quam. Aspernatur, nostrum,
+                veniam. Lorem ipsum dolor sit amet, consectetur adipisicing
+                elit. Molestiae nesciunt eaque est voluptas facere itaque
+                commodi saepe atque possimus, aliquid vel molestias sapiente
+                quos optio, quia quam. Aspernatur, nostrum, veniam. Lorem ipsum
+                dolor sit amet, consectetur adipisicing elit. Molestiae nesciunt
+                eaque est voluptas facere itaque commodi saepe atque possimus,
+                aliquid vel molestias sapiente quos optio, quia quam.
+                Aspernatur, nostrum, veniam. Lorem ipsum dolor sit amet,
+                consectetur adipisicing elit. Molestiae nesciunt eaque est
+                voluptas facere itaque commodi saepe atque possimus, aliquid vel
+                molestias sapiente quos optio, quia quam. Aspernatur, nostrum,
+                veniam. Lorem ipsum dolor sit amet, consectetur adipisicing
+                elit. Molestiae nesciunt eaque est voluptas facere itaque
+                commodi saepe atque possimus, aliquid vel molestias sapiente
+                quos optio, quia quam. Aspernatur, nostrum, veniam.
+              </p>
             </div>
           </div>
           <aside className="colorFondoAside grid col-2 col-10-md col-12-sm">

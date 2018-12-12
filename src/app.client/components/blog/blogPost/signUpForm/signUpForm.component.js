@@ -10,7 +10,7 @@ import { saveToken } from "../../../../services/auth";
 //css
 import "./signUpForm.css";
 //components
-import CustomScrollBar from "../../../general/customScrollBar.component";
+// import CustomScrollBar from "../../../general/customScrollBar.component";
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -53,6 +53,7 @@ class SignUpForm extends Component {
   }
 
   imageUpload = image => {
+    console.log("imgupload ", image);
     this.setState(() => {
       return {
         userAvatar: image,
@@ -440,19 +441,7 @@ class SignUpForm extends Component {
       userName,
       userPassword
     } = this.state;
-    //luego se se crea un objeto "data" con las entradas
-    let data = {
-      userFirstName,
-      userLastName,
-      userEmail,
-      userCountry,
-      userBirthDate,
-      userGender,
-      userInterests,
-      userOtherInterests,
-      userName,
-      userPassword
-    };
+
     //se verifica que la ultima etapa del sign in form este llena y validada
     if (
       termAcepted &&
@@ -460,6 +449,29 @@ class SignUpForm extends Component {
       userNameIsValid.valid === true
     ) {
       //en caso de estar los datos validados, se envian las entradas a la DB para su almacenaje
+
+      //Generar Cookie de sesion
+
+      //luego se se crea un objeto "data" con las entradas
+      let data = {
+        userFirstName,
+        userLastName,
+        userEmail,
+        userCountry,
+        userBirthDate,
+        userGender,
+        userInterests,
+        userOtherInterests,
+        userName,
+        userPassword
+      };
+
+      data = {
+        ...data,
+        userSessionId: sessionStorage.getItem("swordvoice-token")
+      };
+      console.log("data con sessionID", data);
+
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome
@@ -504,8 +516,8 @@ class SignUpForm extends Component {
               userAvatar: userAvatar,
               ...userData
             });
-
-            saveToken(userData.token);
+            //generar cookies de sesion y almacenar en DB la session ID
+            // saveToken(userData.token);
           }
         })
         .catch(err => {

@@ -2,10 +2,12 @@ import express from "express";
 import React from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+// import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import reducer from "../app.redux.store/store/reducer";
 require("dotenv").config();
 import { renderToString } from "react-dom/server";
 import { StaticRouter as Router } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 import morgan from "morgan";
 
 import App from "../app.client/app";
@@ -36,16 +38,17 @@ server.get("/*", (req, res) => {
   const context = {};
   // const initialState = { isMobile };
   const appString = renderToString(
-    <Provider store={store}>
-      <Router location={req.url} context={context}>
-        {/* <App {...initialState} /> */}
-        <App />
-      </Router>
-    </Provider>
+    <CookiesProvider cookies={req.universalCookies}>
+      <Provider store={store}>
+        <Router location={req.url} context={context}>
+          {/* <App {...initialState} /> */}
+          <App />
+        </Router>
+      </Provider>
+    </CookiesProvider>
   );
 
   const preloadedState = store.getState();
-  console.log("preloadedState", preloadedState);
 
   res.send(
     template({

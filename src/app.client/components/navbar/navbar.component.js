@@ -1,9 +1,18 @@
+//modules
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Route, NavLink } from "react-router-dom";
+import { withCookies } from "react-cookie";
+//css
+import "./navbar.css";
+//assets
+import ActiveBar from "./activeBar";
+import userLogo from "../../assets/img/general/userLogo.svg";
+//components
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
-import "./navbar.css";
-import { Route, NavLink } from "react-router-dom";
-import ActiveBar from "./activeBar";
+//services
+import { sessionCookie } from "../../services/sessionCookie";
 
 class NavBar extends Component {
   constructor(props) {
@@ -27,20 +36,25 @@ class NavBar extends Component {
   }
 
   handleScroll() {
+    console.log("handleScroll this.props", this.props);
     window.pageYOffset === 0
       ? this.setState({
           navBarMarginTop: "20",
           navBarBackgroundOnScroll: "transparent",
           logoWidth: "90px"
         })
-      : this.setState({
-          navBarMarginTop: 0,
-          navBarBackgroundOnScroll: "white",
-          logoWidth: "67px"
+      : this.setState(prevState => {
+          return {
+            navBarMarginTop: 0,
+            navBarBackgroundOnScroll: "white",
+            logoWidth: "67px"
+          };
         });
   }
 
   componentDidMount() {
+    sessionCookie(this.props);
+
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
@@ -62,9 +76,6 @@ class NavBar extends Component {
       },
       {
         nombre: "Contact"
-      },
-      {
-        nombre: "Users"
       }
     ];
     const contentMenuSmall = menu.map((smallMenuContent, i) => {
@@ -138,8 +149,28 @@ class NavBar extends Component {
                 </div>
               </a>
             </div>
-            <div id="menu" className="grid col-5">
-              {content}
+            <div className="menuPcCont">
+              <div id="menu" className="grid ">
+                {content}
+              </div>
+              {!this.props.isUserLoggedIn ? (
+                <div className="grid userLogo">
+                  <img src={userLogo} alt="user Logo" />
+                </div>
+              ) : (
+                <div
+                  className="avatarImg menuAvatar"
+                  style={{
+                    height: "45px",
+                    width: "45px",
+                    backgroundImage: `url(${
+                      this.props.loggedUserAvatar
+                        ? this.props.loggedUserAvatar
+                        : "none"
+                    })`
+                  }}
+                />
+              )}
             </div>
           </div>
 
@@ -298,4 +329,25 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+const mapStateToProps2 = state => {
+  return {
+    loggedUserName: state.loggedUserName,
+    isUserLoggedIn: state.isUserLoggedIn,
+    loggedUserAvatar: state.loggedUserAvatar
+      ? URL.createObjectURL(state.loggedUserAvatar)
+      : state.loggedUserAvatar
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+  };
+};
+
+const NavBar2 = withCookies(NavBar);
+export default connect(
+  mapStateToProps2,
+  mapDispachToProps
+)(NavBar2);

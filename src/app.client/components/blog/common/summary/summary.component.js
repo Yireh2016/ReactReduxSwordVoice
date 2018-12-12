@@ -9,7 +9,7 @@ import SimpleBar from "simplebar-react";
 
 import "./summary.css";
 //components
-import CustomScrollBar from "../../../general/customScrollBar.component";
+// import CustomScrollBar from "../../../general/customScrollBar.component";
 
 class Summary extends React.Component {
   constructor(props) {

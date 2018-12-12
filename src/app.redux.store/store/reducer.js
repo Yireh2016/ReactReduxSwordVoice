@@ -5,9 +5,7 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log("state on reducer before action", state);
   const newState = { ...state };
-  console.log("cloned state on reducer before action", state);
 
   if (action.type === "LOGGED_IN") {
     // logear al usuario
@@ -15,7 +13,6 @@ const reducer = (state = initialState, action) => {
     newState.loggedUserAvatar = action.payload.loggedUserAvatar;
     newState.loggedUserName = action.payload.userName;
 
-    console.log("action", action);
     // console.log("action.payload.loggedUserName", action.payload.loggedUserName);
   }
 
@@ -26,7 +23,6 @@ const reducer = (state = initialState, action) => {
     // newState.loggedUserName = "";
   }
 
-  console.log(`LOGGED_IN action newState`, newState);
   return newState;
 };
 

@@ -9,7 +9,7 @@ import NewPost from "./newPost/newPost.component";
 import Call2Action from "../general/call2action.component";
 import FooterApp from "../footer/footer.component";
 import Logo from "../general/logo.component";
-import CustomScrollBar from "../general/customScrollBar.component";
+// import CustomScrollBar from "../general/customScrollBar.component";
 import SearchBar from "./searchBar/searchBar.component";
 import AsidePost from "../blog/asidePost/asidePost.component";
 import LightShadow from "../general/lightShadow/lightShadow.component";
@@ -18,7 +18,7 @@ import "./blog.css";
 //images
 import newPostImg from "../../assets/img/blog/newPost.jpg";
 import avatarImg from "../../assets/img/general/avatar.jpg";
-import MyScrollBar from "../general/myScrollBar/myScrollbar.component";
+// import MyScrollBar from "../general/myScrollBar/myScrollbar.component";
 
 // if (process.env.CLIENT) {
 //   global.window = {};
@@ -44,8 +44,6 @@ class BlogComponent extends Component {
       // summaryTextHeight: null,
       newPostArray: this.fetchNewPost()
     };
-
-    console.log("state on constructor", this.state);
   }
 
   componentDidMount() {

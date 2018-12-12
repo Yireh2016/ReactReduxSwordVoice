@@ -2,8 +2,8 @@
 import React from "react";
 import SimpleBar from "simplebar-react";
 //components
-import CustomScrollBar from "../../general/customScrollBar.component";
-import MyScrollBar from "../../general/myScrollBar/myScrollbar.component";
+// import CustomScrollBar from "../../general/customScrollBar.component";
+// import MyScrollBar from "../../general/myScrollBar/myScrollbar.component";
 //css
 import "./asidePost.css";
 

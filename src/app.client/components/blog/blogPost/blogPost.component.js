@@ -66,7 +66,7 @@ class BlogArticle extends Component {
     this.setState({ device: device });
 
     const similDataArray = this.fetchData();
-
+    //esto cabio porque ya no tengo token
     if (getToken() && isLoggedIn()) {
       // this.props.onLogIn();
       const token = getToken();
@@ -86,9 +86,7 @@ class BlogArticle extends Component {
       similPostsArray: similDataArray
     });
   }
-  componentWillUpdate() {
-    console.log("componentWillUpdate", this.props);
-  }
+
   fetchData() {
     return [
       //halar de la base de datos los ultimos 6 registros
@@ -333,9 +331,18 @@ class BlogArticle extends Component {
   };
   handleSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
-    saveToken(userData.token);
-    const userId = getUserFromToken(userData.token);
-    this.setUserFromId(userId);
+    let imgBlob;
+    if (userData.userAvatar !== {}) {
+      let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
+      imgBlob = new Blob([imgBytes], {
+        type: "image/jpeg"
+      });
+    }
+
+    this.props.onLogIn({
+      loggedUserAvatar: imgBlob,
+      userName: userData.userName
+    });
   };
   setUserFromId = userId => {
     axios
@@ -350,7 +357,6 @@ class BlogArticle extends Component {
           loggedUserAvatar: imgBlob,
           userName: res.data.userName
         });
-        console.log("this.props", this.props);
 
         this.setState({
           loggedUserAvatar: imgBlob,

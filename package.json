@@ -26,6 +26,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "react": "^16.6.3",
+    "react-cookie": "^3.0.8",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.6.3",
     "react-html-parser": "^2.0.2",
@@ -34,7 +35,9 @@
     "react-router-dom": "^4.3.1",
     "react-transition-group": "^1.2.1",
     "redux": "^4.0.1",
-    "simplebar-react": "^0.1.0"
+    "simplebar-react": "^0.1.0",
+    "universal-cookie-express": "^3.0.7",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",

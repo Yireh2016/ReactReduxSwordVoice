@@ -50,7 +50,8 @@ routerAPI.post("/signup", (req, res) => {
     !userData.userLastName ||
     !userData.userCountry ||
     !userData.userBirthDate ||
-    !userData.userGender
+    !userData.userGender ||
+    !userData.userSessionId
   ) {
     res.json(400, {
       message: "All fields required"
@@ -68,8 +69,8 @@ routerAPI.post("/signup", (req, res) => {
     } else {
       const responseUserData = {
         id: data._id,
-        userName: data.userName,
-        token: user.generateJwt()
+        userName: data.userName
+        // token: user.generateJwt()
       };
       res.json(200, responseUserData); //user ID is returned to use it later for avatar upload
     }
@@ -89,16 +90,15 @@ routerAPI.post("/login", (req, res) => {
   }
 
   passport.authenticate("local", function(err, user, info) {
-    let token;
+    // let token;
     if (err) {
       res.json(404, err);
       return;
     }
     if (user) {
-      token = user.generateJwt();
-      res.json(200, {
-        token: token
-      });
+      console.log("api.index user.userAvatar", user.userAvatar);
+      // token = user.generateJwt();
+      res.json(200, { userName: user.userName, userAvatar: user.userAvatar });
     } else {
       console.log("dio un 401", info);
       res.json(401, info);
