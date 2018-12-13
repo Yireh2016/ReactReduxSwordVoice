@@ -1,0 +1,14 @@
+# Dependency directory
+node_modules
+# Environment variables
+.env
+# Generated Bundles
+dist
+#Server Bundle
+server
+# Uploads Development only
+uploads
+# vscode config
+.vscode
+#junk
+junk

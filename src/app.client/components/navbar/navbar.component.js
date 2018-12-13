@@ -2,13 +2,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route, NavLink } from "react-router-dom";
-import { withCookies } from "react-cookie";
+import { withCookies, Cookies } from "react-cookie";
 //css
 import "./navbar.css";
 //assets
 import ActiveBar from "./activeBar";
 import userLogo from "../../assets/img/general/userLogo.svg";
 //components
+import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
+import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
 //services
@@ -21,7 +23,10 @@ class NavBar extends Component {
       menuVisible: null,
       navBarMarginTop: "20",
       navBarBackgroundOnScroll: "transparent",
-      logoWidth: "90px"
+      logoWidth: "90px",
+      showSignUp: false,
+      showLogIn: false,
+      showDesplegable: false
     };
   }
 
@@ -36,7 +41,6 @@ class NavBar extends Component {
   }
 
   handleScroll() {
-    console.log("handleScroll this.props", this.props);
     window.pageYOffset === 0
       ? this.setState({
           navBarMarginTop: "20",
@@ -59,6 +63,34 @@ class NavBar extends Component {
       this.handleScroll();
     });
   }
+
+  signClickHandler = () => {
+    this.setState({
+      showSignUp: true,
+      showDesplegable: false
+    });
+  };
+
+  onMouseLeaveHandler = () => {
+    this.setState({ showDesplegable: false });
+  };
+  mouseOverAvatarHandler = () => {
+    this.setState({ showDesplegable: true });
+  };
+  logInClickHandler = () => {
+    this.setState({
+      showDesplegable: false,
+      showLogIn: true
+    });
+  };
+  logOutClickHandler = () => {
+    this.props.onLogOut();
+    this.props.cookies.remove("sessionId", { path: "/" });
+
+    this.setState({
+      showDesplegable: false
+    });
+  };
   render() {
     let isVisible = this.state.menuVisible;
     const menu = [
@@ -153,24 +185,68 @@ class NavBar extends Component {
               <div id="menu" className="grid ">
                 {content}
               </div>
-              {!this.props.isUserLoggedIn ? (
-                <div className="grid userLogo">
-                  <img src={userLogo} alt="user Logo" />
-                </div>
-              ) : (
-                <div
-                  className="avatarImg menuAvatar"
-                  style={{
-                    height: "45px",
-                    width: "45px",
-                    backgroundImage: `url(${
-                      this.props.loggedUserAvatar
-                        ? this.props.loggedUserAvatar
-                        : "none"
-                    })`
+              {this.state.showSignUp && (
+                <SignUpForm
+                  onCancelClick={() => {
+                    this.setState({ showSignUp: false });
                   }}
                 />
               )}
+              {this.state.showLogIn && (
+                <LogInForm
+                  onCancelClick={() => {
+                    this.setState({ showLogIn: false });
+                  }}
+                />
+              )}
+              <div
+                className="menuAvatar"
+                onMouseLeave={this.onMouseLeaveHandler}
+                onMouseOver={this.mouseOverAvatarHandler}
+              >
+                {!this.props.isUserLoggedIn ? (
+                  <div className="grid userLogo">
+                    <img src={userLogo} alt="user Logo" />
+                  </div>
+                ) : (
+                  <div
+                    className="avatarImg "
+                    style={{
+                      height: "45px",
+                      width: "45px",
+                      backgroundImage: `url(${
+                        this.props.loggedUserAvatar
+                          ? this.props.loggedUserAvatar
+                          : "none"
+                      })`
+                    }}
+                  />
+                )}
+
+                {this.state.showDesplegable && (
+                  <div
+                    onMouseOver={this.mouseOverAvatarHandler}
+                    onMouseLeave={this.onMouseLeaveHandler}
+                    className="menuAvatarDesplegable"
+                  >
+                    <div className="desplegableFlecha" />
+                    <div className="despleglableContenido">
+                      <ul>
+                        {this.props.isUserLoggedIn ? (
+                          <li onClick={this.signClickHandler}>Profile</li>
+                        ) : (
+                          <li onClick={this.signClickHandler}>Sign Up</li>
+                        )}
+                        {this.props.isUserLoggedIn ? (
+                          <li onClick={this.logOutClickHandler}>Log Out</li>
+                        ) : (
+                          <li onClick={this.logInClickHandler}>Log In</li>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

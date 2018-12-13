@@ -19,8 +19,8 @@ const reducer = (state = initialState, action) => {
   if (action.type === "LOGGED_OUT") {
     // deslogear al usuario
     newState.isUserLoggedIn = false;
-    // newState.loggedUserAvatar = undefined;
-    // newState.loggedUserName = "";
+    newState.loggedUserAvatar = undefined;
+    newState.loggedUserName = "";
   }
 
   return newState;

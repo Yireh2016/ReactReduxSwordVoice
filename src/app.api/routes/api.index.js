@@ -8,6 +8,15 @@ let upload = multer({ dest: "dist/assets/uploads/" });
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
+
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+////////    POST C of CRUD   /////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+
 // cargar imagen de avatar
 routerAPI.post("/upload/:userID", upload.single("avatar"), (req, res) => {
   const { file } = req;
@@ -106,6 +115,14 @@ routerAPI.post("/login", (req, res) => {
   })(req, res);
 });
 
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+////////    GET R of CRUD   //////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+
 // obtener todos los usuarios
 routerAPI.get("/users", async (req, res) => {
   usersModel.find().exec((err, users) => {
@@ -164,7 +181,14 @@ routerAPI.get("/searchUser/:username", (req, res) => {
   });
 });
 
-// Eliminar usuario
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+/////////  DELETE d of CRUD //////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+// Eliminar usuario unico
 routerAPI.delete("/users/:userId", (req, res) => {
   usersModel.findByIdAndRemove(req.params.userId).exec(err => {
     if (err) {
@@ -186,6 +210,32 @@ routerAPI.delete("/allUsers", (req, res) => {
   });
 });
 
-// module.exports = routerAPI;
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+/////////  UPDATE U of CRUD //////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+
+routerAPI.put("/sessionUpdate/:username", (req, res) => {
+  const username = req.params.username;
+  const sessionId = req.query.sessionId;
+  console.log("username", username);
+  console.log("sessionId", sessionId);
+  usersModel.findOneAndUpdate(
+    { userName: username },
+    {
+      userSessionId: sessionId
+    },
+    function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.end("success");
+      }
+    }
+  );
+});
 
 export default routerAPI;

@@ -5,10 +5,12 @@ import axios from "axios";
 import "./logInForm.css";
 //components
 import Logo from "../../../general/logo.component";
+import { connect } from "react-redux";
+
 //services
 // import { saveToken} from "../../../../services/auth";
 
-export default class LogInForm extends Component {
+class LogInForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +24,29 @@ export default class LogInForm extends Component {
       animControl1: undefined
     };
   }
+
+  onSuccessLogIn = userData => {
+    //Redux: hacer este metodo en el componente LogInForm
+    let imgBlob;
+    if (userData.userAvatar !== {}) {
+      let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
+      imgBlob = new Blob([imgBytes], {
+        type: "image/jpeg"
+      });
+      //POST update to update session ID
+      axios.put(
+        `api/sessionUpdate/${
+          userData.userName
+        }?sessionId=${sessionStorage.getItem("swordvoice-token")}`,
+        "hello"
+      );
+    }
+
+    this.props.onLogIn({
+      loggedUserAvatar: imgBlob,
+      userName: userData.userName
+    });
+  };
 
   handleFormInputChange = event => {
     const {
@@ -56,7 +81,7 @@ export default class LogInForm extends Component {
             alert("Login Successful");
 
             this.props.onCancelClick();
-            this.props.onSuccessLogIn(res.data);
+            this.onSuccessLogIn(res.data);
           }
         })
         .catch(err => {
@@ -138,3 +163,25 @@ export default class LogInForm extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  console.log("mapStateToProps state", state);
+  return {
+    loggedUserName: state.loggedUserName,
+    isUserLoggedIn: state.isUserLoggedIn,
+    loggedUserAvatar: state.loggedUserAvatar
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(LogInForm);
+// export default BlogArticle;

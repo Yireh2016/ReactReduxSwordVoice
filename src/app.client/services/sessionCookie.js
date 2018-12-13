@@ -5,8 +5,8 @@ export function sessionCookie(props) {
   //setting a cookie
   //verifica si el cookie de session existe
   if (cookies.get("sessionId") === undefined) {
-    cookies.set("sessiontId", uuid(), { path: "/" });
-    sessionStorage.setItem("swordvoice-token", cookies.cookies.sessiontId);
+    cookies.set("sessionId", uuid(), { path: "/" });
+    sessionStorage.setItem("swordvoice-token", cookies.cookies.sessionId);
     return;
   }
   //verifica si el cookie de session es igual al session storage

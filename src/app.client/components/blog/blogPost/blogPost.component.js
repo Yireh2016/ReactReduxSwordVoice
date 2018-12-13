@@ -329,21 +329,28 @@ class BlogArticle extends Component {
       loggedUserName: userData.userName
     });
   };
-  handleSuccessLogIn = userData => {
-    //Redux: hacer este metodo en el componente LogInForm
-    let imgBlob;
-    if (userData.userAvatar !== {}) {
-      let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
-      imgBlob = new Blob([imgBytes], {
-        type: "image/jpeg"
-      });
-    }
+  // handleSuccessLogIn = userData => {
+  //   //Redux: hacer este metodo en el componente LogInForm
+  //   let imgBlob;
+  //   if (userData.userAvatar !== {}) {
+  //     let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
+  //     imgBlob = new Blob([imgBytes], {
+  //       type: "image/jpeg"
+  //     });
+  //     //POST update to update session ID
+  //     axios.put(
+  //       `api/sessionUpdate/${
+  //         userData.userName
+  //       }?sessionId=${sessionStorage.getItem("swordvoice-token")}`,
+  //       "hello"
+  //     );
+  //   }
 
-    this.props.onLogIn({
-      loggedUserAvatar: imgBlob,
-      userName: userData.userName
-    });
-  };
+  //   this.props.onLogIn({
+  //     loggedUserAvatar: imgBlob,
+  //     userName: userData.userName
+  //   });
+  // };
   setUserFromId = userId => {
     axios
       .get(`/api/users/${userId}`)

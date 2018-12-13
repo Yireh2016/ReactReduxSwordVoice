@@ -8,6 +8,10 @@
   background-color: rgba(0, 0, 0, 0.637);
 }
 .formCard {
+  border: 3px solid #f95f0b;
+  box-sizing: border-box;
+  border-radius: 15px;
+
   padding: 20px;
   position: absolute;
   top: 0;
