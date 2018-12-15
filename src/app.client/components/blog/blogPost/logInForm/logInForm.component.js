@@ -1,6 +1,7 @@
 //modules
 import React, { Component } from "react";
 import axios from "axios";
+import { withCookies } from "react-cookie";
 //css
 import "./logInForm.css";
 //components
@@ -8,7 +9,8 @@ import Logo from "../../../general/logo.component";
 import { connect } from "react-redux";
 
 //services
-// import { saveToken} from "../../../../services/auth";
+import { saveToken } from "../../../../services/auth";
+import { sessionCookie } from "../../../../services/sessionCookie";
 
 class LogInForm extends Component {
   constructor(props) {
@@ -28,22 +30,26 @@ class LogInForm extends Component {
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
     let imgBlob;
-    if (userData.userAvatar !== {}) {
-      let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
-      imgBlob = new Blob([imgBytes], {
-        type: "image/jpeg"
+
+    sessionCookie(this.props);
+
+    if (userData.userAvatar === "") {
+      //si no existe avatar
+      this.props.onLogIn({
+        loggedUserAvatar: undefined,
+        userName: userData.userName
       });
-      //POST update to update session ID
-      axios.put(
-        `api/sessionUpdate/${
-          userData.userName
-        }?sessionId=${sessionStorage.getItem("swordvoice-token")}`,
-        "hello"
-      );
+      return;
     }
 
+    console.log("dentro del if userData.userAvatar", userData.userAvatar);
+    // let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
+    // imgBlob = new Blob([imgBytes], {
+    //   type: "image/jpeg"
+    // });
+
     this.props.onLogIn({
-      loggedUserAvatar: imgBlob,
+      loggedUserAvatar: userData.userAvatar,
       userName: userData.userName
     });
   };
@@ -167,9 +173,9 @@ class LogInForm extends Component {
 const mapStateToProps = state => {
   console.log("mapStateToProps state", state);
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvatar: state.loggedUserAvatar
+    loggedUserName: state.logInStatus.loggedUserName,
+    isUserLoggedIn: state.logInStatus.isUserLoggedIn,
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {
@@ -180,8 +186,8 @@ const mapDispachToProps = dispach => {
   };
 };
 
-export default connect(
+const LogInForm2 = connect(
   mapStateToProps,
   mapDispachToProps
 )(LogInForm);
-// export default BlogArticle;
+export default withCookies(LogInForm2);

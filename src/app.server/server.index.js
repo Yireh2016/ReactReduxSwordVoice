@@ -1,9 +1,10 @@
 import express from "express";
 import React from "react";
-import { createStore } from "redux";
 import { Provider } from "react-redux";
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
-import reducer from "../app.redux.store/store/reducer";
+import { store, history } from "../app.redux.store/store/configStore";
+import { ConnectedRouter } from "connected-react-router";
+import cookieParser from "cookie-parser";
 require("dotenv").config();
 import { renderToString } from "react-dom/server";
 import { StaticRouter as Router } from "react-router-dom";
@@ -22,6 +23,7 @@ const server = express();
 //middlewares
 server.use(morgan("dev"));
 server.use(express.json());
+server.use(cookieParser());
 
 //static files
 server.use(express.static("dist/assets"));
@@ -32,18 +34,19 @@ server.use(passport.initialize());
 server.use("/api", routerAPI);
 
 server.get("/*", (req, res) => {
-  //Redux on server side
-  const store = createStore(reducer);
+  console.log("on server checks if user is auth", req.isAuthenticated());
   // const isMobile = false;
   const context = {};
   // const initialState = { isMobile };
   const appString = renderToString(
     <CookiesProvider cookies={req.universalCookies}>
       <Provider store={store}>
-        <Router location={req.url} context={context}>
-          {/* <App {...initialState} /> */}
-          <App />
-        </Router>
+        <ConnectedRouter history={history}>
+          <Router location={req.url} context={context}>
+            {/* <App {...initialState} /> */}
+            <App />
+          </Router>
+        </ConnectedRouter>
       </Provider>
     </CookiesProvider>
   );

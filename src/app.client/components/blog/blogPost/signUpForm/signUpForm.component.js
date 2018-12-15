@@ -4,9 +4,11 @@ import Compressor from "compressorjs";
 import axios from "axios";
 import SimpleBar from "simplebar-react";
 import { connect } from "react-redux";
-
+import { withCookies, Cookies } from "react-cookie";
 //services
 import { saveToken } from "../../../../services/auth";
+import { sessionCookie } from "../../../../services/sessionCookie";
+
 //css
 import "./signUpForm.css";
 //components
@@ -18,7 +20,7 @@ class SignUpForm extends Component {
     this.state = {
       // user state
 
-      userAvatar: undefined,
+      userAvatar: "",
       userFirstName: undefined,
       userFirstNameIsValid: " ",
       userLastName: undefined,
@@ -450,8 +452,6 @@ class SignUpForm extends Component {
     ) {
       //en caso de estar los datos validados, se envian las entradas a la DB para su almacenaje
 
-      //Generar Cookie de sesion
-
       //luego se se crea un objeto "data" con las entradas
       let data = {
         userFirstName,
@@ -463,25 +463,20 @@ class SignUpForm extends Component {
         userInterests,
         userOtherInterests,
         userName,
-        userPassword
+        userPassword,
+        userAvatar
       };
-
-      data = {
-        ...data,
-        userSessionId: sessionStorage.getItem("swordvoice-token")
-      };
-      console.log("data con sessionID", data);
+      console.log("sign up data", data);
 
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome
         .then(res => {
-          //se maneja la respuesta
           if (res.status === 200) {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
 
             const userData = res.data;
-            if (userAvatar) {
+            if (userAvatar !== "") {
               let form = new FormData();
               form.append("avatar", userAvatar);
 
@@ -504,20 +499,20 @@ class SignUpForm extends Component {
             }
 
             this.props.onCancelClick(); //se cierra el modal de signup
-            console.log("this.props on singUpform before ditpathc", this.props);
-
+            sessionCookie(this.props);
             this.props.onLogIn({
+              //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
               loggedUserAvatar: userAvatar,
-              ...userData
+              loggedUserName: userData.userName
             });
-            console.log("this.props on singUpform", this.props);
-            this.props.onSuccessSignUp({
-              //se ejecuta funcion del componente padre para cambiar la vista luego del sign up enviando la data obtenida de la DB y el avatar del cliente
-              userAvatar: userAvatar,
-              ...userData
-            });
+
+            // this.props.onSuccessSignUp({
+            //   //se ejecuta funcion del componente padre para cambiar la vista luego del sign up enviando la data obtenida de la DB y el avatar del cliente
+            //   userAvatar: userAvatar,
+            //   userName: userData.userName
+            // });
             //generar cookies de sesion y almacenar en DB la session ID
-            // saveToken(userData.token);
+            saveToken(userData.token);
           }
         })
         .catch(err => {
@@ -1393,9 +1388,9 @@ class SignUpForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvata: state.loggedUserAvatar
+    loggedUserName: state.logInStatus.loggedUserName,
+    isUserLoggedIn: state.logInStatus.isUserLoggedIn,
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar
 
     /*   isUserLoggedIn: false,
   loggedUserAvatar: undefined,
@@ -1412,9 +1407,11 @@ const mapDispachToProps = dispach => {
   };
 };
 
-export default connect(
+const SignUpForm2 = connect(
   mapStateToProps,
   mapDispachToProps
 )(SignUpForm);
+
+export default withCookies(SignUpForm2);
 
 // export default SignUpForm;

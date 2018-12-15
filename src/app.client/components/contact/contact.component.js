@@ -3,12 +3,26 @@ import NavBar from "../navbar/navbar.component.js";
 import "./contact.css";
 //components
 import SwordVoice from "../general/swordVoice/swordVoice.component.js";
+import axios from "axios";
 //services
 
 export default class ContactComponent extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  eliminarUser = () => {
+    axios
+      .delete("/api/users/a")
+      .then(res => {
+        if (res.status === 200) {
+          alert("delete Successful");
+        }
+      })
+      .catch(err => {
+        alert(`There was an error status:  ${err}`);
+      });
+  };
 
   render() {
     return (
@@ -19,6 +33,7 @@ export default class ContactComponent extends React.Component {
             <SwordVoice delay={2} />
             <p>
               <span>hola</span>
+              <button onClick={this.eliminarUser}>Eliminar user a</button>
             </p>
 
             <div

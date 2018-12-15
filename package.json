@@ -19,6 +19,8 @@
     "babel-plugin-react-css-modules": "^3.4.2",
     "compressorjs": "^1.0.0",
     "concurrently": "^4.1.0",
+    "connected-react-router": "^6.0.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.8",

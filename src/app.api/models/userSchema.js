@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 import crypto from "crypto";
 
 const userSchema = new Schema({
-  userAvatar: { data: Buffer, contentType: String },
+  userAvatar: { type: { data: Buffer, contentType: String }, required: true },
   userFirstName: { type: String, required: true },
   userLastName: { type: String, required: true },
   userEmail: { type: String, unique: true, required: true },
@@ -15,8 +15,8 @@ const userSchema = new Schema({
   userOtherInterests: { type: [String] },
   userName: { type: String, unique: true, required: true },
   userPassword: { type: String, required: true },
-  userSalt: { type: String, required: true },
-  userSessionId: { type: String, required: true }
+  userSalt: { type: String, required: true }
+  // userSessionId: { type: String, required: true }
 });
 
 userSchema.methods.setPassword = function(password) {
@@ -33,19 +33,18 @@ userSchema.methods.verifyPassword = function(password) {
   return this.userPassword === hash;
 };
 
-// userSchema.methods.generateJwt = function() {
-//   let expiry = new Date();
-//   expiry.setDate(expiry.getDate() + 7); //expire after 7 days
-//   return jwt.sign(
-//     {
-//       _id: this._id,
-//       userAvatar: this.userAvatar,
-//       name: this.userName, //using the uniques userName and email as payload for
-//       email: this.userEmail, //generating the JWT
-//       exp: parseInt(expiry.getTime() / 1000)
-//     },
-//     process.env.JWT_SECRET //secret for signning JWT
-//   );
-// };
+userSchema.methods.generateJwt = function() {
+  let expiry = new Date();
+  expiry.setDate(expiry.getDate() + 1); //expire after 1 day
+  return jwt.sign(
+    {
+      userAvatar: this.userAvatar,
+      name: this.userName, //using the uniques userName and email as payload for
+      ramdomSeed: Math.random(),
+      exp: parseInt(expiry.getTime() / 1000)
+    },
+    process.env.JWT_SECRET //secret for signning JWT
+  );
+};
 // module.exports = mongoose.model('User', userSchema);
 mongoose.model("User", userSchema);

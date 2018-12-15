@@ -28,7 +28,7 @@ import avatarImg from "../../../assets/img/general/avatar.jpg";
 import {
   isLoggedIn,
   saveToken,
-  getUserFromToken,
+  getTokenData,
   getToken
 } from "../../../services/auth";
 
@@ -70,8 +70,9 @@ class BlogArticle extends Component {
     if (getToken() && isLoggedIn()) {
       // this.props.onLogIn();
       const token = getToken();
-      const userId = getUserFromToken(token);
-      this.setUserFromId(userId);
+      const tokenData = getTokenData(token);
+      console.log("tokenData", tokenData);
+      // this.setUserFromId(userId);
     }
 
     const win = window.innerWidth * 0.6;
@@ -321,14 +322,15 @@ class BlogArticle extends Component {
       };
     });
   };
-  handleSuccessSignUp = userData => {
-    //Redux: cambiar state en el compoenente SignUpForm
-    this.setState({
-      isUserLoggedIn: true,
-      loggedUserAvatar: userData.userAvatar,
-      loggedUserName: userData.userName
-    });
-  };
+  // onSuccessSignUp = userData => {
+  //   //Esto va a ser eliminado a la larga ya que estoy usando el Store en vez del state local
+
+  //   this.setState({
+  //     isUserLoggedIn: true,
+  //     loggedUserAvatar: userData.userAvatar,
+  //     loggedUserName: userData.userName
+  //   });
+  // };
   // handleSuccessLogIn = userData => {
   //   //Redux: hacer este metodo en el componente LogInForm
   //   let imgBlob;
@@ -507,7 +509,7 @@ class BlogArticle extends Component {
           <section>
             {this.state.showSignUp && (
               <SignUpForm
-                onSuccessSignUp={userData => this.handleSuccessSignUp(userData)}
+                // onSuccessSignUp={userData => this.onSuccessSignUp(userData)}
                 onCancelClick={this.onSignUpClick}
               />
             )}
@@ -551,9 +553,9 @@ class BlogArticle extends Component {
 const mapStateToProps2 = state => {
   console.log("mapStateToProps state", state);
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvatar: state.loggedUserAvatar
+    loggedUserName: state.logInStatus.loggedUserName,
+    isUserLoggedIn: state.logInStatus.isUserLoggedIn,
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {

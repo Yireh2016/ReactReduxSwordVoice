@@ -13,8 +13,8 @@ import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
 import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
+import { string } from "prop-types";
 //services
-import { sessionCookie } from "../../services/sessionCookie";
 
 class NavBar extends Component {
   constructor(props) {
@@ -41,24 +41,27 @@ class NavBar extends Component {
   }
 
   handleScroll() {
+    //evita que hayan llamadas innecesarioas al setstate, ya que el scroll es un evento que puede llenar la cola de tareas facilmente
+    if (
+      (window.pageYOffset === 0 && this.state.navBarMarginTop === "20") ||
+      (window.pageYOffset !== 0 && this.state.navBarMarginTop === 0)
+    ) {
+      return;
+    }
     window.pageYOffset === 0
       ? this.setState({
           navBarMarginTop: "20",
           navBarBackgroundOnScroll: "transparent",
           logoWidth: "90px"
         })
-      : this.setState(prevState => {
-          return {
-            navBarMarginTop: 0,
-            navBarBackgroundOnScroll: "white",
-            logoWidth: "67px"
-          };
+      : this.setState({
+          navBarMarginTop: 0,
+          navBarBackgroundOnScroll: "white",
+          logoWidth: "67px"
         });
   }
 
   componentDidMount() {
-    sessionCookie(this.props);
-
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
@@ -83,10 +86,11 @@ class NavBar extends Component {
       showLogIn: true
     });
   };
+
   logOutClickHandler = () => {
     this.props.onLogOut();
     this.props.cookies.remove("sessionId", { path: "/" });
-
+    sessionStorage.removeItem("swordvoice-token");
     this.setState({
       showDesplegable: false
     });
@@ -214,11 +218,17 @@ class NavBar extends Component {
                     style={{
                       height: "45px",
                       width: "45px",
-                      backgroundImage: `url(${
-                        this.props.loggedUserAvatar
-                          ? this.props.loggedUserAvatar
-                          : "none"
-                      })`
+                      backgroundImage:
+                        typeof this.props.loggedUserAvatar === "string"
+                          ? `url('data:image/jpeg;base64,${
+                              this.props.loggedUserAvatar
+                            }`
+                          : `url(${URL.createObjectURL(
+                              this.props.loggedUserAvatar
+                            )})`
+                      //   `url('data:image/jpeg;base64,${
+                      // this.props.loggedUserAvatar
+                      // }`
                     }}
                   />
                 )}
@@ -405,13 +415,11 @@ class NavBar extends Component {
   }
 }
 
-const mapStateToProps2 = state => {
+const mapStateToProps = state => {
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvatar: state.loggedUserAvatar
-      ? URL.createObjectURL(state.loggedUserAvatar)
-      : state.loggedUserAvatar
+    loggedUserName: state.logInStatus.loggedUserName,
+    isUserLoggedIn: state.logInStatus.isUserLoggedIn,
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {
@@ -422,8 +430,8 @@ const mapDispachToProps = dispach => {
   };
 };
 
-const NavBar2 = withCookies(NavBar);
-export default connect(
-  mapStateToProps2,
+const NavBar2 = connect(
+  mapStateToProps,
   mapDispachToProps
-)(NavBar2);
+)(NavBar);
+export default withCookies(NavBar2);

@@ -9,6 +9,17 @@ let upload = multer({ dest: "dist/assets/uploads/" });
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
 
+function authAPI(req, res, next) {
+  // do any checks you want to in here
+  console.log("req.cookies", req.cookies);
+  // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
+  // you can do this however you want with whatever variables you set up
+  if (req.cookies.sessionId) return next();
+
+  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.redirect("/");
+}
+
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
@@ -46,7 +57,7 @@ routerAPI.post("/upload/:userID", upload.single("avatar"), (req, res) => {
   });
   res.json(200);
 });
-// insertar usuario en la DB
+// insertar usuario en la DB en el SIGN UP
 routerAPI.post("/signup", (req, res) => {
   const userData = req.body;
 
@@ -59,15 +70,19 @@ routerAPI.post("/signup", (req, res) => {
     !userData.userLastName ||
     !userData.userCountry ||
     !userData.userBirthDate ||
-    !userData.userGender ||
-    !userData.userSessionId
+    !userData.userGender
   ) {
     res.json(400, {
       message: "All fields required"
     });
     return;
   }
-
+  console.log("userData en POST sign up", userData);
+  //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
+  if (userData.userAvatar === "") {
+    userData.userAvatar = new Buffer([]);
+    console.log("userData.userAvatar en IF de api sign up", userData);
+  }
   let user = new usersModel(userData);
 
   user.setPassword(userData.userPassword);
@@ -78,8 +93,8 @@ routerAPI.post("/signup", (req, res) => {
     } else {
       const responseUserData = {
         id: data._id,
-        userName: data.userName
-        // token: user.generateJwt()
+        userName: data.userName,
+        token: user.generateJwt()
       };
       res.json(200, responseUserData); //user ID is returned to use it later for avatar upload
     }
@@ -99,15 +114,18 @@ routerAPI.post("/login", (req, res) => {
   }
 
   passport.authenticate("local", function(err, user, info) {
-    // let token;
+    let token;
     if (err) {
       res.json(404, err);
       return;
     }
     if (user) {
-      console.log("api.index user.userAvatar", user.userAvatar);
-      // token = user.generateJwt();
-      res.json(200, { userName: user.userName, userAvatar: user.userAvatar });
+      token = user.generateJwt();
+      res.json(200, {
+        userName: user.userName,
+        userAvatar: user.userAvatar,
+        token: token
+      });
     } else {
       console.log("dio un 401", info);
       res.json(401, info);
@@ -189,8 +207,18 @@ routerAPI.get("/searchUser/:username", (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 // Eliminar usuario unico
-routerAPI.delete("/users/:userId", (req, res) => {
-  usersModel.findByIdAndRemove(req.params.userId).exec(err => {
+routerAPI.delete("/users/:userId", authAPI, (req, res) => {
+  // usersModel.findOneAndDelete().exec()
+
+  // usersModel.findByIdAndRemove(req.params.userId).exec(err => {
+  //   if (err) {
+  //     res.json(404, err);
+  //     return;
+  //   }
+  //   res.json(204, { message: "user removed" });
+  // });
+
+  usersModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
     if (err) {
       res.json(404, err);
       return;

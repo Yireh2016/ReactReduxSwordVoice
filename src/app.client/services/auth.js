@@ -1,13 +1,13 @@
 export function saveToken(token) {
-  window.localStorage["swordVoice-token"] = token;
+  sessionStorage.setItem("swordvoice-token", token);
 }
 export function getToken() {
-  return window.localStorage["swordVoice-token"];
+  return sessionStorage.getItem("swordvoice-token");
 }
 
-export function getUserFromToken(token) {
+export function getTokenData(token) {
   let payload = JSON.parse(window.atob(token.split(".")[1]));
-  return payload._id;
+  return payload;
 }
 
 export function isLoggedIn() {
