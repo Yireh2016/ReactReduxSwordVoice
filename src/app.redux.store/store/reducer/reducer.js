@@ -6,7 +6,7 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
-
+  console.log("reducer payload", action.payload);
   if (action.type === "LOGGED_IN") {
     // logear al usuario
     newState.isUserLoggedIn = true;

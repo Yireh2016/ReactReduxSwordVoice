@@ -13,7 +13,7 @@ import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
 import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
-import { string } from "prop-types";
+import { guestCookie } from "../../../app.client/services/cookieManager";
 //services
 
 class NavBar extends Component {
@@ -28,6 +28,14 @@ class NavBar extends Component {
       showLogIn: false,
       showDesplegable: false
     };
+
+    if (
+      typeof window !== "undefined" &&
+      window.document &&
+      window.document.createElement
+    ) {
+      guestCookie(props);
+    }
   }
 
   handleClick() {
@@ -90,7 +98,6 @@ class NavBar extends Component {
   logOutClickHandler = () => {
     this.props.onLogOut();
     this.props.cookies.remove("sessionId", { path: "/" });
-    sessionStorage.removeItem("swordvoice-token");
     this.setState({
       showDesplegable: false
     });
@@ -218,17 +225,9 @@ class NavBar extends Component {
                     style={{
                       height: "45px",
                       width: "45px",
-                      backgroundImage:
-                        typeof this.props.loggedUserAvatar === "string"
-                          ? `url('data:image/jpeg;base64,${
-                              this.props.loggedUserAvatar
-                            }`
-                          : `url(${URL.createObjectURL(
-                              this.props.loggedUserAvatar
-                            )})`
-                      //   `url('data:image/jpeg;base64,${
-                      // this.props.loggedUserAvatar
-                      // }`
+                      backgroundImage: `url('data:image/jpeg;base64,${
+                        this.props.loggedUserAvatar
+                      }`
                     }}
                   />
                 )}

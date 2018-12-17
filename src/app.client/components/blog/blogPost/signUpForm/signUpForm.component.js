@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { withCookies, Cookies } from "react-cookie";
 //services
 import { saveToken } from "../../../../services/auth";
-import { sessionCookie } from "../../../../services/sessionCookie";
+import { sessionCookie } from "../../../../services/cookieManager";
 
 //css
 import "./signUpForm.css";
@@ -195,10 +195,10 @@ class SignUpForm extends Component {
           });
           return;
         }
-
+        //Verificando si el email esta en la DB y pertenece a otro usuario
         fetch(`/api/searchEmail/${value}`)
           .then(res => {
-            if (res.status === 404) {
+            if (res.status !== 200) {
               this.setState({
                 userEmailIsValid: { valid: true }
               });
@@ -474,7 +474,7 @@ class SignUpForm extends Component {
         .then(res => {
           if (res.status === 200) {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
-
+            sessionCookie(this.props);
             const userData = res.data;
             if (userAvatar !== "") {
               let form = new FormData();
@@ -486,6 +486,13 @@ class SignUpForm extends Component {
                 .then(res => {
                   if (res.status === 200) {
                     alert("data and image submited");
+                    console.log("this dentro del then", this);
+
+                    this.props.onLogIn({
+                      //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
+                      loggedUserAvatar: res.data.doc.userAvatar,
+                      loggedUserName: userData.userName
+                    });
                   }
                 })
                 .catch(err => {
@@ -495,24 +502,16 @@ class SignUpForm extends Component {
                   );
                 });
             } else {
-              alert("data submited");
+              console.log("no hay avatar solo se envia usuario");
+              this.props.onLogIn({
+                //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
+
+                loggedUserName: userData.userName
+              });
+              alert("data submited without avatar");
             }
 
             this.props.onCancelClick(); //se cierra el modal de signup
-            sessionCookie(this.props);
-            this.props.onLogIn({
-              //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
-              loggedUserAvatar: userAvatar,
-              loggedUserName: userData.userName
-            });
-
-            // this.props.onSuccessSignUp({
-            //   //se ejecuta funcion del componente padre para cambiar la vista luego del sign up enviando la data obtenida de la DB y el avatar del cliente
-            //   userAvatar: userAvatar,
-            //   userName: userData.userName
-            // });
-            //generar cookies de sesion y almacenar en DB la session ID
-            saveToken(userData.token);
           }
         })
         .catch(err => {

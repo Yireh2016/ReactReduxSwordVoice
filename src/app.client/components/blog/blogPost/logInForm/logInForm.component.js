@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 
 //services
 import { saveToken } from "../../../../services/auth";
-import { sessionCookie } from "../../../../services/sessionCookie";
+import { sessionCookie } from "../../../../services/cookieManager";
 
 class LogInForm extends Component {
   constructor(props) {

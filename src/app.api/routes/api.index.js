@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import multer from "multer";
 import fs from "fs";
 import passport from "passport";
+// import axios from "axios";
 
 let upload = multer({ dest: "dist/assets/uploads/" });
 
@@ -10,11 +11,22 @@ let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
 
 function authAPI(req, res, next) {
-  // do any checks you want to in here
-  console.log("req.cookies", req.cookies);
-  // CHECK THE USER STORED IN SESSION FOR A CUSTOM VARIABLE
-  // you can do this however you want with whatever variables you set up
-  if (req.cookies.sessionId) return next();
+  if (req.cookies.sessionId) {
+    console.log("autorizado como user");
+
+    return next();
+  }
+
+  // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
+  res.redirect("/");
+}
+
+function guestAPI(req, res, next) {
+  console.log("revisando si el usuario es guest", req.cookies);
+  if (req.cookies.guestID) {
+    console.log("autorizado como guest");
+    return next();
+  }
 
   // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
   res.redirect("/");
@@ -28,37 +40,45 @@ function authAPI(req, res, next) {
 //////////////////////////////////////
 //////////////////////////////////////
 
-// cargar imagen de avatar
-routerAPI.post("/upload/:userID", upload.single("avatar"), (req, res) => {
-  const { file } = req;
-  const userID = req.params.userID;
+// cargar imagen de avatar AUTH
+//se usa en: signUpForm
+routerAPI.post(
+  "/upload/:userID",
+  authAPI,
+  upload.single("avatar"),
+  (req, res) => {
+    const { file } = req;
+    const userID = req.params.userID;
 
-  fs.readFile(`${file.path}`, (err, data) => {
-    if (err) {
-      console.log("error leyendo archivo", err);
-      throw err;
-    }
-    console.log("typeof", typeof data);
-    console.log("imagen antes de meterla a la DB", data);
-    usersModel.findOneAndUpdate(
-      { _id: userID },
-      { $set: { userAvatar: data } },
-      { new: true },
-      (err, doc) => {
-        if (err) {
-          console.log("Something wrong when updating data!");
-        }
-        fs.unlink(`${file.path}`, err => {
-          if (err) throw err;
-          console.log(`successfully deleted ${file.path}`);
-        });
+    fs.readFile(`${file.path}`, (err, data) => {
+      if (err) {
+        console.log("error leyendo archivo", err);
+        throw err;
       }
-    );
-  });
-  res.json(200);
-});
+
+      usersModel.findOneAndUpdate(
+        { _id: userID },
+        { $set: { userAvatar: data } },
+        { new: true },
+        (err, doc) => {
+          if (err) {
+            console.log("Something wrong when updating data!");
+            return;
+          }
+          fs.unlink(`${file.path}`, err => {
+            if (err) throw err;
+            console.log(`successfully deleted ${file.path}`);
+          });
+
+          res.json(200, { doc });
+        }
+      );
+    });
+  }
+);
 // insertar usuario en la DB en el SIGN UP
-routerAPI.post("/signup", (req, res) => {
+//se usa en: signUpForm
+routerAPI.post("/signup", guestAPI, (req, res) => {
   const userData = req.body;
 
   if (
@@ -102,7 +122,8 @@ routerAPI.post("/signup", (req, res) => {
 });
 
 // hacer Login
-routerAPI.post("/login", (req, res) => {
+//se usa en: logInForm
+routerAPI.post("/login", guestAPI, (req, res) => {
   const userData = req.body;
   console.log("userData del post login", userData);
 
@@ -141,8 +162,9 @@ routerAPI.post("/login", (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 
-// obtener todos los usuarios
-routerAPI.get("/users", async (req, res) => {
+// obtener todos MUST BE AUTH
+//se usa en: DEVELOPMENT ONLY
+routerAPI.get("/users", (req, res) => {
   usersModel.find().exec((err, users) => {
     console.log("searching users");
     if (err) {
@@ -161,8 +183,9 @@ routerAPI.get("/users", async (req, res) => {
   // res.json(users);
 });
 
-// obtener usuario especifico
-routerAPI.get("/users/:userId", (req, res) => {
+// obtener usuario especifico must be AUTH
+//se usa en: signUpForm
+routerAPI.get("/users/:userId", authAPI, (req, res) => {
   usersModel.findById(req.params.userId).exec((err, user) => {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
@@ -174,8 +197,11 @@ routerAPI.get("/users/:userId", (req, res) => {
 });
 
 // Obtener email
-routerAPI.get("/searchEmail/:email", (req, res) => {
+//se usa en: signUpForm
+// para verificar, en tiempo real, que el email del usuario no se encuentre duplicado
+routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
   const email = req.params.email;
+  console.log("usuario guest intentando hacer sigun up");
   usersModel.find({ userEmail: email }).exec((err, email) => {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
@@ -187,14 +213,30 @@ routerAPI.get("/searchEmail/:email", (req, res) => {
 });
 
 // Obtener username
-routerAPI.get("/searchUser/:username", (req, res) => {
-  const username = req.params.username;
-  usersModel.find({ userName: username }).exec((err, username) => {
+// routerAPI.get("/searchUser/:username", guestAPI, (req, res) => {
+//   const username = req.params.username;
+//   usersModel.find({ username }).exec((err, username) => {
+//     if (err) {
+//       res.json(501, `thre was an error: ${err}`);
+//     } else {
+//       console.log("specific user", username[0]);
+//       username[0] ? res.json(200, username) : res.json(404, username);
+//     }
+//   });
+// });
+
+//obtener  usuario especifico por username AUTH
+//se usa en: signUpForm
+// para verificar, en tiempo real, que el username del usuario no se encuentre duplicado
+routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
+  const userName = req.params.userName;
+  console.log("buscando usuario en DB");
+  usersModel.find({ userName: userName }).exec(function(err, userName) {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
     } else {
-      console.log("specific email", username[0]);
-      username[0] ? res.json(200, username) : res.json(404, username);
+      console.log("specific email", userName[0]);
+      userName[0] ? res.json(200, userName) : res.json(404, userName);
     }
   });
 });
@@ -207,17 +249,9 @@ routerAPI.get("/searchUser/:username", (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 // Eliminar usuario unico
+//se usa en contact y deberia usarse en PROFILE
+//para eliminar usuario de la DB
 routerAPI.delete("/users/:userId", authAPI, (req, res) => {
-  // usersModel.findOneAndDelete().exec()
-
-  // usersModel.findByIdAndRemove(req.params.userId).exec(err => {
-  //   if (err) {
-  //     res.json(404, err);
-  //     return;
-  //   }
-  //   res.json(204, { message: "user removed" });
-  // });
-
   usersModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
     if (err) {
       res.json(404, err);
@@ -228,6 +262,7 @@ routerAPI.delete("/users/:userId", authAPI, (req, res) => {
 });
 
 // Eliminar todos
+//se usa en: DEVELOPMENT ONLY
 routerAPI.delete("/allUsers", (req, res) => {
   usersModel.remove({}, function(err) {
     if (err) {
@@ -246,24 +281,24 @@ routerAPI.delete("/allUsers", (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.put("/sessionUpdate/:username", (req, res) => {
-  const username = req.params.username;
-  const sessionId = req.query.sessionId;
-  console.log("username", username);
-  console.log("sessionId", sessionId);
-  usersModel.findOneAndUpdate(
-    { userName: username },
-    {
-      userSessionId: sessionId
-    },
-    function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        res.end("success");
-      }
-    }
-  );
-});
+// routerAPI.put("/sessionUpdate/:username", (req, res) => {
+//   const username = req.params.username;
+//   const sessionId = req.query.sessionId;
+//   console.log("username", username);
+//   console.log("sessionId", sessionId);
+//   usersModel.findOneAndUpdate(
+//     { userName: username },
+//     {
+//       userSessionId: sessionId
+//     },
+//     function(err) {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         res.end("success");
+//       }
+//     }
+//   );
+// });
 
 export default routerAPI;

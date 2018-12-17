@@ -43,10 +43,11 @@ const NewComment = props => {
           <div
             className="avatarImg"
             style={{
-              backgroundImage: `url(${
-                props.loggedUserAvatar
-                  ? URL.createObjectURL(props.loggedUserAvatar)
-                  : "none"
+              //`url('data:image/jpeg;base64,${
+              // this.props.loggedUserAvatar
+              //       }`
+              backgroundImage: `url(data:image/jpeg;base64,${
+                props.loggedUserAvatar ? props.loggedUserAvatar : "none"
               })`
             }}
           />
