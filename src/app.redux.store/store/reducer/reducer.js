@@ -3,24 +3,32 @@ const initialState = {
   loggedUserAvatar: undefined,
   loggedUserName: undefined
 };
-
+//estado inicial viene del CONFIG REDUCER.JS
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
-  console.log("reducer payload", action.payload);
-  if (action.type === "LOGGED_IN") {
-    // logear al usuario
-    newState.isUserLoggedIn = true;
-    newState.loggedUserAvatar = action.payload.loggedUserAvatar;
-    newState.loggedUserName = action.payload.userName;
+  console.log("action.type", action.type);
+  switch (action.type) {
+    case "LOGGED_IN": {
+      newState.isUserLoggedIn = true;
+      newState.loggedUserAvatar = action.payload.loggedUserAvatar;
+      newState.loggedUserName = action.payload.userName;
 
-    // console.log("action.payload.loggedUserName", action.payload.loggedUserName);
-  }
+      break;
+    }
 
-  if (action.type === "LOGGED_OUT") {
-    // deslogear al usuario
-    newState.isUserLoggedIn = false;
-    newState.loggedUserAvatar = undefined;
-    newState.loggedUserName = "";
+    case "LOGGED_OUT": {
+      newState.isUserLoggedIn = false;
+      newState.loggedUserAvatar = undefined;
+      newState.loggedUserName = "";
+      break;
+    }
+
+    case "DEFAULT": {
+      newState.isUserLoggedIn = false;
+      newState.loggedUserAvatar = undefined;
+      newState.loggedUserName = "";
+      break;
+    }
   }
 
   return newState;

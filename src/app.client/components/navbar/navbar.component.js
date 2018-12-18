@@ -97,10 +97,76 @@ class NavBar extends Component {
 
   logOutClickHandler = () => {
     this.props.onLogOut();
-    this.props.cookies.remove("sessionId", { path: "/" });
+
+    this.props.cookies.remove("sessionId");
+
     this.setState({
       showDesplegable: false
     });
+  };
+
+  avatarToRender = () => {
+    console.log("this.props.loggedUserAvatar", this.props.loggedUserAvatar);
+    console.log(
+      "typeof this.props.loggedUserAvatar",
+      typeof this.props.loggedUserAvatar
+    );
+    if (this.props.isUserLoggedIn) {
+      let salida;
+
+      switch (this.props.loggedUserAvatar) {
+        case "": {
+          salida = (
+            <div className="grid userLogo">
+              <img src={userLogo} alt="user Logo" />
+            </div>
+          );
+
+          break;
+        }
+        default: {
+          salida = (
+            <div
+              className="avatarImg "
+              style={{
+                height: "45px",
+                width: "45px",
+                backgroundImage: `url('data:image/jpeg;base64,${
+                  this.props.loggedUserAvatar
+                }`
+              }}
+            />
+          );
+
+          break;
+        }
+      }
+
+      return salida;
+    } else {
+      return (
+        <div className="grid userLogo">
+          <img src={userLogo} alt="user Logo" />
+        </div>
+      );
+    }
+
+    // {!this.props.isUserLoggedIn ? (
+    //   <div className="grid userLogo">
+    //     <img src={userLogo} alt="user Logo" />
+    //   </div>
+    // ) : (
+    //   <div
+    //     className="avatarImg "
+    //     style={{
+    //       height: "45px",
+    //       width: "45px",
+    //       backgroundImage: `url('data:image/jpeg;base64,${
+    //         this.props.loggedUserAvatar
+    //       }`
+    //     }}
+    //   />
+    // )}
   };
   render() {
     let isVisible = this.state.menuVisible;
@@ -164,6 +230,7 @@ class NavBar extends Component {
         </React.Fragment>
       );
     });
+
     return (
       <div id="wrapper">
         <nav id="navBar">
@@ -215,22 +282,7 @@ class NavBar extends Component {
                 onMouseLeave={this.onMouseLeaveHandler}
                 onMouseOver={this.mouseOverAvatarHandler}
               >
-                {!this.props.isUserLoggedIn ? (
-                  <div className="grid userLogo">
-                    <img src={userLogo} alt="user Logo" />
-                  </div>
-                ) : (
-                  <div
-                    className="avatarImg "
-                    style={{
-                      height: "45px",
-                      width: "45px",
-                      backgroundImage: `url('data:image/jpeg;base64,${
-                        this.props.loggedUserAvatar
-                      }`
-                    }}
-                  />
-                )}
+                {this.avatarToRender()}
 
                 {this.state.showDesplegable && (
                   <div
@@ -256,6 +308,11 @@ class NavBar extends Component {
                   </div>
                 )}
               </div>
+              {this.props.isUserLoggedIn && (
+                <div className="menuPcWelcome">
+                  Wellcome <span>{this.props.loggedUserName}</span>
+                </div>
+              )}
             </div>
           </div>
 

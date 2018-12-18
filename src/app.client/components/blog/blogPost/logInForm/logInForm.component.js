@@ -29,10 +29,16 @@ class LogInForm extends Component {
 
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
-    let imgBlob;
 
     sessionCookie(this.props);
-
+    axios
+      .put(`/api/sessionUpdate/${userData.userName}`)
+      .then(res => {
+        res.json(200);
+      })
+      .catch(err => {
+        console.log("err", err);
+      });
     if (userData.userAvatar === "") {
       //si no existe avatar
       this.props.onLogIn({
@@ -42,7 +48,6 @@ class LogInForm extends Component {
       return;
     }
 
-    console.log("dentro del if userData.userAvatar", userData.userAvatar);
     // let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
     // imgBlob = new Blob([imgBytes], {
     //   type: "image/jpeg"

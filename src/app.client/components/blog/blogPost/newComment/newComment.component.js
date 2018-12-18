@@ -2,8 +2,11 @@
 import React from "react";
 //css
 import "./newComment.css";
-
+//imagenes
+import userLogo from "../../../../assets/img/general/userLogo.svg";
+console.log("userLogo1", userLogo);
 const NewComment = props => {
+  console.log("userLogo2", userLogo);
   return (
     <div className="commentLayoutCont fila">
       <div className="grid col-2 relleno" />
@@ -46,8 +49,10 @@ const NewComment = props => {
               //`url('data:image/jpeg;base64,${
               // this.props.loggedUserAvatar
               //       }`
-              backgroundImage: `url(data:image/jpeg;base64,${
-                props.loggedUserAvatar ? props.loggedUserAvatar : "none"
+              backgroundImage: `url(${
+                props.loggedUserAvatar
+                  ? `data:image/jpeg;base64,${props.loggedUserAvatar}`
+                  : userLogo
               })`
             }}
           />

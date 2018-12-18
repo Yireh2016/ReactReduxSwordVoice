@@ -1,7 +1,7 @@
 import express from "express";
 import React from "react";
 import { Provider } from "react-redux";
-// import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import mongoose from "mongoose";
 import { store, history } from "../app.redux.store/store/configStore";
 import { ConnectedRouter } from "connected-react-router";
 import cookieParser from "cookie-parser";
@@ -34,32 +34,71 @@ server.use(passport.initialize());
 server.use("/api", routerAPI);
 
 server.get("/*", (req, res) => {
-  console.log("on server checks if user is auth", req.isAuthenticated());
+  console.log("on server checks if user is auth", req.cookies.sessionId);
   // const isMobile = false;
   const context = {};
   // const initialState = { isMobile };
-  const appString = renderToString(
-    <CookiesProvider cookies={req.universalCookies}>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Router location={req.url} context={context}>
-            {/* <App {...initialState} /> */}
-            <App />
-          </Router>
-        </ConnectedRouter>
-      </Provider>
-    </CookiesProvider>
-  );
+  let renderTemplate = store => {
+    const appString = renderToString(
+      <CookiesProvider cookies={req.universalCookies}>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <Router location={req.url} context={context}>
+              {/* <App {...initialState} /> */}
+              <App />
+            </Router>
+          </ConnectedRouter>
+        </Provider>
+      </CookiesProvider>
+    );
 
-  const preloadedState = store.getState();
+    return appString;
+  };
+  let preloadedState;
+  let payload;
+  console.log("req.cookies.sessionId", req.cookies.sessionId);
+  if (req.cookies.sessionId) {
+    console.log("usuario esta logeuado");
+    const sessionId = req.cookies.sessionId;
+    let usersModel = mongoose.model("User");
+    let query = usersModel.find({ userSessionId: sessionId });
+    query.exec((err, user) => {
+      if (err) {
+        console.log(`Server Error: Cannot Find Session ID ${sessionId}`, err);
+      } else {
+        payload = {
+          loggedUserAvatar: JSON.stringify(user[0].userAvatar).replace(
+            /\"/g,
+            ``
+          ),
+          userName: user[0].userName
+        };
 
-  res.send(
-    template({
-      body: appString,
-      title: "Hello World from the server",
-      initialState: safeStringify(preloadedState)
-    })
-  );
+        store.dispatch({ type: "LOGGED_IN", payload });
+        preloadedState = store.getState();
+        console.log("preloadedState logueado");
+        res.send(
+          template({
+            body: renderTemplate(store),
+            title: "Hello World from the server",
+            initialState: safeStringify(preloadedState)
+          })
+        );
+      }
+    });
+  } else {
+    //se renderiza el estado inicial por defecto
+    store.dispatch({ type: "DEFAULT" });
+    preloadedState = store.getState();
+
+    res.send(
+      template({
+        body: renderTemplate(store),
+        title: "Hello World from the server",
+        initialState: safeStringify(preloadedState)
+      })
+    );
+  }
 });
 
 //starting server

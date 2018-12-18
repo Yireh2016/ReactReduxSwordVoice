@@ -10,5 +10,12 @@ export function sessionCookie(props) {
 
 export function guestCookie(props) {
   const { cookies } = props;
+  if (sessionStorage.getItem("guestID")) {
+    console.log("sessionStorage existe");
+    cookies.set("guestID", sessionStorage.getItem("guestID"), { path: "/" });
+    return;
+  }
+
   cookies.set("guestID", uuid(), { path: "/" });
+  sessionStorage.setItem("guestID", cookies.get("guestID"));
 }

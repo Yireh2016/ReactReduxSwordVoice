@@ -52,6 +52,7 @@ class BlogArticle extends Component {
     };
   }
   componentDidMount() {
+    console.log("this.props", this.props);
     const winWidth = window.innerWidth;
     let device;
 

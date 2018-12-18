@@ -466,7 +466,9 @@ class SignUpForm extends Component {
         userPassword,
         userAvatar
       };
-      console.log("sign up data", data);
+      sessionCookie(this.props);
+      //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
+      data = { ...data, userSessionId: this.props.cookies.cookies.sessionId };
 
       axios
         .post("/api/signup", data)
@@ -474,7 +476,7 @@ class SignUpForm extends Component {
         .then(res => {
           if (res.status === 200) {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
-            sessionCookie(this.props);
+
             const userData = res.data;
             if (userAvatar !== "") {
               let form = new FormData();
@@ -491,7 +493,7 @@ class SignUpForm extends Component {
                     this.props.onLogIn({
                       //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
                       loggedUserAvatar: res.data.doc.userAvatar,
-                      loggedUserName: userData.userName
+                      userName: userData.userName
                     });
                   }
                 })
@@ -506,13 +508,15 @@ class SignUpForm extends Component {
               this.props.onLogIn({
                 //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
 
-                loggedUserName: userData.userName
+                userName: userData.userName
               });
               alert("data submited without avatar");
             }
-
-            this.props.onCancelClick(); //se cierra el modal de signup
+          } else {
+            //en caso de no poder salvar el usuario en DB se destruye la cookie de session
+            this.props.cookies.remove("sessionId");
           }
+          this.props.onCancelClick(); //se cierra el modal de signup
         })
         .catch(err => {
           alert(`There was an error status:  ${err}`);

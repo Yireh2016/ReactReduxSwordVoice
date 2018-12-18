@@ -11,16 +11,6 @@ import Portolio from "./components/portfolio/portfolio.component";
 import Contact from "./components/contact/contact.component";
 import BlogArticle from "./components/blog/blogPost/blogPost.component";
 
-import Test from "./components/test";
-
-// export default class App extends Component {
-//   render() {
-//     // const { isMobile } = this.props;
-
-//     return <BlogArticle />;
-//   }
-// }
-
 class App extends Component {
   render() {
     // const { isMobile } = this.props;

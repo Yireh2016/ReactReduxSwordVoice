@@ -12,24 +12,20 @@ let usersModel = mongoose.model("User");
 
 function authAPI(req, res, next) {
   if (req.cookies.sessionId) {
-    console.log("autorizado como user");
-
     return next();
   }
 
   // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
-  res.redirect("/");
+  // res.redirect("/");
 }
 
 function guestAPI(req, res, next) {
-  console.log("revisando si el usuario es guest", req.cookies);
   if (req.cookies.guestID) {
-    console.log("autorizado como guest");
     return next();
   }
 
   // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
-  res.redirect("/");
+  // res.redirect("/");
 }
 
 //////////////////////////////////////
@@ -281,24 +277,24 @@ routerAPI.delete("/allUsers", (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 
-// routerAPI.put("/sessionUpdate/:username", (req, res) => {
-//   const username = req.params.username;
-//   const sessionId = req.query.sessionId;
-//   console.log("username", username);
-//   console.log("sessionId", sessionId);
-//   usersModel.findOneAndUpdate(
-//     { userName: username },
-//     {
-//       userSessionId: sessionId
-//     },
-//     function(err) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.end("success");
-//       }
-//     }
-//   );
-// });
+routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
+  const username = req.params.username;
+  const sessionId = req.cookies.sessionId;
+  console.log("username on PUT", username);
+  console.log("sessionId", sessionId);
+  usersModel.findOneAndUpdate(
+    { userName: username },
+    {
+      userSessionId: sessionId
+    },
+    function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.end("success");
+      }
+    }
+  );
+});
 
 export default routerAPI;

@@ -146,6 +146,12 @@
   background-color: #0387b7;
   border-radius: 15px 0px;
 }
+.menuPcWelcome {
+  padding-left: 10px;
+}
+.menuPcWelcome span {
+  color: #f95f0b;
+}
 #active-line {
   /*	margin-left: -8px;*/
   width: 75px;

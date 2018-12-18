@@ -15,11 +15,9 @@ export const history = isServer
     })
   : createBrowserHistory();
 
-// const initialState = {
-//   isUserLoggedIn: false,
-//   loggedUserAvatar: undefined,
-//   loggedUserName: undefined
-// };
+//Estado inicial viene de la variable preloaded_state que esta definida en el servidor SERVER.INDEX.JS
+const initialState = isServer ? undefined : window.__PRELOADED_STATE__;
+
 const composeEnhancer = !isServer
   ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
   : compose;
@@ -27,7 +25,7 @@ const composeEnhancer = !isServer
 export const store = createStore(
   createRootReducer(history), // root reducer with router state
 
-  // initialState,
+  initialState,
   composeEnhancer(
     applyMiddleware(
       routerMiddleware(history) // for dispatching history actions
