@@ -19,7 +19,8 @@ class Summary extends React.Component {
 
     this.state = {
       summaryHeight: "10",
-      isPC: undefined
+      isPC: undefined,
+      summaryTextH: 0
     };
   }
 
@@ -30,10 +31,23 @@ class Summary extends React.Component {
 
     this.setState(() => {
       return {
-        isPC: window.innerWidth > 1050 ? true : false
+        isPC: window.innerWidth > 1050 ? true : false,
+        summaryTextH: this.myRef.current.clientHeight
       };
     });
+    console.log("se termino de montar el sumamary ", this.state.summaryTextH);
   }
+
+  getSnapshotBeforeUpdate() {
+    if (this.myRef.current.clientHeight === 0) {
+      this.setState(() => {
+        return {
+          summaryTextH: this.myRef.current.clientHeight
+        };
+      });
+    }
+  }
+
   handleResize() {
     const node = this.myRef.current;
     const height = node.clientWidth * this.props.widthHeightRatio;
@@ -52,7 +66,8 @@ class Summary extends React.Component {
       <a
         style={{
           fontWeight: "bold",
-          paddingLeft: "20px"
+          paddingLeft: "20px",
+          fontSize: "initial"
         }}
         href="/blog/post"
       >
@@ -85,27 +100,32 @@ class Summary extends React.Component {
         style={{
           backgroundColor: "white",
           borderRadius: "0px 30px",
-          height:
-            this.state.isPC === true
-              ? `${this.props.summaryTextHeight}px`
-              : "auto",
+          height: this.props.summaryTextHeight,
+          // height:
+          //   this.state.isPC === true
+          //     ? `${this.props.summaryTextHeight}px`
+          //     : "auto",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around"
         }}
       >
-        <h3 className="summaryTitle">Summary</h3>
+        {this.props.hasSummaryTitle === true && (
+          <h3 className="summaryTitle">Summary</h3>
+        )}
         {this.summaryAdaptableText}
-        <div
+        <section
           style={{
-            height:
-              this.state.isPC === true
-                ? `${this.props.summaryTextHeight - 250 - 39}px`
-                : ""
+            height: `${this.props.summaryParagraphHeight *
+              this.state.summaryTextH}px`
+            // height:
+            //   this.state.isPC === true
+            //     ? `${this.props.summaryTextHeight - 250 - 39}px`
+            //     : ""
           }}
         >
           {summaryText}
-        </div>
+        </section>
 
         <div>{readMore}</div>
         <div className="categories fila">{categoryContent}</div>

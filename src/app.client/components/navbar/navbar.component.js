@@ -106,11 +106,6 @@ class NavBar extends Component {
   };
 
   avatarToRender = () => {
-    console.log("this.props.loggedUserAvatar", this.props.loggedUserAvatar);
-    console.log(
-      "typeof this.props.loggedUserAvatar",
-      typeof this.props.loggedUserAvatar
-    );
     if (this.props.isUserLoggedIn) {
       let salida;
 
@@ -310,7 +305,7 @@ class NavBar extends Component {
               </div>
               {this.props.isUserLoggedIn && (
                 <div className="menuPcWelcome">
-                  Wellcome <span>{this.props.loggedUserName}</span>
+                  Welcome <span>{this.props.loggedUserName}</span>
                 </div>
               )}
             </div>

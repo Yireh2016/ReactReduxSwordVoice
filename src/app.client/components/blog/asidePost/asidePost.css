@@ -24,7 +24,7 @@
 
 @media (max-width: 1050px) {
   .popPostSection {
-    height: calc(60vw / 1.3 + 80px);
+    height: calc(60vw * 1.1 + 80px);
     padding-left: 40px;
   }
   .popPostSection h2 {
@@ -38,8 +38,8 @@
   }
   .popPostContainer {
     overflow: hidden;
-    height: 38vh;
-    width: 20000px; /*cambiar en jcript*/
+    height: 50vh;
+    /* width: 20000px; cambiar en jcript */
   }
   .popPostContainer > div {
     /* width: 50vw; */

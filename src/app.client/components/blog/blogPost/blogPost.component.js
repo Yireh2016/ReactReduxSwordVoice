@@ -88,44 +88,201 @@ class BlogArticle extends Component {
       similPostsArray: similDataArray
     });
   }
-
   fetchData() {
     return [
       //halar de la base de datos los ultimos 6 registros
       {
-        postImage: avatarImg,
-        postTitle: "Jainer Munoz, Enterprenour and Director of SwordVoice",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: avatarImg,
+          title: "Jainer Munoz, Enterprenour and Director of SwordVoice",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title:
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title:
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title:
+            "I just got a developer job at Facebook. Here’s how I prepped for my interviews.",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title:
+            "5 Lessons Learned From Writing Over 300,000 Lines of Infrastructure Code",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       },
       {
-        postImage: newPostImg,
-        postTitle: "Visual Hierarchy: Typography Herachy Concepts",
-        widthHeightRatio: "1.3"
+        articleProps: {
+          image: newPostImg,
+          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
       }
     ];
   }
@@ -394,6 +551,7 @@ class BlogArticle extends Component {
   render() {
     const newPostData = this.fetchArticle();
     const bindings = newPostData[0].articleProps;
+    const widthHeightRatio = 1.07;
 
     const comments = newPostData[0].articleProps.comments.map(
       (commentsData, i) => {
@@ -422,15 +580,38 @@ class BlogArticle extends Component {
         </div>
       </footer>
     );
-    const popularPostsArray = this.state.similPostsArray;
-    const interestPostsJSX = popularPostsArray.map((popularPostsContent, i) => {
+    const similarPostsArray = this.state.similPostsArray;
+    const similarPostsJSX = similarPostsArray.map((similarPostsContent, i) => {
+      const bindings = similarPostsContent.articleProps;
+      const summaryComponent = height => {
+        return (
+          <Summary
+            widthHeightRatio="1.640107407407407"
+            summaryParagraphHeight={0.34}
+            summary={bindings.summaryText}
+            date={bindings.date}
+            avatar={bindings.authorAvatar}
+            author={bindings.author}
+            categories={bindings.categories}
+            summaryTextHeight={
+              this.state.device === "pc" ? `${height}` : "13vh"
+            }
+            summaryText="summaryTextBlogPost"
+            hasReadMore={true}
+            hasSummaryTitle={true}
+            className="summaryTextScrollPost"
+          />
+        );
+      };
+
       return (
         <div key={i} className="grid popularPost-article">
           <Post
-            postImage={popularPostsContent.postImage}
-            postTitle={popularPostsContent.postTitle}
-            widthHeightRatio={popularPostsContent.widthHeightRatio}
+            postImage={similarPostsContent.articleProps.image}
+            postTitle={similarPostsContent.articleProps.title}
+            widthHeightRatio={widthHeightRatio}
             hasBorder={true}
+            summaryComponent={summaryComponent}
           />
         </div>
       );
@@ -466,13 +647,15 @@ class BlogArticle extends Component {
           </div>
           <div className="blogPostSummary grid  ">
             <Summary
+              hasSummaryTitle={true}
               widthHeightRatio="1.640107407407407"
               summary={bindings.summaryText}
               date={bindings.date}
               avatar={bindings.authorAvatar}
               author={bindings.author}
               categories={bindings.categories}
-              summaryTextHeight={this.state.device === "pc" ? "25vh" : "13vh"}
+              summaryTextHeight={this.state.device === "pc" ? "60vh" : "13vh"}
+              summaryParagraphHeight={2}
               summaryText="summaryTextBlogPost"
               hasReadMore={false}
               className="summaryTextScroll"
@@ -538,7 +721,7 @@ class BlogArticle extends Component {
             postSectionHeight={this.state.similPostSectionHeight}
             postContWidth={this.state.similPostContWidth}
           >
-            {interestPostsJSX}
+            {similarPostsJSX}
           </AsidePost>
         </div>
         <div className="googleAdVertical grid col-4 col-12-md">

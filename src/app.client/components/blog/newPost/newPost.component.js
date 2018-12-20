@@ -17,21 +17,6 @@ class NewPost extends React.Component {
     };
   }
 
-  componentDidMount() {
-    // const newPostSectionH = this.newPostSectionHeight.current.clientHeight;
-    // const newPostaddingTop = (newPostSectionH - this.state.postHeight) / 2;
-    // console.log("newPostSectionH", newPostSectionH);
-    // console.log("this.state.postHeight", this.state.postHeight);
-    // console.log("newPostaddingTop", newPostaddingTop);
-    // if (this.props.offset) {
-    //   this.setState({
-    //     newPostTitleContStyle: {
-    //       paddingTop: `${newPostaddingTop}px`
-    //     }
-    //   });
-    // }
-  }
-
   changeHeight = height => {
     this.setState({ postHeight: height });
   };
@@ -39,13 +24,14 @@ class NewPost extends React.Component {
     const newPostJSX = this.props.newPost.map((newPostArrayContent, i) => {
       return (
         <Post
+          hasThreeDots={false}
           postHeight={h => {
             this.changeHeight(h);
           }}
           key={i}
           postImage={newPostArrayContent.articleProps.image}
           postTitle={newPostArrayContent.articleProps.title}
-          widthHeightRatio={newPostArrayContent.articleProps.widthHeightRatio}
+          widthHeightRatio={0.8}
         />
       );
     });
@@ -56,6 +42,7 @@ class NewPost extends React.Component {
           <LightShadow key={i} factor={5}>
             <div ref={this.summaryCursorMove}>
               <Summary
+                hasSummaryTitle={true}
                 className="newPostSummarySection"
                 key={i}
                 widthHeightRatio="1.640107407407407"
@@ -67,6 +54,7 @@ class NewPost extends React.Component {
                 summaryTextHeight={this.state.postHeight}
                 summaryText="summaryTextBlogPost"
                 hasReadMore={true}
+                summaryParagraphHeight={0.34}
               />
             </div>
           </LightShadow>
