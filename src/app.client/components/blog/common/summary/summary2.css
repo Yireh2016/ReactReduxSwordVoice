@@ -1,0 +1,52 @@
+.summary2-layout {
+  color: rgb(2, 66, 89);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.summary2-readMore {
+  font-weight: bold;
+}
+.summary2-layout-readMore p {
+  margin: 0;
+}
+
+.summary2-keywords {
+  background-color: rgb(179, 232, 255);
+  border-radius: 10px;
+  padding: 5px;
+  margin: 0 5px;
+}
+.summary2-layout-keywords {
+  display: flex;
+  flex-direction: row;
+}
+.summary2-layout-date time {
+  text-align: right;
+  display: block;
+  padding: 0 20px;
+}
+
+.summary2-avatar {
+  display: inline-block;
+  background-size: cover;
+  height: 50px;
+  width: 50px;
+  border: 1px solid transparent;
+  border-radius: 100%;
+}
+.summary2-author {
+  font-weight: bold;
+}
+.summary2-layout-author {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+.summary2-layout-author span {
+  padding: 0 5px;
+  box-sizing: border-box;
+}

@@ -12,6 +12,7 @@ import { ConnectedRouter } from "connected-react-router";
 
 //components
 import App from "./app";
+import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTop.component";
 // other imports
 //Store
 import { store, history } from "../app.redux.store/store/configStore";
@@ -27,7 +28,9 @@ hydrate(
       <ConnectedRouter history={history}>
         {/* <Router history={history}> */}
         <Router>
-          <App />
+          <ScrollToTop>
+            <App />
+          </ScrollToTop>
         </Router>
       </ConnectedRouter>
     </Provider>

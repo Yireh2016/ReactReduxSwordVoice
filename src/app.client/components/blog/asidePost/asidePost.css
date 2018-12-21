@@ -5,6 +5,7 @@
   visibility: hidden;
 }
 .popPostSection {
+  margin: 20px 0 0 0;
   padding: 20px;
   /* background: linear-gradient(269.69deg, #1a2225 5.03%, #00171f 98.08%); */
   background-color: #00171f;

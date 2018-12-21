@@ -19,6 +19,7 @@ import FooterApp from "../../footer/footer.component";
 import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
+import Summary2 from "../common/summary/summary2.component";
 // import SearchBar from "../searchBar.component";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
@@ -585,22 +586,31 @@ class BlogArticle extends Component {
       const bindings = similarPostsContent.articleProps;
       const summaryComponent = height => {
         return (
-          <Summary
-            widthHeightRatio="1.640107407407407"
-            summaryParagraphHeight={0.34}
-            summary={bindings.summaryText}
+          <Summary2
+            textHTML={bindings.summaryText}
             date={bindings.date}
             avatar={bindings.authorAvatar}
             author={bindings.author}
-            categories={bindings.categories}
-            summaryTextHeight={
-              this.state.device === "pc" ? `${height}` : "13vh"
-            }
-            summaryText="summaryTextBlogPost"
-            hasReadMore={true}
-            hasSummaryTitle={true}
-            className="summaryTextScrollPost"
+            keywords={bindings.categories}
+            width={height * 0.95}
+            height={height}
           />
+          // <Summary
+          //   widthHeightRatio="1.640107407407407"
+          //   summaryParagraphHeight={0.34}
+          //   summary={bindings.summaryText}
+          //   date={bindings.date}
+          //   avatar={bindings.authorAvatar}
+          //   author={bindings.author}
+          //   categories={bindings.categories}
+          //   summaryTextHeight={
+          //     this.state.device === "pc" ? `${height}` : "13vh"
+          //   }
+          //   summaryText="summaryTextBlogPost"
+          //   hasReadMore={true}
+          //   hasSummaryTitle={true}
+          //   className="summaryTextScrollPost"
+          // />
         );
       };
 

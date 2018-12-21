@@ -40,7 +40,9 @@
 }
 
 .newPostSummaryCont {
-  padding: 0 0 0 2vw;
+  border-radius: 0 47px;
+  box-sizing: border-box;
+  background-color: white;
   transform: translateX(2px);
   width: 30%;
 }
@@ -130,7 +132,7 @@
   margin: 0;
 }
 .recentPost {
-  padding: 16px 0;
+  /* padding: 16px 0; */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -153,15 +155,18 @@
 }
 .recentPostContainer {
   /* padding-left: calc(8vh - 40px); */
-  height: calc(100vh - 186px);
+  height: calc(100vh - 93px);
   /*overflow-y: scroll;
 	overflow-x: hidden;*/
   overflow: hidden;
 }
-
+.recentPost-layout {
+  display: flex;
+  flex-wrap: wrap;
+}
 .recentPost-article {
   padding: 0 0 40px 40px;
-  width: 50%;
+  width: 45%;
 }
 
 .popularPost-article {
@@ -223,7 +228,7 @@
   }
   .recentPostLayoutContainer,
   .recentPostContainer {
-    height: calc(60vw * 1 + 10px);
+    height: calc(60vw * 1.07 + 10px);
   }
   .recentPostLayoutContainer {
     overflow-x: scroll;
@@ -236,6 +241,18 @@
   .recentPostScroll > div:first-child {
     overflow-x: scroll !important;
     overflow-y: hidden !important;
+  }
+  .summaryTextScrollPost > section {
+    overflow: scroll;
+  }
+  .recentPost-layout {
+    flex-wrap: nowrap;
+    display: block;
+    height: calc(60vw * 1.07 + 10px);
+    overflow-y: hidden;
+  }
+  .recentPost-layout > div {
+    float: left;
   }
   .recentPost {
     /*flex-direction: column;*/

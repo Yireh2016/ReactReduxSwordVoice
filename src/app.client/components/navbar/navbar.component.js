@@ -21,6 +21,7 @@ class NavBar extends Component {
     super(props);
     this.state = {
       menuVisible: null,
+      menuIsOpaque: false,
       navBarMarginTop: "20",
       navBarBackgroundOnScroll: "transparent",
       logoWidth: "90px",
@@ -56,23 +57,45 @@ class NavBar extends Component {
     ) {
       return;
     }
-    window.pageYOffset === 0
-      ? this.setState({
-          navBarMarginTop: "20",
-          navBarBackgroundOnScroll: "transparent",
-          logoWidth: "90px"
-        })
-      : this.setState({
-          navBarMarginTop: 0,
-          navBarBackgroundOnScroll: "white",
-          logoWidth: "67px"
-        });
+    //if is PC
+
+    if (window.innerWidth > 1050) {
+      // {    window.pageYOffset === 0
+      //       ? this.setState({
+      //           navBarMarginTop: "20",
+      //           navBarBackgroundOnScroll: "transparent",
+      //           logoWidth: "90px"
+      //         })
+      //       : this.setState({
+      //           navBarMarginTop: 0,
+      //           navBarBackgroundOnScroll: "white",
+      //           logoWidth: "67px"
+      //         });
+
+      window.pageYOffset > 20
+        ? this.setState({
+            menuIsOpaque: true
+          })
+        : this.setState({
+            menuIsOpaque: false
+          });
+    }
   }
 
   componentDidMount() {
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
+
+    if (
+      window.pageYOffset > 0 &&
+      window.innerWidth > 1050 &&
+      !this.state.menuIsOpaque
+    ) {
+      this.setState({
+        menuIsOpaque: true
+      });
+    }
   }
 
   signClickHandler = () => {
@@ -228,12 +251,20 @@ class NavBar extends Component {
 
     return (
       <div id="wrapper">
-        <nav id="navBar">
+        <nav
+          id="navBar"
+          style={{
+            animation: this.state.menuIsOpaque
+              ? " MenuPChidden 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)"
+              : " MenuPCshow 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)"
+          }}
+        >
           <div
             id="menu-pc"
             className="fila"
             style={{
               marginTop: this.state.navBarMarginTop + "px",
+
               position: "relative"
             }}
           >

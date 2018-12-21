@@ -37,7 +37,7 @@ class Summary extends React.Component {
     });
     console.log("se termino de montar el sumamary ", this.state.summaryTextH);
   }
-
+  componentDidUpdate() {}
   getSnapshotBeforeUpdate() {
     if (this.myRef.current.clientHeight === 0) {
       this.setState(() => {
@@ -46,6 +46,7 @@ class Summary extends React.Component {
         };
       });
     }
+    return null;
   }
 
   handleResize() {

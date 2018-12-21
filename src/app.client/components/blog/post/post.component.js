@@ -108,6 +108,7 @@ class Post extends React.Component {
     if (this.props.postHeight) {
       this.props.postHeight(height + (height * 2) / 59.57);
     }
+
     this.setState({
       newPostHeight: height
     });

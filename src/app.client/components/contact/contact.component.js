@@ -1,10 +1,16 @@
 import React from "react";
 import NavBar from "../navbar/navbar.component.js";
+import axios from "axios";
+//CSS
 import "./contact.css";
 //components
 import SwordVoice from "../general/swordVoice/swordVoice.component.js";
-import axios from "axios";
+import Summary2 from "../blog/common/summary/summary2.component";
 //services
+
+//assets
+import avatarImg from "../../assets/img/general/avatar.jpg";
+import newPostImg from "../../assets/img/blog/newPost.jpg";
 
 export default class ContactComponent extends React.Component {
   constructor(props) {
@@ -25,6 +31,36 @@ export default class ContactComponent extends React.Component {
   };
 
   render() {
+    const mockData = [
+      {
+        articleProps: {
+          image: newPostImg,
+          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
+      }
+    ];
+
     return (
       <div>
         <NavBar />
@@ -79,6 +115,15 @@ export default class ContactComponent extends React.Component {
               quam. Aspernatur, nostrum, veniam.
             </p>
           </aside>
+          <Summary2
+            textHTML={mockData[0].articleProps.summaryText}
+            keywords={mockData[0].articleProps.categories}
+            date={mockData[0].articleProps.date}
+            avatar={mockData[0].articleProps.authorAvatar}
+            author={mockData[0].articleProps.author}
+            width={387}
+            height={401}
+          />
         </div>
       </div>
     );

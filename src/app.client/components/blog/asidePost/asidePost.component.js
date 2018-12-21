@@ -17,7 +17,7 @@ const AsidePost = props => {
           style={{
             height:
               props.device === "pc"
-                ? "calc(" + props.postSectionHeight + " - 100px)"
+                ? "calc(" + props.postSectionHeight + " - 80px)"
                 : "",
             width: props.device === "pc" ? "inherit" : props.postContWidth
           }}

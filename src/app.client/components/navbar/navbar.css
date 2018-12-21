@@ -164,8 +164,37 @@
 
 #menu-pc {
   margin-top: 20px;
+  transform: translateY(0);
   transition: all 1s cubic-bezier(0.75, -0.6, 0.35, 1.65);
+  /* animation: MenuHidden 5s forwards cubic-bezier(0.39, 0.575, 0.565, 1) ; */
 }
+@keyframes MenuPChidden {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+    /* visibility: visible; */
+  }
+
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+    /* visibility: hidden; */
+  }
+}
+
+@keyframes MenuPCshow {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  from {
+    transform: translateY(-200%);
+    opacity: 0;
+    /* visibility: hidden; */
+  }
+}
+
 .fondoMenuPc {
   position: absolute;
   top: -25px;

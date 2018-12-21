@@ -12,6 +12,7 @@ import { CookiesProvider } from "react-cookie";
 import morgan from "morgan";
 
 import App from "../app.client/app";
+import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTop.component";
 import template from "./template";
 import passport from "passport"; //modulo debe estar declarado antes que los modelos
 import "../app.api/models/db";
@@ -44,8 +45,9 @@ server.get("/*", (req, res) => {
         <Provider store={store}>
           <ConnectedRouter history={history}>
             <Router location={req.url} context={context}>
-              {/* <App {...initialState} /> */}
-              <App />
+              <ScrollToTop>
+                <App />
+              </ScrollToTop>
             </Router>
           </ConnectedRouter>
         </Provider>

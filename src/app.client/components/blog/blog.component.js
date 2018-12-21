@@ -18,12 +18,7 @@ import "./blog.css";
 //images
 import newPostImg from "../../assets/img/blog/newPost.jpg";
 import avatarImg from "../../assets/img/general/avatar.jpg";
-import Summary from "./common/summary/summary.component";
-// import MyScrollBar from "../general/myScrollBar/myScrollbar.component";
-
-// if (process.env.CLIENT) {
-//   global.window = {};
-// }
+import Summary2 from "../blog/common/summary/summary2.component";
 
 class BlogComponent extends Component {
   constructor(props) {
@@ -353,42 +348,48 @@ class BlogComponent extends Component {
 
       if (node.scrollTop + 1 >= maxScroll) {
         newData = this.seeMorePosts(newData);
+        return newData;
       }
     } else {
       const maxScroll = node.scrollWidth - node.clientWidth;
 
       if (node.scrollLeft == maxScroll) {
         newData = this.seeMorePosts(newData);
+        return newData;
       }
     }
 
-    return newData;
+    return undefined;
   };
   recentPostScroll = e => {
-    let newData = this.state.recentPostsArray;
-    newData = this.nodeScrollControl(e, newData);
+    let newData;
+    let prevData = this.state.recentPostsArray;
+    newData = this.nodeScrollControl(e, prevData);
 
-    this.setState(prevState => {
-      const win = window.innerWidth * 0.6;
-      return {
-        recentPostContWidth:
-          prevState.device === "pc" ? "100%" : newData.length * win + "px",
-        recentPostsArray: newData
-      };
-    });
+    if (newData) {
+      this.setState(prevState => {
+        const win = window.innerWidth * 0.6;
+        return {
+          recentPostContWidth:
+            prevState.device === "pc" ? "100%" : newData.length * win + "px",
+          recentPostsArray: newData
+        };
+      });
+    }
   };
   popPostScroll = e => {
     let newData = this.state.popPostsArray;
     newData = this.nodeScrollControl(e, newData);
-
-    this.setState(prevState => {
-      const win = window.innerWidth * 0.6;
-      return {
-        popPostContWidth:
-          prevState.device === "pc" ? "100%" : newData.length * win + "px",
-        popPostsArray: newData
-      };
-    });
+    if (newData) {
+      this.setState(prevState => {
+        const win = window.innerWidth * 0.6;
+        return {
+          popPostContWidth:
+            prevState.device === "pc" ? "100%" : newData.length * win + "px",
+          popPostsArray: newData
+        };
+      });
+    }
   };
 
   render() {
@@ -402,22 +403,31 @@ class BlogComponent extends Component {
       const bindings = popularPostsContent.articleProps;
       const summaryComponent = height => {
         return (
-          <Summary
-            widthHeightRatio="1.640107407407407"
-            summaryParagraphHeight={0.34}
-            summary={bindings.summaryText}
+          <Summary2
+            textHTML={bindings.summaryText}
             date={bindings.date}
             avatar={bindings.authorAvatar}
             author={bindings.author}
-            categories={bindings.categories}
-            summaryTextHeight={
-              this.state.device === "pc" ? `${height}` : "30vh"
-            }
-            summaryText="summaryTextBlogPost"
-            hasReadMore={true}
-            hasSummaryTitle={true}
-            className="summaryTextScrollPost"
+            keywords={bindings.categories}
+            width={height * 0.95}
+            height={height}
           />
+          // <Summary
+          //   widthHeightRatio="1.640107407407407"
+          //   summaryParagraphHeight={0.34}
+          //   summary={bindings.summaryText}
+          //   date={bindings.date}
+          //   avatar={bindings.authorAvatar}
+          //   author={bindings.author}
+          //   categories={bindings.categories}
+          //   summaryTextHeight={
+          //     this.state.device === "pc" ? `${height}` : "45vh"
+          //   }
+          //   summaryText="summaryTextBlogPost"
+          //   hasReadMore={true}
+          //   hasSummaryTitle={true}
+          //   className="summaryTextScrollPost"
+          // />
         );
       };
       return (
@@ -438,26 +448,35 @@ class BlogComponent extends Component {
         const bindings = recentPostContent.articleProps;
         const summaryComponent = height => {
           return (
-            <Summary
-              summaryParagraphHeight={0.8}
-              widthHeightRatio="1.640107407407407"
-              summary={bindings.summaryText}
+            <Summary2
+              textHTML={bindings.summaryText}
               date={bindings.date}
               avatar={bindings.authorAvatar}
               author={bindings.author}
-              categories={bindings.categories}
-              summaryTextHeight={
-                this.state.device === "pc" ? `${height}` : "30vh"
-              }
-              hasSummaryTitle={true}
-              summaryText="summaryTextBlogPost"
-              hasReadMore={true}
-              className="summaryTextScrollPost"
+              keywords={bindings.categories}
+              width={height * 0.9263}
+              height={height}
             />
+            // <Summary
+            //   summaryParagraphHeight={0.8}
+            //   widthHeightRatio="1.640107407407407"
+            //   summary={bindings.summaryText}
+            //   date={bindings.date}
+            //   avatar={bindings.authorAvatar}
+            //   author={bindings.author}
+            //   categories={bindings.categories}
+            //   summaryTextHeight={
+            //     this.state.device === "pc" ? `${height}` : "45vh"
+            //   }
+            //   hasSummaryTitle={true}
+            //   summaryText="summaryTextBlogPost"
+            //   hasReadMore={true}
+            //   className="summaryTextScrollPost"
+            // />
           );
         };
         return (
-          <div className="grid recentPost-article " key={i}>
+          <div className=" recentPost-article " key={i}>
             <Post
               postImage={recentPostContent.articleProps.image}
               postTitle={recentPostContent.articleProps.title}
@@ -535,7 +554,9 @@ class BlogComponent extends Component {
                   >
                     {recentPostsJSX}
                   </CustomScrollBar> */}
-                  <SimpleBar>{recentPostsJSX}</SimpleBar>
+                  <SimpleBar>
+                    <div className="recentPost-layout">{recentPostsJSX}</div>
+                  </SimpleBar>
                 </div>
               </div>
             </div>

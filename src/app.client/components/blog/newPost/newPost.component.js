@@ -2,6 +2,7 @@
 import React from "react";
 //components
 import Summary from "../common/summary/summary.component";
+import Summary2 from "../common/summary/summary2.component";
 import Post from "../post/post.component";
 import LightShadow from "../../general/lightShadow/lightShadow.component";
 
@@ -13,8 +14,32 @@ class NewPost extends React.Component {
     this.summaryCursorMove = React.createRef();
     this.state = {
       postHeight: 0,
-      newPostTitleContStyle: {}
+      newPostTitleContStyle: {},
+      device: ""
     };
+  }
+  componentDidMount() {
+    if (window.innerWidth > 1050) {
+      //PC
+      this.setState({ device: "pc" });
+      return;
+    }
+
+    if (window.innerWidth > 750) {
+      //tablet
+      this.setState({
+        device: "tablet",
+        summaryW: window.innerWidth,
+        summaryH: window.innerWidth * 0.6
+      });
+      return;
+    }
+    //movil
+    this.setState({
+      device: "movil",
+      summaryW: window.innerWidth,
+      summaryH: window.innerWidth * 1
+    });
   }
 
   changeHeight = height => {
@@ -38,27 +63,36 @@ class NewPost extends React.Component {
 
     const newPostSummaryJSX = this.props.newPost.map(
       (newPostArrayContent, i) => {
-        return (
-          <LightShadow key={i} factor={5}>
-            <div ref={this.summaryCursorMove}>
-              <Summary
-                hasSummaryTitle={true}
-                className="newPostSummarySection"
-                key={i}
-                widthHeightRatio="1.640107407407407"
-                summary={newPostArrayContent.articleProps.summaryText}
-                date={newPostArrayContent.articleProps.date}
-                avatar={newPostArrayContent.articleProps.authorAvatar}
-                author={newPostArrayContent.articleProps.author}
-                categories={newPostArrayContent.articleProps.categories}
-                summaryTextHeight={this.state.postHeight}
-                summaryText="summaryTextBlogPost"
-                hasReadMore={true}
-                summaryParagraphHeight={0.34}
-              />
-            </div>
-          </LightShadow>
-        );
+        if (this.state.device === "pc") {
+          return (
+            <LightShadow key={i} factor={5}>
+              <div ref={this.summaryCursorMove}>
+                <Summary2
+                  textHTML={newPostArrayContent.articleProps.summaryText}
+                  date={newPostArrayContent.articleProps.date}
+                  avatar={newPostArrayContent.articleProps.authorAvatar}
+                  author={newPostArrayContent.articleProps.author}
+                  keywords={newPostArrayContent.articleProps.categories}
+                  width={this.state.postHeight * 0.66}
+                  height={this.state.postHeight}
+                />
+              </div>
+            </LightShadow>
+          );
+        } else {
+          return (
+            <Summary2
+              key={i}
+              textHTML={newPostArrayContent.articleProps.summaryText}
+              date={newPostArrayContent.articleProps.date}
+              avatar={newPostArrayContent.articleProps.authorAvatar}
+              author={newPostArrayContent.articleProps.author}
+              keywords={newPostArrayContent.articleProps.categories}
+              width={this.state.summaryW}
+              height={this.state.summaryH}
+            />
+          );
+        }
       }
     );
 
