@@ -69,16 +69,16 @@ server.get("/*", (req, res) => {
         console.log(`Server Error: Cannot Find Session ID ${sessionId}`, err);
       } else {
         payload = {
-          loggedUserAvatar: JSON.stringify(user[0].userAvatar).replace(
-            /\"/g,
-            ``
-          ),
+          // loggedUserAvatar: JSON.stringify(user[0].userAvatar).replace(
+          //   /\"/g,
+          //   ``
+          // ),
           userName: user[0].userName
         };
-
+        console.log("payload de usuario logueado");
         store.dispatch({ type: "LOGGED_IN", payload });
         preloadedState = store.getState();
-        console.log("preloadedState logueado");
+        console.log("preloadedState logueado", preloadedState);
         res.send(
           template({
             body: renderTemplate(store),

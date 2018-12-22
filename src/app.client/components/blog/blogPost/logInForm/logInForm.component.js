@@ -52,7 +52,7 @@ class LogInForm extends Component {
     // imgBlob = new Blob([imgBytes], {
     //   type: "image/jpeg"
     // });
-
+    window.localStorage.setItem("userAvatar", userData.userAvatar);
     this.props.onLogIn({
       loggedUserAvatar: userData.userAvatar,
       userName: userData.userName

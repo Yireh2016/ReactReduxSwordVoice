@@ -27,7 +27,8 @@ class NavBar extends Component {
       logoWidth: "90px",
       showSignUp: false,
       showLogIn: false,
-      showDesplegable: false
+      showDesplegable: false,
+      loggedUserAvatar: ""
     };
 
     if (
@@ -60,18 +61,6 @@ class NavBar extends Component {
     //if is PC
 
     if (window.innerWidth > 1050) {
-      // {    window.pageYOffset === 0
-      //       ? this.setState({
-      //           navBarMarginTop: "20",
-      //           navBarBackgroundOnScroll: "transparent",
-      //           logoWidth: "90px"
-      //         })
-      //       : this.setState({
-      //           navBarMarginTop: 0,
-      //           navBarBackgroundOnScroll: "white",
-      //           logoWidth: "67px"
-      //         });
-
       window.pageYOffset > 20
         ? this.setState({
             menuIsOpaque: true
@@ -83,6 +72,14 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
+    if (
+      window.localStorage.getItem("userAvatar") &&
+      this.props.isUserLoggedIn
+    ) {
+      this.setState({
+        loggedUserAvatar: window.localStorage.getItem("userAvatar")
+      });
+    }
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
@@ -95,6 +92,14 @@ class NavBar extends Component {
       this.setState({
         menuIsOpaque: true
       });
+    }
+  }
+  componentDidUpdate() {
+    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
+      window.localStorage.setItem("userAvatar", this.props.loggedUserAvatar);
+      if (this.state.loggedUserAvatar === "") {
+        this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
+      }
     }
   }
 
@@ -122,9 +127,10 @@ class NavBar extends Component {
     this.props.onLogOut();
 
     this.props.cookies.remove("sessionId");
-
+    window.localStorage.removeItem("userAvatar");
     this.setState({
-      showDesplegable: false
+      showDesplegable: false,
+      loggedUserAvatar: ""
     });
   };
 
@@ -132,7 +138,7 @@ class NavBar extends Component {
     if (this.props.isUserLoggedIn) {
       let salida;
 
-      switch (this.props.loggedUserAvatar) {
+      switch (this.state.loggedUserAvatar) {
         case "": {
           salida = (
             <div className="grid userLogo">
@@ -150,7 +156,7 @@ class NavBar extends Component {
                 height: "45px",
                 width: "45px",
                 backgroundImage: `url('data:image/jpeg;base64,${
-                  this.props.loggedUserAvatar
+                  this.state.loggedUserAvatar
                 }`
               }}
             />

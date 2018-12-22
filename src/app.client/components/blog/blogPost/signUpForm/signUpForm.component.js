@@ -488,7 +488,6 @@ class SignUpForm extends Component {
                 .then(res => {
                   if (res.status === 200) {
                     alert("data and image submited");
-                    console.log("this dentro del then", this);
 
                     this.props.onLogIn({
                       //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
@@ -627,6 +626,7 @@ class SignUpForm extends Component {
   //     //   break;
   //   }
   // };
+
   componentDidMount() {
     setTimeout(() => {
       this.setState(() => {
