@@ -82,13 +82,19 @@ class Post extends React.Component {
     this.handleResize();
 
     /*Para que mi newPost sea Fluido al resize la pantalla, creo un event handler que calcule el nuevo height*/
-    // if (window.addEventListener) {
-    //   window.addEventListener("resize", this.handleResize.bind(this), false);
-    // } else if (window.attachEvent) {
-    //   window.attachEvent("onresize", this.handleResize.bind(this));
-    // }
+    if (window.addEventListener) {
+      window.addEventListener("resize", this.handleResize.bind(this), false);
+    } else if (window.attachEvent) {
+      window.attachEvent("onresize", this.handleResize.bind(this));
+    }
 
-    /*window.addEventListener("resize", this.handleResize.bind(this));*/
+    window.addEventListener("resize", this.handleResize.bind(this));
+
+    if (this.state.hasThreeDots) {
+      this.setState({ postTitleHeight: "calc(100% - 44px)" });
+    } else {
+      this.setState({ postTitleHeight: "100%" });
+    }
   }
   // handleOnMouseOver() {
   //   this.state.postOpacity === "1"
@@ -188,7 +194,9 @@ class Post extends React.Component {
                 lineHeight: lineHeightRatioCalc + "px",
                 letterSpacing: spacing + "px",
                 color: this.state.isDetailsOpen ? "#024259 " : "white ",
-                height: this.state.isDetailsOpen ? "auto" : "calc(100% - 44px)"
+                height: this.state.isDetailsOpen
+                  ? "auto"
+                  : this.state.postTitleHeight
 
                 // margin: "0",
                 // fontWeight: "bold",

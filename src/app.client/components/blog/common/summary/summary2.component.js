@@ -8,14 +8,17 @@ class Summary2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontStandardSize: 0
+      fontStandardSize: 0,
+      textMaxHeight: "auto"
     };
   }
 
   componentDidMount() {
     if (window.innerWidth > 1050) {
       //PC
-      this.setState({ fontStandardSize: this.props.height * 0.05 });
+      this.setState({
+        fontStandardSize: this.props.height * 0.05
+      });
       return;
     }
 
@@ -30,7 +33,8 @@ class Summary2 extends React.Component {
     //movil
     this.setState({
       fontStandardSize:
-        this.props.height * 0.05 > 16 ? this.props.height * 0.05 : 16
+        this.props.height * 0.05 > 16 ? this.props.height * 0.05 : 16,
+      textMaxHeight: "70px"
     });
   }
 
@@ -96,7 +100,12 @@ class Summary2 extends React.Component {
     const layoutText = (
       // <div className={layoutTextCSS}>
       <div>
-        <SimpleBar style={{ height: this.props.height * textHeightRatio }}>
+        <SimpleBar
+          style={{
+            maxHeight: this.state.textMaxHeight,
+            height: this.props.height * textHeightRatio
+          }}
+        >
           {text(fontStandardSize * 0.8)}
         </SimpleBar>
       </div>
@@ -200,7 +209,7 @@ class Summary2 extends React.Component {
         </React.Fragment>
       );
     };
-    //layout author
+    //layout author y avatar
     const authorLayoutCSS = "summary2-layout-author";
     const layoutAuthorData = (
       <div className={authorLayoutCSS}>

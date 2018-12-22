@@ -56,14 +56,17 @@
 @media (max-width: 700px) {
   .popPostSection {
     padding: 5px 10px;
-    height: calc(75vw / 1.3 + 15vh);
+    height: calc(60vw * 1.07 + 22vh);
   }
   .popPostSection h2 {
     margin-left: 0px;
     padding: 10px 0 10px 0;
   }
   .popPostContainer {
-    height: calc((60vw / 1.3) + 10px + 1.8rem + 1.2vh) !important ;
+    height: calc((60vw * 1.07) + 22px + 1.8rem + 1.2vh) !important ;
+  }
+  .popPostContainer .simplebar-content {
+    overflow: scroll hidden !important;
   }
   .popPostContainer > div {
     margin-right: 10px;
