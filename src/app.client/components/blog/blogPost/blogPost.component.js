@@ -69,13 +69,13 @@ class BlogArticle extends Component {
 
     const similDataArray = this.fetchData();
     //esto cabio porque ya no tengo token
-    if (getToken() && isLoggedIn()) {
-      // this.props.onLogIn();
-      const token = getToken();
-      const tokenData = getTokenData(token);
-      console.log("tokenData", tokenData);
-      // this.setUserFromId(userId);
-    }
+    // if (getToken() && isLoggedIn()) {
+    //   // this.props.onLogIn();
+    //   const token = getToken();
+    //   const tokenData = getTokenData(token);
+    //   console.log("tokenData", tokenData);
+    //   // this.setUserFromId(userId);
+    // }
 
     const win = window.innerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
@@ -88,6 +88,28 @@ class BlogArticle extends Component {
 
       similPostsArray: similDataArray
     });
+  }
+  componentDidUpdate() {
+    console.log(
+      `this.props.isLoggedIn es ${
+        this.props.isUserLoggedIn
+      } y window ${window.localStorage.getItem(
+        "userAvatar"
+      )} y this.state.loggedUserAvatar ${this.state.loggedUserAvatar}`
+    );
+    if (
+      this.props.isUserLoggedIn &&
+      window.localStorage.getItem("userAvatar") &&
+      this.state.loggedUserAvatar === ""
+    ) {
+      console.log("cambiando estado");
+      this.setState({
+        loggedUserAvatar: window.localStorage.getItem("userAvatar")
+      });
+      console.log(" estado nuevo ", this.state);
+    } else {
+      console.log("nocambie estado");
+    }
   }
   fetchData() {
     return [
@@ -481,37 +503,7 @@ class BlogArticle extends Component {
       };
     });
   };
-  // onSuccessSignUp = userData => {
-  //   //Esto va a ser eliminado a la larga ya que estoy usando el Store en vez del state local
 
-  //   this.setState({
-  //     isUserLoggedIn: true,
-  //     loggedUserAvatar: userData.userAvatar,
-  //     loggedUserName: userData.userName
-  //   });
-  // };
-  // handleSuccessLogIn = userData => {
-  //   //Redux: hacer este metodo en el componente LogInForm
-  //   let imgBlob;
-  //   if (userData.userAvatar !== {}) {
-  //     let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
-  //     imgBlob = new Blob([imgBytes], {
-  //       type: "image/jpeg"
-  //     });
-  //     //POST update to update session ID
-  //     axios.put(
-  //       `api/sessionUpdate/${
-  //         userData.userName
-  //       }?sessionId=${sessionStorage.getItem("swordvoice-token")}`,
-  //       "hello"
-  //     );
-  //   }
-
-  //   this.props.onLogIn({
-  //     loggedUserAvatar: imgBlob,
-  //     userName: userData.userName
-  //   });
-  // };
   setUserFromId = userId => {
     axios
       .get(`/api/users/${userId}`)
@@ -691,7 +683,7 @@ class BlogArticle extends Component {
             {this.props.isUserLoggedIn ? (
               <NewComment
                 loggedUserName={this.props.loggedUserName}
-                loggedUserAvatar={this.props.loggedUserAvatar}
+                loggedUserAvatar={this.state.loggedUserAvatar}
               />
             ) : (
               <EnableComment

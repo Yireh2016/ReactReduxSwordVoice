@@ -628,6 +628,9 @@ class SignUpForm extends Component {
   // };
 
   componentDidMount() {
+    window.addEventListener("scroll", function(e) {
+      e.preventDefault();
+    });
     setTimeout(() => {
       this.setState(() => {
         return {
@@ -636,6 +639,9 @@ class SignUpForm extends Component {
       });
     }, 200);
   }
+  onScrollformLayout = e => {
+    e.preventDefault();
+  };
   render() {
     let controlButtons;
     switch (this.state.formPage) {
@@ -735,7 +741,15 @@ class SignUpForm extends Component {
     });
 
     return (
-      <div className="formLayout">
+      <div
+        className="formLayout"
+        onWheel={e => {
+          this.onScrollformLayout(e);
+        }}
+        onScroll={e => {
+          this.onScrollformLayout(e);
+        }}
+      >
         <div className="formCard">
           <div className="signUpPageCont">
             <section

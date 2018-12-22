@@ -105,6 +105,9 @@ class LogInForm extends Component {
   };
 
   componentDidMount() {
+    window.addEventListener("scroll", function(e) {
+      e.preventDefault();
+    });
     setTimeout(() => {
       this.setState(() => {
         return {
@@ -113,6 +116,9 @@ class LogInForm extends Component {
       });
     }, 200);
   }
+  onScrollformLayout = e => {
+    e.preventDefault();
+  };
   render() {
     let controlButtons = (
       <React.Fragment>
@@ -128,7 +134,15 @@ class LogInForm extends Component {
 
     // const logo = logoSV;
     return (
-      <div className="formLayout">
+      <div
+        className="formLayout"
+        onWheel={e => {
+          this.onScrollformLayout(e);
+        }}
+        onScroll={e => {
+          this.onScrollformLayout(e);
+        }}
+      >
         <div className="formCard">
           <div className="signUpPageCont">
             <section

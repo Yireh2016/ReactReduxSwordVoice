@@ -125,8 +125,9 @@ class NavBar extends Component {
 
   logOutClickHandler = () => {
     this.props.onLogOut();
-
+    console.log("elimianndo session ID");
     this.props.cookies.remove("sessionId");
+    console.log(" session ID eliminado ", this.props.cookies.cookies);
     window.localStorage.removeItem("userAvatar");
     this.setState({
       showDesplegable: false,
@@ -257,6 +258,20 @@ class NavBar extends Component {
 
     return (
       <div id="wrapper">
+        {this.state.showSignUp && (
+          <SignUpForm
+            onCancelClick={() => {
+              this.setState({ showSignUp: false });
+            }}
+          />
+        )}
+        {this.state.showLogIn && (
+          <LogInForm
+            onCancelClick={() => {
+              this.setState({ showLogIn: false });
+            }}
+          />
+        )}
         <nav
           id="navBar"
           style={{
@@ -295,20 +310,7 @@ class NavBar extends Component {
               <div id="menu" className="grid ">
                 {content}
               </div>
-              {this.state.showSignUp && (
-                <SignUpForm
-                  onCancelClick={() => {
-                    this.setState({ showSignUp: false });
-                  }}
-                />
-              )}
-              {this.state.showLogIn && (
-                <LogInForm
-                  onCancelClick={() => {
-                    this.setState({ showLogIn: false });
-                  }}
-                />
-              )}
+
               <div
                 className="menuAvatar"
                 onMouseLeave={this.onMouseLeaveHandler}
