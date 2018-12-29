@@ -324,6 +324,67 @@ class BlogArticle extends Component {
           author: "Jainer Muñoz",
           date: "August, 21 2018",
           authorAvatar: avatarImg,
+          articleJSX: `<h1>{title}</h1>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
+							est facere voluptate omnis porro minima nemo eaque ratione saepe
+							totam cum, pariatur obcaecati, voluptates in eveniet! Ab minima
+							autem nemo!
+						</p>
+						<p>
+							Recuerda que tu experiencia en Medium está basada en los
+							escritores, publicaciones y etiquetas que sigues, y hay mucho y
+							bueno que seguir en nuestro idioma.
+						</p>
+						<figure>
+							<img src={image}
+								alt="article image"
+								class="  grid col-12"
+							/>
+							<figcaption>Test Figure</figcaption>
+						</figure>
+						<h2>And finally: Protect the nerds</h2>
+						<p>
+							A computer programmer from Seattle is doing more to alleviate
+							world poverty, hunger, and disease through the Bill & Melinda
+							Gates Foundation than any other person in America right now. Nerds
+							create vaccines. Nerds engineer bridges and roadways. Nerds become
+							teachers and librarians. We need those obnoxiously smart people,
+							because they make the world a better place. We can’t have them
+							cowering before a society that rolls their eyes at every word they
+							say. Ross needs better friends
+						</p>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+							Quibusdam placeat recusandae nemo necessitatibus quidem, eum sint
+							saepe eveniet accusantium porro numquam? Ab culpa veritatis, nam
+							dolores commodi corporis, odio itaque.
+						</p>
+
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit
+							ipsam numquam porro laborum cupiditate minima voluptatem, aliquid
+							quasi reiciendis. Officiis dolores, ad nam repellendus
+							repudiandae. Ea similique facilis assumenda dolores.
+						</p>
+						<p>
+							Dolores voluptatum modi itaque eos sequi eaque corrupti! Alias,
+							facere suscipit consequuntur architecto reprehenderit atque sunt
+							perferendis amet dicta illum molestias, enim consectetur eos quae
+							esse aliquid, veniam quia quis!
+						</p>
+						<p>
+							Unde accusamus repudiandae magnam ab quaerat, eligendi quae
+							nesciunt ea id maxime. Illo, suscipit nesciunt explicabo esse
+							vitae, porro tempora, reiciendis magnam itaque neque consequatur
+							repudiandae, doloremque aliquam! Possimus, dignissimos!
+						</p>
+						<p>
+							Ullam nesciunt quis cupiditate quia vel magni dicta eius in
+							voluptatibus aperiam. Pariatur, non, ratione. Eum, quasi tempore
+							ea eligendi aspernatur maxime ex earum. Vel quis doloremque odit,
+							esse incidunt.
+						</p>`,
           categories: [
             {
               category: "Design"
@@ -397,69 +458,7 @@ class BlogArticle extends Component {
               ]
             }
           ]
-        },
-
-        articleJSX: `<h1>{title}</h1>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-							est facere voluptate omnis porro minima nemo eaque ratione saepe
-							totam cum, pariatur obcaecati, voluptates in eveniet! Ab minima
-							autem nemo!
-						</p>
-						<p>
-							Recuerda que tu experiencia en Medium está basada en los
-							escritores, publicaciones y etiquetas que sigues, y hay mucho y
-							bueno que seguir en nuestro idioma.
-						</p>
-						<figure>
-							<img src={image}
-								alt="article image"
-								class="  grid col-12"
-							/>
-							<figcaption>Test Figure</figcaption>
-						</figure>
-						<h2>And finally: Protect the nerds</h2>
-						<p>
-							A computer programmer from Seattle is doing more to alleviate
-							world poverty, hunger, and disease through the Bill & Melinda
-							Gates Foundation than any other person in America right now. Nerds
-							create vaccines. Nerds engineer bridges and roadways. Nerds become
-							teachers and librarians. We need those obnoxiously smart people,
-							because they make the world a better place. We can’t have them
-							cowering before a society that rolls their eyes at every word they
-							say. Ross needs better friends
-						</p>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-							Quibusdam placeat recusandae nemo necessitatibus quidem, eum sint
-							saepe eveniet accusantium porro numquam? Ab culpa veritatis, nam
-							dolores commodi corporis, odio itaque.
-						</p>
-
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit
-							ipsam numquam porro laborum cupiditate minima voluptatem, aliquid
-							quasi reiciendis. Officiis dolores, ad nam repellendus
-							repudiandae. Ea similique facilis assumenda dolores.
-						</p>
-						<p>
-							Dolores voluptatum modi itaque eos sequi eaque corrupti! Alias,
-							facere suscipit consequuntur architecto reprehenderit atque sunt
-							perferendis amet dicta illum molestias, enim consectetur eos quae
-							esse aliquid, veniam quia quis!
-						</p>
-						<p>
-							Unde accusamus repudiandae magnam ab quaerat, eligendi quae
-							nesciunt ea id maxime. Illo, suscipit nesciunt explicabo esse
-							vitae, porro tempora, reiciendis magnam itaque neque consequatur
-							repudiandae, doloremque aliquam! Possimus, dignissimos!
-						</p>
-						<p>
-							Ullam nesciunt quis cupiditate quia vel magni dicta eius in
-							voluptatibus aperiam. Pariatur, non, ratione. Eum, quasi tempore
-							ea eligendi aspernatur maxime ex earum. Vel quis doloremque odit,
-							esse incidunt.
-						</p>`
+        }
       }
     ];
   };
@@ -621,7 +620,7 @@ class BlogArticle extends Component {
     return (
       <div id="blogPostPage">
         <Navbar hasBackground="true" />
-        <div className="postHero fila">
+        {/* <div className="postHero fila">
           <div
             className="postHeroBack"
             style={{
@@ -665,72 +664,77 @@ class BlogArticle extends Component {
           </div>
         </div>
 
-        <div className="grid col-0 relleno" />
-        <div className="googleAdBanner grid col-12">
+        <div className="grid col-0 relleno" /> */}
+        {/* <div className="googleAdBanner grid col-12">
           Compra cosas que no quieres
-        </div>
-        <div className="blogArticle grid col-8 col-12-md">
-          <article>
-            <JsxParser bindings={bindings} jsx={newPostData[0].articleJSX} />
-          </article>
-          <div className="googleAdBanner grid col-12">
-            Compra cosas que no quieres
+        </div> */}
+        <div className="blogArticleContainer">
+          <div className="blogArticle grid col-8 col-12-md">
+            <article>
+              <JsxParser
+                bindings={bindings}
+                jsx={newPostData[0].articleProps.articleJSX}
+              />
+            </article>
+            <div className="googleAdBanner grid col-12">
+              Compra cosas que no quieres
+            </div>
+
+            <section>
+              <h2>Leave your comments:</h2>
+
+              {this.props.isUserLoggedIn ? (
+                <NewComment
+                  loggedUserName={this.props.loggedUserName}
+                  loggedUserAvatar={this.state.loggedUserAvatar}
+                />
+              ) : (
+                <EnableComment
+                  onSignUpClick={this.onSignUpClick}
+                  onLogInClick={this.onLogInClick}
+                />
+              )}
+            </section>
+            <section>
+              {this.state.showSignUp && (
+                <SignUpForm
+                  // onSuccessSignUp={userData => this.onSuccessSignUp(userData)}
+                  onCancelClick={this.onSignUpClick}
+                />
+              )}
+
+              {this.state.showLogIn && (
+                <LogInForm
+                  onCancelClick={this.onLogInClick}
+                  onSuccessLogIn={userData => this.handleSuccessLogIn(userData)}
+                />
+              )}
+            </section>
+            <section>
+              {/*oldComments*/}
+
+              {comments}
+            </section>
           </div>
+          {footerBlog}
 
-          <section>
-            <h2>Leave your comments:</h2>
-
-            {this.props.isUserLoggedIn ? (
-              <NewComment
-                loggedUserName={this.props.loggedUserName}
-                loggedUserAvatar={this.state.loggedUserAvatar}
-              />
-            ) : (
-              <EnableComment
-                onSignUpClick={this.onSignUpClick}
-                onLogInClick={this.onLogInClick}
-              />
-            )}
-          </section>
-          <section>
-            {this.state.showSignUp && (
-              <SignUpForm
-                // onSuccessSignUp={userData => this.onSuccessSignUp(userData)}
-                onCancelClick={this.onSignUpClick}
-              />
-            )}
-
-            {this.state.showLogIn && (
-              <LogInForm
-                onCancelClick={this.onLogInClick}
-                onSuccessLogIn={userData => this.handleSuccessLogIn(userData)}
-              />
-            )}
-          </section>
-          <section>
-            {/*oldComments*/}
-
-            {comments}
-          </section>
-        </div>
-        {footerBlog}
-
-        <div className="grid col-4 col-12-md  asideContenedor">
-          <AsidePost
-            asideTitle="Similar Posts"
-            onScroll={this.similPostScroll}
-            device={this.state.device}
-            postSectionHeight={this.state.similPostSectionHeight}
-            postContWidth={this.state.similPostContWidth}
-          >
-            {similarPostsJSX}
-          </AsidePost>
-        </div>
-        <div className="googleAdVertical grid col-4 col-12-md">
-          compra lo que no quieres
-        </div>
-        <div className="googleAdVertical grid col-4 col-12-md ">
-          compra lo que no quieres
+          <div className="grid col-4 col-12-md  asideContenedor">
+            <AsidePost
+              asideTitle="Similar Posts"
+              onScroll={this.similPostScroll}
+              device={this.state.device}
+              postSectionHeight={this.state.similPostSectionHeight}
+              postContWidth={this.state.similPostContWidth}
+            >
+              {similarPostsJSX}
+            </AsidePost>
+          </div>
+          <div className="googleAdVertical grid col-4 col-12-md">
+            compra lo que no quieres
+          </div>
+          <div className="googleAdVertical grid col-4 col-12-md ">
+            compra lo que no quieres
+          </div>
         </div>
       </div>
     );

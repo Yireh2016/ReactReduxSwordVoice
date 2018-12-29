@@ -456,24 +456,8 @@ class BlogComponent extends Component {
                 keywords={bindings.categories}
                 width={height * 0.9263}
                 height={height}
-              />{" "}
+              />
             </div>
-            // <Summary
-            //   summaryParagraphHeight={0.8}
-            //   widthHeightRatio="1.640107407407407"
-            //   summary={bindings.summaryText}
-            //   date={bindings.date}
-            //   avatar={bindings.authorAvatar}
-            //   author={bindings.author}
-            //   categories={bindings.categories}
-            //   summaryTextHeight={
-            //     this.state.device === "pc" ? `${height}` : "45vh"
-            //   }
-            //   hasSummaryTitle={true}
-            //   summaryText="summaryTextBlogPost"
-            //   hasReadMore={true}
-            //   className="summaryTextScrollPost"
-            // />
           );
         };
         return (

@@ -1,6 +1,9 @@
 import React from "react";
+//assets
 import threeDotsButton from "../../../assets/img/general/threeDots.svg";
 import "./post.css";
+// services
+import whichDevice from "../../../services/responsiveManager";
 /*Props
 Imagen dentro del componente: postImage
 Titulo del componente: postTitle
@@ -90,8 +93,14 @@ class Post extends React.Component {
 
     window.addEventListener("resize", this.handleResize.bind(this));
 
+    const device = whichDevice(window.innerWidth);
+
     if (this.state.hasThreeDots) {
-      this.setState({ postTitleHeight: "calc(100% - 44px)" });
+      device === "movil"
+        ? this.setState({ postTitleHeight: "calc(100% - 28px)" })
+        : this.setState({ postTitleHeight: "calc(100% - 44px)" });
+
+      // si es movil this.setState({ postTitleHeight: "calc(100% - 32px)" });
     } else {
       this.setState({ postTitleHeight: "100%" });
     }
@@ -122,12 +131,21 @@ class Post extends React.Component {
   render() {
     /*Relaciones o Ratios para componente fluido*/
 
-    const fontRatioCalc = this.state.newPostHeight / 20.48766794439927; //15.48766794439927
-    const lineHeightRatioCalc = this.state.newPostHeight / 10.76; //9.76   13.9
+    const fontRatioCalc =
+      this.state.newPostHeight / 20.48766794439927 < 16
+        ? 16
+        : this.state.newPostHeight / 20.48766794439927; //15.48766794439927
+    const lineHeightRatioCalc =
+      this.state.newPostHeight / 20.48766794439927 >= 16
+        ? this.state.newPostHeight / 10.76
+        : 24.3; //9.76   13.9
     const paddingDerIzq = this.state.newPostHeight / 18.95467515634779;
     const paddingArr = this.state.newPostHeight / 30.97;
     const borderWidth = this.state.newPostHeight / 205.57; //59.57;
-    const spacing = this.state.newPostHeight / 146;
+    const spacing =
+      this.state.newPostHeight / 20.48766794439927 >= 16
+        ? this.state.newPostHeight / 146
+        : 2.63425;
     const border =
       this.props.hasBorder === false
         ? "none"

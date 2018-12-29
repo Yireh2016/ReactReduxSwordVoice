@@ -73,6 +73,9 @@
   max-width: 100%;
   height: 60vh;
 }
+.blogArticleContainer {
+  margin-top: 100px;
+}
 .blogArticle {
   padding: 20px 50px 20px 133px;
 }
@@ -119,6 +122,9 @@ aside h2 {
 }
 
 @media (max-width: 1050px) {
+  .blogArticleContainer {
+    margin-top: 134px;
+  }
   .postHero {
     margin: 110px 0 0 0;
   }
@@ -157,6 +163,9 @@ aside h2 {
 }
 
 @media (max-width: 700px) {
+  .blogArticleContainer {
+    margin-top: 28vw;
+  }
   .postHero {
     margin-top: 82.5px;
   }
@@ -165,7 +174,7 @@ aside h2 {
   }
   .blogPostTitle {
     padding: 0px;
-    margin-top: -4.3px;
+    margin-top: -14.3px;
   }
   .blogPostTitleText {
     height: auto;

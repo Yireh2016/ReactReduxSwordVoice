@@ -29,7 +29,6 @@
 .threeDotsCont {
   bottom: 10px;
   position: absolute;
-
   right: 10px;
 }
 .threeDotsCont button {
@@ -46,4 +45,10 @@
 }
 .threeDotsCont button img:hover {
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .threeDotsCont button img {
+    width: calc(47px * 0.5);
+  }
 }

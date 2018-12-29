@@ -36,7 +36,7 @@ class NewPost extends React.Component {
     this.setState({
       device: "movil",
       summaryW: window.innerWidth,
-      summaryH: window.innerWidth * 1
+      summaryH: window.innerWidth * 0.888
     });
   }
 
