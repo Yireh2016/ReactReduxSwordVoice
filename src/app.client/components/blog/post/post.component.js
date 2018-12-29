@@ -70,12 +70,12 @@ class Post extends React.Component {
     const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
 
     if (!hasOverflowingChildren) {
-      return false;
+      return;
     }
-
     let title = this.state.postTitle;
+    const space = title.length - 5 > 55 ? 55 : title.length - 5;
 
-    title = this.spaceThreeDots(title, title.length - 5);
+    title = this.spaceThreeDots(title, space);
     this.setState({ postTitle: title });
   }
   componentDidMount() {
@@ -126,7 +126,7 @@ class Post extends React.Component {
     const lineHeightRatioCalc = this.state.newPostHeight / 10.76; //9.76   13.9
     const paddingDerIzq = this.state.newPostHeight / 18.95467515634779;
     const paddingArr = this.state.newPostHeight / 30.97;
-    const borderWidth = this.state.newPostHeight / 59.57;
+    const borderWidth = this.state.newPostHeight / 205.57; //59.57;
     const spacing = this.state.newPostHeight / 146;
     const border =
       this.props.hasBorder === false

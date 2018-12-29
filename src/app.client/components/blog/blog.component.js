@@ -12,7 +12,7 @@ import Logo from "../general/logo.component";
 // import CustomScrollBar from "../general/customScrollBar.component";
 import SearchBar from "./searchBar/searchBar.component";
 import AsidePost from "../blog/asidePost/asidePost.component";
-import LightShadow from "../general/lightShadow/lightShadow.component";
+// import LightShadow from "../general/lightShadow/lightShadow.component";
 //css
 import "./blog.css";
 //images
@@ -94,7 +94,36 @@ class BlogComponent extends Component {
       {
         articleProps: {
           image: avatarImg,
-          title: "Jainer Munoz, Enterprenour and Director of SwordVoice",
+          title:
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
+
+          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
+						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+
+          author: "Jainer Muñoz",
+          date: "August, 21 2018",
+          authorAvatar: avatarImg,
+          categories: [
+            {
+              category: "Desing"
+            },
+            {
+              category: "UX/UI"
+            },
+            {
+              category: "Web"
+            },
+            {
+              category: "Mobile"
+            }
+          ]
+        }
+      },
+      {
+        articleProps: {
+          image: newPostImg,
+          title:
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
 						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
@@ -178,7 +207,7 @@ class BlogComponent extends Component {
         articleProps: {
           image: newPostImg,
           title:
-            "I just got a developer job at Facebook. Here’s how I prepped for my interviews.",
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
 						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
@@ -206,7 +235,7 @@ class BlogComponent extends Component {
         articleProps: {
           image: newPostImg,
           title:
-            "5 Lessons Learned From Writing Over 300,000 Lines of Infrastructure Code",
+            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
 						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
@@ -233,34 +262,8 @@ class BlogComponent extends Component {
       {
         articleProps: {
           image: newPostImg,
-          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
+          title:
+            "Visual Hierarchy has become one of the most important concept in modern design.",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
 						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
@@ -403,31 +406,22 @@ class BlogComponent extends Component {
       const bindings = popularPostsContent.articleProps;
       const summaryComponent = height => {
         return (
-          <Summary2
-            textHTML={bindings.summaryText}
-            date={bindings.date}
-            avatar={bindings.authorAvatar}
-            author={bindings.author}
-            keywords={bindings.categories}
-            width={height * 0.95}
-            height={height}
-          />
-          // <Summary
-          //   widthHeightRatio="1.640107407407407"
-          //   summaryParagraphHeight={0.34}
-          //   summary={bindings.summaryText}
-          //   date={bindings.date}
-          //   avatar={bindings.authorAvatar}
-          //   author={bindings.author}
-          //   categories={bindings.categories}
-          //   summaryTextHeight={
-          //     this.state.device === "pc" ? `${height}` : "45vh"
-          //   }
-          //   summaryText="summaryTextBlogPost"
-          //   hasReadMore={true}
-          //   hasSummaryTitle={true}
-          //   className="summaryTextScrollPost"
-          // />
+          <div
+            style={{
+              opacity: 0,
+              animation: "SummaryIN 300ms ease 500ms forwards "
+            }}
+          >
+            <Summary2
+              textHTML={bindings.summaryText}
+              date={bindings.date}
+              avatar={bindings.authorAvatar}
+              author={bindings.author}
+              keywords={bindings.categories}
+              width={height * 0.95}
+              height={height}
+            />
+          </div>
         );
       };
       return (
@@ -448,15 +442,22 @@ class BlogComponent extends Component {
         const bindings = recentPostContent.articleProps;
         const summaryComponent = height => {
           return (
-            <Summary2
-              textHTML={bindings.summaryText}
-              date={bindings.date}
-              avatar={bindings.authorAvatar}
-              author={bindings.author}
-              keywords={bindings.categories}
-              width={height * 0.9263}
-              height={height}
-            />
+            <div
+              style={{
+                opacity: 0,
+                animation: "SummaryIN 300ms ease 500ms forwards "
+              }}
+            >
+              <Summary2
+                textHTML={bindings.summaryText}
+                date={bindings.date}
+                avatar={bindings.authorAvatar}
+                author={bindings.author}
+                keywords={bindings.categories}
+                width={height * 0.9263}
+                height={height}
+              />{" "}
+            </div>
             // <Summary
             //   summaryParagraphHeight={0.8}
             //   widthHeightRatio="1.640107407407407"
@@ -492,15 +493,15 @@ class BlogComponent extends Component {
     const footerBlog = (
       <footer className=" footerBlogLayoutContainer grid col-4 col-12-md">
         <div className="footerBlogContainer">
-          <LightShadow factor={-10}>
-            <div ref={this.logoCursorMove}>
-              <Logo
-                className="footerBlogLogo "
-                style={{ top: "100px" }}
-                logoWidth="20vw"
-              />
-            </div>
-          </LightShadow>
+          {/* <LightShadow factor={-10}> */}
+          <div ref={this.logoCursorMove}>
+            <Logo
+              className="footerBlogLogo "
+              style={{ top: "100px" }}
+              logoWidth="20vw"
+            />
+          </div>
+          {/* </LightShadow> */}
           <Call2Action className="call2ActionBlog" />
           <FooterApp estilos="appear footer-blog " size="redesSociales-blog" />
         </div>

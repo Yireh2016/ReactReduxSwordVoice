@@ -14,21 +14,23 @@ class LightShadow extends Component {
     window.addEventListener("mousemove", e => {
       const cursorX = e.x;
       const cursorY = e.y;
-      const childElementX =
-        this.props.children.ref.current.getBoundingClientRect().top +
-        this.props.children.ref.current.clientWidth;
-      const childElementY =
-        this.props.children.ref.current.getBoundingClientRect().left +
-        this.props.children.ref.current.clientHeight;
-      let elementX = 2 * centerX - cursorX;
-      let elementY = 2 * centerY - cursorY;
-      elementX = (elementX - childElementX / 2) / (centerX * 2);
-      elementY = (elementY - childElementY / 2) / (centerY * 2);
+      if (this.props.children.ref) {
+        const childElementX =
+          this.props.children.ref.current.getBoundingClientRect().top +
+          this.props.children.ref.current.clientWidth;
+        const childElementY =
+          this.props.children.ref.current.getBoundingClientRect().left +
+          this.props.children.ref.current.clientHeight;
+        let elementX = 2 * centerX - cursorX;
+        let elementY = 2 * centerY - cursorY;
+        elementX = (elementX - childElementX / 2) / (centerX * 2);
+        elementY = (elementY - childElementY / 2) / (centerY * 2);
 
-      this.setState({
-        elementX: elementX * this.props.factor,
-        elementY: elementY * this.props.factor
-      });
+        this.setState({
+          elementX: elementX * this.props.factor,
+          elementY: elementY * this.props.factor
+        });
+      }
     });
   }
   render() {

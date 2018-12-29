@@ -1,10 +1,8 @@
 //modules
 import React from "react";
 //components
-import Summary from "../common/summary/summary.component";
 import Summary2 from "../common/summary/summary2.component";
 import Post from "../post/post.component";
-import LightShadow from "../../general/lightShadow/lightShadow.component";
 
 class NewPost extends React.Component {
   constructor(props) {
@@ -65,19 +63,18 @@ class NewPost extends React.Component {
       (newPostArrayContent, i) => {
         if (this.state.device === "pc") {
           return (
-            <LightShadow key={i} factor={5}>
-              <div ref={this.summaryCursorMove}>
-                <Summary2
-                  textHTML={newPostArrayContent.articleProps.summaryText}
-                  date={newPostArrayContent.articleProps.date}
-                  avatar={newPostArrayContent.articleProps.authorAvatar}
-                  author={newPostArrayContent.articleProps.author}
-                  keywords={newPostArrayContent.articleProps.categories}
-                  width={this.state.postHeight * 0.66}
-                  height={this.state.postHeight}
-                />
-              </div>
-            </LightShadow>
+            <div ref={this.summaryCursorMove} key={i}>
+              <Summary2
+                textHTML={newPostArrayContent.articleProps.summaryText}
+                date={newPostArrayContent.articleProps.date}
+                avatar={newPostArrayContent.articleProps.authorAvatar}
+                author={newPostArrayContent.articleProps.author}
+                keywords={newPostArrayContent.articleProps.categories}
+                width={this.state.postHeight * 0.66}
+                height={this.state.postHeight}
+              />
+            </div>
+            // </LightShadow>
           );
         } else {
           return (
@@ -109,12 +106,14 @@ class NewPost extends React.Component {
             >
               {newPostJSX}
             </div>
+            {/* <LightShadow factor={5}> */}
             <div
               style={this.state.newPostTitleContStyle}
               className="newPostSummaryCont  grid"
             >
               {newPostSummaryJSX}
             </div>
+            {/* </LightShadow> */}
           </div>
         </section>
       </div>

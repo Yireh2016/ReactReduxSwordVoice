@@ -35,3 +35,15 @@
   text-decoration: none;
   font-weight: bold;
 }
+
+@media (max-width: 1050px) {
+  .logInForm {
+    height: 60vh;
+  }
+}
+
+@media (max-width: 700px) {
+  .logInLogo {
+    padding-top: 0;
+  }
+}

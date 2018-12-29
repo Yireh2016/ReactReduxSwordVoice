@@ -75,9 +75,9 @@
   width: 100%;
   transform: rotateZ(180deg);
   transform-origin: right;
-  -webkit-animation: navbarRotate 2s ease 1s normal forwards;
+  /* -webkit-animation: navbarRotate 2s ease 1s normal forwards;
   -o-animation: navbarRotate 2s ease 1s normal forwards;
-  animation: navbarRotate 2s ease 1s normal forwards;
+  animation: navbarRotate 2s ease 1s normal forwards; */
 }
 @keyframes navbarRotate {
   to {
@@ -166,7 +166,6 @@
   margin-top: 20px;
   transform: translateY(0);
   transition: all 1s cubic-bezier(0.75, -0.6, 0.35, 1.65);
-  /* animation: MenuHidden 5s forwards cubic-bezier(0.39, 0.575, 0.565, 1) ; */
 }
 @keyframes MenuPChidden {
   from {
@@ -255,11 +254,12 @@
   }
 
   .desplegable-logo {
-    height: 50vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 200px;
+    margin: auto;
   }
   .fila-menu {
     margin-bottom: 5vh;
@@ -284,6 +284,78 @@
     font-size: 4rem;
     letter-spacing: 0.08em;
     color: #ebf0f2;
+  }
+
+  @keyframes ProfileToggle {
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    from {
+      transform: translateX(-200%);
+      opacity: 0;
+      /* visibility: hidden; */
+    }
+  }
+  .desplegable-toggle-navbar {
+    position: relative;
+  }
+  .desplegable-toggle-navbar ul {
+    transition: all ease 1s;
+    position: absolute;
+  }
+  .avatarMenuLayout {
+    float: right;
+    justify-content: space-evenly;
+    height: calc(100vh - 342px);
+    display: flex;
+    flex-direction: column;
+  }
+  .avatarMenuLayout a {
+    display: inline-flex;
+  }
+  .avatarMenuContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .avatarMenu {
+    border-radius: 100%;
+    height: 100px;
+    width: 100px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .avatarMenu img {
+    width: 100%;
+  }
+  .desplegable-login {
+    font-size: 2rem;
+    padding-top: 20px;
+  }
+  .desplegable-login button {
+    background-color: transparent;
+    border: 2px solid #f95f0b;
+    border-radius: 16px;
+    color: #f95f0b;
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 15px;
+  }
+  .desplegable-login button:nth-child(2) {
+    background-color: #007ca8;
+    color: #ecf0f2;
+  }
+  .desplegable-login p {
+    color: white;
+    margin: 5px 0;
+    text-align: center;
+  }
+  .desplegable-login p span {
+    color: #f95f0b;
+    font-weight: bold;
   }
   .desplegable-footer {
     padding: 20px;
@@ -336,7 +408,7 @@
   }
   #menu-desplegable li {
     margin-top: 2vh;
-    font-size: 5vh;
+    font-size: 4vh;
   }
   .desplegable-equis {
     padding: 3vh 3vh 0 0;
@@ -352,12 +424,34 @@
   .desplegable-footer a {
     margin-right: 20px;
   }
+  .desplegable-login {
+    padding-top: 7px;
+  }
+  .desplegable-login p {
+    font-size: 4vh;
+  }
+  .desplegable-login button {
+    font-size: 0.8rem;
+    padding: 9px;
+    border-radius: 10px;
+  }
+
+  .avatarMenuLayout {
+    padding-right: 10px;
+    height: calc(100vh - 190px);
+  }
+  .avatarMenu {
+    height: 70px;
+    width: 70px;
+  }
 
   .fila-menu {
     margin-bottom: 0;
   }
   .fila-menu ul {
     margin: 0;
+    padding-top: 35%;
+    padding-left: 20px;
   }
   #menu-pc {
     display: none;

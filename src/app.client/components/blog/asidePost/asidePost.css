@@ -5,11 +5,11 @@
   visibility: hidden;
 }
 .popPostSection {
+  border-radius: 15px;
   margin: 20px 0 0 0;
   padding: 20px;
   /* background: linear-gradient(269.69deg, #1a2225 5.03%, #00171f 98.08%); */
   background-color: #00171f;
-  overflow: hidden;
 }
 .popPostSection > h2 {
   text-align: center;
@@ -27,6 +27,7 @@
   .popPostSection {
     height: calc(60vw * 1.1 + 80px);
     padding-left: 40px;
+    border-radius: 0;
   }
   .popPostSection h2 {
     text-align: left;

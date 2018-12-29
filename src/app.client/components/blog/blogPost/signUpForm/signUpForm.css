@@ -6,21 +6,22 @@
   height: 100vh;
   z-index: 3;
   background-color: rgba(0, 0, 0, 0.637);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .formCard {
   border: 3px solid #f95f0b;
   box-sizing: border-box;
   border-radius: 15px;
-
   padding: 20px;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   height: 100vh;
   max-width: 33%;
   width: 360px;
   background: linear-gradient(180deg, #1a2225 66.02%, #0088ba 91.38%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 .signUpPageCont {
   position: relative;
@@ -116,17 +117,14 @@
 .signUpPage1,
 .signUpPage2 {
   transition: opacity 500ms, transform 500ms;
-  position: absolute;
+  /* position: absolute;
   top: 0;
-  left: 0;
+  left: 0; */
   opacity: 0;
   transform: translateX(20%);
   font-size: 24px;
 }
 .controlButtons {
-  left: 0;
-  position: absolute;
-  top: calc(100vh - 65px);
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -193,13 +191,24 @@
 }
 @media (max-width: 1050px) {
   .formCard {
+    width: 50%;
     max-width: 50%;
   }
 }
 @media (max-width: 700px) {
+  .signUpForm {
+    height: calc(100vh - 118px - 100px);
+  }
+  .avatarLoad {
+    height: 100px;
+    width: 100px;
+  }
   .formCard {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+  }
+  .formLayout {
+    background-color: #f95f0b;
   }
 }

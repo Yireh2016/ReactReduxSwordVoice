@@ -151,7 +151,7 @@ class LogInForm extends Component {
             >
               <div className="grid col-12">
                 <form className="logInForm">
-                  <Logo className="col-8 logInLogo" />
+                  <Logo className="col-8 logInLogo col-5-sm" />
                   <label>
                     Username <br />
                     <input

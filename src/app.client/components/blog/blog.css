@@ -154,6 +154,8 @@
   overflow: visible;
 }
 .recentPostContainer {
+  border-radius: 0 0px 80px 0px;
+  border: 1px solid transparent;
   /* padding-left: calc(8vh - 40px); */
   height: calc(100vh - 93px);
   /*overflow-y: scroll;
@@ -166,6 +168,7 @@
 }
 .recentPost-article {
   padding: 0 0 40px 40px;
+  /* width: 45%; */
   width: 45%;
 }
 
@@ -173,6 +176,16 @@
   width: 100%;
 }
 
+@keyframes SummaryIN {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
 @media (max-width: 1050px) {
   .contenedorMain-Blog {
     margin-top: 14.3vw;
@@ -193,6 +206,9 @@
   .newPostSummaryCont {
     width: 100%;
     padding: 0;
+    box-shadow: 0 1.4px 7.6px 3.1px #0000003d;
+    /* border: none; */
+    border-radius: 0;
   }
   .newPostSummaryCont > h1 {
     margin: 20px 0 0 20px;
@@ -229,6 +245,7 @@
   .recentPostLayoutContainer,
   .recentPostContainer {
     height: calc(60vw * 1.07 + 10px);
+    border: none;
   }
   .recentPostLayoutContainer {
     overflow-x: scroll;

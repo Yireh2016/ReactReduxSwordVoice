@@ -21,14 +21,16 @@ class NavBar extends Component {
     super(props);
     this.state = {
       menuVisible: null,
-      menuIsOpaque: false,
+      menuIsOpaque: null,
       navBarMarginTop: "20",
       navBarBackgroundOnScroll: "transparent",
       logoWidth: "90px",
       showSignUp: false,
       showLogIn: false,
       showDesplegable: false,
-      loggedUserAvatar: ""
+      loggedUserAvatar: "",
+      toggleAnim: false,
+      tempUnmount: false
     };
 
     if (
@@ -41,13 +43,18 @@ class NavBar extends Component {
   }
 
   handleClick() {
-    this.state.menuVisible === "translateX(0)"
-      ? this.setState({
-          menuVisible: null
-        })
-      : this.setState({
-          menuVisible: "translateX(0)"
-        });
+    if (this.state.menuVisible === "translateX(0)") {
+      this.setState({
+        menuVisible: null,
+        tempUnmount: false
+      });
+
+      return;
+    }
+    this.setState({
+      tempUnmount: true,
+      menuVisible: "translateX(0)"
+    });
   }
 
   handleScroll() {
@@ -61,13 +68,24 @@ class NavBar extends Component {
     //if is PC
 
     if (window.innerWidth > 1050) {
-      window.pageYOffset > 20
-        ? this.setState({
-            menuIsOpaque: true
-          })
-        : this.setState({
-            menuIsOpaque: false
-          });
+      if (window.pageYOffset > 20) {
+        this.setState({
+          menuIsOpaque: true
+        });
+      } else {
+        /*
+          antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
+        */
+
+        this.setState(prevState => {
+          const menuState =
+            prevState.menuIsOpaque === null //verifico la primera animacion
+              ? { menuIsOpaque: null } // dejo el estado actual si vengo de la animacion primera
+              : { menuIsOpaque: false }; //si no entonces si disparo la animacion de "ocultar menu"
+
+          return menuState;
+        });
+      }
     }
   }
 
@@ -103,6 +121,9 @@ class NavBar extends Component {
     }
   }
 
+  onAvatarClick = () => {
+    this.setState({ toggleAnim: !this.state.toggleAnim });
+  };
   signClickHandler = () => {
     this.setState({
       showSignUp: true,
@@ -131,7 +152,8 @@ class NavBar extends Component {
     window.localStorage.removeItem("userAvatar");
     this.setState({
       showDesplegable: false,
-      loggedUserAvatar: ""
+      loggedUserAvatar: "",
+      toggleAnim: false
     });
   };
 
@@ -175,25 +197,26 @@ class NavBar extends Component {
         </div>
       );
     }
-
-    // {!this.props.isUserLoggedIn ? (
-    //   <div className="grid userLogo">
-    //     <img src={userLogo} alt="user Logo" />
-    //   </div>
-    // ) : (
-    //   <div
-    //     className="avatarImg "
-    //     style={{
-    //       height: "45px",
-    //       width: "45px",
-    //       backgroundImage: `url('data:image/jpeg;base64,${
-    //         this.props.loggedUserAvatar
-    //       }`
-    //     }}
-    //   />
-    // )}
   };
   render() {
+    let animation;
+    switch (this.state.menuIsOpaque) {
+      case null: {
+        animation = "navbarRotate 2s ease 1s normal forwards";
+
+        break;
+      }
+      case true: {
+        animation =
+          " MenuPChidden 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)";
+        break;
+      }
+      case false: {
+        animation =
+          " MenuPCshow 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)";
+        break;
+      }
+    }
     let isVisible = this.state.menuVisible;
     const menu = [
       {
@@ -212,6 +235,15 @@ class NavBar extends Component {
         nombre: "Contact"
       }
     ];
+
+    const desplegableMenu = [
+      {
+        nombre: "Profile"
+      },
+      {
+        nombre: "Log out"
+      }
+    ];
     const contentMenuSmall = menu.map((smallMenuContent, i) => {
       return (
         <React.Fragment key={i}>
@@ -223,6 +255,33 @@ class NavBar extends Component {
             >
               {smallMenuContent.nombre}
             </NavLink>
+          </li>
+        </React.Fragment>
+      );
+    });
+    const contentMenuDesplegable = desplegableMenu.map((desplegableMenu, i) => {
+      return (
+        <React.Fragment key={i}>
+          <li>
+            {desplegableMenu.nombre === "Profile" ? (
+              <NavLink
+                to={"/" + desplegableMenu.nombre}
+                activeClassName="activeLink"
+                className="flyingLink"
+              >
+                {desplegableMenu.nombre}
+              </NavLink>
+            ) : (
+              <span
+                style={{
+                  color: "var(--orange)",
+                  fontWeight: "500"
+                }}
+                onClick={this.logOutClickHandler}
+              >
+                {desplegableMenu.nombre}
+              </span>
+            )}
           </li>
         </React.Fragment>
       );
@@ -275,9 +334,7 @@ class NavBar extends Component {
         <nav
           id="navBar"
           style={{
-            animation: this.state.menuIsOpaque
-              ? " MenuPChidden 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)"
-              : " MenuPCshow 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)"
+            animation: animation
           }}
         >
           <div
@@ -416,14 +473,13 @@ class NavBar extends Component {
             </a>
           </div>
 
-          <div
-            id="menu-desplegable"
-            onClick={() => {
-              this.handleClick();
-            }}
-            style={{ transform: isVisible }}
-          >
-            <div className="desplegable-equis">
+          <div id="menu-desplegable" style={{ transform: isVisible }}>
+            <div
+              onClick={() => {
+                this.handleClick();
+              }}
+              className="desplegable-equis"
+            >
               <svg viewBox="0 0 64 64" fill="none">
                 <rect
                   width="45"
@@ -455,26 +511,75 @@ class NavBar extends Component {
             </div>
 
             <div className="fila fila-menu">
-              <ul className="col-6-md col-6-sm grid ">{contentMenuSmall}</ul>
+              <div className="col-6-md col-6-sm grid desplegable-toggle-navbar">
+                <ul
+                  style={
+                    !this.state.toggleAnim
+                      ? {
+                          transform: "translateX(0)",
+                          opacity: "1"
+                        }
+                      : {
+                          transform: "translateX(-200%)",
+                          opacity: "0"
+                        }
+                  }
+                >
+                  {contentMenuSmall}
+                </ul>
 
-              <div
-                className="grid col-6-md col-6-sm"
-                style={{
-                  display: "flex",
-                  flexDirection: "column"
-                }}
-              >
-                <div className="avatarMenuContainer">
-                  <div className="avatarMenu" />
-                  <div>
-                    <p>
-                      Welcome{" "}
-                      <span>
-                        Jainer <span />
-                      </span>
-                    </p>
+                {this.state.tempUnmount && (
+                  <ul
+                    style={
+                      this.state.toggleAnim
+                        ? {
+                            transform: "translateX(0)",
+                            opacity: "1"
+                          }
+                        : {
+                            transform: "translateX(-200%)",
+                            opacity: "0"
+                          }
+                    }
+                  >
+                    {contentMenuDesplegable}
+                  </ul>
+                )}
+              </div>
+
+              <div className="grid col-6-md col-6-sm avatarMenuLayout">
+                {this.props.isUserLoggedIn && (
+                  <div className="avatarMenuContainer">
+                    <div
+                      className="avatarMenu"
+                      onClick={this.onAvatarClick}
+                      style={{
+                        backgroundImage: `url('data:image/jpeg;base64,${
+                          this.state.loggedUserAvatar
+                        }`
+                      }}
+                    />
+                    <div className="desplegable-login">
+                      <p>
+                        Welcome
+                        <span>
+                          {` ${this.props.loggedUserName}`} <span />
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
+                {!this.props.isUserLoggedIn && (
+                  <div className="avatarMenuContainer">
+                    <div className="avatarMenu">
+                      <img src={userLogo} alt="User Avatar Logo" />
+                    </div>
+                    <div className="desplegable-login">
+                      <button onClick={this.logInClickHandler}>Log In</button>{" "}
+                      <button onClick={this.signClickHandler}>Sign Up</button>
+                    </div>
+                  </div>
+                )}
                 <a href="/home">
                   <Logo className="col-6-md col-12-sm grid desplegable-logo" />
                 </a>

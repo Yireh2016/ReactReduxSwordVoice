@@ -6,7 +6,9 @@
   padding: 10px 20px;
   box-sizing: border-box;
 }
-
+.summary2-text p:nth-child(1) {
+  margin-top: 0;
+}
 .summary2-readMore {
   font-weight: bold;
 }
