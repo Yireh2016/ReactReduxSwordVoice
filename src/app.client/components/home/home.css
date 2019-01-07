@@ -19,11 +19,75 @@
   height: 100vh;
 }
 #contenedorFondo {
-  transform: scale(0.9);
+  /* transform: scale(0.9); */
+
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+#contenedorFondo svg:nth-child(3) {
+  top: 90px;
+  left: -1px;
+  position: fixed;
+  height: calc(100vh - 90px);
+}
+
+#contenedorFondo svg:nth-child(3) path {
+  stroke-dasharray: 4364.666015625;
+  stroke-width: 5px;
+  stroke: var(--orange);
+  stroke-dashoffset: 3855.666016;
+  animation: topPathAnim 1s ease forwards;
+}
+@keyframes topPathAnim {
+  from {
+    stroke-dashoffset: 3855.666016;
+  }
+
+  to {
+    stroke-dashoffset: 1055.666016;
+  }
+}
+#contenedorFondo svg:nth-child(4) {
+  position: fixed;
+  bottom: 0;
+  height: calc(100vh - 90px);
+  right: -1px;
+}
+
+#contenedorFondo svg:nth-child(4) path {
+  stroke-dasharray: 4364.666015625;
+  stroke-width: 5px;
+  stroke: var(--orange);
+  stroke-dashoffset: 3467.766016;
+  animation: bottomPathAnim 1s ease 1s forwards;
+}
+@keyframes bottomPathAnim {
+  from {
+    stroke-dashoffset: 3467.766016;
+  }
+
+  to {
+    stroke-dashoffset: -876.233984;
+  }
+}
+
+#contenedorFondo img {
+  opacity: 0;
+  transform: scale(2);
+  animation: imgAppear 1s cubic-bezier(1, 0, 0.445, 1.435) 2s forwards;
+}
+
+@keyframes imgAppear {
+  from {
+    opacity: 0;
+    transform: scale(2);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 #imgFondo {
@@ -100,7 +164,7 @@
   position: absolute;
   background: #ffffff;
   background: var(--white);
-  width: 200%;
+  width: 100vw;
   height: calc(100% + 10px);
   -webkit-animation: bounceCont 1s cubic-bezier(0.87, -0.19, 0.975, 0.67) 3s
     normal forwards;

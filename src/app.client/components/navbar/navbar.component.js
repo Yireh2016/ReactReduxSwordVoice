@@ -346,10 +346,7 @@ class NavBar extends Component {
               position: "relative"
             }}
           >
-            <div
-              className="fondoMenuPc"
-              style={{ backgroundColor: this.state.navBarBackgroundOnScroll }}
-            />
+            <div className="fondoMenuPc" style={{ backgroundColor: "white" }} />
             <div className="grid col-2 relleno" />
             <div className="grid col-3 ">
               <a href="/home">

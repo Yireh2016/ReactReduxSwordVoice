@@ -1,0 +1,30 @@
+.loginLayout {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginCont {
+  /* display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--blueDark);
+  color: var(--white);
+  border-radius: 20px; */
+  grid-row-gap: 10px;
+  display: grid;
+  grid-template-columns: auto;
+  padding: 20px;
+  background-color: var(--blueDark);
+  color: var(--white);
+  border-radius: 20px;
+}
+.loginCont button {
+  background-color: var(--blueLight);
+  color: white;
+}
+.loginInputLayout {
+  display: flex;
+  flex-direction: column;
+}

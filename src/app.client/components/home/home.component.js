@@ -32,8 +32,48 @@ class Home extends Component {
         {/*Fondo PC*/}
 
         <div id="contenedorFondo">
-          <LightShadow factor={5}>
-            <svg
+          <img
+            src={`${imgFondo} `}
+            alt="imagen fondo"
+            style={{
+              position: "fixed",
+              width: "120vw",
+              height: "120vh"
+            }}
+          />
+          <div
+            style={{
+              position: "fixed",
+              height: "91px",
+              backgroundColor: "white",
+              top: "0",
+              left: "0",
+              width: "100vw"
+            }}
+          />
+          <svg
+            viewBox="0 0 1439 888"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M-1.99988 0V891C-1.99988 891 5.4635 816.086 21.0129 714.11C44.6981 558.779 87.1444 340.659 150.553 228.865C255.589 43.6765 541.188 0 1439 0H-1.99988Z"
+              fill="white"
+            />
+          </svg>
+
+          <svg
+            viewBox="0 0 1439 888"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1439 891V0C1439 0 1431.54 74.9139 1415.99 176.89C1392.3 332.221 1349.86 550.341 1286.45 662.135C1181.41 847.324 895.812 891 -2 891H1439Z"
+              fill="white"
+            />
+          </svg>
+          {/* <LightShadow factor={5}> */}
+          {/* <svg
               ref={this.fondoCursor}
               id="imgFondo"
               viewBox="0 0 1442.6248 1020.3935"
@@ -68,12 +108,10 @@ class Home extends Component {
                 d="m 1424.8117,-21.427051 c -0.01,7.1e-4 -0.013,-4.5e-4 -0.02,0.002 0.01,0.002 0.018,-0.002 0.02,-0.002 z M 228.7844,138.57494 C -0.35967984,207.29913 22.901645,991.41736 22.794155,992.47926 305.44278,983.22885 1170.2121,1019.948 1293.958,824.96403 1417.704,629.98009 1449.5864,267.62537 1459.5771,89.805384 1388.13,80.191544 611.20039,31.718754 228.7844,138.57494 Z M 1462.8078,-6.546141 v 0.082 c 0.021,0.038568 0,-0.045039 0,-0.082 z"
               />
             </svg>
-          </LightShadow>
+        */}
+          {/* </LightShadow> */}
         </div>
-        {/* </LightShadow> */}
-
         {/*Fondo Tablet*/}
-
         <div id="imgFondoMd">
           <img
             src={imgFondoMed}
@@ -97,7 +135,6 @@ class Home extends Component {
           </svg>
         </div>
         {/*Fondo Phone*/}
-
         <div id="imgFondoSm">
           <img
             src={imgFondoMed}
@@ -120,7 +157,6 @@ class Home extends Component {
           </svg>
         </div>
         {/*Hero Section*/}
-
         <section className="home-hero center">
           <div id="tarjetaAnimada" className="center" />
           {/* <LightShadow factor={-10}> */}
@@ -135,7 +171,6 @@ class Home extends Component {
           </h2>
         </section>
         {/*Boton de accion y footer*/}
-
         <Call2Action className="call2Action-home appear" />
         <FooterApp estilos="appear footer" size="redesSociales-home" />
       </div>

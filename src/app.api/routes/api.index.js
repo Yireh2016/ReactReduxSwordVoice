@@ -137,11 +137,21 @@ routerAPI.post("/login", guestAPI, (req, res) => {
       return;
     }
     if (user) {
-      token = user.generateJwt();
+      // token = user.generateJwt();
       res.json(200, {
-        userName: user.userName,
         userAvatar: user.userAvatar,
-        token: token
+        userFirstName: user.userFirstName,
+        userLastName: user.userLastName,
+        userEmail: user.userEmail,
+        userCountry: user.userCountry,
+        userBirthDate: user.userBirthDate,
+        userGender: user.userGender,
+        userInterests: user.userInterests,
+        userOtherInterests: user.userOtherInterests,
+        userName: user.userName,
+        userSessionId: user.userSessionId,
+        userType: user.userType,
+        userCreationDate: user.userCreationDate
       });
     } else {
       console.log("dio un 401", info);

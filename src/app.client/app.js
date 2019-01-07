@@ -21,7 +21,7 @@ class App extends Component {
           exact
           path="/home"
           render={() => <Home cookies={this.props.cookies} />}
-        />{" "}
+        />
         <Route
           exact
           path="/"

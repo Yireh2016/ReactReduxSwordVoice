@@ -180,5 +180,67 @@ module.exports = [
     resolve: {
       extensions: [".js", ".jsx"]
     }
+  },
+  /////////////////
+  ////////CMS  WEBPACK
+  ////////////////////
+  {
+    entry: "./src/app.cms/cms.index.js",
+    output: {
+      path: path.join(__dirname, "dist/assets/"),
+      publicPath: "/",
+      filename: "bundleCMS.js"
+    },
+    devtool: "eval",
+    plugins: clientLoaders.concat([
+      new ExtractTextPlugin("indexCMS.css", {
+        allChunks: true
+      })
+    ]),
+    // externals: nodeExternals(),
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          use: "babel-loader"
+        },
+        {
+          test: /\.css$/,
+          // use: ExtractTextPlugin.extract({
+          //   fallback: "style-loader",
+          //   use: "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]"
+          // })
+          // use: [
+          //   // { loader: 'style-loader' },
+          //   {
+          //     loader: 'css-loader',
+          //     options: {
+          //       fallback: 'style-loader',
+          //       sourceMap: true,
+          //       modules: true,
+          //       localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
+          //     }
+          //   },
+
+          // ]
+          use: ExtractTextPlugin.extract({
+            fallback: "isomorphic-style-loader",
+            use: "css-loader"
+          })
+        },
+        {
+          test: /\.(jpe?g|png|gif|svg|ico)$/i,
+          use: [
+            {
+              loader: "file-loader"
+            }
+          ]
+        }
+      ]
+    },
+    resolve: {
+      extensions: [".js", ".jsx"]
+    }
   }
 ];

@@ -1,43 +1,43 @@
 .redesSociales:hover {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .footer {
-	position: fixed;
-	right: 15%;
-	bottom: 5%;
-	animation-delay: 3.5s;
+  position: fixed;
+  right: 5%;
+  bottom: 5%;
+  animation-delay: 3.5s;
 }
 
 .footer svg {
-	margin-right: 15px;
-	float: left;
-	fill: #00171f;
-	fill: var(--blueDark);
-	height: 32px;
+  margin-right: 15px;
+  float: left;
+  fill: #00171f;
+  fill: var(--blueDark);
+  height: 32px;
 }
 
 .footer svg:hover {
-	fill: #f95f0b;
-	fill: var(--orange);
+  fill: #f95f0b;
+  fill: var(--orange);
 }
 
 .footer svg:hover path {
-	stroke: none;
+  stroke: none;
 }
 .footer path {
-	stroke: #f95f0b;
-	stroke: var(--orange);
-	stroke-width: 2px;
+  stroke: #f95f0b;
+  stroke: var(--orange);
+  stroke-width: 2px;
 }
 
 @media (max-width: 1050px) /*and (orientation: portrait) */ {
-	.footer {
-		position: fixed;
-		left: 50%;
-		bottom: 5%;
-		width: fit-content;
-		transform: translateX(calc(-50% + 16px));
-	}
+  .footer {
+    position: fixed;
+    left: 50%;
+    bottom: 5%;
+    width: fit-content;
+    transform: translateX(calc(-50% + 16px));
+  }
 }
 /**/

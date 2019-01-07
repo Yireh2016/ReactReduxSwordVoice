@@ -1,0 +1,11 @@
+:root {
+  --orange: #f95f0b;
+  --blueDark: #00171f;
+  --blueLight: #2e9ac2;
+  --grayLight: #f1f1f1;
+  --white: #ffffff;
+  --grayDark: #b0b0b0;
+}
+body {
+  margin: 0;
+}

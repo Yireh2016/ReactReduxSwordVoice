@@ -16,7 +16,9 @@ const userSchema = new Schema({
   userName: { type: String, unique: true, required: true },
   userPassword: { type: String, required: true },
   userSalt: { type: String, required: true },
-  userSessionId: { type: String, required: true }
+  userSessionId: { type: String, required: true },
+  userType: { type: String, required: true, default: "user" },
+  userCreationDate: { type: Date, required: true, default: Date.now() }
 });
 
 userSchema.methods.setPassword = function(password) {
