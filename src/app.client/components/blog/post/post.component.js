@@ -1,6 +1,7 @@
 import React from "react";
 //assets
 import threeDotsButton from "../../../assets/img/general/threeDots.svg";
+import splash from "../../../assets/img/general/splash.svg";
 import "./post.css";
 // services
 import whichDevice from "../../../services/responsiveManager";
@@ -55,7 +56,6 @@ class Post extends React.Component {
     // .threeDotsCont button img
     // transform=rotate(90deg)
     //
-    console.log("this.state.isDetailsOpen", this.state.isDetailsOpen);
     this.setState(prevState => {
       return {
         isDetailsOpen: prevState.isDetailsOpen ? false : true
@@ -150,6 +150,7 @@ class Post extends React.Component {
       this.props.hasBorder === false
         ? "none"
         : borderWidth + "px solid #f95f0b";
+    const threeDotsWidth = this.state.newPostHeigh / 9.72;
 
     return (
       <div
@@ -163,8 +164,8 @@ class Post extends React.Component {
         // }}
         ref={this.myNewPostRef}
         style={{
-          height: `${this.state.newPostHeight}px`,
-          border: border
+          height: `${this.state.newPostHeight}px`
+
           // overflow: "hidden",
           // position: "relative"
         }}
@@ -173,8 +174,7 @@ class Post extends React.Component {
           className="postCompImg"
           style={{
             backgroundImage: `url(${this.props.postImage}`
-            // height: "100%",
-            // backgroundSize: "cover"
+            // border: border
           }}
         />
         <div
@@ -186,7 +186,7 @@ class Post extends React.Component {
             opacity: this.state.postOpacity,
             height: this.state.isDetailsOpen ? "100%" : "32%",
             transform: this.state.isDetailsOpen && "translateY(-68%)",
-            backgroundColor: this.state.isDetailsOpen ? "white" : "#024259",
+            backgroundColor: this.state.isDetailsOpen ? "white" : "transparent",
             border: this.state.isDetailsOpen
               ? "3px solid rgb(151, 196, 236)"
               : "none"
@@ -214,7 +214,10 @@ class Post extends React.Component {
                 color: this.state.isDetailsOpen ? "#024259 " : "white ",
                 height: this.state.isDetailsOpen
                   ? "auto"
-                  : this.state.postTitleHeight
+                  : this.state.postTitleHeight,
+                position: "absolute",
+                zIndex: " 1",
+                top: "-12%"
 
                 // margin: "0",
                 // fontWeight: "bold",
@@ -236,12 +239,18 @@ class Post extends React.Component {
                   style={{
                     transform: this.state.isDetailsOpen
                       ? "rotate(90deg)"
-                      : "rotate(0deg)"
+                      : "rotate(0deg)",
+                    width: `${threeDotsWidth}`
                   }}
                   src={threeDotsButton}
                   alt="three Dots Button"
                 />
               </button>
+            </div>
+          )}
+          {!this.state.isDetailsOpen && (
+            <div className="postTitleSplash">
+              <img src={splash} />
             </div>
           )}
         </div>

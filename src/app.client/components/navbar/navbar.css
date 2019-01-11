@@ -22,21 +22,21 @@
 }
 
 .enlace {
-  margin-right: 20px;
+  margin-right: 10px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
   font-size: 0.5rem;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.05em;
   color: #004059;
   color: var(--blueDark);
   text-decoration: none;
   text-align: center;
-  transition: all 0.5s cubic-bezier(0.75, -0.6, 0.35, 1.65);
+  transition: all 0.2s cubic-bezier(0.75, -0.6, 0.35, 1.65);
 }
 .enlace:hover {
-  letter-spacing: 0.3em;
-  font-size: 0.55rem;
+  /* letter-spacing: 0.3em; */
+  /* font-size: 0.55rem; */
   color: #f95f0b;
   color: var(--orange);
 }
@@ -146,6 +146,11 @@
 }
 .menuPcWelcome {
   padding-left: 10px;
+  color: #3f5e6a;
+  font-weight: bold;
+  width: 10%;
+  font-size: 0.5rem;
+  text-align: center;
 }
 .menuPcWelcome span {
   color: #f95f0b;
@@ -155,10 +160,10 @@
   width: 75px;
   transition: all 0.5s cubic-bezier(0.75, -0.6, 0.35, 1.65);
 }
-#menu a:hover #active-line {
+/* #menu a:hover #active-line {
   width: 40px;
   transform: translateX(-8px);
-}
+} */
 
 #menu-pc {
   margin-top: 20px;

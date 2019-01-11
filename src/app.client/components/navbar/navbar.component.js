@@ -354,7 +354,7 @@ class NavBar extends Component {
           >
             <div className="fondoMenuPc" style={{ backgroundColor: "white" }} />
             <div className="grid col-2 relleno" />
-            <div className="grid col-3 ">
+            <div className="grid " style={{ width: "48%" }}>
               <a href="/home">
                 <Logo
                   className="logoTransition"
