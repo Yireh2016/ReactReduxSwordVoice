@@ -19,6 +19,8 @@ import "./blog.css";
 import newPostImg from "../../assets/img/blog/newPost.jpg";
 import avatarImg from "../../assets/img/general/avatar.jpg";
 import Summary2 from "../blog/common/summary/summary2.component";
+//services
+import isDevice from "../../../services/isDevice";
 
 class BlogComponent extends Component {
   constructor(props) {
@@ -43,16 +45,7 @@ class BlogComponent extends Component {
   }
 
   componentDidMount() {
-    const winWidth = window.innerWidth;
-    let device;
-
-    if (winWidth <= 700) {
-      device = "phone";
-    } else if (winWidth > 700 && winWidth < 1050) {
-      device = "tablet";
-    } else {
-      device = "pc";
-    }
+    const device = isDevice();
 
     // const recentDataArray = this.fetchData();
     // const popDataArray = this.fetchData();

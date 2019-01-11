@@ -135,7 +135,13 @@ class NavBar extends Component {
     this.setState({ showDesplegable: false });
   };
   mouseOverAvatarHandler = () => {
+    console.log("this.state.showDesplegable ", this.state.showDesplegable);
+
     this.setState({ showDesplegable: true });
+    console.log(
+      "this.state.showDesplegable despues",
+      this.state.showDesplegable
+    );
   };
   logInClickHandler = () => {
     this.setState({
@@ -368,7 +374,12 @@ class NavBar extends Component {
               <div
                 className="menuAvatar"
                 onMouseLeave={this.onMouseLeaveHandler}
-                onMouseOver={this.mouseOverAvatarHandler}
+                onMouseEnter={this.mouseOverAvatarHandler}
+                onClick={
+                  this.state.showDesplegable
+                    ? this.onMouseLeaveHandler
+                    : this.mouseOverAvatarHandler
+                }
               >
                 {this.avatarToRender()}
 
@@ -572,7 +583,7 @@ class NavBar extends Component {
                       <img src={userLogo} alt="User Avatar Logo" />
                     </div>
                     <div className="desplegable-login">
-                      <button onClick={this.logInClickHandler}>Log In</button>{" "}
+                      <button onClick={this.logInClickHandler}>Log In</button>
                       <button onClick={this.signClickHandler}>Sign Up</button>
                     </div>
                   </div>

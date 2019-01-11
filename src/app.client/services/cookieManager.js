@@ -5,7 +5,7 @@ export function sessionCookie(props) {
   //setting a cookie
   //verifica si el cookie de session existe
 
-  cookies.set("sessionId", uuid(), { path: "/" });
+  cookies.set("sessionId", uuid(), { path: "/", maxAge: 60 * 60 * 24 * 365 });
 }
 
 export function guestCookie(props) {

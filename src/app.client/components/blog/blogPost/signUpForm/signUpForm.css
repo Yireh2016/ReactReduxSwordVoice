@@ -9,22 +9,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 .formCard {
+  position: relative;
   border: 3px solid #f95f0b;
   box-sizing: border-box;
   border-radius: 15px;
-  padding: 20px;
+  /* padding: 20px; */
+  padding: 2vw;
   height: 100vh;
-  max-width: 33%;
-  width: 360px;
+  width: 25vw;
+  max-width: 340px;
   background: linear-gradient(180deg, #1a2225 66.02%, #0088ba 91.38%);
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  max-height: 680px;
 }
 .signUpPageCont {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .avatarContForm {
   display: flex;
@@ -49,6 +55,9 @@
   transform: translate(-50%, -50%);
   width: 100%;
 }
+.signUpForm2 {
+  grid-row-gap: 2vh;
+}
 .signUpForm,
 .signUpForm2,
 .signUpForm3 {
@@ -56,20 +65,29 @@
   width: 100%;
   color: white;
   font-weight: bold;
-  display: flex;
+  display: grid;
+  grid-template-columns: 100%;
+  /* grid-row-gap: 2vh; */
+  /* grid-row-gap: 25px; */
+  /* display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-around; */
 }
-.signUpForm {
+
+.signUpForm2 > *,
+.signUpForm3 > * {
+  padding: 2vh 0 0 0;
+}
+/* .2signUpForm {
   height: calc(100vh - 200px - 100px);
 }
 .signUpForm2 {
   height: calc(100vh - 100px);
-}
-.signUpForm3 {
-  height: calc(100vh - 300px);
-  margin-top: 50px;
-}
+} */
+/* .signUpForm3 {
+  height: calc(100vh - 300px); 
+   margin-top: 50px;
+} */
 .signUpForm label input,
 .signUpForm select,
 .signUpForm2 label input,
@@ -79,7 +97,7 @@
   border: 1px solid transparent;
   border-radius: 21px;
   width: 100%;
-  height: 5vh;
+  height: 35px;
   box-sizing: border-box;
   padding-left: 10px;
   font-weight: bold;
@@ -93,7 +111,7 @@
   position: relative;
   padding: 2px 3px 0 3px;
   margin: 5px 0 0 2px;
-  height: 3vh;
+  height: 22.8px;
   font-size: 13.3px;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.445);
@@ -124,19 +142,26 @@
   transform: translateX(20%);
   font-size: 24px;
 }
+
 .controlButtons {
-  width: 100%;
+  left: 50%;
+  position: absolute;
+  /* width: 100%; */
   display: flex;
   flex-direction: row;
   justify-content: center;
+  /* padding-top: 3vh; */
+  bottom: calc(-50px - 3vh);
+  transform: translateX(-50%);
 }
+
 .controlButtons button {
   width: 150px;
   height: 50px;
   border-radius: 15px;
   font-weight: bold;
   font-size: 1.1rem;
-  margin-right: 20px;
+  margin-right: 10px;
   box-sizing: border-box;
   background: #00171f;
   border: 3px solid #00b7fb;
@@ -150,9 +175,20 @@
   color: white;
 }
 .flyIn {
-  opacity: 1;
-  z-index: 1;
-  transform: translateX(0);
+  animation: flyIn 500ms ease-in forwards;
+}
+@keyframes flyIn {
+  from {
+    opacity: 0;
+    z-index: 0;
+    transform: translateX(20%);
+  }
+
+  to {
+    opacity: 1;
+    z-index: 1;
+    transform: translateX(0);
+  }
 }
 .flyToLeft,
 .flyToRight {
@@ -166,9 +202,13 @@
   transform: translateX(20%);
 }
 
-.interestsCont span {
-  font-size: 16px;
+.smallSpan {
+  font-size: 12.8px;
   font-weight: normal;
+  color: #d9d9d9;
+}
+.interestsSpan {
+  max-width: 80%;
 }
 .interestsCont h3 {
   font-size: 24px;
@@ -184,31 +224,84 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 50px;
+  height: 7vh;
+}
+.interestsLay {
+  padding: 2vh 0 0 1.5vw;
 }
 .checkboxCont input {
   margin-right: 15px;
 }
+.personalData {
+  display: flex;
+  flex-direction: row;
+}
+.personalData label {
+  width: 50%;
+}
+.personalData label:nth-child(2) {
+  margin-left: 1.3vw;
+}
 @media (max-width: 1050px) {
   .formCard {
     width: 50%;
-    max-width: 50%;
+    padding: 10px 3vw;
+  }
+  .avatarContForm {
+    padding: 0 0 3vh 0;
+  }
+  .checkboxCont input {
+    margin-right: 1.2vw;
+  }
+  .controlButtons {
+    bottom: calc(-50px - 2vh);
   }
 }
 @media (max-width: 700px) {
-  .signUpForm {
+  /* .signUpForm {
     height: calc(100vh - 118px - 100px);
-  }
+  } */
   .avatarLoad {
-    height: 100px;
-    width: 100px;
+    height: 30vh;
+    width: 30vh;
+  }
+  .avatarContForm {
+    padding: 0;
   }
   .formCard {
+    padding: 8vh 7vw;
     width: 100%;
-    max-width: 100%;
+    max-width: none;
+    max-height: none;
     box-sizing: border-box;
   }
   .formLayout {
     background-color: #f95f0b;
+  }
+
+  .signUpForm {
+    grid-row-gap: 0vh;
+  }
+  .signUpForm2 {
+    grid-row-gap: 6vh;
+  }
+
+  .signUpPage1,
+  .signUpPage2 {
+    font-size: 18px;
+  }
+
+  .interestsCont input {
+    width: auto;
+    height: auto;
+  }
+  .controlButtons {
+    bottom: calc(-50px - 3vh);
+  }
+  .controlButtons button {
+    margin-right: 22px;
+    border-radius: 10px;
+    width: 123px;
+    height: 44px;
   }
 }

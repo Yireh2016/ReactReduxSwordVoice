@@ -3,6 +3,7 @@ import React from "react";
 import { hydrate } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
+import "@babel/polyfill"; //para que axios funcione en ie11
 // import { createStore } from "redux";
 import { CookiesProvider } from "react-cookie";
 import { ConnectedRouter } from "connected-react-router";

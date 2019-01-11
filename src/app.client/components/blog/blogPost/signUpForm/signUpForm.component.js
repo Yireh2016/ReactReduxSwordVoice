@@ -8,6 +8,7 @@ import { withCookies, Cookies } from "react-cookie";
 //services
 import { saveToken } from "../../../../services/auth";
 import { sessionCookie } from "../../../../services/cookieManager";
+import isBrowser from "../../../../../services/isBrowser";
 
 //css
 import "./signUpForm.css";
@@ -67,26 +68,38 @@ class SignUpForm extends Component {
   };
   handleImgUpload = files => {
     let Uploadfunction = this.imageUpload;
-    new Compressor(files[0], {
-      quality: 0.6,
-      width: 200,
-      mimeType: "jpg",
-      convertSize: 200000,
-      success(result) {
-        Uploadfunction(result);
-      },
-      error(err) {
-        console.log("error", err);
+    const browser = isBrowser();
+    const shouldCompress =
+      browser === "ie" || browser === "edge" ? false : true;
 
-        this.setState(() => {
-          return {
-            userAvatarPreview: undefined,
-            uploadMessage: `${err}`
-          };
-        });
-        return;
-      }
-    });
+    console.log(
+      `isbrowser es ${browser} y shouldCompress es ${shouldCompress}`
+    );
+    if (shouldCompress) {
+      new Compressor(files[0], {
+        quality: 0.6,
+        width: 200,
+        mimeType: "jpg",
+        convertSize: 200000,
+        success(result) {
+          Uploadfunction(result);
+        },
+        error(err) {
+          console.log("error", err);
+
+          this.setState(() => {
+            return {
+              userAvatarPreview: undefined,
+              uploadMessage: `${err}`
+            };
+          });
+          return;
+        }
+      });
+    } else {
+      console.log("cargando imagen sin comprimir");
+      Uploadfunction(files[0]);
+    }
   };
   handleOnInterestClick = event => {
     const texto = event.target.innerText;
@@ -187,6 +200,11 @@ class SignUpForm extends Component {
             /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
           )
         ) {
+          console.log(`value.match(
+            /[a-z0-9!#$%&'*+/=?^_'{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_'{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+          ) ${value.match(
+            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
+          )}`);
           this.setState({
             userEmailIsValid: {
               valid: false,
@@ -196,13 +214,9 @@ class SignUpForm extends Component {
           return;
         }
         //Verificando si el email esta en la DB y pertenece a otro usuario
-        fetch(`/api/searchEmail/${value}`)
+        axios(`/api/searchEmail/${value}`)
           .then(res => {
-            if (res.status !== 200) {
-              this.setState({
-                userEmailIsValid: { valid: true }
-              });
-            } else {
+            if (res.status === 200) {
               this.setState({
                 userEmailIsValid: {
                   valid: false,
@@ -213,6 +227,13 @@ class SignUpForm extends Component {
           })
           .catch(err => {
             if (err) {
+              if (JSON.stringify(err).match(/404/g)) {
+                this.setState({
+                  userEmailIsValid: { valid: true }
+                });
+                return;
+              }
+
               this.setState({
                 userEmailIsValid: {
                   valid: " ",
@@ -252,20 +273,25 @@ class SignUpForm extends Component {
         if (value && value.match(/^(\w){1,20}$/g)) {
           //username has to be 1 to 20 chars long including hyphen and underscore
 
-          fetch(`/api/searchUser/${value}`).then(res => {
-            if (res.status === 200) {
-              this.setState({
-                userNameIsValid: {
-                  valid: false,
-                  message: "This username already being used"
-                }
-              });
-              return;
-            }
-            this.setState({
-              userNameIsValid: { valid: true }
+          axios(`/api/searchUser/${value}`)
+            .then(res => {
+              if (res.status === 200) {
+                this.setState({
+                  userNameIsValid: {
+                    valid: false,
+                    message: "This username already being used"
+                  }
+                });
+                return;
+              }
+            })
+            .catch(err => {
+              if (JSON.stringify(err).match(/404/g)) {
+                this.setState({
+                  userNameIsValid: { valid: true }
+                });
+              }
             });
-          });
 
           return;
         }
@@ -352,6 +378,7 @@ class SignUpForm extends Component {
   onNextClick = () => {
     this.setState(prevState => {
       let nextPage = prevState.formPage + 1;
+      console.log(`prevState es ${JSON.stringify(prevState)}`);
       if (
         nextPage === 2 &&
         prevState.userEmailIsValid.valid === true &&
@@ -481,9 +508,9 @@ class SignUpForm extends Component {
             if (userAvatar !== "") {
               let form = new FormData();
               form.append("avatar", userAvatar);
-
+              const browser = isBrowser();
               axios
-                .post(`/api/upload/${userData.id}`, form) //se sube imagen como avatar del cliente
+                .post(`/api/upload/${userData.id}?browser=${browser}`, form) //se sube imagen como avatar del cliente
                 .then(this.handleErrors) //en caso de error
                 .then(res => {
                   if (res.status === 200) {
@@ -734,7 +761,7 @@ class SignUpForm extends Component {
               name={value}
               onChange={this.handleFormInterestChange}
             />
-            <span>{value}</span>
+            <span className="smallSpan interestsSpan">{value}</span>
           </div>
         </React.Fragment>
       );
@@ -750,42 +777,42 @@ class SignUpForm extends Component {
           this.onScrollformLayout(e);
         }}
       >
-        <div className="formCard">
+        <div className="formCard ">
           <div className="signUpPageCont">
-            <section
-              id="signUpPage1"
-              className={`fila signUpPage1 ${this.state.animControl1} `}
-            >
-              <div className="grid col-12 avatarContForm">
-                <input
-                  ref={this.inputFile}
-                  style={{
-                    display: "none"
-                  }}
-                  type="file"
-                  name="avatar"
-                  id="avatar"
-                  accept="image/*"
-                  onChange={e => {
-                    this.handleImgUpload(e.target.files);
-                  }}
-                />
-
-                <div
-                  onClick={() => {
-                    this.inputFile.current.click();
-                  }}
-                  className="avatarLoad"
-                  style={{
-                    backgroundImage: this.state.userAvatarPreview,
-                    backgroundSize: "cover"
-                  }}
-                >
-                  <span>{this.state.uploadMessage}</span>
-                </div>
-              </div>
-              <div className="grid col-12">
+            {this.state.formPage === 1 && (
+              <section
+                id="signUpPage1"
+                className={`fila signUpPage1 ${this.state.animControl1} `}
+              >
                 <form id="userSignUpForm" className="signUpForm">
+                  <div className=" avatarContForm">
+                    <input
+                      ref={this.inputFile}
+                      style={{
+                        display: "none"
+                      }}
+                      type="file"
+                      name="avatar"
+                      id="avatar"
+                      accept="image/*"
+                      onChange={e => {
+                        this.handleImgUpload(e.target.files);
+                      }}
+                    />
+
+                    <div
+                      onClick={() => {
+                        this.inputFile.current.click();
+                      }}
+                      className="avatarLoad"
+                      style={{
+                        backgroundImage: this.state.userAvatarPreview,
+                        backgroundSize: "cover"
+                      }}
+                    >
+                      <span>{this.state.uploadMessage}</span>
+                    </div>
+                  </div>
                   <label>
                     Name <br />
                     <input
@@ -1160,125 +1187,138 @@ class SignUpForm extends Component {
                     </select>
                   </label>
                 </form>
-              </div>
-            </section>
-
-            <section
-              id="signUpPage2"
-              className={`fila signUpPage2 ${this.state.animControl2} `}
-            >
-              <div className="grid col-12">
-                <form id="userSignUpForm2" className="signUpForm2">
-                  <label>
-                    Date of Birth <br />
-                    <input
-                      type="date"
-                      name="userBirthDate"
-                      value={this.state.userBirthDate}
-                      onChange={this.handleFormInputChange}
-                      onBlur={this.handleOnBlur}
-                    />
-                  </label>
-
-                  <label>
-                    Gender <br />
-                    <select
-                      value={this.state.userGender}
-                      name="userGender"
-                      onChange={this.handleFormInputChange}
-                      onBlur={this.handleOnBlur}
+              </section>
+            )}
+            {this.state.formPage === 2 && (
+              <section
+                id="signUpPage2"
+                className={`fila signUpPage2 ${this.state.animControl2} `}
+              >
+                <div className="">
+                  <form id="userSignUpForm2" className="signUpForm2">
+                    <div className="interestsCont">
+                      Interests <br />
+                      <div className="interestsLay">{interests}</div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column"
+                      }}
                     >
-                      <option value=" ">Please, Select your gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </select>
-                  </label>
-
-                  <div className="interestsCont">
-                    Interests <br />
-                    {interests}
-                  </div>
-                  <div>
-                    <label>
-                      Other Interests <br />
-                      <div
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "normal"
-                        }}
-                      >
-                        (Optional and separeted by commas)
-                      </div>
-                      <div
-                        style={{
-                          position: "relative"
-                        }}
-                      >
-                        <input
-                          type="text"
-                          name="userOtherInterestsText"
-                          value={this.state.userOtherInterestsText}
-                          onChange={this.handleFormInputChange}
-                        />
-                        <div
-                          style={{
-                            position: "absolute",
-                            textAlign: "center",
-                            color: "#00171f",
-                            background: "#f95f0b",
-                            borderRadius: "15px",
-                            width: "100%",
-                            transition: "all .4s",
-                            height: "1.2rem",
-                            lineHeight: "1.2rem",
-                            fontSize: "0.6rem",
-                            opacity: this.state.userOtherInterestsTextIsValid
-                              ? "0"
-                              : "1",
-                            zIndex: this.state.userOtherInterestsTextIsValid
-                              ? "-1"
-                              : "1"
-                          }}
-                        >
-                          Please, do not use special characters
+                      <label>
+                        Other Interests <br />
+                        <div className="smallSpan">
+                          (Optional and separeted by commas)
                         </div>
-                      </div>
-                    </label>
+                        <div style={{}}>
+                          <input
+                            type="text"
+                            name="userOtherInterestsText"
+                            value={this.state.userOtherInterestsText}
+                            onChange={this.handleFormInputChange}
+                          />
+                          <div
+                            style={{
+                              textAlign: "center",
+                              color: "#00171f",
+                              background: "#f95f0b",
+                              borderRadius: "15px",
+                              width: "100%",
+                              transition: "all .4s",
+                              height: "1.2rem",
+                              lineHeight: "1.2rem",
+                              fontSize: "0.6rem",
+                              opacity: this.state.userOtherInterestsTextIsValid
+                                ? "0"
+                                : "1",
+                              zIndex: this.state.userOtherInterestsTextIsValid
+                                ? "-1"
+                                : "1",
+                              display: this.state.userOtherInterestsTextIsValid
+                                ? "none"
+                                : "block"
+                            }}
+                          >
+                            Please, do not use special characters
+                          </div>
+                        </div>
+                      </label>
 
-                    <div className="otherInterestsCont ">
-                      {/* <CustomScrollBar style={{ minHeight: "32px" }}>
+                      <div className="otherInterestsCont ">
+                        {/* <CustomScrollBar style={{ minHeight: "32px" }}>
                         {otherInterests}
                       </CustomScrollBar> */}
-                      <SimpleBar style={{ maxHeight: "32px" }}>
-                        {otherInterests}
-                      </SimpleBar>
+                        <SimpleBar style={{ maxHeight: "40px" }}>
+                          {otherInterests}
+                        </SimpleBar>
+                      </div>
+                    </div>
+
+                    <div className="personalData">
+                      <label>
+                        Birth Date <br />
+                        <input
+                          type="date"
+                          name="userBirthDate"
+                          value={this.state.userBirthDate}
+                          onChange={this.handleFormInputChange}
+                          onBlur={this.handleOnBlur}
+                        />
+                      </label>
+
+                      <label>
+                        Gender <br />
+                        <select
+                          value={this.state.userGender}
+                          name="userGender"
+                          onChange={this.handleFormInputChange}
+                          onBlur={this.handleOnBlur}
+                        >
+                          <option value=" ">Select one</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                        </select>
+                      </label>
+                    </div>
+                  </form>
+                </div>
+              </section>
+            )}
+            {this.state.formPage === 3 && (
+              <section
+                id="signUpPage3"
+                className={`fila signUpPage2 ${this.state.animControl3} `}
+              >
+                <form id="userSignUpForm3" className="signUpForm3">
+                  <div className=" avatarContForm">
+                    <input
+                      ref={this.inputFile}
+                      style={{
+                        display: "none"
+                      }}
+                      type="file"
+                      name="avatar"
+                      id="avatar"
+                      accept="image/*"
+                      onChange={e => {
+                        this.handleImgUpload(e.target.files);
+                      }}
+                    />
+                    <div
+                      onClick={() => {
+                        this.inputFile.current.click();
+                      }}
+                      className="avatarLoad"
+                      style={{
+                        backgroundImage: this.state.userAvatarPreview,
+                        backgroundSize: "cover"
+                      }}
+                    >
+                      <span>{this.state.uploadMessage}</span>
                     </div>
                   </div>
-                </form>
-              </div>
-            </section>
 
-            <section
-              id="signUpPage3"
-              className={`fila signUpPage2 ${this.state.animControl3} `}
-            >
-              <div className="grid col-12">
-                <div className="grid col-12 avatarContForm">
-                  <div
-                    onClick={() => {
-                      this.inputFile.current.click();
-                    }}
-                    className="avatarLoad"
-                    style={{
-                      backgroundImage: this.state.userAvatarPreview,
-                      backgroundSize: "cover"
-                    }}
-                  >
-                    <span>{this.state.uploadMessage}</span>
-                  </div>
-                </div>
-
-                <form id="userSignUpForm3" className="signUpForm3">
                   <label>
                     User Name <br />
                     <input
@@ -1359,14 +1399,17 @@ class SignUpForm extends Component {
                         transition: "all .4s",
                         lineHeight: "1.2rem",
                         fontSize: "0.6rem",
-                        opacity: this.state.passwordConfirmIsValid ? "0" : "1"
+                        opacity: this.state.passwordConfirmIsValid ? "0" : "1",
+                        visibility: this.state.passwordConfirmIsValid
+                          ? "hidden"
+                          : "visible"
                       }}
                     >
                       Confirmation password do not match yet
                     </div>
                   </label>
 
-                  <div className="grid col-12 checkboxCont">
+                  <div className=" checkboxCont">
                     <input
                       type="checkbox"
                       style={{ width: "18px" }}
@@ -1379,7 +1422,7 @@ class SignUpForm extends Component {
                         fontWeight: "300"
                       }}
                     >
-                      I accept the
+                      I accept the{" "}
                       <a
                         href="#"
                         style={{
@@ -1393,10 +1436,13 @@ class SignUpForm extends Component {
                     </span>
                   </div>
                 </form>
-              </div>
-            </section>
+              </section>
+            )}
+
+            <div className="controlButtons controlButtonsSignUp">
+              {controlButtons}
+            </div>
           </div>
-          <div className="controlButtons">{controlButtons}</div>
         </div>
       </div>
     );

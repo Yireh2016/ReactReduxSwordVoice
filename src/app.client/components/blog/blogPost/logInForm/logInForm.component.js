@@ -143,7 +143,7 @@ class LogInForm extends Component {
           this.onScrollformLayout(e);
         }}
       >
-        <div className="formCard">
+        <div className="formCardLogin">
           <div className="signUpPageCont">
             <section
               id="logInPage"
@@ -182,7 +182,7 @@ class LogInForm extends Component {
               </div>
             </section>
           </div>
-          <div className="controlButtons">{controlButtons}</div>
+          <div className="controlButtonLogin">{controlButtons}</div>
         </div>
       </div>
     );
