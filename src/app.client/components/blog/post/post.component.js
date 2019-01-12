@@ -187,9 +187,7 @@ class Post extends React.Component {
             height: this.state.isDetailsOpen ? "100%" : "32%",
             transform: this.state.isDetailsOpen && "translateY(-68%)",
             backgroundColor: this.state.isDetailsOpen ? "white" : "transparent",
-            border: this.state.isDetailsOpen
-              ? "3px solid rgb(151, 196, 236)"
-              : "none"
+            border: this.state.isDetailsOpen ? "3px solid  #f95f0b" : "none"
             // border: 3px solid rgb(151, 196, 236);
 
             // position: "absolute",

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { withCookies } from "react-cookie";
-import { guestCookie } from "../../../app.client/services/cookieManager";
+import {
+  guestCookie,
+  sessionCookie
+} from "../../../app.client/services/cookieManager";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -12,8 +15,7 @@ class Login extends Component {
     super(props);
     this.state = {
       userName: undefined,
-      userPassword: undefined,
-      isUserLoggedIn: false
+      userPassword: undefined
     };
   }
 
@@ -43,6 +45,12 @@ class Login extends Component {
           if (res.status === 200) {
             alert("Login Successful");
             console.log("res.data", res.data);
+            sessionStorage.setItem("userAvatar", res.data.userAvatar);
+            sessionStorage.setItem("userName", res.data.userName);
+            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
+            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
+            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
+            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
             this.props.onLogIn(res.data);
           }
         })
@@ -96,8 +104,7 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
   };
 };
 
