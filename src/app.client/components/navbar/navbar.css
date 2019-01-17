@@ -139,6 +139,10 @@
   padding: 10px 30px;
   cursor: pointer;
 }
+.despleglableContenido ul li a {
+  color: white;
+  text-decoration: none;
+}
 .despleglableContenido ul li:hover {
   color: white;
   background-color: #0387b7;

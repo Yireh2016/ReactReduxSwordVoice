@@ -3,23 +3,27 @@ import React from "react";
 import { render } from "react-dom";
 import { CookiesProvider } from "react-cookie";
 import { BrowserRouter as Router } from "react-router-dom";
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 
 //assets
 import "./cms.index.css";
 
-//reducer
-import reducer from "../app.cms/store/reducers/reducer";
-
+//reducers
+import reducer from "./store/reducers/reducer";
+import postEditCtlreducer from "./store/reducers/postEditionControlReducer";
 //components
 import App from "./app.cms";
 
 // other imports
 //Store
 
+const rootReducer = combineReducers({
+  login: reducer,
+  postCreation: postEditCtlreducer
+});
 const store = createStore(
-  reducer,
+  rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

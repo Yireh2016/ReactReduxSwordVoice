@@ -179,7 +179,6 @@ routerAPI.get("/users", (req, res) => {
       return;
     }
 
-    console.log("users", users);
     res.json(users);
   });
 
@@ -241,9 +240,28 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
     } else {
-      console.log("specific email", userName[0]);
+      console.log("specific userName", userName[0]);
       userName[0] ? res.json(200, userName) : res.json(404, userName);
     }
+  });
+});
+
+//obtener  usuario especifico por SessionID AUTH
+//se usa en: login del CMS
+// obtiene datos de usuario para hacer login en CMS
+routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
+  const sessionID = req.params.sessionID;
+  console.log("buscando sessionID en DB");
+  usersModel.find({ userSessionId: sessionID }).exec(function(err, data) {
+    if (err) {
+      res.json(501, `thre was an error: ${err}`);
+    }
+    if (data.length > 0) {
+      console.log("db data ", data);
+      res.json(200, data[0]);
+      return;
+    }
+    res.json(404, "not found");
   });
 });
 

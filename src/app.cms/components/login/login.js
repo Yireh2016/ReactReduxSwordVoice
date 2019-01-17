@@ -20,6 +20,26 @@ class Login extends Component {
   }
 
   componentDidMount() {
+    if (this.props.cookies.cookies.sessionId) {
+      axios(`/api/searchSessionID/${this.props.cookies.cookies.sessionId}`)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(`res.data on login from cms ${res.data}`);
+            const data = {
+              userAvatar: res.data.userAvatar,
+              userName: res.data.userName
+            };
+            this.props.onLogIn(data);
+          }
+        })
+        .catch(err => {
+          if (err) {
+            console.log(`Error al buscar el usuario por Session ID`, err);
+            guestCookie(this.props);
+          }
+        });
+      return;
+    }
     guestCookie(this.props);
   }
 
@@ -45,13 +65,24 @@ class Login extends Component {
           if (res.status === 200) {
             alert("Login Successful");
             console.log("res.data", res.data);
-            sessionStorage.setItem("userAvatar", res.data.userAvatar);
-            sessionStorage.setItem("userName", res.data.userName);
-            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
-            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
-            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
-            // sessionStorage.setItem("userAvatar", res.data.userAvatar);
-            this.props.onLogIn(res.data);
+            sessionCookie(this.props);
+
+            axios
+              .put(`/api/sessionUpdate/${res.data.userName}`)
+              .then(response => {
+                console.log("res ", response);
+              })
+              .catch(err => {
+                console.log("err ", err);
+              });
+
+            window.localStorage.setItem("userAvatar", res.data.userAvatar);
+
+            const data = {
+              userAvatar: res.data.userAvatar,
+              userName: res.data.userName
+            };
+            this.props.onLogIn(data);
           }
         })
         .catch(err => {
@@ -96,9 +127,9 @@ class Login extends Component {
 const mapStateToProps = state => {
   console.log("mapStateToProps state", state);
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvatar: state.loggedUserAvatar
+    loggedUserName: state.login.loggedUserName,
+    isUserLoggedIn: state.login.isUserLoggedIn,
+    loggedUserAvatar: state.login.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {

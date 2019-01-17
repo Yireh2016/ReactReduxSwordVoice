@@ -513,7 +513,7 @@ class BlogArticle extends Component {
         console.log("dispatch LOGGED_IN");
 
         this.props.onLogIn({
-          loggedUserAvatar: imgBlob,
+          userAvatar: imgBlob,
           userName: res.data.userName
         });
 

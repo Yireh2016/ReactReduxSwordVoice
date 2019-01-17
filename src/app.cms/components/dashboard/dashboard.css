@@ -4,6 +4,7 @@
   grid-template-areas: "aside main";
   grid-template-columns: 20% auto;
   grid-template-rows: 100vh;
+  transition: all ease 1s;
 }
 
 .dashAside {
@@ -17,6 +18,7 @@
 
 .dashMain {
   grid-area: main;
+  transition: all ease 1s;
 }
 .dashAvatar {
   flex-grow: 0.15;
@@ -85,11 +87,38 @@
   justify-content: space-between;
 }
 .dashLogOut {
-  flex-grow: 0.2;
+  flex-grow: 1;
+}
+.dashMain {
+  position: relative;
+}
+.mainToogleMenu {
+  opacity: 0.3;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  padding: 9px 9px 9px 0;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+}
+.mainToogleMenu:hover {
+  opacity: 1;
+}
+.mainToogleMenu {
+  background-color: var(--blueDark);
+}
+.mainToogleMenu img {
+  width: calc(33px * 0.6);
 }
 
 @media (max-width: 1050px) {
-  .dashAvatarImg {
+  .dashboardLayout {
+    grid-template-columns: 30% auto;
+  }
+  .mainToogleMenu {
+    opacity: 1;
+  }
+  /* .dashAvatarImg {
     height: 50px;
     width: 50px;
   }
@@ -112,7 +141,7 @@
 
   .dashMenu img {
     width: 15%;
-  }
+  } */
 }
 
 @media (max-width: 700px) {

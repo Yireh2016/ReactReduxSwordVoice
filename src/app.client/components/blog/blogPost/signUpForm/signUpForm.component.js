@@ -518,7 +518,7 @@ class SignUpForm extends Component {
 
                     this.props.onLogIn({
                       //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
-                      loggedUserAvatar: res.data.doc.userAvatar,
+                      userAvatar: res.data.doc.userAvatar,
                       userName: userData.userName
                     });
                   }
@@ -1211,7 +1211,7 @@ class SignUpForm extends Component {
                         <div className="smallSpan">
                           (Optional and separeted by commas)
                         </div>
-                        <div style={{}}>
+                        <div>
                           <input
                             type="text"
                             name="userOtherInterestsText"

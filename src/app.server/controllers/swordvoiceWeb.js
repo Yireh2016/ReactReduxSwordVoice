@@ -44,20 +44,35 @@ const swordvoiceWeb = (req, res) => {
     let usersModel = mongoose.model("User");
     let query = usersModel.find({ userSessionId: sessionId });
     query.exec((err, user) => {
+      console.log(`user en CONTROLLER`, user);
       if (err) {
         console.log(`Server Error: Cannot Find Session ID ${sessionId}`, err);
       } else {
-        payload = {
-          // loggedUserAvatar: JSON.stringify(user[0].userAvatar).replace(
-          //   /\"/g,
-          //   ``
-          // ),
-          userName: user[0].userName
-        };
-        console.log("payload de usuario logueado");
-        store.dispatch({ type: "LOGGED_IN", payload });
+        if (user[0]) {
+          payload = {
+            // loggedUserAvatar: JSON.stringify(user[0].userAvatar).replace(
+            //   /\"/g,
+            //   ``
+            // ),
+            userName: user[0].userName
+          };
+          console.log("payload de usuario logueado");
+          store.dispatch({ type: "LOGGED_IN", payload });
+          preloadedState = store.getState();
+          console.log("preloadedState logueado", preloadedState);
+
+          res.send(
+            template({
+              body: renderTemplate(store),
+              title: "Hello World from the server",
+              initialState: safeStringify(preloadedState)
+            })
+          );
+
+          return;
+        }
+        //en caso de no encontrar ningun usuario con esta sesion ID, entonces renderiza la pagina sin nadie logueado
         preloadedState = store.getState();
-        console.log("preloadedState logueado", preloadedState);
         res.send(
           template({
             body: renderTemplate(store),

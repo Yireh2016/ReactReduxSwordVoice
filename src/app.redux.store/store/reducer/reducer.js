@@ -10,7 +10,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGGED_IN": {
       newState.isUserLoggedIn = true;
-      newState.loggedUserAvatar = action.payload.loggedUserAvatar;
+      newState.loggedUserAvatar = action.payload.userAvatar;
       newState.loggedUserName = action.payload.userName;
 
       break;

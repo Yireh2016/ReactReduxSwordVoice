@@ -1,40 +1,65 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+//components
+import Welcome from "../welcome/welcome";
+import CreatePost from "../createPost/createPost";
 
 //css
 import "./dashboard.css";
 //assets
-import avatar from "../../../app.client/assets/img/general/userLogo.svg";
 import plus from "../../assets/dashboard/plus.svg";
 import exit from "../../assets/dashboard/exit.svg";
 import hamburger from "../../assets/dashboard/hamburger.svg";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { isMenu: true };
   }
 
-  componentDidMount() {
-    if (sessionStorage.getItem("userName")) {
-      const sessionData = {
-        loggedUserAvatar: sessionStorage.getItem("userAvatar"),
-        loggedUserName: sessionStorage.getItem("userName")
-      };
-      this.props.onLogIn(sessionData);
-    }
-  }
   logoutHandler = () => {
-    sessionStorage.removeItem("userAvatar");
-    sessionStorage.removeItem("userName");
+    console.log("removiendo cookie de session");
+    this.props.cookies.remove("sessionId");
+    window.localStorage.removeItem("userAvatar");
     this.props.onLogOut();
   };
+
+  toogleClickHandler = () => {
+    this.setState(prevState => {
+      return { isMenu: !prevState.isMenu };
+    });
+  };
+
   render() {
     if (this.props.isUserLoggedIn) {
+      const CreatePostBtn = withRouter(({ history }) => {
+        return (
+          <button
+            onClick={() => {
+              if (window.location.pathname === "/cms/dashboard/createPost")
+                return;
+              history.push("dashboard/createPost");
+            }}
+          >
+            <span>Create Post</span> <img src={plus} alt="Plus" />
+          </button>
+        );
+      });
+
       return (
-        <div className="dashboardLayout">
+        <div
+          className="dashboardLayout"
+          style={
+            this.state.isMenu
+              ? { transform: "translate(0)" }
+              : {
+                  transform: "translate(-20%)"
+                }
+          }
+        >
           <aside className="dashAside">
             <div className="dashAvatar">
               <p>
@@ -55,9 +80,7 @@ class Dashboard extends Component {
               </div>
             </div>
             <div className="dashCreatePost">
-              <button>
-                <span>Create Post</span> <img src={plus} alt="Plus" />
-              </button>
+              <CreatePostBtn />
             </div>
             <div className="dashMenu">
               <div>
@@ -77,7 +100,31 @@ class Dashboard extends Component {
               </div>
             </div>
           </aside>
-          <section className="dashMain">hola section</section>
+          <section
+            className="dashMain"
+            style={
+              this.state.isMenu
+                ? {
+                    width: "100%"
+                  }
+                : {
+                    width: "100vw"
+                  }
+            }
+          >
+            <div onClick={this.toogleClickHandler} className="mainToogleMenu">
+              <img src={hamburger} alt="hamburger" />
+            </div>
+
+            <Switch>
+              <Route exact path="/cms/dashboard/" render={() => <Welcome />} />
+              <Route
+                exact
+                path="/cms/dashboard/createPost"
+                render={() => <CreatePost />}
+              />
+            </Switch>
+          </section>
         </div>
       );
     }
@@ -88,9 +135,9 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUserName: state.loggedUserName,
-    isUserLoggedIn: state.isUserLoggedIn,
-    loggedUserAvatar: state.loggedUserAvatar
+    loggedUserName: state.login.loggedUserName,
+    isUserLoggedIn: state.login.isUserLoggedIn,
+    loggedUserAvatar: state.login.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {

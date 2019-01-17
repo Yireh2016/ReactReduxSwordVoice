@@ -28,7 +28,7 @@ passport.use(
             message: "Incorrect username or password."
           });
         }
-        console.log("usuario encontrado", user);
+        console.log("usuario encontrado Login correcto");
         return done(null, user);
       });
     }

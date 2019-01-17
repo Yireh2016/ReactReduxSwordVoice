@@ -1,0 +1,21 @@
+.welcomeLayout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcomeCont {
+  flex-grow: 0.6;
+  text-align: center;
+}
+
+.welcomeCont h1 {
+  padding: 10vmin 0 0 0;
+  font-size: 8vmin;
+}
+
+.welcomeCont h1 span {
+  color: var(--orange);
+}

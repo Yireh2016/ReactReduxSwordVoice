@@ -1,0 +1,82 @@
+.elementEditionLayout {
+  display: grid;
+  grid-template-areas: " element element element editionBtn" "editionLayout editionLayout editionLayout .";
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr 1fr 5vw;
+  grid-row-gap: 2vh;
+}
+.elementSelect {
+  grid-area: element;
+}
+.elementSelect span {
+  color: var(--bluedark);
+  font-weight: bold;
+  font-size: 24px;
+}
+.elementSelect select {
+  background-color: transparent;
+  font-size: calc(24px * 0.6);
+  padding: 0 5px;
+  margin: 0 5px;
+  border-radius: 10px;
+}
+.elementSelectLayout {
+  display: flex;
+  align-items: center;
+}
+.elementPreview {
+  grid-area: preview;
+  width: 100%;
+  min-height: 20vh;
+  background-color: #f2f2f2;
+}
+.elementPreview * {
+  padding: 0;
+  margin: 0;
+}
+.elementSubEditionLayout {
+  grid-area: editionLayout;
+  display: grid;
+  grid-template-areas: "preview preview preview " "contenido contenido contenido " "atributes classes styles ";
+  /* grid-template-areas: " element element element editionBtn"
+"preview preview preview ."
+"contenido contenido contenido ."
+"atributes classes styles .";
+  grid-template-rows: auto auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 5vw;
+  grid-row-gap: 2vh; */
+}
+.elementContent textarea,
+.elementPreview {
+  padding: 20px 20px;
+  margin: 10px 5px;
+  box-sizing: border-box;
+}
+.elementContent {
+  grid-area: contenido;
+}
+.elementContent textarea {
+  width: 100%;
+  height: 20vh;
+  padding: 20px;
+}
+.elementAtributes {
+  grid-area: atributes;
+}
+.elementStyles {
+  grid-area: styles;
+}
+.elementClasses {
+  grid-area: classes;
+}
+.elementEditionBtn {
+  grid-area: editionBtn;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.elementEditionBtn img {
+  width: 21px;
+  margin-bottom: 7px;
+}

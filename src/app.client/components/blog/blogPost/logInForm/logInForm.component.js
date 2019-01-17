@@ -42,7 +42,7 @@ class LogInForm extends Component {
     if (userData.userAvatar === "") {
       //si no existe avatar
       this.props.onLogIn({
-        loggedUserAvatar: undefined,
+        userAvatar: undefined,
         userName: userData.userName
       });
       return;
@@ -54,7 +54,7 @@ class LogInForm extends Component {
     // });
     window.localStorage.setItem("userAvatar", userData.userAvatar);
     this.props.onLogIn({
-      loggedUserAvatar: userData.userAvatar,
+      userAvatar: userData.userAvatar,
       userName: userData.userName
     });
   };

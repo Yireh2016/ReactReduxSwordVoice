@@ -1,0 +1,57 @@
+.createBarCont {
+  position: relative;
+}
+
+.createBar {
+  position: absolute;
+  top: 3vmax;
+  right: 3vmax;
+}
+.createBarItem {
+  text-align: center;
+  padding: 10px 0 0 0;
+}
+.createBarItem:hover {
+  cursor: pointer;
+  color: var(--orange);
+}
+.createBarItem img {
+  width: 31px;
+}
+.createLayout {
+  display: flex;
+  flex-direction: column;
+  /* width: 50%; */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.editionArea {
+  overflow-y: scroll;
+  background-color: #eaedee;
+  height: 80vh;
+  width: 80%;
+  padding: 15px 3vw;
+  box-sizing: border-box;
+}
+.addElementBtn {
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.6rem;
+  box-sizing: border-box;
+  background: #00171f;
+  border: 1px solid var(--orange);
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+.addElementBtn img {
+  width: 12px;
+}
+.addElementBtn * {
+  padding: 0 3px;
+}
+/* .elementCont {
+
+} */

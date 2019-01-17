@@ -393,7 +393,9 @@ class NavBar extends Component {
                     <div className="despleglableContenido">
                       <ul>
                         {this.props.isUserLoggedIn ? (
-                          <li onClick={this.signClickHandler}>Profile</li>
+                          <li>
+                            <a href="cms">Profile</a>
+                          </li>
                         ) : (
                           <li onClick={this.signClickHandler}>Sign Up</li>
                         )}
