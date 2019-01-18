@@ -14,22 +14,24 @@ class PostElement extends Component {
 
     // PROPS
     // HTMLid indica el id del html element
+    // isEditionModeHandler  toogle edition mode flag
 
     this.state = {
-      HTMLElementType: undefined,
-      HTMLElementContent: undefined,
-      HTMLAtributes: undefined,
+      HTMLElementType: "",
+      HTMLElementContent: "",
+      HTMLAtributes: "",
       HTMLAtributesArr: [],
-      // HTMLAtributesIsValid: true,
       HTMLAtributesStr: "",
-      finalJSXElement: "",
-      HTMLStyles: undefined,
+      HTMLStyles: "",
       HTMLStylesStr: "",
       HTMLStylesArr: [],
-      HTMLClasses: undefined,
+      HTMLClasses: "",
       HTMLClassesArr: [],
       HTMLClassesStr: "",
-      isEditionMode: true
+      HTMLPreviewStr: "",
+      HTMLid: props.HTMLid,
+      isEditionMode: true,
+      finalHTMLElement: ""
     };
     this.elementsJSX = {
       p: `<p atributes style={styles} class={classes}> {content}</p>`,
@@ -38,21 +40,37 @@ class PostElement extends Component {
       h3: `<h3 atributes style={styles} class={classes}> {content}</h3>`,
       h4: `<h4 atributes style={styles} class={classes}> {content}</h4>`,
       h5: `<h5 atributes style={styles} class={classes}> {content}</h5>`,
-      h6: `<h6 atributes style={styles} class={classes}> {content}</h6>`
+      h6: `<h6 atributes style={styles} class={classes}> {content}</h6>`,
+      figure: `<figure>
+      <img src={imageFile} alt={alt} atributes style={styles} class={classes}>
+      <figcaption>Test Figure</figcaption>
+    </figure>`
     };
   }
 
-  //HTMLHandler
-  HTMLHandler = e => {
+  //inputHTMLHandler
+  inputHTMLHandler = e => {
     const {
       target: { name, value }
     } = e;
+
     this.setState({ [name]: value });
-    if (name === "HTMLElementType") {
-      this.setState({ finalJSXElement: value });
-    }
 
     switch (name) {
+      case "HTMLElementType": {
+        if (value !== "custom") {
+          this.setState({ HTMLPreviewStr: value });
+        }
+        break;
+      }
+
+      case "HTMLElementContent": {
+        if (this.state.HTMLElementType === "custom") {
+          this.setState({ HTMLPreviewStr: value });
+        }
+        break;
+      }
+
       case "HTMLAtributes": {
         if (value.match(/,/g)) {
           this.setState(prevState => {
@@ -63,7 +81,7 @@ class PostElement extends Component {
               HTMLAtributesArr: atributesArr,
               HTMLAtributes: "",
               HTMLAtributesStr: `${prevState.HTMLAtributesStr} ${atributes}`,
-              finalJSXElement: prevState.finalJSXElement.replace(
+              HTMLElementType: prevState.HTMLElementType.replace(
                 "atributes",
                 `atributes ${atributes}`
               )
@@ -108,19 +126,64 @@ class PostElement extends Component {
         break;
       }
 
+      case "HTMLElementContent": {
+        if (this.state.HTMLElementType === "custom") {
+          this.setState(prevState => {
+            return { HTMLPreviewStr: prevState.HTMLPreviewStr + value };
+          });
+        }
+      }
+
       default:
         break;
     }
   };
-
-  editionBtnHandler = () => {
+  prepareHTMLFilter = (str, styles, classes, content) => {
+    str = str.replace("atributes", "");
+    str = str.replace("{styles}", `"${styles}"`);
+    str = str.replace("{classes}", `"${classes}"`);
+    str = str.replace("{content}", content);
+    return str;
+  };
+  editionBtnHandler = e => {
+    e.preventDefault();
+    this.props.isEditionModeHandler();
     this.setState(prevState => {
       return { isEditionMode: !prevState.isEditionMode };
     });
+
+    let finalHTMLElement = this.state.HTMLPreviewStr;
+    let styles = this.state.HTMLStylesStr;
+    let classes = this.state.HTMLClassesStr;
+    let content = this.state.HTMLElementContent;
+
+    finalHTMLElement = this.prepareHTMLFilter(
+      finalHTMLElement,
+      styles,
+      classes,
+      content
+    );
+    this.setState({ finalHTMLElement: finalHTMLElement });
+
     let payload = {
-      ...this.state
+      ...this.state,
+      finalHTMLElement: finalHTMLElement
     };
+
+    if (this.props.elements.length >= this.props.HTMLid) {
+      this.props.onEditElement(payload);
+      return;
+    }
+
     this.props.onAddElement(payload);
+  };
+
+  delBtnHandler = () => {
+    let payload = this.props.elements.filter((el, i, arr) => {
+      return this.props.HTMLid !== arr[i].HTMLid;
+    });
+
+    this.props.onDelElement(payload);
   };
 
   render() {
@@ -134,16 +197,60 @@ class PostElement extends Component {
     const classes = this.state.HTMLClassesArr.map((clase, i) => {
       return <li key={i}>{clase}</li>;
     });
+
+    // const editionElementType = () => {
+    //   console.log(
+    //     "this.state.HTMLElementType.match(/<figure>/g)",
+    //     this.state.HTMLElementType.match(/<figure>/g)
+    //   );
+    //   console.log("this.state.HTMLElementType", this.state.HTMLElementType);
+
+    //   if (this.state.HTMLElementType.match(/<figure>/g)) {
+    //     console.log("es una fugura");
+    //     return <div>es una fugura</div>;
+    //   }
+
+    //   return (
+    //     <textarea
+    //       value={this.state.HTMLElementContent}
+    //       name="HTMLElementContent"
+    //       onChange={this.inputHTMLHandler}
+    //     >
+    //       {this.state.HTMLElementContent}
+    //     </textarea>
+    //   );
+    // };
+
+    // const editionElementType = () => {
+    //   return (
+    //     <textarea
+    //       value={this.state.HTMLElementContent}
+    //       name="HTMLElementContent"
+    //       onChange={this.inputHTMLHandler}
+    //     >
+    //       {this.state.HTMLElementContent}
+    //     </textarea>
+    //   );
+    // };
+
     return (
-      <div className="elementEditionLayout">
-        <div className="elementSelect">
-          {this.state.isEditionMode && (
+      <div>
+        <div
+          className="elementEditionLayout"
+          style={
+            this.props.HTMLid % 2 === 0
+              ? { backgroundColor: " #dde2e4", padding: "20px" }
+              : { backgroundColor: "transparent ", padding: "20px" }
+          }
+        >
+          <div className="elementSelect">
             <div className="elementSelectLayout">
               <span>Element</span>
               <select
                 value={this.state.HTMLElementType}
                 name="HTMLElementType"
-                onChange={this.HTMLHandler}
+                onChange={this.inputHTMLHandler}
+                disabled={!this.state.isEditionMode}
               >
                 <option value="">Select one</option>
                 <option value={this.elementsJSX.h1}>Header 1</option>
@@ -153,22 +260,65 @@ class PostElement extends Component {
                 <option value={this.elementsJSX.h5}>Header 5</option>
                 <option value={this.elementsJSX.h6}>Header 6</option>
                 <option value={this.elementsJSX.p}>Paragraph</option>
-                <option value="figure">Imagen</option>
+                <option value={this.elementsJSX.figure}>Image</option>
                 <option value="custom">Custom Element</option>
               </select>
             </div>
-          )}
-          <div className="elementPreview">
-            {
-              <JsxParser
-                jsx={this.state.finalJSXElement}
-                bindings={{
-                  content: this.state.HTMLElementContent,
-                  styles: this.state.HTMLStylesStr,
-                  classes: this.state.HTMLClassesStr
-                }}
-              />
-            }
+
+            <div
+              onDoubleClick={e => {
+                this.editionBtnHandler(e);
+              }}
+              className="elementPreview blogArticle"
+            >
+              {
+                <JsxParser
+                  jsx={this.state.HTMLPreviewStr}
+                  bindings={{
+                    content: this.state.HTMLElementContent,
+                    styles: this.state.HTMLStylesStr,
+                    classes: this.state.HTMLClassesStr
+                  }}
+                />
+              }
+            </div>
+          </div>
+
+          <div className="elementEditionBtn">
+            <img
+              onClick={this.editionBtnHandler}
+              src={edit}
+              style={{ opacity: "1", cursor: "pointer" }}
+              alt="edit"
+            />
+            <img
+              style={
+                this.state.isEditionMode
+                  ? { opacity: ".2" }
+                  : { opacity: "1", cursor: "pointer" }
+              }
+              src={paint}
+              alt="paint"
+            />
+            <img
+              style={
+                this.state.isEditionMode
+                  ? { opacity: ".2" }
+                  : { opacity: "1", cursor: "pointer" }
+              }
+              src={del}
+              onClick={this.delBtnHandler}
+              alt="delete"
+            />
+            <img
+              style={
+                this.state.isEditionMode
+                  ? { opacity: ".2" }
+                  : { opacity: "1", cursor: "pointer" }
+              }
+              src={copy}
+              alt="copy"
+            />
           </div>
         </div>
 
@@ -178,7 +328,7 @@ class PostElement extends Component {
               <textarea
                 value={this.state.HTMLElementContent}
                 name="HTMLElementContent"
-                onChange={this.HTMLHandler}
+                onChange={this.inputHTMLHandler}
               >
                 {this.state.HTMLElementContent}
               </textarea>
@@ -190,7 +340,7 @@ class PostElement extends Component {
                   type="text"
                   name="HTMLAtributes"
                   value={this.state.HTMLAtributes}
-                  onChange={this.HTMLHandler}
+                  onChange={this.inputHTMLHandler}
                 />
                 <ul>{atributes}</ul>
               </div>
@@ -202,7 +352,7 @@ class PostElement extends Component {
                   type="text"
                   name="HTMLStyles"
                   value={this.state.HTMLStyles}
-                  onChange={this.HTMLHandler}
+                  onChange={this.inputHTMLHandler}
                 />
                 <ul>{styles}</ul>
               </div>
@@ -214,56 +364,19 @@ class PostElement extends Component {
                   type="text"
                   name="HTMLClasses"
                   value={this.state.HTMLClasses}
-                  onChange={this.HTMLHandler}
+                  onChange={this.inputHTMLHandler}
                 />
                 <ul>{classes}</ul>
               </div>
             </div>
           </div>
         )}
-
-        <div className="elementEditionBtn">
-          <img
-            onClick={this.editionBtnHandler}
-            src={edit}
-            style={{ opacity: "1", cursor: "pointer" }}
-            alt="edit"
-          />
-          <img
-            style={
-              this.state.isEditionMode
-                ? { opacity: ".2" }
-                : { opacity: "1", cursor: "pointer" }
-            }
-            src={paint}
-            alt="paint"
-          />
-          <img
-            style={
-              this.state.isEditionMode
-                ? { opacity: ".2" }
-                : { opacity: "1", cursor: "pointer" }
-            }
-            src={del}
-            alt="delete"
-          />
-          <img
-            style={
-              this.state.isEditionMode
-                ? { opacity: ".2" }
-                : { opacity: "1", cursor: "pointer" }
-            }
-            src={copy}
-            alt="copy"
-          />
-        </div>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  console.log("state", state);
   return {
     elements: state.postCreation.elements
   };
@@ -271,9 +384,11 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload })
-    // onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    // onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
+    onEditElement: payload =>
+      dispach({ type: "EDIT_ELEMENT", payload: payload }),
+
+    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload })
   };
 };
 

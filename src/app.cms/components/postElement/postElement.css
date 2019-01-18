@@ -2,9 +2,10 @@
   display: grid;
   grid-template-areas: " element element element editionBtn" "editionLayout editionLayout editionLayout .";
   grid-template-rows: auto auto;
-  grid-template-columns: 1fr 1fr 1fr 5vw;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 5vw;
   grid-row-gap: 2vh;
 }
+
 .elementSelect {
   grid-area: element;
 }
@@ -27,28 +28,25 @@
 .elementPreview {
   grid-area: preview;
   width: 100%;
-  min-height: 20vh;
-  background-color: #f2f2f2;
 }
 .elementPreview * {
   padding: 0;
   margin: 0;
+  word-break: break-all;
+  user-select: none;
 }
 .elementSubEditionLayout {
   grid-area: editionLayout;
   display: grid;
   grid-template-areas: "preview preview preview " "contenido contenido contenido " "atributes classes styles ";
-  /* grid-template-areas: " element element element editionBtn"
-"preview preview preview ."
-"contenido contenido contenido ."
-"atributes classes styles .";
-  grid-template-rows: auto auto auto auto;
-  grid-template-columns: 1fr 1fr 1fr 5vw;
-  grid-row-gap: 2vh; */
+
+  grid-template-rows: auto auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-row-gap: 1vh;
 }
 .elementContent textarea,
 .elementPreview {
-  padding: 20px 20px;
+  padding: 20px 20px !important;
   margin: 10px 5px;
   box-sizing: border-box;
 }
