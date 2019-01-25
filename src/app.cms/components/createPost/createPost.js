@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import JsxParser from "react-jsx-parser";
 import ReactHtmlParser from "react-html-parser";
+import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -9,11 +10,19 @@ import "./createPost.css";
 //assets
 import play from "../../assets/createPost/play.svg";
 import tag from "../../assets/createPost/tag.svg";
+import upload from "../../assets/createPost/upload.svg";
 import time from "../../assets/createPost/time.svg";
 import check from "../../assets/createPost/check.svg";
 import plus from "../../assets/dashboard/plus.svg";
 //components
 import PostElement from "../postElement/postElement";
+//react map
+/*
+
+DashBoard
+  CreatePost
+
+*/
 
 class CreatePost extends Component {
   constructor(props) {
@@ -21,52 +30,52 @@ class CreatePost extends Component {
     this.state = {
       elementList: [],
       isEditionMode: false,
-      finalHTMLElement: ""
+      finalHTMLElement: "",
+      dom: ""
     };
   }
   componentDidUpdate() {}
   // getDerivedStateFromProps(){
 
   // }
-
+  updateStateDom = dom => {
+    console.log("dom2", dom);
+    this.setState({ dom: dom });
+  };
   previewBtnHandler = () => {
-    console.log("this.props.elements", this.props.elements);
-
+    let updateStateDom = dom => {
+      console.log("dom1", dom);
+      this.updateStateDom(dom);
+    };
     let arrElements = this.props.elements;
-    console.log("arr", arrElements);
 
     let finalHTMLElement = "";
     for (let i = 0; i < arrElements.length; i++) {
-      console.log("arrElements dentro del for", arrElements);
-      console.log(`arrElements[${i}]`, arrElements[i]);
-      console.log("arrElements[0]", arrElements[0]);
       finalHTMLElement =
         finalHTMLElement + " " + arrElements[i].finalHTMLElement;
-      console.log("finalHTMLElement i", finalHTMLElement);
     }
 
-    console.log("fuera del for arrElements", arrElements);
+    let handler = new htmlparser.DefaultHandler(function(error, dom) {
+      if (error) console.log("error", error);
+      else {
+        console.log("dom", dom);
+        updateStateDom(dom);
+      }
+    });
+    let parser = new htmlparser.Parser(handler);
+    parser.parseComplete(finalHTMLElement);
 
     this.setState({ finalHTMLElement: finalHTMLElement });
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
   };
   commitBtnHandler = () => {
-    console.log("this.props.elements", this.props.elements);
-
     let arrElements = this.props.elements;
-    console.log("arr", arrElements);
 
     let finalHTMLElement = "";
     for (let i = 0; i < arrElements.length; i++) {
-      console.log("arrElements dentro del for", arrElements);
-      console.log(`arrElements[${i}]`, arrElements[i]);
-      console.log("arrElements[0]", arrElements[0]);
       finalHTMLElement =
         finalHTMLElement + " " + arrElements[i].finalHTMLElement;
-      console.log("finalHTMLElement i", finalHTMLElement);
     }
-
-    console.log("fuera del for arrElements", arrElements);
 
     this.setState({ finalHTMLElement: finalHTMLElement });
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
@@ -88,12 +97,9 @@ class CreatePost extends Component {
       };
     });
   };
-
   playBtnHandler = () => {};
 
   render() {
-    console.log("this.props on render", this.props);
-
     const elements = this.props.elements.map((value, i) => {
       return (
         <div key={i}>
@@ -104,7 +110,6 @@ class CreatePost extends Component {
         </div>
       );
     });
-    console.log("elements", elements);
     return (
       <div>
         {/* Create Bar */}
@@ -114,7 +119,6 @@ class CreatePost extends Component {
               <h4>Preview</h4>
               <Link
                 onClick={this.previewBtnHandler}
-                // to={{ pathname: "/cms/preview", state: this.state.finalJSX }}
                 target="_blank"
                 to={{
                   pathname: "/cms/preview"
@@ -125,15 +129,19 @@ class CreatePost extends Component {
             </div>
             <div className="createBarItem">
               <h4>Add Tag</h4>
-              <img src={tag} alt="preview botton  " />
+              <img src={tag} alt="add tag botton  " />
+            </div>
+            <div className="createBarItem">
+              <h4>Upload File</h4>
+              <img src={upload} alt="upload botton  " />
             </div>
             <div className="createBarItem">
               <h4>Program</h4>
-              <img src={time} alt="preview botton  " />
+              <img src={time} alt="program botton  " />
             </div>
             <div className="createBarItem">
               <h4>Publish</h4>
-              <img src={check} alt="preview botton  " />
+              <img src={check} alt="publish botton  " />
             </div>
           </div>
         </div>
@@ -165,6 +173,7 @@ class CreatePost extends Component {
             </div>
           </div>
           <div>Tags:</div>
+          <div>Available Files</div>
         </div>
       </div>
     );

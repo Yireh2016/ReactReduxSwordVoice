@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import JsxParser from "react-jsx-parser";
+import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
 //assets
 import "./postElement.css";
@@ -7,6 +8,21 @@ import edit from "../../assets/createPost/edit.svg";
 import paint from "../../assets/createPost/paint.svg";
 import del from "../../assets/createPost/delete.svg";
 import copy from "../../assets/createPost/copy.svg";
+//components
+import Paragraph from "../paragraph/paragraph";
+import Header from "../header/header";
+import CustomElement from "../customElement/customElement";
+//react map
+/*
+
+DashBoard
+  CreatePost
+    PostElement
+
+
+*/
+
+// import Header from "../header/header";
 
 class PostElement extends Component {
   constructor(props) {
@@ -15,6 +31,7 @@ class PostElement extends Component {
     // PROPS
     // HTMLid indica el id del html element
     // isEditionModeHandler  toogle edition mode flag
+    //elements array of elements
 
     this.state = {
       HTMLElementType: "",
@@ -31,123 +48,135 @@ class PostElement extends Component {
       HTMLPreviewStr: "",
       HTMLid: props.HTMLid,
       isEditionMode: true,
-      finalHTMLElement: ""
+      finalHTMLElement: "",
+      isImageUploader: false
     };
     this.elementsJSX = {
-      p: `<p atributes style={styles} class={classes}> {content}</p>`,
-      h1: `<h1 atributes style={styles} class={classes}> {content}</h1>`,
-      h2: `<h2 atributes style={styles} class={classes}> {content}</h2>`,
-      h3: `<h3 atributes style={styles} class={classes}> {content}</h3>`,
-      h4: `<h4 atributes style={styles} class={classes}> {content}</h4>`,
-      h5: `<h5 atributes style={styles} class={classes}> {content}</h5>`,
-      h6: `<h6 atributes style={styles} class={classes}> {content}</h6>`,
+      p: `<p style={styles} class={classes}> {content}</p>`,
+      h1: `<h1 style={styles} class={classes}> {content}</h1>`,
+      h2: `<h2 style={styles} class={classes}> {content}</h2>`,
+      h3: `<h3 style={styles} class={classes}> {content}</h3>`,
+      h4: `<h4 style={styles} class={classes}> {content}</h4>`,
+      h5: `<h5 style={styles} class={classes}> {content}</h5>`,
+      h6: `<h6 style={styles} class={classes}> {content}</h6>`,
       figure: `<figure>
-      <img src={imageFile} alt={alt} atributes style={styles} class={classes}>
+      <img src={imageFile} alt={alt}  style={styles} class={classes}>
       <figcaption>Test Figure</figcaption>
     </figure>`
     };
   }
 
-  //inputHTMLHandler
-  inputHTMLHandler = e => {
+  inputTextHTMLHandler = e => {
+    console.log("text area input");
+    const {
+      target: { value }
+    } = e;
+    this.setState({ HTMLElementContent: value });
+  };
+
+  stylesHTMLHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+    if (value.match(/;/g)) {
+      this.setState(prevState => {
+        let styles = value.slice(0, value.length);
+        let stylesArr = prevState.HTMLStylesArr;
+        stylesArr.push(`${styles}`);
+        return {
+          HTMLstylesArr: stylesArr,
+          HTMLStylesStr: `${prevState.HTMLStylesStr} ${styles}`,
+          HTMLStyles: ""
+        };
+      });
+    } else {
+      this.setState({ [name]: value });
+    }
+  };
+
+  atributesHTMLHandler = e => {
     const {
       target: { name, value }
     } = e;
 
-    this.setState({ [name]: value });
+    if (value.match(/,/g)) {
+      this.setState(prevState => {
+        let atributes = value.slice(0, value.length - 1);
+        let filter = /accept-charset|accept|accesskey|action|align|allow|alt|async|autocapitalize|autofocus|autoplay|bgcolor|border|buffered|challenge|charset|checked|cite|class|code|codebase|color|cols|colspan|content|contenteditable|contextmenu|controls|coords|data-*|data|datetime|decoding|default|defer|dir|dirname|disabled|download|draggable|dropzone|enctype|for|form|formaction|headers|height|hidden|high|href|hreflang|http-equiv|icon|id|importance|integrity|ismap|itemprop|keytype|kind|label|lang|language|lazyload|list|loop|low|manifest|max|maxlength|media|method|min|minlength|multiple|muted|name|novalidate|open|optimum|pattern|ping|placeholder|poster|preload|radiogroup|readonly|referrerpolicy|rel|required|reversed|rows|rowspan|sandbox|scope|scoped|selected|shape|size|sizes|slot|span|spellcheck|src|srcdoc|srclang|srcset|start|step|style|summary|tabindex|target|title|translate|type|usemap|value|width|wrap/g;
 
-    switch (name) {
-      case "HTMLElementType": {
-        if (value !== "custom") {
-          this.setState({ HTMLPreviewStr: value });
+        if (atributes.match(filter)) {
+          let atributesArr = prevState.HTMLAtributesArr;
+          atributesArr.push(`${atributes}`);
+          return {
+            HTMLAtributesArr: atributesArr,
+            HTMLAtributes: "",
+            HTMLAtributesStr: `${prevState.HTMLAtributesStr} ${atributes}`,
+            HTMLPreviewStr: prevState.HTMLPreviewStr.replace(
+              "{classes}",
+              `{classes} ${atributes}`
+            )
+          };
         }
-        break;
-      }
+      });
+    } else {
+      this.setState({ [name]: value });
+    }
+  };
 
-      case "HTMLElementContent": {
-        if (this.state.HTMLElementType === "custom") {
-          this.setState({ HTMLPreviewStr: value });
-        }
-        break;
-      }
+  classesHTMLHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+    if (value.match(/,/g)) {
+      this.setState(prevState => {
+        let classes = value.slice(0, value.length - 1);
+        let classesArr = prevState.HTMLClassesArr;
+        classesArr.push(`${classes}`);
+        return {
+          HTMLClassesArr: classesArr,
+          HTMLClassesStr: `${prevState.HTMLClassesStr} ${classes}`,
+          HTMLClasses: ""
+        };
+      });
+    } else {
+      this.setState({ [name]: value });
+    }
+  };
 
-      case "HTMLAtributes": {
-        if (value.match(/,/g)) {
-          this.setState(prevState => {
-            let atributes = value.slice(0, value.length - 1);
-            let atributesArr = prevState.HTMLAtributesArr;
-            atributesArr.push(`${atributes}`);
-            return {
-              HTMLAtributesArr: atributesArr,
-              HTMLAtributes: "",
-              HTMLAtributesStr: `${prevState.HTMLAtributesStr} ${atributes}`,
-              HTMLElementType: prevState.HTMLElementType.replace(
-                "atributes",
-                `atributes ${atributes}`
-              )
-            };
-          });
-        }
+  inputSelectHTMLHandler = e => {
+    const {
+      target: { value }
+    } = e;
+    console.log("value", value);
+    if (value !== "custom" && value !== "image") {
+      this.setState({
+        HTMLPreviewStr: value,
+        isImageUploader: false,
+        HTMLElementType: value
+      });
+    }
 
-        break;
-      }
-
-      case "HTMLStyles": {
-        if (value.match(/;/g)) {
-          this.setState(prevState => {
-            let styles = value.slice(0, value.length);
-            let stylesArr = prevState.HTMLStylesArr;
-            stylesArr.push(`${styles}`);
-            return {
-              HTMLstylesArr: stylesArr,
-              HTMLStylesStr: `${prevState.HTMLStylesStr} ${styles}`,
-              HTMLStyles: ""
-            };
-          });
-        }
-
-        break;
-      }
-
-      case "HTMLClasses": {
-        if (value.match(/,/g)) {
-          this.setState(prevState => {
-            let classes = value.slice(0, value.length - 1);
-            let classesArr = prevState.HTMLClassesArr;
-            classesArr.push(`${classes}`);
-            return {
-              HTMLClassesArr: classesArr,
-              HTMLClassesStr: `${prevState.HTMLClassesStr} ${classes}`,
-              HTMLClasses: ""
-            };
-          });
-        }
-
-        break;
-      }
-
-      case "HTMLElementContent": {
-        if (this.state.HTMLElementType === "custom") {
-          this.setState(prevState => {
-            return { HTMLPreviewStr: prevState.HTMLPreviewStr + value };
-          });
-        }
-      }
-
-      default:
-        break;
+    if (value === "image") {
+      this.setState({ isImageUploader: true });
+    }
+    if (value === "custom") {
+      this.setState({ HTMLElementType: value });
     }
   };
   prepareHTMLFilter = (str, styles, classes, content) => {
-    str = str.replace("atributes", "");
     str = str.replace("{styles}", `"${styles}"`);
     str = str.replace("{classes}", `"${classes}"`);
     str = str.replace("{content}", content);
     return str;
   };
+  sendWordToJSXHandler = word => {
+    // HTMLPreviewStr
+    this.setState({ HTMLPreviewStr: word });
+  };
   editionBtnHandler = e => {
     e.preventDefault();
     this.props.isEditionModeHandler();
+    this.props.isEditionModey;
     this.setState(prevState => {
       return { isEditionMode: !prevState.isEditionMode };
     });
@@ -166,7 +195,23 @@ class PostElement extends Component {
     this.setState({ finalHTMLElement: finalHTMLElement });
 
     let payload = {
-      ...this.state,
+      HTMLElementType: this.state.HTMLElementType,
+      HTMLElementContent: this.state.HTMLElementContent,
+      HTMLAtributes: this.state.HTMLAtributes,
+      HTMLAtributesArr: this.state.HTMLAtributesArr,
+      HTMLAtributesStr: this.state.HTMLAtributesStr,
+      HTMLStyles: this.state.HTMLStyles,
+      HTMLStylesStr: this.state.HTMLStylesStr,
+      HTMLStylesArr: this.state.HTMLStylesArr,
+      HTMLClasses: this.state.HTMLClasses,
+      HTMLClassesArr: this.state.HTMLClassesArr,
+      HTMLClassesStr: this.state.HTMLClassesStr,
+      HTMLPreviewStr: this.state.HTMLPreviewStr,
+      HTMLid: this.state.HTMLid
+    };
+
+    payload = {
+      ...payload,
       finalHTMLElement: finalHTMLElement
     };
 
@@ -187,52 +232,6 @@ class PostElement extends Component {
   };
 
   render() {
-    const atributes = this.state.HTMLAtributesArr.map((atribute, i) => {
-      return <li key={i}>{atribute}</li>;
-    });
-
-    const styles = this.state.HTMLStylesArr.map((style, i) => {
-      return <li key={i}>{style}</li>;
-    });
-    const classes = this.state.HTMLClassesArr.map((clase, i) => {
-      return <li key={i}>{clase}</li>;
-    });
-
-    // const editionElementType = () => {
-    //   console.log(
-    //     "this.state.HTMLElementType.match(/<figure>/g)",
-    //     this.state.HTMLElementType.match(/<figure>/g)
-    //   );
-    //   console.log("this.state.HTMLElementType", this.state.HTMLElementType);
-
-    //   if (this.state.HTMLElementType.match(/<figure>/g)) {
-    //     console.log("es una fugura");
-    //     return <div>es una fugura</div>;
-    //   }
-
-    //   return (
-    //     <textarea
-    //       value={this.state.HTMLElementContent}
-    //       name="HTMLElementContent"
-    //       onChange={this.inputHTMLHandler}
-    //     >
-    //       {this.state.HTMLElementContent}
-    //     </textarea>
-    //   );
-    // };
-
-    // const editionElementType = () => {
-    //   return (
-    //     <textarea
-    //       value={this.state.HTMLElementContent}
-    //       name="HTMLElementContent"
-    //       onChange={this.inputHTMLHandler}
-    //     >
-    //       {this.state.HTMLElementContent}
-    //     </textarea>
-    //   );
-    // };
-
     return (
       <div>
         <div
@@ -249,7 +248,7 @@ class PostElement extends Component {
               <select
                 value={this.state.HTMLElementType}
                 name="HTMLElementType"
-                onChange={this.inputHTMLHandler}
+                onChange={this.inputSelectHTMLHandler}
                 disabled={!this.state.isEditionMode}
               >
                 <option value="">Select one</option>
@@ -271,7 +270,7 @@ class PostElement extends Component {
               }}
               className="elementPreview blogArticle"
             >
-              {
+              {this.state.HTMLElementType !== "custom" ? (
                 <JsxParser
                   jsx={this.state.HTMLPreviewStr}
                   bindings={{
@@ -280,7 +279,9 @@ class PostElement extends Component {
                     classes: this.state.HTMLClassesStr
                   }}
                 />
-              }
+              ) : (
+                ReactHtmlParser(this.state.HTMLPreviewStr)
+              )}
             </div>
           </div>
 
@@ -325,49 +326,43 @@ class PostElement extends Component {
         {this.state.isEditionMode && (
           <div className="elementSubEditionLayout">
             <div className="elementContent">
-              <textarea
-                value={this.state.HTMLElementContent}
-                name="HTMLElementContent"
-                onChange={this.inputHTMLHandler}
-              >
-                {this.state.HTMLElementContent}
-              </textarea>
-            </div>
-            <div className="elementAtributes">
-              Atributes
-              <div>
-                <input
-                  type="text"
-                  name="HTMLAtributes"
-                  value={this.state.HTMLAtributes}
-                  onChange={this.inputHTMLHandler}
+              {this.state.HTMLElementType.match(/<p/g) && (
+                <Paragraph
+                  inputTextHTMLHandler={this.inputTextHTMLHandler}
+                  atributesHTMLHandler={this.atributesHTMLHandler}
+                  stylesHTMLHandler={this.stylesHTMLHandler}
+                  classesHTMLHandler={this.classesHTMLHandler}
+                  HTMLElementContent={this.state.HTMLElementContent}
+                  HTMLAtributes={this.state.HTMLAtributes}
+                  HTMLStyles={this.state.HTMLStyles}
+                  HTMLClasses={this.state.HTMLClasses}
+                  HTMLAtributesArr={this.state.HTMLAtributesArr}
+                  HTMLStylesArr={this.state.HTMLStylesArr}
+                  HTMLClassesArr={this.state.HTMLClassesArr}
                 />
-                <ul>{atributes}</ul>
-              </div>
-            </div>
-            <div className="elementStyles">
-              Styles
-              <div>
-                <input
-                  type="text"
-                  name="HTMLStyles"
-                  value={this.state.HTMLStyles}
-                  onChange={this.inputHTMLHandler}
+              )}
+              {this.state.HTMLElementType.match(/<h/g) && (
+                <Header
+                  inputTextHTMLHandler={this.inputTextHTMLHandler}
+                  atributesHTMLHandler={this.atributesHTMLHandler}
+                  stylesHTMLHandler={this.stylesHTMLHandler}
+                  classesHTMLHandler={this.classesHTMLHandler}
+                  HTMLElementContent={this.state.HTMLElementContent}
+                  HTMLAtributes={this.state.HTMLAtributes}
+                  HTMLStyles={this.state.HTMLStyles}
+                  HTMLClasses={this.state.HTMLClasses}
+                  HTMLAtributesArr={this.state.HTMLAtributesArr}
+                  HTMLStylesArr={this.state.HTMLStylesArr}
+                  HTMLClassesArr={this.state.HTMLClassesArr}
                 />
-                <ul>{styles}</ul>
-              </div>
-            </div>
-            <div className="elementClasses">
-              Classes
-              <div>
-                <input
-                  type="text"
-                  name="HTMLClasses"
-                  value={this.state.HTMLClasses}
-                  onChange={this.inputHTMLHandler}
+              )}
+              {this.state.HTMLElementType.match(/custom/g) && (
+                <CustomElement
+                  sendWordToJSXHandler={word => {
+                    this.sendWordToJSXHandler(word);
+                  }}
                 />
-                <ul>{classes}</ul>
-              </div>
+              )}
             </div>
           </div>
         )}

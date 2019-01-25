@@ -1,6 +1,5 @@
 // import React, { Component } from "react";
 import React from "react";
-import JsxParser from "react-jsx-parser";
 import ReactHtmlParser from "react-html-parser";
 //css
 import "./preview.css";
