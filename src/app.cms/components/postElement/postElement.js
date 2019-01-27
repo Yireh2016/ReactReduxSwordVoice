@@ -12,6 +12,7 @@ import copy from "../../assets/createPost/copy.svg";
 import Paragraph from "../paragraph/paragraph";
 import Header from "../header/header";
 import CustomElement from "../customElement/customElement";
+import CustomParagraph from "../customParagraph/customParagraph";
 //react map
 /*
 
@@ -67,7 +68,6 @@ class PostElement extends Component {
   }
 
   inputTextHTMLHandler = e => {
-    console.log("text area input");
     const {
       target: { value }
     } = e;
@@ -147,7 +147,6 @@ class PostElement extends Component {
     const {
       target: { value }
     } = e;
-    console.log("value", value);
     if (value !== "custom" && value !== "image") {
       this.setState({
         HTMLPreviewStr: value,
@@ -258,7 +257,8 @@ class PostElement extends Component {
                 <option value={this.elementsJSX.h4}>Header 4</option>
                 <option value={this.elementsJSX.h5}>Header 5</option>
                 <option value={this.elementsJSX.h6}>Header 6</option>
-                <option value={this.elementsJSX.p}>Paragraph</option>
+                <option value={this.elementsJSX.p}>One Paragraph</option>
+                <option value="manyParagraph">Multiple Paragraph</option>
                 <option value={this.elementsJSX.figure}>Image</option>
                 <option value="custom">Custom Element</option>
               </select>
@@ -286,43 +286,72 @@ class PostElement extends Component {
           </div>
 
           <div className="elementEditionBtn">
-            <img
-              onClick={this.editionBtnHandler}
-              src={edit}
-              style={{ opacity: "1", cursor: "pointer" }}
-              alt="edit"
-            />
-            <img
-              style={
-                this.state.isEditionMode
-                  ? { opacity: ".2" }
-                  : { opacity: "1", cursor: "pointer" }
-              }
-              src={paint}
-              alt="paint"
-            />
-            <img
-              style={
-                this.state.isEditionMode
-                  ? { opacity: ".2" }
-                  : { opacity: "1", cursor: "pointer" }
-              }
-              src={del}
-              onClick={this.delBtnHandler}
-              alt="delete"
-            />
-            <img
-              style={
-                this.state.isEditionMode
-                  ? { opacity: ".2" }
-                  : { opacity: "1", cursor: "pointer" }
-              }
-              src={copy}
-              alt="copy"
-            />
+            <div>
+              <img
+                onClick={this.editionBtnHandler}
+                src={edit}
+                style={{ opacity: "1", cursor: "pointer" }}
+                alt="edit"
+              />
+              <img
+                style={
+                  this.state.isEditionMode
+                    ? { opacity: ".2" }
+                    : { opacity: "1", cursor: "pointer" }
+                }
+                src={paint}
+                alt="paint"
+              />
+              <img
+                style={
+                  this.state.isEditionMode
+                    ? { opacity: ".2" }
+                    : { opacity: "1", cursor: "pointer" }
+                }
+                src={del}
+                onClick={this.delBtnHandler}
+                alt="delete"
+              />
+              <img
+                style={
+                  this.state.isEditionMode
+                    ? { opacity: ".2" }
+                    : { opacity: "1", cursor: "pointer" }
+                }
+                src={copy}
+                alt="copy"
+              />
+            </div>
           </div>
         </div>
 
+        <div className="elementSubEditionLayout">
+          <div className="elementContent">
+            <CustomElement
+              style={
+                this.state.HTMLElementType.match(/custom/g) &&
+                this.state.isEditionMode
+                  ? { display: "block" }
+                  : { display: "none" }
+              }
+              sendWordToJSXHandler={word => {
+                this.sendWordToJSXHandler(word);
+              }}
+            />
+
+            <CustomParagraph
+              style={
+                this.state.HTMLElementType.match(/many/g) &&
+                this.state.isEditionMode
+                  ? { display: "block" }
+                  : { display: "none" }
+              }
+              sendWordToJSXHandler={word => {
+                this.sendWordToJSXHandler(word);
+              }}
+            />
+          </div>
+        </div>
         {this.state.isEditionMode && (
           <div className="elementSubEditionLayout">
             <div className="elementContent">
@@ -354,13 +383,6 @@ class PostElement extends Component {
                   HTMLAtributesArr={this.state.HTMLAtributesArr}
                   HTMLStylesArr={this.state.HTMLStylesArr}
                   HTMLClassesArr={this.state.HTMLClassesArr}
-                />
-              )}
-              {this.state.HTMLElementType.match(/custom/g) && (
-                <CustomElement
-                  sendWordToJSXHandler={word => {
-                    this.sendWordToJSXHandler(word);
-                  }}
                 />
               )}
             </div>

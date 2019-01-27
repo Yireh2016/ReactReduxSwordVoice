@@ -1,5 +1,16 @@
 import React from "react";
 
+//react map
+/*
+
+DashBoard
+  CreatePost
+    PostElement
+     Paragraph
+
+
+*/
+
 const Paragraph = props => {
   const atributes = props.HTMLAtributesArr.map((atribute, i) => {
     return <li key={i}>{atribute}</li>;

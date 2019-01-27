@@ -72,7 +72,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
+}
+.elementEditionBtn div {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
 }
 .elementEditionBtn img {
   width: 21px;

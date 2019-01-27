@@ -64,14 +64,11 @@ class Login extends Component {
         .then(res => {
           if (res.status === 200) {
             alert("Login Successful");
-            console.log("res.data", res.data);
             sessionCookie(this.props);
 
             axios
               .put(`/api/sessionUpdate/${res.data.userName}`)
-              .then(response => {
-                console.log("res ", response);
-              })
+              .then(response => {})
               .catch(err => {
                 console.log("err ", err);
               });

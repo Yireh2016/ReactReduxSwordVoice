@@ -38,14 +38,13 @@ class CustomElement extends Component {
       target: { value }
     } = e;
 
-    console.log(`e.target.value`, e.target.value);
     this.setState(() => {
       return { customElementContent: value };
     });
   };
   render() {
     return (
-      <div>
+      <div style={this.props.style}>
         <div>
           <textarea
             value={this.state.customElementContent}

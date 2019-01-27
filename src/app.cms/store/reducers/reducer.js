@@ -7,7 +7,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
-  console.log("action.payload", action.payload);
   switch (action.type) {
     case "LOGGED_IN": {
       newState.isUserLoggedIn = true;

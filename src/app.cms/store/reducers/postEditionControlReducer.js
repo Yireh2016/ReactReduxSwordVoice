@@ -5,7 +5,6 @@ const initialState = {
 const postEditCtlreducer = (state = initialState, action) => {
   let newState = state;
 
-  console.log("action.payload", action.payload);
   switch (action.type) {
     case "CREATE_ELEMENT": {
       const newElement = {
