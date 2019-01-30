@@ -13,6 +13,7 @@ import Paragraph from "../paragraph/paragraph";
 import Header from "../header/header";
 import CustomElement from "../customElement/customElement";
 import CustomParagraph from "../customParagraph/customParagraph";
+import ImageElement from "../imageElement/imageElement";
 //react map
 /*
 
@@ -35,7 +36,7 @@ class PostElement extends Component {
     //elements array of elements
 
     this.state = {
-      HTMLElementType: "",
+      HTMLElementType: this.props.HTMLElementType,
       HTMLElementContent: "",
       HTMLAtributes: "",
       HTMLAtributesArr: [],
@@ -50,7 +51,10 @@ class PostElement extends Component {
       HTMLid: props.HTMLid,
       isEditionMode: true,
       finalHTMLElement: "",
-      isImageUploader: false
+      isImageUploader: false,
+      imgFile: "",
+      imgAlt: "",
+      imgFigcaption: ""
     };
     this.elementsJSX = {
       p: `<p style={styles} class={classes}> {content}</p>`,
@@ -60,11 +64,19 @@ class PostElement extends Component {
       h4: `<h4 style={styles} class={classes}> {content}</h4>`,
       h5: `<h5 style={styles} class={classes}> {content}</h5>`,
       h6: `<h6 style={styles} class={classes}> {content}</h6>`,
-      figure: `<figure>
-      <img src={imageFile} alt={alt}  style={styles} class={classes}>
-      <figcaption>Test Figure</figcaption>
-    </figure>`
+      figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
+      // figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
     };
+  }
+
+  componentDidMount() {
+    if (this.props.HTMLid === 1) {
+      let value = "<h1 style={styles} class={classes}> {content}</h1>";
+      this.setState({
+        HTMLPreviewStr: value,
+        isImageUploader: false
+      });
+    }
   }
 
   inputTextHTMLHandler = e => {
@@ -162,10 +174,22 @@ class PostElement extends Component {
       this.setState({ HTMLElementType: value });
     }
   };
-  prepareHTMLFilter = (str, styles, classes, content) => {
+  prepareHTMLFilter = (
+    str,
+    styles,
+    classes,
+    content,
+    file,
+    alt,
+    figcaption
+  ) => {
     str = str.replace("{styles}", `"${styles}"`);
     str = str.replace("{classes}", `"${classes}"`);
     str = str.replace("{content}", content);
+    str = str.replace("{imgFile}", `"${file}"`);
+    str = str.replace("{imgAlt}", `"${alt}"`);
+    str = str.replace("{imgFigcaption}", figcaption);
+
     return str;
   };
   sendWordToJSXHandler = word => {
@@ -175,7 +199,7 @@ class PostElement extends Component {
   editionBtnHandler = e => {
     e.preventDefault();
     this.props.isEditionModeHandler();
-    this.props.isEditionModey;
+    // this.props.isEditionModey;
     this.setState(prevState => {
       return { isEditionMode: !prevState.isEditionMode };
     });
@@ -184,12 +208,22 @@ class PostElement extends Component {
     let styles = this.state.HTMLStylesStr;
     let classes = this.state.HTMLClassesStr;
     let content = this.state.HTMLElementContent;
+    // let alt = "test";
+    // let imgFile = "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg";
+    // let figcaption = "test";
+    //images only
+    let alt = this.state.imgAlt;
+    let imgFile = this.state.imgFile;
+    let figcaption = this.state.imgFigcaption;
 
     finalHTMLElement = this.prepareHTMLFilter(
       finalHTMLElement,
       styles,
       classes,
-      content
+      content,
+      imgFile,
+      alt,
+      figcaption
     );
     this.setState({ finalHTMLElement: finalHTMLElement });
 
@@ -206,7 +240,10 @@ class PostElement extends Component {
       HTMLClassesArr: this.state.HTMLClassesArr,
       HTMLClassesStr: this.state.HTMLClassesStr,
       HTMLPreviewStr: this.state.HTMLPreviewStr,
-      HTMLid: this.state.HTMLid
+      HTMLid: this.state.HTMLid,
+      imgFile: "",
+      imgAlt: "",
+      imgFigcaption: ""
     };
 
     payload = {
@@ -229,8 +266,66 @@ class PostElement extends Component {
 
     this.props.onDelElement(payload);
   };
-
+  atrImgHTMLHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+    this.setState({ [name]: value });
+  };
+  imgFileSet = image => {
+    // this.setState({ imgFile: `url(${URL.createObjectURL(image)})` });
+  };
   render() {
+    console.log("rendering");
+    const parser = () => {
+      console.log("HTMLElementType en poist", this.state.HTMLElementType);
+
+      if (
+        this.state.HTMLElementType === "custom" ||
+        this.state.HTMLElementType === "manyParagraph"
+      ) {
+        console.log(" custom o manyparagraph", this.state.HTMLElementType);
+        return ReactHtmlParser(this.state.HTMLPreviewStr);
+      } else if (this.state.HTMLElementType.match(/figure/g)) {
+        console.log(
+          " dentro del figurethis.state.HTMLElementType.match(/figure/g)",
+          this.state.HTMLElementType.match(/figure/g)
+        );
+
+        return (
+          <JsxParser
+            jsx={this.state.HTMLPreviewStr}
+            bindings={{
+              styles: this.state.HTMLStylesStr,
+              // styles: "width:100%",
+              classes: this.state.HTMLClassesStr,
+              // classes: "grid",
+              imgFile: this.state.imgFile,
+              // imgFile: "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg",
+              // imgAlt: "test",
+              imgAlt: this.state.imgAlt,
+              // imgFigcaption: "test"
+              imgFigcaption: this.state.imgFigcaption
+            }}
+          />
+        );
+      } else {
+        console.log(
+          "this.state.HTMLElementType.match(/figure/g)",
+          this.state.HTMLElementType.match(/figure/g)
+        );
+        return (
+          <JsxParser
+            jsx={this.state.HTMLPreviewStr}
+            bindings={{
+              content: this.state.HTMLElementContent,
+              styles: this.state.HTMLStylesStr,
+              classes: this.state.HTMLClassesStr
+            }}
+          />
+        );
+      }
+    };
     return (
       <div>
         <div
@@ -251,16 +346,21 @@ class PostElement extends Component {
                 disabled={!this.state.isEditionMode}
               >
                 <option value="">Select one</option>
-                <option value={this.elementsJSX.h1}>Header 1</option>
-                <option value={this.elementsJSX.h2}>Header 2</option>
-                <option value={this.elementsJSX.h3}>Header 3</option>
-                <option value={this.elementsJSX.h4}>Header 4</option>
-                <option value={this.elementsJSX.h5}>Header 5</option>
-                <option value={this.elementsJSX.h6}>Header 6</option>
-                <option value={this.elementsJSX.p}>One Paragraph</option>
-                <option value="manyParagraph">Multiple Paragraph</option>
-                <option value={this.elementsJSX.figure}>Image</option>
-                <option value="custom">Custom Element</option>
+                {this.state.HTMLid === 1 ? (
+                  <option value={this.elementsJSX.h1}>Header 1</option>
+                ) : (
+                  <React.Fragment>
+                    <option value={this.elementsJSX.h2}>Header 2</option>
+                    <option value={this.elementsJSX.h3}>Header 3</option>
+                    <option value={this.elementsJSX.h4}>Header 4</option>
+                    <option value={this.elementsJSX.h5}>Header 5</option>
+                    <option value={this.elementsJSX.h6}>Header 6</option>
+                    <option value={this.elementsJSX.p}>One Paragraph</option>
+                    <option value="manyParagraph">Multiple Paragraph</option>
+                    <option value={this.elementsJSX.figure}>Image</option>
+                    <option value="custom">Custom Element</option>
+                  </React.Fragment>
+                )}
               </select>
             </div>
 
@@ -270,7 +370,8 @@ class PostElement extends Component {
               }}
               className="elementPreview blogArticle"
             >
-              {this.state.HTMLElementType !== "custom" ? (
+              {parser()}
+              {/* {this.state.HTMLElementType !== "custom"  ? (
                 <JsxParser
                   jsx={this.state.HTMLPreviewStr}
                   bindings={{
@@ -281,7 +382,7 @@ class PostElement extends Component {
                 />
               ) : (
                 ReactHtmlParser(this.state.HTMLPreviewStr)
-              )}
+              )} */}
             </div>
           </div>
 
@@ -302,16 +403,18 @@ class PostElement extends Component {
                 src={paint}
                 alt="paint"
               />
-              <img
-                style={
-                  this.state.isEditionMode
-                    ? { opacity: ".2" }
-                    : { opacity: "1", cursor: "pointer" }
-                }
-                src={del}
-                onClick={this.delBtnHandler}
-                alt="delete"
-              />
+              {!this.state.HTMLElementType.match(/h1/g) && (
+                <img
+                  style={
+                    this.state.isEditionMode
+                      ? { opacity: ".2" }
+                      : { opacity: "1", cursor: "pointer" }
+                  }
+                  src={del}
+                  onClick={this.delBtnHandler}
+                  alt="delete"
+                />
+              )}
               <img
                 style={
                   this.state.isEditionMode
@@ -383,6 +486,27 @@ class PostElement extends Component {
                   HTMLAtributesArr={this.state.HTMLAtributesArr}
                   HTMLStylesArr={this.state.HTMLStylesArr}
                   HTMLClassesArr={this.state.HTMLClassesArr}
+                />
+              )}
+
+              {this.state.HTMLElementType.match(/<figure/g) && (
+                <ImageElement
+                  atrImgHTMLHandler={this.atrImgHTMLHandler}
+                  imgFileSet={this.imgFileSet}
+                  inputTextHTMLHandler={this.inputTextHTMLHandler}
+                  atributesHTMLHandler={this.atributesHTMLHandler}
+                  stylesHTMLHandler={this.stylesHTMLHandler}
+                  classesHTMLHandler={this.classesHTMLHandler}
+                  HTMLElementContent={this.state.HTMLElementContent}
+                  HTMLAtributes={this.state.HTMLAtributes}
+                  HTMLStyles={this.state.HTMLStyles}
+                  HTMLClasses={this.state.HTMLClasses}
+                  HTMLAtributesArr={this.state.HTMLAtributesArr}
+                  HTMLStylesArr={this.state.HTMLStylesArr}
+                  HTMLClassesArr={this.state.HTMLClassesArr}
+                  imgFile={this.state.imgFile}
+                  imgAlt={this.state.imgAlt}
+                  imgFigcaption={this.state.imgFigcaption}
                 />
               )}
             </div>

@@ -32,15 +32,6 @@ const Header = props => {
           name="HTMLElementContent"
           value={props.HTMLElementContent}
         />
-        {/* <textarea
-          value={props.HTMLElementContent}
-          name="HTMLElementContent"
-          onChange={e => {
-            props.inputTextHTMLHandler(e);
-          }}
-        >
-          {props.HTMLElementContent}
-        </textarea> */}
       </div>
       <div className="elementAtributes">
         Atributes

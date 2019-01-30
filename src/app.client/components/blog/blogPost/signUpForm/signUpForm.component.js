@@ -72,9 +72,6 @@ class SignUpForm extends Component {
     const shouldCompress =
       browser === "ie" || browser === "edge" ? false : true;
 
-    console.log(
-      `isbrowser es ${browser} y shouldCompress es ${shouldCompress}`
-    );
     if (shouldCompress) {
       new Compressor(files[0], {
         quality: 0.6,
@@ -552,107 +549,6 @@ class SignUpForm extends Component {
     }
     alert("Please, fill all required values");
   };
-  // handleOnBlur = e => {
-  //   const name = e.target.name;
-  //   const value = e.target.value;
-
-  //   switch (
-  //     name
-  //   ) {
-  //      // case "userFirstName": {
-  //     //   if (value && value.match(/^[a-zA-Z]+$/g)) {
-  //     //     this.setState({
-  //     //       userFirstNameIsValid: true
-  //     //     });
-  //     //     return;
-  //     //   }
-
-  //     //   this.setState({
-  //     //     userFirstNameIsValid: false
-  //     //   });
-
-  //     //   break;
-  //     // }
-  //     // case "userLastName": {
-  //     //   if (value && value.match(/^[a-zA-Z]+$/g)) {
-  //     //     this.setState({
-  //     //       userLastNameIsValid: true
-  //     //     });
-
-  //     //     return;
-  //     //   }
-
-  //     //   this.setState({
-  //     //     userLastNameIsValid: false
-  //     //   });
-
-  //     //   break;
-  //     // }
-  //     // case "userEmail": {
-  //     //   if (
-  //     //     !value ||
-  //     //     !value.match(
-  //     //       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-  //     //     )
-  //     //   ) {
-  //     //     this.setState({
-  //     //       userEmailIsValid: {
-  //     //         valid: false,
-  //     //         message: "Please, insert a valid Email address"
-  //     //       }
-  //     //     });
-
-  //     //     return;
-  //     //   }
-
-  //     //   break;
-  //     // }
-  //     // case "userBirthDate": {
-  //     //   if (value === " ") {
-  //     //     this.setState({
-  //     //       userBirthDateIsValid: false
-  //     //     });
-  //     //     return;
-  //     //   }
-  //     //   this.setState({
-  //     //     userBirthDateIsValid: true
-  //     //   });
-  //     //   break;
-  //     // }
-  //     // case "userGender": {
-  //     //   if (value === " ") {
-  //     //     this.setState({
-  //     //       userGenderIsValid: false
-  //     //     });
-  //     //     return;
-  //     //   }
-  //     //   this.setState({
-  //     //     userGenderIsValid: true
-  //     //   });
-  //     //   break;
-  //     // }
-  //     // case "userName": {
-  //     //   console.log("entro al case de userName", value);
-  //     //   if (value && value.match(/^(\w){1,20}$/g)) {
-  //     //     //username has to be 1 to 20 chars long including hyphen and underscore
-  //     //     this.setState({
-  //     //       userNameIsValid: { valid: true, message: "" }
-  //     //     });
-  //     //     return;
-  //     //   }
-  //     //   this.setState({
-  //     //     userNameIsValid: {
-  //     //       valid: false,
-  //     //       message: "Please, insert username without spaces"
-  //     //     }
-  //     //   });
-  //     //   break;
-  //     // }
-
-  //     // default:
-  //     //   break;
-  //   }
-  // };
 
   componentDidMount() {
     window.addEventListener("scroll", function(e) {

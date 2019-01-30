@@ -4,6 +4,7 @@ import ReactHtmlParser from "react-html-parser";
 import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 //css
 import "./createPost.css";
 //assets
@@ -32,8 +33,10 @@ class CreatePost extends Component {
     super(props);
     this.inputFile = React.createRef();
     this.state = {
+      projectTitle: "",
+      projectTitleText: "",
       elementList: [],
-      isEditionMode: false,
+      isEditionMode: true,
       finalHTMLElement: "",
       dom: "",
       editionPage: 1,
@@ -53,6 +56,13 @@ class CreatePost extends Component {
       "Mobile Apps"
     ];
   }
+  componentDidMount() {
+    console.log("this.state.elementList.length", this.state.elementList.length);
+    if (this.state.elementList.length === 0) {
+      console.log("this.addElementBtnHandler();");
+      this.addElementBtnHandler();
+    }
+  }
   componentDidUpdate() {
     let arr = this.state.summaryElValue.match(/.*[^\n]/g);
     let str = "";
@@ -62,15 +72,12 @@ class CreatePost extends Component {
       }
     }
   }
-  // getDerivedStateFromProps(){
 
-  // }
   updateStateDom = dom => {
     this.setState({ dom: dom });
   };
   previewBtnHandler = () => {
     let updateStateDom = dom => {
-      "dom1", dom;
       this.updateStateDom(dom);
     };
     let arrElements = this.props.elements;
@@ -110,8 +117,14 @@ class CreatePost extends Component {
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
   };
   addElementBtnHandler = () => {
-    if (this.props.elements.length === 0) {
-      this.props.onCreateElement(this.props.elements.length + 1);
+    console.log(
+      "creating element this.props.elements.length",
+      this.props.elements
+    );
+    if (!this.props.elements) {
+      console.log("creating element");
+
+      this.props.onCreateElement(1);
       this.setState({ elementList: this.props.elements, isEditionMode: true });
       return;
     }
@@ -129,7 +142,7 @@ class CreatePost extends Component {
   playBtnHandler = () => {};
   nextBtnHandler = val => {
     this.setState(prevState => {
-      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 3) {
+      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 4) {
         return { editionPage: prevState.editionPage + val };
       }
     });
@@ -166,7 +179,35 @@ class CreatePost extends Component {
       return { fileList: arr };
     });
   };
+  projectTitleTextInputHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+    this.setState({ [name]: value });
+  };
+  saveProjectTitleHandler = () => {
+    const savedText = this.state.projectTitleText;
+    this.setState({ projectTitle: savedText });
+  };
+  cancelProjectTitleHandler = () => {
+    this.props.history.push("/cms/dashboard");
+  };
+
   render() {
+    if (this.state.projectTitle === "") {
+      return (
+        <div>
+          <input
+            type="text"
+            name="projectTitleText"
+            value={this.state.projectTitleText}
+            onChange={this.projectTitleTextInputHandler}
+          />
+          <button onClick={this.saveProjectTitleHandler}>save</button>
+          <button onClick={this.cancelProjectTitleHandler}>cancel</button>
+        </div>
+      );
+    }
     const files = this.state.fileList.map((file, i) => {
       let fileName = file.name;
       return (
@@ -195,12 +236,13 @@ class CreatePost extends Component {
         </React.Fragment>
       );
     });
-    const elements = this.props.elements.map((value, i) => {
+    const elements = this.props.elements.map((element, i) => {
       return (
         <div key={i}>
           <PostElement
             HTMLid={i + 1}
             isEditionModeHandler={this.isEditionModeHandler}
+            HTMLElementType={element.HTMLElementType}
           />
         </div>
       );
@@ -362,7 +404,16 @@ class CreatePost extends Component {
 
             {/* second page summary creation */}
             {this.state.editionPage === 2 && (
-              <div className="summaryArea">
+              <div
+                className="summaryArea"
+                style={
+                  this.state.editionPage === 2
+                    ? { animation: "editionIn 500ms ease normal forwards" }
+                    : {
+                        animation: "editionOut 500ms ease  normal forwards"
+                      }
+                }
+              >
                 <textarea
                   className="summaryElValue"
                   value={this.state.summaryElValue}
@@ -371,6 +422,22 @@ class CreatePost extends Component {
                 >
                   {this.state.summaryElValue}
                 </textarea>
+              </div>
+            )}
+
+            {/* third page summary creation */}
+            {this.state.editionPage === 3 && (
+              <div
+                className="SeoArea"
+                style={
+                  this.state.editionPage === 3
+                    ? { animation: "editionIn 500ms ease normal forwards" }
+                    : {
+                        animation: "editionOut 500ms ease  normal forwards"
+                      }
+                }
+              >
+                <input type="text" />
               </div>
             )}
           </div>
@@ -406,7 +473,10 @@ const mapDispachToProps = dispach => {
     onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload })
   };
 };
+
+const CreatePost2 = withRouter(CreatePost);
+
 export default connect(
   mapStateToProps,
   mapDispachToProps
-)(CreatePost);
+)(CreatePost2);

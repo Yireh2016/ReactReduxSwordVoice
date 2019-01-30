@@ -1,12 +1,54 @@
-const initialState = {
-  elements: []
-};
+// const initialState = {
+//   elements: [
+//     {
+//       HTMLElementType: "",
+//       HTMLElementContent: "",
+//       HTMLAtributes: "",
+//       HTMLAtributesArr: [],
+//       HTMLAtributesStr: "",
+//       finalJSXElement: "",
+//       HTMLStyles: "",
+//       HTMLStylesStr: "",
+//       HTMLStylesArr: [],
+//       HTMLClasses: "",
+//       HTMLClassesArr: [],
+//       HTMLClassesStr: "",
+//       isEditionMode: false,
+//       HTMLid: 1
+//     }
+//   ]
+// };
+
+const initialState = {};
 //estado inicial viene del CONFIG REDUCER.JS
 const postEditCtlreducer = (state = initialState, action) => {
   let newState = state;
 
   switch (action.type) {
     case "CREATE_ELEMENT": {
+      console.log("creating element");
+      const newElement = [
+        {
+          HTMLElementType: "<h1 style={styles} class={classes}> {content}</h1>",
+          HTMLElementContent: "",
+          HTMLAtributes: "",
+          HTMLAtributesArr: [],
+          HTMLAtributesStr: "",
+          finalJSXElement: "",
+          HTMLStyles: "",
+          HTMLStylesStr: "",
+          HTMLStylesArr: [],
+          HTMLClasses: "",
+          HTMLClassesArr: [],
+          HTMLClassesStr: "",
+          isEditionMode: true,
+          HTMLid: action.id
+        }
+      ];
+      newState.elements = newElement;
+      break;
+    }
+    case "ADD_ELEMENT": {
       const newElement = {
         HTMLElementType: "",
         HTMLElementContent: "",
@@ -20,14 +62,9 @@ const postEditCtlreducer = (state = initialState, action) => {
         HTMLClasses: "",
         HTMLClassesArr: [],
         HTMLClassesStr: "",
-        isEditionMode: true,
-        HTMLid: action.id
+        HTMLid: action.payload
       };
       newState.elements.push(newElement);
-      break;
-    }
-    case "ADD_ELEMENT": {
-      newState.elements.push(action.payload);
       break;
     }
     case "EDIT_ELEMENT": {
