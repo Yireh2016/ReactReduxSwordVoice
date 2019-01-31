@@ -73,13 +73,17 @@ const postEditCtlreducer = (state = initialState, action) => {
     }
 
     case "DEL_ELEMENT": {
-      // const arr = newState.elements.filter(el => {
-      //   return el.HTMLid !== action.payload.HTMLid;
-      // });
       newState.elements = action.payload;
       break;
     }
-
+    case "SEO_EDITION": {
+      newState.seo = action.payload;
+      break;
+    }
+    case "SUMMARY_EDITION": {
+      newState.summary = action.payload;
+      break;
+    }
     case "DEFAULT": {
       newState = state;
       break;

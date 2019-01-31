@@ -20,6 +20,7 @@ import back from "../../assets/createPost/back.svg";
 import PostElement from "../postElement/postElement";
 //services
 import paragraph from "../../../services/paragraphService";
+import SeoEditor from "../seoEditor/seoEditor";
 //react map
 /*
 
@@ -71,22 +72,31 @@ class CreatePost extends Component {
         str = str + `<p>${arr[i]}</p>`;
       }
     }
+    if (this.state.summaryElValue !== "") {
+      this.props.onSummaryEdition(this.state.summaryElValue);
+    }
   }
 
   updateStateDom = dom => {
     this.setState({ dom: dom });
   };
-  previewBtnHandler = () => {
-    let updateStateDom = dom => {
-      this.updateStateDom(dom);
-    };
-    let arrElements = this.props.elements;
+
+  htmlArrCosolidation = arr => {
+    let arrElements = arr;
 
     let finalHTMLElement = "";
     for (let i = 0; i < arrElements.length; i++) {
       finalHTMLElement =
-        finalHTMLElement + " " + arrElements[i].finalHTMLElement;
+        finalHTMLElement + "" + arrElements[i].finalHTMLElement;
     }
+    return finalHTMLElement;
+  };
+  previewBtnHandler = () => {
+    let updateStateDom = dom => {
+      this.updateStateDom(dom);
+    };
+
+    let finalHTMLElement = this.htmlArrCosolidation(this.props.elements);
 
     let handler = new htmlparser.DefaultHandler(function(error, dom) {
       if (error) console.log("error", error);
@@ -192,7 +202,25 @@ class CreatePost extends Component {
   cancelProjectTitleHandler = () => {
     this.props.history.push("/cms/dashboard");
   };
-
+  programHandler = () => {
+    let finalHTMl = this.htmlArrCosolidation(this.props.elements);
+    const finalPost = {
+      seo: {
+        title: "",
+        description: "",
+        keywords: []
+      },
+      article: {
+        html: finalHTMl,
+        author: "",
+        date: "",
+        categories: [],
+        comments: []
+      }
+    };
+    console.log("finalPost", finalPost);
+    return finalPost;
+  };
   render() {
     if (this.state.projectTitle === "") {
       return (
@@ -247,6 +275,20 @@ class CreatePost extends Component {
         </div>
       );
     });
+    const titles = () => {
+      const page = this.state.editionPage;
+      let result;
+      if (page === 1) {
+        result = <h1>Blog Post Edition</h1>;
+        return result;
+      } else if (page === 2) {
+        result = <h1>Summary Edition</h1>;
+        return result;
+      } else if (page === 3) {
+        result = <h1>SEO Edition</h1>;
+        return result;
+      }
+    };
     return (
       <div>
         {/* Create Bar */}
@@ -297,22 +339,12 @@ class CreatePost extends Component {
               />
               <img src={upload} alt="upload botton  " />
             </div>
-            {/* <div
-              className="createBarItem"
-              style={
-                this.state.editionPage > 1
-                  ? { visibility: "visible" }
-                  : { visibility: "hidden" }
-              }
-            >
-              <h4>Add Tag</h4>
-              <img src={tag} alt="add tag botton  " />
-            </div> */}
 
             <div
               className="createBarItem"
+              onClick={this.programHandler}
               style={
-                this.state.editionPage > 1
+                this.state.editionPage > 2
                   ? { visibility: "visible" }
                   : { visibility: "hidden" }
               }
@@ -323,7 +355,7 @@ class CreatePost extends Component {
             <div
               className="createBarItem"
               style={
-                this.state.editionPage > 1
+                this.state.editionPage > 2
                   ? { visibility: "visible" }
                   : { visibility: "hidden" }
               }
@@ -353,11 +385,7 @@ class CreatePost extends Component {
         </div>
         {/* Edition Area */}
         <div className="createLayout">
-          {this.state.editionPage === 1 ? (
-            <h1>Blog Post Edition</h1>
-          ) : (
-            <h1>Summary Edition</h1>
-          )}
+          {titles()}
           <div
             style={{
               height: "80vh",
@@ -428,7 +456,7 @@ class CreatePost extends Component {
             {/* third page summary creation */}
             {this.state.editionPage === 3 && (
               <div
-                className="SeoArea"
+                className="seoArea"
                 style={
                   this.state.editionPage === 3
                     ? { animation: "editionIn 500ms ease normal forwards" }
@@ -437,7 +465,7 @@ class CreatePost extends Component {
                       }
                 }
               >
-                <input type="text" />
+                <SeoEditor />
               </div>
             )}
           </div>
@@ -470,7 +498,9 @@ const mapDispachToProps = dispach => {
     onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
     onEditElement: payload =>
       dispach({ type: "EDIT_ELEMENT", payload: payload }),
-    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload })
+    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
+    onSummaryEdition: payload =>
+      dispach({ type: "SUMMARY_EDITION", payload: payload })
   };
 };
 

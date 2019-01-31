@@ -59,6 +59,9 @@
 .addElementBtn * {
   padding: 0 3px;
 }
+.addElementBtn:hover {
+  cursor: pointer;
+}
 .summaryArea {
   margin: 10px 0 0 0;
   display: flex;

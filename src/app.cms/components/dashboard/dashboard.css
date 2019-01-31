@@ -74,7 +74,8 @@
 }
 .dashCreatePost button:hover,
 .dashLogOut button:hover {
-  background-color: var(--blueLight);
+  background-color: white;
+  color: #1a2225;
   cursor: pointer;
 }
 .dashMenu {
