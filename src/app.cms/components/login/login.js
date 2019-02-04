@@ -24,7 +24,6 @@ class Login extends Component {
       axios(`/api/searchSessionID/${this.props.cookies.cookies.sessionId}`)
         .then(res => {
           if (res.status === 200) {
-            console.log(`res.data on login from cms ${res.data}`);
             const data = {
               userAvatar: res.data.userAvatar,
               userName: res.data.userName
@@ -122,7 +121,6 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("mapStateToProps state", state);
   return {
     loggedUserName: state.login.loggedUserName,
     isUserLoggedIn: state.login.isUserLoggedIn,

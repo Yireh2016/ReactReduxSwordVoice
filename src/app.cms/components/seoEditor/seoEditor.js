@@ -6,26 +6,34 @@ class SeoEditor extends Component {
     super(props);
     this.state = {
       title: "",
-      keywords: ""
+      keywords: "",
+      url: ""
     };
-  }
-  componentDidUpdate() {
-    this.props.onEditSEO(this.state);
   }
 
   componentDidMount() {
     if (this.props.elements) {
       this.setState({
-        title: this.state.elementList[0].HTMLElementContent,
-        keywords: this.props.elements.keywords
+        title: this.props.elements[0].HTMLElementContent,
+        keywords: this.props.seo.keywords,
+        description: this.props.summary
       });
     }
+
+    const articleURL = this.props.project.url;
+
+    this.setState({ url: articleURL });
   }
   inputSEOHandler = e => {
     const {
       target: { name, value }
     } = e;
     this.setState({ [name]: value });
+    if (name === "url") {
+      this.props.onProjectURLEdition(value);
+      return;
+    }
+    this.props.onEditSEO({ [name]: value });
   };
   render() {
     return (
@@ -33,18 +41,22 @@ class SeoEditor extends Component {
         <label>
           Title
           <input
-            type="text"
-            name="title"
+            // type="text"
+            // name="title"
+            // disabled
+            readOnly
             value={this.state.title}
-            onChange={this.inputSEOHandler}
+            // onChange={this.inputSEOHandler}
           />
         </label>
         <label>
           Description
           <textarea
-            name="description"
+            // disabled
+            readOnly
+            // name="description"
             value={this.state.description}
-            onChange={this.inputSEOHandler}
+            // onChange={this.inputSEOHandler}
             cols="30"
             rows="10"
           />
@@ -54,7 +66,16 @@ class SeoEditor extends Component {
           <input
             type="text"
             name="keywords"
-            value={this.state.keywords}
+            value={this.props.seo.keywords}
+            onChange={this.inputSEOHandler}
+          />
+        </label>
+        <label>
+          URL
+          <input
+            type="text"
+            name="url"
+            value={this.state.url}
             onChange={this.inputSEOHandler}
           />
         </label>
@@ -66,14 +87,18 @@ class SeoEditor extends Component {
 const mapStateToProps = state => {
   return {
     elements: state.postCreation.elements,
-    seo: state.postCreation.seo
+    seo: state.postCreation.seo,
+    summary: state.postCreation.summary,
+    project: state.postCreation.project
   };
 };
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
-    onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload })
+    onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
+    onProjectURLEdition: payload =>
+      dispach({ type: "PROJECT_URL_EDITION", payload: payload })
   };
 };
 

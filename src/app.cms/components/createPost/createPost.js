@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import JsxParser from "react-jsx-parser";
-import ReactHtmlParser from "react-html-parser";
+// import JsxParser from "react-jsx-parser";
+// import ReactHtmlParser from "react-html-parser";
 import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+// import { withRouter } from "react-router-dom";
 //css
 import "./createPost.css";
 //assets
 import play from "../../assets/createPost/play.svg";
-import tag from "../../assets/createPost/tag.svg";
+// import tag from "../../assets/createPost/tag.svg";
 import upload from "../../assets/createPost/upload.svg";
 import time from "../../assets/createPost/time.svg";
 import check from "../../assets/createPost/check.svg";
@@ -21,6 +21,7 @@ import PostElement from "../postElement/postElement";
 //services
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
+import ProjectTitle from "../projectTitle/projectTitle";
 //react map
 /*
 
@@ -33,6 +34,7 @@ class CreatePost extends Component {
   constructor(props) {
     super(props);
     this.inputFile = React.createRef();
+    this.editionAreaRef = React.createRef();
     this.state = {
       projectTitle: "",
       projectTitleText: "",
@@ -43,7 +45,8 @@ class CreatePost extends Component {
       editionPage: 1,
       summaryElValue: "",
       fileList: [],
-      tagList: []
+      tagList: [],
+      dateProgram: ""
     };
 
     this.tags = [
@@ -58,28 +61,11 @@ class CreatePost extends Component {
     ];
   }
   componentDidMount() {
-    console.log("this.state.elementList.length", this.state.elementList.length);
     if (this.state.elementList.length === 0) {
-      console.log("this.addElementBtnHandler();");
       this.addElementBtnHandler();
     }
   }
-  componentDidUpdate() {
-    let arr = this.state.summaryElValue.match(/.*[^\n]/g);
-    let str = "";
-    if (arr) {
-      for (let i = 0; i < arr.length; i++) {
-        str = str + `<p>${arr[i]}</p>`;
-      }
-    }
-    if (this.state.summaryElValue !== "") {
-      this.props.onSummaryEdition(this.state.summaryElValue);
-    }
-  }
-
-  updateStateDom = dom => {
-    this.setState({ dom: dom });
-  };
+  componentDidUpdate() {}
 
   htmlArrCosolidation = arr => {
     let arrElements = arr;
@@ -91,23 +77,24 @@ class CreatePost extends Component {
     }
     return finalHTMLElement;
   };
-  previewBtnHandler = () => {
-    let updateStateDom = dom => {
-      this.updateStateDom(dom);
-    };
-
-    let finalHTMLElement = this.htmlArrCosolidation(this.props.elements);
-
+  parseHTML2Object = htmlStr => {
     let handler = new htmlparser.DefaultHandler(function(error, dom) {
       if (error) console.log("error", error);
       else {
-        updateStateDom(dom);
+        console.log("parser no error");
       }
     });
     let parser = new htmlparser.Parser(handler);
-    parser.parseComplete(finalHTMLElement);
+    parser.parseComplete(htmlStr);
+    return handler.dom;
+  };
 
-    this.setState({ finalHTMLElement: finalHTMLElement });
+  previewBtnHandler = () => {
+    let finalHTMLElement = this.htmlArrCosolidation(this.props.elements);
+
+    let dom = this.parseHTML2Object(finalHTMLElement);
+
+    this.setState({ finalHTMLElement: finalHTMLElement, dom: dom });
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
 
     let str = paragraph(this.state.summaryElValue);
@@ -127,13 +114,7 @@ class CreatePost extends Component {
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
   };
   addElementBtnHandler = () => {
-    console.log(
-      "creating element this.props.elements.length",
-      this.props.elements
-    );
     if (!this.props.elements) {
-      console.log("creating element");
-
       this.props.onCreateElement(1);
       this.setState({ elementList: this.props.elements, isEditionMode: true });
       return;
@@ -151,6 +132,19 @@ class CreatePost extends Component {
   };
   playBtnHandler = () => {};
   nextBtnHandler = val => {
+    if (this.state.editionPage === 2) {
+      let arr = this.state.summaryElValue.match(/.*[^\n]/g);
+      let str = "";
+      if (arr) {
+        for (let i = 0; i < arr.length; i++) {
+          str = str + `<p>${arr[i]}</p>`;
+        }
+      }
+      if (this.state.summaryElValue !== "") {
+        this.props.onSummaryEdition(this.state.summaryElValue);
+      }
+    }
+
     this.setState(prevState => {
       if (prevState.editionPage + val > 0 && prevState.editionPage + val < 4) {
         return { editionPage: prevState.editionPage + val };
@@ -168,17 +162,59 @@ class CreatePost extends Component {
       prevState.fileList.push(file);
       return { fileList: prevState.fileList };
     });
+    this.props.onAddFile(file);
+  };
+  keywordsToArr = keywords => {
+    if (
+      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
+      keywords !== ""
+    ) {
+      keywords = keywords + ",";
+    }
+    let arr =
+      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
+
+    let arrLen = arr.length;
+
+    for (let i = 0; i < arrLen; i++) {
+      arr[i] = arr[i].substring(0, arr[i].length - 1);
+    }
+
+    return arr;
   };
   tagOptionHandler = e => {
     const {
       target: { value }
     } = e;
+    let arr = this.keywordsToArr(this.props.seo.keywords);
+    // let arr = this.props.seo.keywords.match(/([^,])*,/g)
+    //   ? this.props.seo.keywords.match(/([^,])*,/g)
+    //   : [];
+    // console.log("arr", arr);
+    let arrLen = arr.length;
+    // for (let i = 0; i < arrLen; i++) {
+    //   arr[i] = arr[i].substring(0, arr[i].length - 1);
+    // }
 
-    this.setState(prevState => {
-      let arr = prevState.tagList;
+    for (let i = 0; i < arrLen; i++) {
+      if (arr[i] === value) {
+        arr = arr.filter(val => {
+          return val !== value;
+        });
+      }
+    }
+    if (arrLen === arr.length) {
       arr.push(value);
-      return { tagList: arr };
-    });
+    }
+
+    let keywords = "";
+    for (let i = 0; i < arr.length; i++) {
+      keywords = keywords + arr[i] + ",";
+    }
+
+    this.props.onEditSEO({ keywords: keywords });
+
+    this.setState({ tagList: arr });
   };
   onFileRemove = fileName => {
     this.setState(prevState => {
@@ -188,6 +224,20 @@ class CreatePost extends Component {
       });
       return { fileList: arr };
     });
+
+    let arr = this.props.files.filter((value, i, arr) => {
+      return arr[i] !== fileName;
+    });
+    this.props.onAddDeleteFile(arr);
+  };
+  uploadFileHandler = file => {
+    this.setState(prevState => {
+      prevState.fileList.push(file);
+      return { fileList: prevState.fileList };
+    });
+    let arr = this.props.files;
+    arr.push(file.name);
+    this.props.onAddDeleteFile(arr);
   };
   projectTitleTextInputHandler = e => {
     const {
@@ -195,45 +245,107 @@ class CreatePost extends Component {
     } = e;
     this.setState({ [name]: value });
   };
-  saveProjectTitleHandler = () => {
-    const savedText = this.state.projectTitleText;
-    this.setState({ projectTitle: savedText });
-  };
-  cancelProjectTitleHandler = () => {
-    this.props.history.push("/cms/dashboard");
-  };
+  // saveProjectTitleHandler = () => {
+  //   const savedText = this.state.projectTitleText;
+  //   this.setState({ projectTitle: savedText });
+  //   this.props.onProjectURLEdition(savedText);
+
+  // };
+  // cancelProjectTitleHandler = () => {
+  //   this.props.history.push("/cms/dashboard");
+  // };
   programHandler = () => {
+    //hacer validaciones antes de programar post
+    let date =
+      this.state.dateProgram === "" ? new Date() : this.state.dateProgram;
     let finalHTMl = this.htmlArrCosolidation(this.props.elements);
+    let rawBody = "";
+
+    let dom = this.parseHTML2Object(finalHTMl);
+    for (let i = 0; i < dom.length; i++) {
+      if (dom[i].type === "tag" && dom[i].name === "p") {
+        rawBody = rawBody + dom[i].children[0].data;
+      }
+    }
+    //da formato a la URL del articulo
+    // let articleURL = this.props.project;
+    // articleURL = articleURL.replace(/[^a-zA-Z0-9ñáéíúóÁÉÍÓÚ]/g, "-");
+    // articleURL = articleURL.replace(/[^\w]-*/g, "-");
+    // let arrArticleUrl = articleURL.match(/.*[^-]/g);
+
+    // console.log("save -", arrArticleUrl[0]);
+
+    let arr = this.keywordsToArr(this.props.seo.keywords);
     const finalPost = {
-      seo: {
-        title: "",
-        description: "",
-        keywords: []
-      },
       article: {
-        html: finalHTMl,
-        author: "",
-        date: "",
-        categories: [],
-        comments: []
+        html: finalHTMl, //str
+        author: this.props.login.loggedUserName, //str
+        date: date, //date
+        categories: arr, //arr
+        comments: [],
+        files: this.props.files, //arr
+        seo: {
+          title: this.props.elements[0].HTMLElementContent, //str
+          description: this.props.summary, //str
+          keywords: arr, //arr
+          structuredData: {
+            //json
+            "@context": "http://schema.org",
+            "@type": "Article",
+            headline: this.props.elements[0].HTMLElementContent, //str
+            alternativeHeadline: this.props.elements[0].HTMLElementContent, //str
+            image: {
+              //json
+              //OJO
+              url:
+                "http://imagenes.canalrcn.com/ImgNTN24/juan_guaido_ntn24_2.jpg?null",
+              "@type": "ImageObject",
+              height: "174",
+              width: "310"
+            },
+            author: this.props.login.loggedUserName, //str
+            url: `/blog/${this.props.project.url}`, //str
+            datePublished: date, //date
+            dateCreated: date, //date
+            dateModified: date, //date
+            description: this.props.summary, //str
+            articleBody: rawBody, //str
+            publisher: {
+              //json
+              "@type": "Organization",
+              name: "SwordVoice.com",
+              logo: {
+                url: "https://www.swordvoice.com/LOGO.svg",
+                type: "ImageObject"
+              }
+            },
+            mainEntityOfPage: "https://www.SwordVoice.com"
+          }
+        }
       }
     };
     console.log("finalPost", finalPost);
     return finalPost;
   };
+
+  editionAreaChangeHanlder = top => {
+    const el = this.editionAreaRef.current;
+    el.scrollTo(0, top);
+  };
   render() {
-    if (this.state.projectTitle === "") {
+    if (this.props.project.name === "") {
       return (
-        <div>
-          <input
-            type="text"
-            name="projectTitleText"
-            value={this.state.projectTitleText}
-            onChange={this.projectTitleTextInputHandler}
-          />
-          <button onClick={this.saveProjectTitleHandler}>save</button>
-          <button onClick={this.cancelProjectTitleHandler}>cancel</button>
-        </div>
+        <ProjectTitle />
+        // <div>
+        //   <input
+        //     type="text"
+        //     name="projectTitleText"
+        //     value={this.state.projectTitleText}
+        //     onChange={this.projectTitleTextInputHandler}
+        //   />
+        //   <button onClick={this.saveProjectTitleHandler}>save</button>
+        //   <button onClick={this.cancelProjectTitleHandler}>cancel</button>
+        // </div>
       );
     }
     const files = this.state.fileList.map((file, i) => {
@@ -271,6 +383,7 @@ class CreatePost extends Component {
             HTMLid={i + 1}
             isEditionModeHandler={this.isEditionModeHandler}
             HTMLElementType={element.HTMLElementType}
+            editionAreaChangeHanlder={this.editionAreaChangeHanlder}
           />
         </div>
       );
@@ -386,6 +499,7 @@ class CreatePost extends Component {
         {/* Edition Area */}
         <div className="createLayout">
           {titles()}
+          <div>Project Name: {this.props.project.name}</div>
           <div
             style={{
               height: "80vh",
@@ -398,6 +512,8 @@ class CreatePost extends Component {
 
             <div
               className="editionArea"
+              ref={this.editionAreaRef}
+              // onChange={this.editionAreaChangeHanlder}
               style={
                 this.state.editionPage === 1
                   ? { animation: "editionIn 500ms ease normal forwards" }
@@ -488,7 +604,12 @@ class CreatePost extends Component {
 
 const mapStateToProps = state => {
   return {
-    elements: state.postCreation.elements
+    elements: state.postCreation.elements,
+    seo: state.postCreation.seo,
+    summary: state.postCreation.summary,
+    login: state.login,
+    project: state.postCreation.project,
+    files: state.postCreation.files
   };
 };
 const mapDispachToProps = dispach => {
@@ -500,13 +621,21 @@ const mapDispachToProps = dispach => {
       dispach({ type: "EDIT_ELEMENT", payload: payload }),
     onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
     onSummaryEdition: payload =>
-      dispach({ type: "SUMMARY_EDITION", payload: payload })
+      dispach({ type: "SUMMARY_EDITION", payload: payload }),
+    onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
+    onAddDeleteFile: payload =>
+      dispach({ type: "ADD_DELETE_FILE", payload: payload })
+
+    // onProjectNameEdition: payload =>
+    //   dispach({ type: "PROJECT_NAME_EDITION", payload: payload }),
+    // onProjectURLEdition: payload =>
+    //   dispach({ type: "PROJECT_URL_EDITION", payload: payload })
   };
 };
 
-const CreatePost2 = withRouter(CreatePost);
+// const CreatePost2 = withRouter(CreatePost);
 
 export default connect(
   mapStateToProps,
   mapDispachToProps
-)(CreatePost2);
+)(CreatePost);

@@ -26,8 +26,6 @@ class ImageElement extends Component {
     const {
       target: { name, value }
     } = e;
-    console.log("name", name);
-    console.log("value", value);
     this.setState({ [name]: value });
   };
   imageUpload = image => {
@@ -38,13 +36,12 @@ class ImageElement extends Component {
     //     uploadMessage: undefined
     //   };
     // });
-    console.log("image despues", URL.createObjectURL(image));
+
     this.props.imgFileSet(image);
     alert("file Uploaded successfully");
   };
 
   handleImgUpload = files => {
-    console.log("imagen subida  ", files);
     this.setState({ image: files });
   };
 
@@ -56,13 +53,11 @@ class ImageElement extends Component {
     // const shouldCompress = false;
 
     if (shouldCompress) {
-      console.log("this.state.image[0]", this.state.image[0]);
       new Compressor(this.state.image[0], {
         quality: this.state.quality,
         mimeType: "jpg",
         convertSize: 200000,
         success(result) {
-          console.log("resultado del compress", result);
           Uploadfunction(result);
         },
         error(err) {
@@ -72,7 +67,6 @@ class ImageElement extends Component {
         }
       });
     } else {
-      console.log("cargando imagen sin comprimir");
       Uploadfunction(this.state.image[0]);
     }
   };

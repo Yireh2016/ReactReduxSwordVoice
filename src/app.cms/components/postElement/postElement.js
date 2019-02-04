@@ -29,6 +29,7 @@ DashBoard
 class PostElement extends Component {
   constructor(props) {
     super(props);
+    this.postElement = React.createRef();
 
     // PROPS
     // HTMLid indica el id del html element
@@ -77,6 +78,10 @@ class PostElement extends Component {
         isImageUploader: false
       });
     }
+  }
+  componentDidUpdate() {
+    const el = this.postElement.current;
+    this.props.editionAreaChangeHanlder(el.offsetTop);
   }
 
   inputTextHTMLHandler = e => {
@@ -183,8 +188,18 @@ class PostElement extends Component {
     alt,
     figcaption
   ) => {
-    str = str.replace("{styles}", `"${styles}"`);
-    str = str.replace("{classes}", `"${classes}"`);
+    if (styles !== "") {
+      str = str.replace("{styles}", `"${styles}"`);
+    } else {
+      str = str.replace(" style={styles}", "");
+    }
+
+    if (classes !== "") {
+      str = str.replace("{classes}", `"${classes}"`);
+    } else {
+      str = str.replace(" class={classes}", "");
+    }
+
     str = str.replace("{content}", content);
     str = str.replace("{imgFile}", `"${file}"`);
     str = str.replace("{imgAlt}", `"${alt}"`);
@@ -264,6 +279,10 @@ class PostElement extends Component {
       return this.props.HTMLid !== arr[i].HTMLid;
     });
 
+    for (let i = 0; i < payload.length; i++) {
+      payload[i].HTMLid = i + 1;
+    }
+
     this.props.onDelElement(payload);
   };
   atrImgHTMLHandler = e => {
@@ -276,22 +295,13 @@ class PostElement extends Component {
     // this.setState({ imgFile: `url(${URL.createObjectURL(image)})` });
   };
   render() {
-    console.log("rendering");
     const parser = () => {
-      console.log("HTMLElementType en poist", this.state.HTMLElementType);
-
       if (
         this.state.HTMLElementType === "custom" ||
         this.state.HTMLElementType === "manyParagraph"
       ) {
-        console.log(" custom o manyparagraph", this.state.HTMLElementType);
         return ReactHtmlParser(this.state.HTMLPreviewStr);
       } else if (this.state.HTMLElementType.match(/figure/g)) {
-        console.log(
-          " dentro del figurethis.state.HTMLElementType.match(/figure/g)",
-          this.state.HTMLElementType.match(/figure/g)
-        );
-
         return (
           <JsxParser
             jsx={this.state.HTMLPreviewStr}
@@ -310,10 +320,6 @@ class PostElement extends Component {
           />
         );
       } else {
-        console.log(
-          "this.state.HTMLElementType.match(/figure/g)",
-          this.state.HTMLElementType.match(/figure/g)
-        );
         return (
           <JsxParser
             jsx={this.state.HTMLPreviewStr}
@@ -327,7 +333,7 @@ class PostElement extends Component {
       }
     };
     return (
-      <div>
+      <div ref={this.postElement}>
         <div
           className="elementEditionLayout"
           style={

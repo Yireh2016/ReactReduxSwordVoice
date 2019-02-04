@@ -19,14 +19,23 @@
 //   ]
 // };
 
-const initialState = {};
+const initialState = {
+  elements: [],
+  seo: {
+    keywords: "",
+    description: "",
+    title: ""
+  },
+  summary: "",
+  project: { name: "", url: "" },
+  files: []
+};
 //estado inicial viene del CONFIG REDUCER.JS
 const postEditCtlreducer = (state = initialState, action) => {
   let newState = state;
 
   switch (action.type) {
     case "CREATE_ELEMENT": {
-      console.log("creating element");
       const newElement = [
         {
           HTMLElementType: "<h1 style={styles} class={classes}> {content}</h1>",
@@ -84,6 +93,19 @@ const postEditCtlreducer = (state = initialState, action) => {
       newState.summary = action.payload;
       break;
     }
+    case "PROJECT_NAME_EDITION": {
+      newState.project.name = action.payload;
+      break;
+    }
+    case "PROJECT_URL_EDITION": {
+      newState.project.url = action.payload;
+      break;
+    }
+    case "ADD_DELETE_FILE": {
+      newState.files = action.payload;
+      break;
+    }
+
     case "DEFAULT": {
       newState = state;
       break;
