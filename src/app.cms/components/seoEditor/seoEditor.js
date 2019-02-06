@@ -5,25 +5,42 @@ class SeoEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      keywords: "",
-      url: ""
+      title: this.props.elements[0].HTMLElementContent,
+      keywords: this.props.seo.keywords,
+      url: this.props.project.url,
+      description: this.props.summary
     };
   }
 
   componentDidMount() {
-    if (this.props.elements) {
-      this.setState({
-        title: this.props.elements[0].HTMLElementContent,
-        keywords: this.props.seo.keywords,
-        description: this.props.summary
-      });
+    // if (this.props.elements) {
+    //   this.setState({
+    //     title: this.props.elements[0].HTMLElementContent,
+    //     keywords: this.props.seo.keywords,
+    //     description: this.props.summary
+    //   });
+    // }
+    // const articleURL = this.props.project.url;
+    // this.setState({ url: articleURL });
+  }
+  keywordsToArr = keywords => {
+    if (
+      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
+      keywords !== ""
+    ) {
+      keywords = keywords + ",";
+    }
+    let arr =
+      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
+
+    let arrLen = arr.length;
+
+    for (let i = 0; i < arrLen; i++) {
+      arr[i] = arr[i].substring(0, arr[i].length - 1);
     }
 
-    const articleURL = this.props.project.url;
-
-    this.setState({ url: articleURL });
-  }
+    return arr;
+  };
   inputSEOHandler = e => {
     const {
       target: { name, value }
@@ -33,7 +50,8 @@ class SeoEditor extends Component {
       this.props.onProjectURLEdition(value);
       return;
     }
-    this.props.onEditSEO({ [name]: value });
+    let arr = this.keywordsToArr(value);
+    this.props.onEditSEO({ keywords: value, keywordsList: arr });
   };
   render() {
     return (

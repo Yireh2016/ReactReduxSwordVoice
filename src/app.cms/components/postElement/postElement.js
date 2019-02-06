@@ -35,27 +35,29 @@ class PostElement extends Component {
     // HTMLid indica el id del html element
     // isEditionModeHandler  toogle edition mode flag
     //elements array of elements
+    //isEditionMode
 
     this.state = {
       HTMLElementType: this.props.HTMLElementType,
-      HTMLElementContent: "",
-      HTMLAtributes: "",
-      HTMLAtributesArr: [],
-      HTMLAtributesStr: "",
-      HTMLStyles: "",
-      HTMLStylesStr: "",
-      HTMLStylesArr: [],
-      HTMLClasses: "",
-      HTMLClassesArr: [],
-      HTMLClassesStr: "",
-      HTMLPreviewStr: "",
-      HTMLid: props.HTMLid,
-      isEditionMode: true,
-      finalHTMLElement: "",
-      isImageUploader: false,
-      imgFile: "",
-      imgAlt: "",
-      imgFigcaption: ""
+      HTMLElementContent: this.props.HTMLElementContent,
+      HTMLAtributes: this.props.HTMLAtributes,
+      HTMLAtributesArr: this.props.HTMLAtributesArr,
+      HTMLAtributesStr: this.props.HTMLAtributesStr,
+      HTMLStyles: this.props.HTMLStyles,
+      HTMLStylesStr: this.props.HTMLStylesStr,
+      HTMLStylesArr: this.props.HTMLStylesArr,
+      HTMLClasses: this.props.HTMLClasses,
+      HTMLClassesArr: this.props.HTMLClassesArr,
+      HTMLClassesStr: this.props.HTMLClassesStr,
+      HTMLPreviewStr: this.props.HTMLPreviewStr,
+      HTMLid: this.props.HTMLid,
+      isEditionMode: this.props.isEditionMode,
+      finalHTMLElement: this.props.finalHTMLElement,
+      imgFile: this.props.imgFile,
+      imgAlt: this.props.imgAlt,
+      imgFigcaption: this.props.imgFigcaption,
+
+      isImageUploader: false
     };
     this.elementsJSX = {
       p: `<p style={styles} class={classes}> {content}</p>`,

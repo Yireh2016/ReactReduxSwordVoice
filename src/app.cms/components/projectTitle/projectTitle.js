@@ -66,7 +66,6 @@ class ProjectTitle extends Component {
       .post("/api/createPost", finalPost)
       .then(res => {
         if (res.status === 200) {
-          console.log("se creo la entrada en DB");
           onSavePostProjectName(savedURLText, savedTitleText);
           alert(`Project ${savedTitleText} saved`);
 

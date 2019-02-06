@@ -59,7 +59,6 @@ export const updatePostCtrl = (req, res) => {
   articleModel.findOneAndUpdate(
     { projectName: projectName },
     {
-      coments: data.coments,
       elements: data.elements,
       files: data.files,
       keywords: data.keywords,

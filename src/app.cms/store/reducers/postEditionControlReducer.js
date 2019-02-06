@@ -23,6 +23,7 @@ const initialState = {
   elements: [],
   seo: {
     keywords: "",
+    keywordsList: [],
     description: "",
     title: ""
   },
@@ -107,6 +108,10 @@ const postEditCtlreducer = (state = initialState, action) => {
     }
     case "FETCH_POST": {
       newState = action.payload;
+      break;
+    }
+    case "DATE_EDITION": {
+      newState.date = action.payload;
       break;
     }
 

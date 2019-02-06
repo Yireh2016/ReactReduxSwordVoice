@@ -1,15 +1,12 @@
 import React, { Component } from "react";
-// import JsxParser from "react-jsx-parser";
-// import ReactHtmlParser from "react-html-parser";
+import axios from "axios";
 import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-// import { withRouter } from "react-router-dom";
 //css
 import "./createPost.css";
 //assets
 import play from "../../assets/createPost/play.svg";
-// import tag from "../../assets/createPost/tag.svg";
 import upload from "../../assets/createPost/upload.svg";
 import time from "../../assets/createPost/time.svg";
 import check from "../../assets/createPost/check.svg";
@@ -22,7 +19,6 @@ import PostElement from "../postElement/postElement";
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
 import ProjectTitle from "../projectTitle/projectTitle";
-import axios from "axios";
 //react map
 /*
 
@@ -37,17 +33,18 @@ class CreatePost extends Component {
     this.inputFile = React.createRef();
     this.editionAreaRef = React.createRef();
     this.state = {
-      projectTitle: "",
-      projectTitleText: "",
-      elementList: [],
-      isEditionMode: true,
-      finalHTMLElement: "",
-      dom: "",
+      projectTitle: this.props.project.name,
+      projectTitleText: this.props.project.name,
+      elementList: this.props.elements,
+      isEditionMode: false,
       editionPage: 1,
-      summaryElValue: "",
+      summaryElValue: this.props.summary,
       fileList: [],
-      tagList: [],
-      dateProgram: ""
+      fileListNames: this.props.fileNames,
+      tagList: this.props.seo.keywords,
+      dateProgram: this.props.date,
+      finalHTMLElement: "",
+      dom: ""
     };
 
     this.tags = [
@@ -64,9 +61,10 @@ class CreatePost extends Component {
   componentDidMount() {
     if (this.state.elementList.length === 0) {
       this.addElementBtnHandler();
+      this.setState({ isEditionMode: true });
+      return;
     }
   }
-  componentDidUpdate() {}
 
   htmlArrCosolidation = arr => {
     let arrElements = arr;
@@ -158,13 +156,7 @@ class CreatePost extends Component {
     } = e;
     this.setState({ [name]: value });
   };
-  uploadFileHandler = file => {
-    this.setState(prevState => {
-      prevState.fileList.push(file);
-      return { fileList: prevState.fileList };
-    });
-    this.props.onAddFile(file);
-  };
+
   keywordsToArr = keywords => {
     if (
       keywords.slice(keywords.length - 1, keywords.length) !== "," &&
@@ -213,7 +205,7 @@ class CreatePost extends Component {
       keywords = keywords + arr[i] + ",";
     }
 
-    this.props.onEditSEO({ keywords: keywords });
+    this.props.onEditSEO({ keywords: keywords, keywordsList: arr });
 
     this.setState({ tagList: arr });
   };
@@ -223,20 +215,36 @@ class CreatePost extends Component {
       arr = arr.filter(val => {
         return val.name !== fileName;
       });
-      return { fileList: arr };
+
+      let arr2 = prevState.fileListNames;
+
+      arr2 = arr2.filter(val => {
+        return val !== fileName;
+      });
+      return { fileList: arr, fileListNames: arr2 };
     });
 
-    let arr = this.props.files.filter((value, i, arr) => {
+    let arr = this.props.fileNames.filter((value, i, arr) => {
       return arr[i] !== fileName;
     });
     this.props.onAddDeleteFile(arr);
   };
+  // uploadFileHandler = file => {
+  //   this.setState(prevState => {
+  //     prevState.fileList.push(file);
+  //     return { fileList: prevState.fileList };
+  //   });
+  //   this.props.onAddFile(file);
+  // };
   uploadFileHandler = file => {
     this.setState(prevState => {
       prevState.fileList.push(file);
-      return { fileList: prevState.fileList };
+
+      return {
+        fileList: prevState.fileList
+      };
     });
-    let arr = this.props.files;
+    let arr = this.props.fileNames;
     arr.push(file.name);
     this.props.onAddDeleteFile(arr);
   };
@@ -258,7 +266,10 @@ class CreatePost extends Component {
   programHandler = () => {
     //hacer validaciones antes de programar post
     let date =
-      this.state.dateProgram === "" ? new Date() : this.state.dateProgram;
+      this.state.dateProgram === "" || this.state.dateProgram === undefined
+        ? new Date()
+        : this.state.dateProgram;
+    this.props.onDateEdition(date);
     let finalHTMl = this.htmlArrCosolidation(this.props.elements);
     let rawBody = "";
 
@@ -277,7 +288,7 @@ class CreatePost extends Component {
         date: date, //date
         categories: arr, //arr
         comments: [],
-        files: this.props.files, //arr
+        files: this.props.fileNames, //arr
         seo: {
           title: this.props.elements[0].HTMLElementContent, //str
           description: this.props.summary, //str
@@ -320,11 +331,10 @@ class CreatePost extends Component {
     };
     console.log("finalPost", finalPost);
     let dataToUpdate = {
-      coments: [],
       elements: this.props.elements,
-      files: this.props.files,
-      keywords: this.props.keywords,
-      author: this.props.loggedUserName,
+      files: this.props.fileNames,
+      keywords: this.props.seo.keywords,
+      author: this.props.login.loggedUserName,
       date: date,
       html: finalHTMl,
       projectName: this.props.project.name,
@@ -332,7 +342,6 @@ class CreatePost extends Component {
       title: this.props.elements[0].HTMLElementContent,
       url: this.props.project.url
     };
-    console.log("dataToUpdate", dataToUpdate);
 
     axios
       .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
@@ -346,7 +355,7 @@ class CreatePost extends Component {
 
   editionAreaChangeHanlder = top => {
     const el = this.editionAreaRef.current;
-    el.scrollTo(0, top);
+    el.scrollTo(0, top - 200); //ojo
   };
   render() {
     if (this.props.project.name === "") {
@@ -368,10 +377,20 @@ class CreatePost extends Component {
       );
     });
     const tags = this.tags.map((tag, i) => {
+      let checked = false;
+      if (this.props.seo.keywordsList.length > 0) {
+        let arr = this.props.seo.keywordsList;
+        for (let i = 0; i < arr.length; i++) {
+          if (tag === arr[i]) {
+            checked = true;
+          }
+        }
+      }
       return (
         <React.Fragment key={i}>
           <input
             onChange={this.tagOptionHandler}
+            checked={checked}
             type="checkbox"
             name="tagsList"
             value={tag}
@@ -386,8 +405,25 @@ class CreatePost extends Component {
           <PostElement
             HTMLid={i + 1}
             isEditionModeHandler={this.isEditionModeHandler}
-            HTMLElementType={element.HTMLElementType}
             editionAreaChangeHanlder={this.editionAreaChangeHanlder}
+            isEditionMode={this.state.isEditionMode}
+            HTMLElementType={element.HTMLElementType}
+            HTMLElementContent={element.HTMLElementContent}
+            HTMLAtributes={element.HTMLAtributes}
+            HTMLAtributesArr={element.HTMLAtributesArr}
+            HTMLAtributesStr={element.HTMLAtributesStr}
+            HTMLStyles={element.HTMLStyles}
+            HTMLStylesStr={element.HTMLStylesStr}
+            HTMLStylesArr={element.HTMLStylesArr}
+            HTMLClasses={element.HTMLClasses}
+            HTMLClassesArr={element.HTMLClassesArr}
+            HTMLClassesStr={element.HTMLClassesStr}
+            HTMLPreviewStr={element.HTMLPreviewStr}
+            HTMLid={element.HTMLid}
+            finalHTMLElement={element.finalHTMLElement}
+            imgFile={element.imgFile}
+            imgAlt={element.imgAlt}
+            imgFigcaption={element.imgFigcaption}
           />
         </div>
       );
@@ -613,7 +649,8 @@ const mapStateToProps = state => {
     summary: state.postCreation.summary,
     login: state.login,
     project: state.postCreation.project,
-    files: state.postCreation.files
+    fileNames: state.postCreation.files,
+    date: state.postCreation.date
   };
 };
 const mapDispachToProps = dispach => {
@@ -628,7 +665,9 @@ const mapDispachToProps = dispach => {
       dispach({ type: "SUMMARY_EDITION", payload: payload }),
     onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
     onAddDeleteFile: payload =>
-      dispach({ type: "ADD_DELETE_FILE", payload: payload })
+      dispach({ type: "ADD_DELETE_FILE", payload: payload }),
+    onDateEdition: payload =>
+      dispach({ type: "DATE_EDITION", payload: payload })
 
     // onProjectNameEdition: payload =>
     //   dispach({ type: "PROJECT_NAME_EDITION", payload: payload }),

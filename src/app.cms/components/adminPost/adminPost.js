@@ -15,7 +15,6 @@ class AdminPost extends Component {
     this.state = { isDataFetched: false, posts: {} };
   }
   dataFetched = posts => {
-    console.log("posts fetched ", posts);
     this.setState({ isDataFetched: true, posts: posts });
   };
   componentDidMount() {
@@ -32,11 +31,32 @@ class AdminPost extends Component {
       });
   }
 
+  keywordsToArr = keywords => {
+    if (
+      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
+      keywords !== ""
+    ) {
+      keywords = keywords + ",";
+    }
+    let arr =
+      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
+
+    let arrLen = arr.length;
+
+    for (let i = 0; i < arrLen; i++) {
+      arr[i] = arr[i].substring(0, arr[i].length - 1);
+    }
+
+    return arr;
+  };
+
   updateReduxState = (data, history) => {
+    let arr = this.keywordsToArr(data.keywords);
     const reduxStateFromDB = {
       elements: data.elements,
       seo: {
         keywords: data.keywords,
+        keywordsList: arr,
         description: data.description,
         title: data.title
       },
@@ -54,17 +74,11 @@ class AdminPost extends Component {
   projectNameClickHandler = (e, props) => {
     const updateReduxState = this.updateReduxState;
     alert("porject presionado");
-    console.log("porject presionado", e.target);
-    console.log("porject presionado props", props.original);
     this.setState({ isDataFetched: false });
 
     axios(`/api/getPosts/${props.original.projectName}`)
       .then(res => {
         if (res.status === 200) {
-          console.log(
-            "res.data" + " " + `/api/getPosts/${props.original.projectName}`,
-            res.data
-          );
           updateReduxState(res.data);
         }
       })
