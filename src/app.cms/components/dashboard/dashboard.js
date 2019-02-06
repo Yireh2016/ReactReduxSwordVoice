@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 //components
 import Welcome from "../welcome/welcome";
 import CreatePost from "../createPost/createPost";
+import AdminPost from "../adminPost/adminPost";
 
 //css
 import "./dashboard.css";
@@ -17,7 +18,7 @@ import hamburger from "../../assets/dashboard/hamburger.svg";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMenu: true };
+    this.state = { isMenu: true, toogleAdmin: false };
   }
 
   logoutHandler = () => {
@@ -33,6 +34,11 @@ class Dashboard extends Component {
     });
   };
 
+  adminClickHandler = () => {
+    this.setState(prevState => {
+      return { toogleAdmin: !prevState.toogleAdmin };
+    });
+  };
   render() {
     if (this.props.isUserLoggedIn) {
       const CreatePostBtn = withRouter(({ history }) => {
@@ -41,11 +47,25 @@ class Dashboard extends Component {
             onClick={() => {
               if (window.location.pathname === "/cms/dashboard/createPost")
                 return;
-              history.push("dashboard/createPost");
+              history.push("/cms/dashboard/createPost");
             }}
           >
             <span>Create Post</span> <img src={plus} alt="Plus" />
           </button>
+        );
+      });
+
+      const AdminPostBtn = withRouter(({ history }) => {
+        return (
+          <li
+            onClick={() => {
+              if (window.location.pathname === "/cms/dashboard/adminPost")
+                return;
+              history.push("/cms/dashboard/adminPost");
+            }}
+          >
+            Post
+          </li>
         );
       });
 
@@ -83,9 +103,25 @@ class Dashboard extends Component {
               <CreatePostBtn />
             </div>
             <div className="dashMenu">
-              <div>
-                <p>Administration</p> <img src={hamburger} alt="hamburger" />
+              <div className="dashMenuAdmin">
+                <p>Administration</p>
+                <img
+                  onClick={this.adminClickHandler}
+                  src={hamburger}
+                  alt="hamburger"
+                />
               </div>
+              {this.state.toogleAdmin && (
+                <div className="dashMenuDesplegable">
+                  <ul>
+                    <li>Profiles</li>
+
+                    <AdminPostBtn />
+
+                    <li>Users</li>
+                  </ul>
+                </div>
+              )}
               <div>
                 <p>Stats</p>
                 <img src={hamburger} alt="hamburger" />
@@ -122,6 +158,11 @@ class Dashboard extends Component {
                 exact
                 path="/cms/dashboard/createPost"
                 render={() => <CreatePost />}
+              />
+              <Route
+                exact
+                path="/cms/dashboard/adminPost"
+                render={() => <AdminPost />}
               />
             </Switch>
           </section>

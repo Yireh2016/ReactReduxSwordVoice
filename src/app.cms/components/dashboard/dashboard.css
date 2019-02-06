@@ -87,6 +87,30 @@
   display: flex;
   justify-content: space-between;
 }
+.dashMenuAdmin:hover {
+  cursor: pointer;
+}
+
+.dashMenuDesplegable {
+  border-radius: 20px;
+  color: #020202;
+  background-color: coral;
+}
+.dashMenuDesplegable ul {
+  padding: 0 0 0 20px;
+}
+.dashMenuDesplegable ul li {
+  list-style-type: none;
+  padding: 5px;
+  transition: all ease 500ms;
+}
+.dashMenuDesplegable ul li:hover {
+  cursor: pointer;
+  /* color: hsl(16, 20%, 20%); */
+  /* background-color: blanchedalmond; */
+  font-weight: bold;
+  letter-spacing: 3px;
+}
 .dashLogOut {
   flex-grow: 1;
 }
@@ -101,6 +125,7 @@
   padding: 9px 9px 9px 0;
   border-radius: 0 10px 10px 0;
   cursor: pointer;
+  z-index: 2;
 }
 .mainToogleMenu:hover {
   opacity: 1;

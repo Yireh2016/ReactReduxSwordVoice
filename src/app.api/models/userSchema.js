@@ -48,5 +48,5 @@ userSchema.methods.generateJwt = function() {
     process.env.JWT_SECRET //secret for signning JWT
   );
 };
-// module.exports = mongoose.model('User', userSchema);
+
 mongoose.model("User", userSchema);

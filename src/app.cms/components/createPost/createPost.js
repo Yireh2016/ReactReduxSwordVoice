@@ -22,6 +22,7 @@ import PostElement from "../postElement/postElement";
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
 import ProjectTitle from "../projectTitle/projectTitle";
+import axios from "axios";
 //react map
 /*
 
@@ -267,13 +268,6 @@ class CreatePost extends Component {
         rawBody = rawBody + dom[i].children[0].data;
       }
     }
-    //da formato a la URL del articulo
-    // let articleURL = this.props.project;
-    // articleURL = articleURL.replace(/[^a-zA-Z0-9ñáéíúóÁÉÍÓÚ]/g, "-");
-    // articleURL = articleURL.replace(/[^\w]-*/g, "-");
-    // let arrArticleUrl = articleURL.match(/.*[^-]/g);
-
-    // console.log("save -", arrArticleUrl[0]);
 
     let arr = this.keywordsToArr(this.props.seo.keywords);
     const finalPost = {
@@ -325,7 +319,29 @@ class CreatePost extends Component {
       }
     };
     console.log("finalPost", finalPost);
-    return finalPost;
+    let dataToUpdate = {
+      coments: [],
+      elements: this.props.elements,
+      files: this.props.files,
+      keywords: this.props.keywords,
+      author: this.props.loggedUserName,
+      date: date,
+      html: finalHTMl,
+      projectName: this.props.project.name,
+      description: this.props.summary,
+      title: this.props.elements[0].HTMLElementContent,
+      url: this.props.project.url
+    };
+    console.log("dataToUpdate", dataToUpdate);
+
+    axios
+      .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
+      .then(res => {
+        console.log("res", res);
+      })
+      .catch(err => {
+        console.log("err", err);
+      });
   };
 
   editionAreaChangeHanlder = top => {
@@ -334,19 +350,7 @@ class CreatePost extends Component {
   };
   render() {
     if (this.props.project.name === "") {
-      return (
-        <ProjectTitle />
-        // <div>
-        //   <input
-        //     type="text"
-        //     name="projectTitleText"
-        //     value={this.state.projectTitleText}
-        //     onChange={this.projectTitleTextInputHandler}
-        //   />
-        //   <button onClick={this.saveProjectTitleHandler}>save</button>
-        //   <button onClick={this.cancelProjectTitleHandler}>cancel</button>
-        // </div>
-      );
+      return <ProjectTitle />;
     }
     const files = this.state.fileList.map((file, i) => {
       let fileName = file.name;

@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
 //css
 import "./projectTitle.css";
+import Loading from "../loading/loading";
 
 class ProjectTitle extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { isLoading: false };
   }
 
   projectTitleTextInputHandler = e => {
@@ -32,11 +34,49 @@ class ProjectTitle extends Component {
     this.setState({ [name]: value });
   };
 
-  saveProjectTitleHandler = () => {
-    const savedURLText = this.state.projectURLText;
-    const savedTitleText = this.state.projectTitleText;
+  onSavePostProjectName = (savedURLText, savedTitleText) => {
     this.props.onProjectURLEdition(savedURLText);
     this.props.onProjectNameEdition(savedTitleText);
+    this.setState({ isLoading: false });
+  };
+  saveProjectTitleHandler = () => {
+    this.setState({ isLoading: true });
+    const savedURLText = this.state.projectURLText;
+    const savedTitleText = this.state.projectTitleText;
+    const onSavePostProjectName = this.onSavePostProjectName;
+
+    const date = new Date();
+    const finalPost = {
+      article: {
+        author: this.props.login.loggedUserName,
+        comments: [],
+        date: date, //date
+        files: [], //arr
+        html: "", //str
+        projectName: savedTitleText, //str
+        description: "", //str
+        keywords: [], //arr
+        structuredData: {},
+        title: "", //str,
+        url: this.state.projectURLText
+      }
+    };
+
+    axios
+      .post("/api/createPost", finalPost)
+      .then(res => {
+        if (res.status === 200) {
+          console.log("se creo la entrada en DB");
+          onSavePostProjectName(savedURLText, savedTitleText);
+          alert(`Project ${savedTitleText} saved`);
+
+          return;
+        }
+      })
+      .catch(err => {
+        console.log(`Error al salvar post ${err}`);
+        alert(`Error ${err}`);
+      });
   };
 
   cancelProjectTitleHandler = () => {
@@ -44,6 +84,9 @@ class ProjectTitle extends Component {
   };
 
   render() {
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
     return (
       <div className="projectTitleLayout">
         <div>
@@ -88,7 +131,8 @@ const mapDispachToProps = dispach => {
 const mapStateToProps = state => {
   return {
     projectName: state.postCreation.project.name,
-    projectURL: state.postCreation.project.url
+    projectURL: state.postCreation.project.url,
+    login: state.login
   };
 };
 

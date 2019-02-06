@@ -105,6 +105,10 @@ const postEditCtlreducer = (state = initialState, action) => {
       newState.files = action.payload;
       break;
     }
+    case "FETCH_POST": {
+      newState = action.payload;
+      break;
+    }
 
     case "DEFAULT": {
       newState = state;
