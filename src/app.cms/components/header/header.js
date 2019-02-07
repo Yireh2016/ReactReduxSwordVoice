@@ -22,16 +22,20 @@ const Header = props => {
     return <li key={i}>{clase}</li>;
   });
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          onChange={e => {
-            props.inputTextHTMLHandler(e);
-          }}
-          name="HTMLElementContent"
-          value={props.HTMLElementContent}
-        />
+    <div className="elementContentLayout">
+      <div className="elementInput">
+        <label>
+          Header
+          <textarea
+            style={{ display: "block" }}
+            type="text"
+            onChange={e => {
+              props.inputTextHTMLHandler(e);
+            }}
+            name="HTMLElementContent"
+            value={props.HTMLElementContent}
+          />
+        </label>
       </div>
       <div className="elementAtributes">
         Atributes

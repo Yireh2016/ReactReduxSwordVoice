@@ -18,7 +18,8 @@ import hamburger from "../../assets/dashboard/hamburger.svg";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMenu: true, toogleAdmin: false };
+    this.state = { isMenu: true, toogleAdmin: false, adminMenuH: 0 };
+    this.adminMenu = React.createRef();
   }
 
   logoutHandler = () => {
@@ -35,8 +36,9 @@ class Dashboard extends Component {
   };
 
   adminClickHandler = () => {
+    const adminMenuH = this.adminMenu.current.clientHeight;
     this.setState(prevState => {
-      return { toogleAdmin: !prevState.toogleAdmin };
+      return { toogleAdmin: !prevState.toogleAdmin, adminMenuH: adminMenuH };
     });
   };
   render() {
@@ -103,26 +105,35 @@ class Dashboard extends Component {
               <CreatePostBtn />
             </div>
             <div className="dashMenu">
-              <div className="dashMenuAdmin">
+              <div className="dashMenuAdmin" onClick={this.adminClickHandler}>
                 <p>Administration</p>
-                <img
-                  onClick={this.adminClickHandler}
-                  src={hamburger}
-                  alt="hamburger"
-                />
+                <img src={hamburger} alt="hamburger" />
               </div>
-              {this.state.toogleAdmin && (
-                <div className="dashMenuDesplegable">
-                  <ul>
-                    <li>Profiles</li>
 
-                    <AdminPostBtn />
+              <div
+                className="dashMenuDesplegable"
+                style={
+                  this.state.toogleAdmin
+                    ? { height: `${this.state.adminMenuH}px` }
+                    : { height: "0" }
+                }
+              >
+                <ul
+                  ref={this.adminMenu}
+                  style={
+                    // this.state.toogleAdmin ? { top: "0" } : { top: "100%" }
+                    { top: "0" }
+                  }
+                >
+                  <li>Profiles</li>
 
-                    <li>Users</li>
-                  </ul>
-                </div>
-              )}
-              <div>
+                  <AdminPostBtn />
+
+                  <li>Users</li>
+                </ul>
+              </div>
+
+              <div className="dashMenuAdmin">
                 <p>Stats</p>
                 <img src={hamburger} alt="hamburger" />
               </div>

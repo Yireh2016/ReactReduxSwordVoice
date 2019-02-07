@@ -122,7 +122,10 @@ class CreatePost extends Component {
     this.props.onAddElement(this.props.elements.length + 1);
     this.setState({ elementList: this.props.elements, isEditionMode: true });
   };
-  isEditionModeHandler = () => {
+  isEditionModeHandler = top => {
+    const el = this.editionAreaRef.current;
+    console.log("top", top);
+    el.scrollTo(0, top); //ojo
     this.setState(prevState => {
       return {
         isEditionMode: !prevState.isEditionMode
@@ -353,9 +356,10 @@ class CreatePost extends Component {
       });
   };
 
-  editionAreaChangeHanlder = top => {
+  editionAreaChangeHandler = top => {
     const el = this.editionAreaRef.current;
-    el.scrollTo(0, top - 200); //ojo
+    console.log("top", top);
+    el.scrollTo(0, top); //ojo
   };
   render() {
     if (this.props.project.name === "") {
@@ -405,7 +409,7 @@ class CreatePost extends Component {
           <PostElement
             HTMLid={i + 1}
             isEditionModeHandler={this.isEditionModeHandler}
-            editionAreaChangeHanlder={this.editionAreaChangeHanlder}
+            editionAreaChangeHandler={this.editionAreaChangeHandler}
             isEditionMode={this.state.isEditionMode}
             HTMLElementType={element.HTMLElementType}
             HTMLElementContent={element.HTMLElementContent}
@@ -553,7 +557,7 @@ class CreatePost extends Component {
             <div
               className="editionArea"
               ref={this.editionAreaRef}
-              // onChange={this.editionAreaChangeHanlder}
+              // onChange={this.editionAreaChangeHandler}
               style={
                 this.state.editionPage === 1
                   ? { animation: "editionIn 500ms ease normal forwards" }

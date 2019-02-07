@@ -81,10 +81,7 @@ class PostElement extends Component {
       });
     }
   }
-  componentDidUpdate() {
-    const el = this.postElement.current;
-    this.props.editionAreaChangeHanlder(el.offsetTop);
-  }
+  componentDidUpdate() {}
 
   inputTextHTMLHandler = e => {
     const {
@@ -177,8 +174,8 @@ class PostElement extends Component {
     if (value === "image") {
       this.setState({ isImageUploader: true });
     }
-    if (value === "custom") {
-      this.setState({ HTMLElementType: value });
+    if (value === "custom" || value === "manyParagraph") {
+      this.setState({ HTMLElementType: value, HTMLPreviewStr: "" });
     }
   };
   prepareHTMLFilter = (
@@ -215,7 +212,9 @@ class PostElement extends Component {
   };
   editionBtnHandler = e => {
     e.preventDefault();
-    this.props.isEditionModeHandler();
+    const el = this.postElement.current;
+    // this.props.editionAreaChangeHandler(el.offsetTop);
+    this.props.isEditionModeHandler(el.offsetTop);
     // this.props.isEditionModey;
     this.setState(prevState => {
       return { isEditionMode: !prevState.isEditionMode };
@@ -296,6 +295,9 @@ class PostElement extends Component {
   imgFileSet = image => {
     // this.setState({ imgFile: `url(${URL.createObjectURL(image)})` });
   };
+  finishEditionHandler = e => {
+    this.editionBtnHandler(e);
+  };
   render() {
     const parser = () => {
       if (
@@ -335,8 +337,9 @@ class PostElement extends Component {
       }
     };
     return (
-      <div ref={this.postElement}>
+      <div>
         <div
+          ref={this.postElement}
           className="elementEditionLayout"
           style={
             this.props.HTMLid % 2 === 0
@@ -439,6 +442,7 @@ class PostElement extends Component {
         <div className="elementSubEditionLayout">
           <div className="elementContent">
             <CustomElement
+              HTMLid={this.props.HTMLid}
               style={
                 this.state.HTMLElementType.match(/custom/g) &&
                 this.state.isEditionMode
@@ -451,6 +455,7 @@ class PostElement extends Component {
             />
 
             <CustomParagraph
+              HTMLid={this.props.HTMLid}
               style={
                 this.state.HTMLElementType.match(/many/g) &&
                 this.state.isEditionMode
@@ -517,6 +522,9 @@ class PostElement extends Component {
                   imgFigcaption={this.state.imgFigcaption}
                 />
               )}
+              <button onClick={this.finishEditionHandler}>
+                Finish Edition
+              </button>
             </div>
           </div>
         )}

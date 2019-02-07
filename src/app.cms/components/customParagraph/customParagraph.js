@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import paragraphService from "../../../services/paragraphService";
+import { connect } from "react-redux";
 //react map
 /*
 
@@ -12,12 +13,14 @@ DashBoard
 
 /*Props
   sendWordToJSXHandler:sendWordToJSXHandler()
+  HTMLid
 */
 class CustomParagraph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      customElementContent: "", //dynamic textarea content
+      customElementContent: this.props.elements[this.props.HTMLid - 1]
+        .HTMLPreviewStr, //dynamic textarea content
       customJSX: "", //all JSX
       customTagElement: "",
       customTagWordList: [], //word list inside tag
@@ -59,4 +62,10 @@ class CustomParagraph extends Component {
   }
 }
 
-export default CustomParagraph;
+const mapStateToProps = state => {
+  return {
+    elements: state.postCreation.elements
+  };
+};
+
+export default connect(mapStateToProps)(CustomParagraph);

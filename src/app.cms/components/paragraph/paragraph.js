@@ -23,8 +23,8 @@ const Paragraph = props => {
     return <li key={i}>{clase}</li>;
   });
   return (
-    <div>
-      <div>
+    <div className="elementContentLayout">
+      <div className="elementInput">
         <textarea
           value={props.HTMLElementContent}
           name="HTMLElementContent"

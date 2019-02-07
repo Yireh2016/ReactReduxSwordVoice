@@ -86,6 +86,13 @@ class AdminPost extends Component {
         console.log("error ", err);
       });
   };
+  onDeleteClick = (e, props) => {
+    console.log("delete click", props);
+  };
+
+  onEditClick = (e, props) => {
+    console.log("edit click", props);
+  };
   render() {
     const articleData = this.state.posts;
     const columns = [
@@ -106,11 +113,17 @@ class AdminPost extends Component {
       },
       {
         Header: "Title",
-        accessor: "title"
+        accessor: "title",
+        Cell: props => {
+          return <span title={props.value}>{props.value}</span>;
+        } // Custom cell components
       },
       {
         Header: "Summary",
-        accessor: "description"
+        accessor: "description",
+        Cell: props => {
+          return <span title={props.value}>{props.value}</span>;
+        } // Custom cell components
       },
       {
         Header: "Author",
@@ -118,7 +131,33 @@ class AdminPost extends Component {
       },
       {
         Header: "Date",
-        accessor: "date"
+        accessor: "date",
+        Cell: props => {
+          return <span title={props.value}>{props.value}</span>;
+        } // Custom cell components
+      },
+      {
+        Header: "Control",
+        Cell: props => {
+          return (
+            <span>
+              <span
+                onClick={e => {
+                  this.onEditClick(e, props);
+                }}
+              >
+                Edit
+              </span>
+              <span
+                onClick={e => {
+                  this.onDeleteClick(e, props);
+                }}
+              >
+                Delete
+              </span>
+            </span>
+          );
+        } // Custom cell components
       }
     ];
     if (this.state.isDataFetched)
