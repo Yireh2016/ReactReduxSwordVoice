@@ -18,8 +18,14 @@ import hamburger from "../../assets/dashboard/hamburger.svg";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMenu: true, toogleAdmin: false, adminMenuH: 0 };
+    this.state = {
+      isMenu: true,
+      toogleAdmin: false,
+      adminMenuH: 0,
+      toogleStats: false
+    };
     this.adminMenu = React.createRef();
+    this.statsMenu = React.createRef();
   }
 
   logoutHandler = () => {
@@ -38,7 +44,21 @@ class Dashboard extends Component {
   adminClickHandler = () => {
     const adminMenuH = this.adminMenu.current.clientHeight;
     this.setState(prevState => {
-      return { toogleAdmin: !prevState.toogleAdmin, adminMenuH: adminMenuH };
+      return {
+        toogleAdmin: !prevState.toogleAdmin,
+        adminMenuH: adminMenuH,
+        toogleStats: false
+      };
+    });
+  };
+  statsClickHandler = () => {
+    const statsMenuH = this.statsMenu.current.clientHeight;
+    this.setState(prevState => {
+      return {
+        toogleStats: !prevState.toogleStats,
+        statsMenuH: statsMenuH,
+        toogleAdmin: false
+      };
     });
   };
   render() {
@@ -46,6 +66,7 @@ class Dashboard extends Component {
       const CreatePostBtn = withRouter(({ history }) => {
         return (
           <button
+            className="cmsBtn"
             onClick={() => {
               if (window.location.pathname === "/cms/dashboard/createPost")
                 return;
@@ -133,14 +154,36 @@ class Dashboard extends Component {
                 </ul>
               </div>
 
-              <div className="dashMenuAdmin">
+              <div className="dashMenuAdmin" onClick={this.statsClickHandler}>
                 <p>Stats</p>
                 <img src={hamburger} alt="hamburger" />
+              </div>
+              <div
+                className="dashMenuDesplegable"
+                style={
+                  this.state.toogleStats
+                    ? { height: `${this.state.statsMenuH}px` }
+                    : { height: "0" }
+                }
+              >
+                <ul
+                  ref={this.statsMenu}
+                  style={
+                    // this.state.toogleAdmin ? { top: "0" } : { top: "100%" }
+                    { top: "0" }
+                  }
+                >
+                  <li>Search Data</li>
+
+                  <li>Interest Data</li>
+
+                  <li>Users Data</li>
+                </ul>
               </div>
             </div>
             <div className="dashLogOut">
               <div>
-                <button onClick={this.logoutHandler}>
+                <button className="cmsBtn" onClick={this.logoutHandler}>
                   <span>Log Out</span>
                   <img src={exit} alt="Exit" />
                 </button>

@@ -55,7 +55,9 @@ class CustomElement extends Component {
             name="HTMLElementContent"
             onChange={this.inputTextHTMLHandler}
           />
-          <button onClick={this.HMTLCheckHandler}>Verify HTML</button>
+          <button className="cmsBtn" onClick={this.HMTLCheckHandler}>
+            Check HTML
+          </button>
         </div>
       </div>
     );

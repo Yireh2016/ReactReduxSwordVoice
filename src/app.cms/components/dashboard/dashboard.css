@@ -61,8 +61,10 @@
 .dashLogOut img {
   width: 20%;
 }
-.dashCreatePost button,
-.dashLogOut button {
+
+.cmsBtn {
+  display: flex;
+  align-items: center;
   padding: 10px;
   border-radius: 10px;
   font-weight: bold;
@@ -71,6 +73,12 @@
   background: #00171f;
   border: 1px solid var(--orange);
   color: #fff;
+  transition: all ease 300ms;
+}
+.cmsBtn:hover {
+  color: #00171f;
+  background-color: #fff;
+  cursor: pointer;
 }
 .dashCreatePost button:hover,
 .dashLogOut button:hover {
@@ -95,7 +103,7 @@
   overflow: hidden;
   padding: 0;
   border-radius: 20px;
-  color: #020202;
+  color: #1a2225;
   position: relative;
   transition: all ease 500ms;
 }
@@ -111,6 +119,7 @@
   transition: all ease 500ms;
 }
 .dashMenuDesplegable ul li {
+  text-align: left;
   font-weight: bold;
   list-style-type: none;
   color: #1a2225;

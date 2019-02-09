@@ -55,7 +55,9 @@ class CustomParagraph extends Component {
             name="HTMLElementContent"
             onChange={this.inputTextHTMLHandler}
           />
-          <button onClick={this.HMTLCheckHandler}>Verify HTML</button>
+          <button className="cmsBtn" onClick={this.HMTLCheckHandler}>
+            Check Text
+          </button>
         </div>
       </div>
     );

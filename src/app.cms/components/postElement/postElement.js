@@ -7,6 +7,7 @@ import "./postElement.css";
 import edit from "../../assets/createPost/edit.svg";
 import paint from "../../assets/createPost/paint.svg";
 import del from "../../assets/createPost/delete.svg";
+import check from "../../assets/dashboard/check.svg";
 import copy from "../../assets/createPost/copy.svg";
 //components
 import Paragraph from "../paragraph/paragraph";
@@ -160,6 +161,9 @@ class PostElement extends Component {
   };
 
   inputSelectHTMLHandler = e => {
+    const el = this.postElement.current;
+    // this.props.editionAreaChangeHandler(el.offsetTop);
+    this.props.isEditionModeHandler(el.offsetTop);
     const {
       target: { value }
     } = e;
@@ -338,15 +342,7 @@ class PostElement extends Component {
     };
     return (
       <div>
-        <div
-          ref={this.postElement}
-          className="elementEditionLayout"
-          style={
-            this.props.HTMLid % 2 === 0
-              ? { backgroundColor: " #dde2e4", padding: "20px" }
-              : { backgroundColor: "transparent ", padding: "20px" }
-          }
-        >
+        <div ref={this.postElement} className="elementEditionLayout">
           <div className="elementSelect">
             <div className="elementSelectLayout">
               <span>Element</span>
@@ -522,8 +518,9 @@ class PostElement extends Component {
                   imgFigcaption={this.state.imgFigcaption}
                 />
               )}
-              <button onClick={this.finishEditionHandler}>
-                Finish Edition
+              <button className="cmsBtn" onClick={this.finishEditionHandler}>
+                <span style={{ marginRight: "5px" }}>Finish</span>
+                <img style={{ width: "10px" }} src={check} alt="check" />
               </button>
             </div>
           </div>

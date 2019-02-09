@@ -73,7 +73,6 @@ class AdminPost extends Component {
   };
   projectNameClickHandler = (e, props) => {
     const updateReduxState = this.updateReduxState;
-    alert("porject presionado");
     this.setState({ isDataFetched: false });
 
     axios(`/api/getPosts/${props.original.projectName}`)

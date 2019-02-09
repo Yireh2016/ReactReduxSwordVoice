@@ -1,4 +1,7 @@
 .elementEditionLayout {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 20px;
   display: grid;
   grid-template-areas: " element element element editionBtn" "editionLayout editionLayout editionLayout .";
   grid-template-rows: auto auto;
@@ -47,13 +50,14 @@
 .elementContent textarea,
 .elementPreview {
   padding: 20px 20px !important;
-  margin: 10px 5px;
+  margin: 10px 0;
   box-sizing: border-box;
 }
 .elementContent {
   grid-area: contenido;
 }
 .elementContent textarea {
+  border-radius: 15px;
   width: 100%;
   height: 20vh;
   padding: 20px;
@@ -61,6 +65,10 @@
 .elementContentLayout {
   display: grid;
   grid-template-areas: "entrada entrada entrada" "styles classes atributes  ";
+}
+.elementContentLayout input {
+  border-radius: 5px;
+  border: 1px solid rgba(169, 169, 169, 1);
 }
 .elementInput {
   grid-area: entrada;

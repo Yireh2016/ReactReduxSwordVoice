@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+//css
+import "./seoEditor.css";
 
 class SeoEditor extends Component {
   constructor(props) {
@@ -12,17 +14,6 @@ class SeoEditor extends Component {
     };
   }
 
-  componentDidMount() {
-    // if (this.props.elements) {
-    //   this.setState({
-    //     title: this.props.elements[0].HTMLElementContent,
-    //     keywords: this.props.seo.keywords,
-    //     description: this.props.summary
-    //   });
-    // }
-    // const articleURL = this.props.project.url;
-    // this.setState({ url: articleURL });
-  }
   keywordsToArr = keywords => {
     if (
       keywords.slice(keywords.length - 1, keywords.length) !== "," &&
@@ -56,47 +47,52 @@ class SeoEditor extends Component {
   render() {
     return (
       <div>
-        <label>
-          Title
-          <input
-            // type="text"
-            // name="title"
-            // disabled
-            readOnly
-            value={this.state.title}
-            // onChange={this.inputSEOHandler}
-          />
-        </label>
-        <label>
-          Description
-          <textarea
-            // disabled
-            readOnly
-            // name="description"
-            value={this.state.description}
-            // onChange={this.inputSEOHandler}
-            cols="30"
-            rows="10"
-          />
-        </label>
-        <label>
-          Keywords
-          <input
-            type="text"
-            name="keywords"
-            value={this.props.seo.keywords}
-            onChange={this.inputSEOHandler}
-          />
-        </label>
-        <label>
-          URL
-          <input
-            type="text"
-            name="url"
-            value={this.state.url}
-            onChange={this.inputSEOHandler}
-          />
-        </label>
+        <div className="readOnlySeoEditor">
+          <label>
+            <span>Title</span>
+            <textarea
+              readOnly
+              value={this.state.title}
+              style={{ backgroundColor: "transparent" }}
+              cols="30"
+              rows="10"
+            />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea
+              readOnly
+              style={{ backgroundColor: "transparent" }}
+              value={this.state.description}
+              cols="30"
+              rows="10"
+            />
+          </label>
+        </div>
+        <div className="readOnlySeoEditor">
+          <label>
+            Keywords
+            <textarea
+              type="text"
+              name="keywords"
+              value={this.props.seo.keywords}
+              onChange={this.inputSEOHandler}
+              cols="30"
+              rows="10"
+            />
+          </label>
+          <label>
+            URL
+            <textarea
+              type="text"
+              name="url"
+              value={this.state.url}
+              onChange={this.inputSEOHandler}
+              cols="30"
+              rows="10"
+            />
+          </label>
+        </div>
       </div>
     );
   }

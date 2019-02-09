@@ -1,0 +1,13 @@
+.readOnlySeoEditor {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.readOnlySeoEditor label {
+  display: flex;
+  flex-direction: column;
+}
+.readOnlySeoEditor textarea {
+  padding: 10px 15px;
+  border-radius: 10px;
+}

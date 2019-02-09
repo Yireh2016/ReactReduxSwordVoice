@@ -3,6 +3,9 @@ import axios from "axios";
 import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import is from "is_js";
+import smoothscroll from "smoothscroll-polyfill";
+
 //css
 import "./createPost.css";
 //assets
@@ -58,6 +61,9 @@ class CreatePost extends Component {
       "Mobile Apps"
     ];
   }
+
+  // kick off the polyfill!
+
   componentDidMount() {
     if (this.state.elementList.length === 0) {
       this.addElementBtnHandler();
@@ -123,9 +129,11 @@ class CreatePost extends Component {
     this.setState({ elementList: this.props.elements, isEditionMode: true });
   };
   isEditionModeHandler = top => {
+    smoothscroll.polyfill();
     const el = this.editionAreaRef.current;
-    console.log("top", top);
-    el.scrollTo(0, top); //ojo
+
+    el.scroll({ top: top, left: 0, behavior: "smooth" });
+
     this.setState(prevState => {
       return {
         isEditionMode: !prevState.isEditionMode
@@ -356,11 +364,6 @@ class CreatePost extends Component {
       });
   };
 
-  editionAreaChangeHandler = top => {
-    const el = this.editionAreaRef.current;
-    console.log("top", top);
-    el.scrollTo(0, top); //ojo
-  };
   render() {
     if (this.props.project.name === "") {
       return <ProjectTitle />;
@@ -409,7 +412,6 @@ class CreatePost extends Component {
           <PostElement
             HTMLid={i + 1}
             isEditionModeHandler={this.isEditionModeHandler}
-            editionAreaChangeHandler={this.editionAreaChangeHandler}
             isEditionMode={this.state.isEditionMode}
             HTMLElementType={element.HTMLElementType}
             HTMLElementContent={element.HTMLElementContent}
@@ -542,11 +544,11 @@ class CreatePost extends Component {
         </div>
         {/* Edition Area */}
         <div className="createLayout">
-          {titles()}
-          <div>Project Name: {this.props.project.name}</div>
+          {/* {titles()}
+          <div>Project Name: {this.props.project.name}</div> */}
           <div
             style={{
-              height: "80vh",
+              height: "90vh",
               position: "relative",
               overflow: "hidden",
               width: "80%"
@@ -555,7 +557,7 @@ class CreatePost extends Component {
             {/* first page post creation */}
 
             <div
-              className="editionArea"
+              className="editionArea style-7"
               ref={this.editionAreaRef}
               // onChange={this.editionAreaChangeHandler}
               style={
@@ -630,7 +632,7 @@ class CreatePost extends Component {
             )}
           </div>
 
-          <div>
+          {/* <div>
             <div className="tagList">
               <h6>Tags:</h6>
               {tags}
@@ -639,7 +641,7 @@ class CreatePost extends Component {
               <h6>Available Files: </h6>
               {files}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
