@@ -44,22 +44,10 @@ class CreatePost extends Component {
       summaryElValue: this.props.summary,
       fileList: [],
       fileListNames: this.props.fileNames,
-      tagList: this.props.seo.keywords,
       dateProgram: this.props.date,
       finalHTMLElement: "",
       dom: ""
     };
-
-    this.tags = [
-      "Graphic Design",
-      "UX/UI",
-      "Web Design",
-      "Web Development",
-      "Programming",
-      "E-commerce",
-      "Digital Marketing",
-      "Mobile Apps"
-    ];
   }
 
   // kick off the polyfill!
@@ -186,40 +174,7 @@ class CreatePost extends Component {
 
     return arr;
   };
-  tagOptionHandler = e => {
-    const {
-      target: { value }
-    } = e;
-    let arr = this.keywordsToArr(this.props.seo.keywords);
-    // let arr = this.props.seo.keywords.match(/([^,])*,/g)
-    //   ? this.props.seo.keywords.match(/([^,])*,/g)
-    //   : [];
-    // console.log("arr", arr);
-    let arrLen = arr.length;
-    // for (let i = 0; i < arrLen; i++) {
-    //   arr[i] = arr[i].substring(0, arr[i].length - 1);
-    // }
 
-    for (let i = 0; i < arrLen; i++) {
-      if (arr[i] === value) {
-        arr = arr.filter(val => {
-          return val !== value;
-        });
-      }
-    }
-    if (arrLen === arr.length) {
-      arr.push(value);
-    }
-
-    let keywords = "";
-    for (let i = 0; i < arr.length; i++) {
-      keywords = keywords + arr[i] + ",";
-    }
-
-    this.props.onEditSEO({ keywords: keywords, keywordsList: arr });
-
-    this.setState({ tagList: arr });
-  };
   onFileRemove = fileName => {
     this.setState(prevState => {
       let arr = prevState.fileList;
@@ -232,13 +187,14 @@ class CreatePost extends Component {
       arr2 = arr2.filter(val => {
         return val !== fileName;
       });
+      this.props.onAddDeleteFile(arr2);
       return { fileList: arr, fileListNames: arr2 };
     });
 
-    let arr = this.props.fileNames.filter((value, i, arr) => {
-      return arr[i] !== fileName;
-    });
-    this.props.onAddDeleteFile(arr);
+    // let arr = this.props.fileNames.filter((value, i, arr) => {
+    //   return arr[i] !== fileName;
+    // });
+    // this.props.onAddDeleteFile(arr);
   };
   // uploadFileHandler = file => {
   //   this.setState(prevState => {
@@ -248,16 +204,24 @@ class CreatePost extends Component {
   //   this.props.onAddFile(file);
   // };
   uploadFileHandler = file => {
-    this.setState(prevState => {
-      prevState.fileList.push(file);
+    if (file) {
+      this.setState(prevState => {
+        for (let i = 0; i < prevState.fileListNames.length; i++) {
+          if (file.name === prevState.fileListNames[i]) {
+            return;
+          }
+        }
 
-      return {
-        fileList: prevState.fileList
-      };
-    });
-    let arr = this.props.fileNames;
-    arr.push(file.name);
-    this.props.onAddDeleteFile(arr);
+        prevState.fileList.push(file);
+        prevState.fileListNames.push(file.name);
+
+        this.props.onAddDeleteFile(prevState.fileListNames);
+        return {
+          fileList: prevState.fileList,
+          fileListNames: prevState.fileListNames
+        };
+      });
+    }
   };
   projectTitleTextInputHandler = e => {
     const {
@@ -368,14 +332,13 @@ class CreatePost extends Component {
     if (this.props.project.name === "") {
       return <ProjectTitle />;
     }
-    const files = this.state.fileList.map((file, i) => {
-      let fileName = file.name;
+    const files = this.state.fileListNames.map((file, i) => {
       return (
         <React.Fragment key={i}>
-          <span>{fileName}</span>
+          <span>{file}</span>
           <span
             onClick={() => {
-              this.onFileRemove(fileName);
+              this.onFileRemove(file);
             }}
           >
             X
@@ -383,29 +346,29 @@ class CreatePost extends Component {
         </React.Fragment>
       );
     });
-    const tags = this.tags.map((tag, i) => {
-      let checked = false;
-      if (this.props.seo.keywordsList.length > 0) {
-        let arr = this.props.seo.keywordsList;
-        for (let i = 0; i < arr.length; i++) {
-          if (tag === arr[i]) {
-            checked = true;
-          }
-        }
-      }
-      return (
-        <React.Fragment key={i}>
-          <input
-            onChange={this.tagOptionHandler}
-            checked={checked}
-            type="checkbox"
-            name="tagsList"
-            value={tag}
-          />
-          {tag}
-        </React.Fragment>
-      );
-    });
+    // const tags = this.tags.map((tag, i) => {
+    //   let checked = false;
+    //   if (this.props.seo.keywordsList.length > 0) {
+    //     let arr = this.props.seo.keywordsList;
+    //     for (let i = 0; i < arr.length; i++) {
+    //       if (tag === arr[i]) {
+    //         checked = true;
+    //       }
+    //     }
+    //   }
+    //   return (
+    //     <React.Fragment key={i}>
+    //       <input
+    //         onChange={this.tagOptionHandler}
+    //         checked={checked}
+    //         type="checkbox"
+    //         name="tagsList"
+    //         value={tag}
+    //       />
+    //       {tag}
+    //     </React.Fragment>
+    //   );
+    // });
     const elements = this.props.elements.map((element, i) => {
       return (
         <div key={i}>
@@ -604,6 +567,7 @@ class CreatePost extends Component {
                       }
                 }
               >
+                <h2>Summary</h2>
                 <textarea
                   className="summaryElValue"
                   value={this.state.summaryElValue}
@@ -627,21 +591,23 @@ class CreatePost extends Component {
                       }
                 }
               >
+                <h2>SEO Edition</h2>
+
                 <SeoEditor />
               </div>
             )}
           </div>
 
-          {/* <div>
-            <div className="tagList">
+          <div>
+            {/* <div className="tagList">
               <h6>Tags:</h6>
               {tags}
-            </div>
+            </div> */}
             <div className="fileList">
               <h6>Available Files: </h6>
               {files}
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     );
@@ -669,7 +635,7 @@ const mapDispachToProps = dispach => {
     onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
     onSummaryEdition: payload =>
       dispach({ type: "SUMMARY_EDITION", payload: payload }),
-    onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
+    // onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
     onAddDeleteFile: payload =>
       dispach({ type: "ADD_DELETE_FILE", payload: payload }),
     onDateEdition: payload =>

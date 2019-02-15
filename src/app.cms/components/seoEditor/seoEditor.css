@@ -1,7 +1,7 @@
 .readOnlySeoEditor {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 .readOnlySeoEditor label {
   display: flex;
@@ -10,4 +10,15 @@
 .readOnlySeoEditor textarea {
   padding: 10px 15px;
   border-radius: 10px;
+}
+.tagList {
+  display: flex;
+  font-size: calc(16px * 0.6);
+  align-items: center;
+}
+.tagList h6 {
+  font-size: 16px;
+}
+.tagList input {
+  margin: 0 0 0 15px;
 }

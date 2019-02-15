@@ -28,12 +28,12 @@ class Dashboard extends Component {
     this.statsMenu = React.createRef();
   }
 
-  logoutHandler = () => {
-    console.log("removiendo cookie de session");
-    this.props.cookies.remove("sessionId");
-    window.localStorage.removeItem("userAvatar");
-    this.props.onLogOut();
-  };
+  // logoutHandler = () => {
+  //   console.log("removiendo cookie de session");
+  //   this.props.cookies.remove("sessionId");
+  //   window.localStorage.removeItem("userAvatar");
+  //   this.props.onLogOut();
+  // };
 
   toogleClickHandler = () => {
     this.setState(prevState => {
@@ -183,10 +183,12 @@ class Dashboard extends Component {
             </div>
             <div className="dashLogOut">
               <div>
-                <button className="cmsBtn" onClick={this.logoutHandler}>
-                  <span>Log Out</span>
-                  <img src={exit} alt="Exit" />
-                </button>
+                <a href="/home">
+                  <button className="cmsBtn">
+                    <span>Home</span>
+                    <img src={exit} alt="Exit" />
+                  </button>
+                </a>
               </div>
             </div>
           </aside>

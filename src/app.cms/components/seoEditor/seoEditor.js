@@ -10,8 +10,20 @@ class SeoEditor extends Component {
       title: this.props.elements[0].HTMLElementContent,
       keywords: this.props.seo.keywords,
       url: this.props.project.url,
-      description: this.props.summary
+      description: this.props.summary,
+      tagList: this.props.seo.keywords
     };
+
+    this.tags = [
+      "Graphic Design",
+      "UX/UI",
+      "Web Design",
+      "Web Development",
+      "Programming",
+      "E-commerce",
+      "Digital Marketing",
+      "Mobile Apps"
+    ];
   }
 
   keywordsToArr = keywords => {
@@ -44,9 +56,67 @@ class SeoEditor extends Component {
     let arr = this.keywordsToArr(value);
     this.props.onEditSEO({ keywords: value, keywordsList: arr });
   };
+  tagOptionHandler = e => {
+    const {
+      target: { value }
+    } = e;
+    let arr = this.keywordsToArr(this.props.seo.keywords);
+    // let arr = this.props.seo.keywords.match(/([^,])*,/g)
+    //   ? this.props.seo.keywords.match(/([^,])*,/g)
+    //   : [];
+    // console.log("arr", arr);
+    let arrLen = arr.length;
+    // for (let i = 0; i < arrLen; i++) {
+    //   arr[i] = arr[i].substring(0, arr[i].length - 1);
+    // }
+
+    for (let i = 0; i < arrLen; i++) {
+      if (arr[i] === value) {
+        arr = arr.filter(val => {
+          return val !== value;
+        });
+      }
+    }
+    if (arrLen === arr.length) {
+      arr.push(value);
+    }
+
+    let keywords = "";
+    for (let i = 0; i < arr.length; i++) {
+      keywords = keywords + arr[i] + ",";
+    }
+
+    this.props.onEditSEO({ keywords: keywords, keywordsList: arr });
+
+    this.setState({ tagList: arr });
+  };
   render() {
+    const tags = this.tags.map((tag, i) => {
+      let checked = false;
+      if (this.props.seo.keywordsList.length > 0) {
+        let arr = this.props.seo.keywordsList;
+        for (let i = 0; i < arr.length; i++) {
+          if (tag === arr[i]) {
+            checked = true;
+          }
+        }
+      }
+      return (
+        <React.Fragment key={i}>
+          <input
+            onChange={this.tagOptionHandler}
+            checked={checked}
+            type="checkbox"
+            name="tagsList"
+            value={tag}
+          />
+          {tag}
+        </React.Fragment>
+      );
+    });
+
     return (
-      <div>
+      <div style={{ display: "grid", gridRowGap: "20px" }}>
         <div className="readOnlySeoEditor">
           <label>
             <span>Title</span>
@@ -81,6 +151,7 @@ class SeoEditor extends Component {
               rows="10"
             />
           </label>
+
           <label>
             URL
             <textarea
@@ -92,6 +163,12 @@ class SeoEditor extends Component {
               rows="10"
             />
           </label>
+        </div>
+        <div className="readOnlySeoEditor">
+          <div className="tagList">
+            <h6>Tags:</h6>
+            {tags}
+          </div>
         </div>
       </div>
     );
@@ -111,6 +188,7 @@ const mapDispachToProps = dispach => {
     //acciones
 
     onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
+
     onProjectURLEdition: payload =>
       dispach({ type: "PROJECT_URL_EDITION", payload: payload })
   };
