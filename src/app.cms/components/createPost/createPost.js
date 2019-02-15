@@ -3,7 +3,7 @@ import axios from "axios";
 import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import is from "is_js";
+// import is from "is_js";
 import smoothscroll from "smoothscroll-polyfill";
 
 //css

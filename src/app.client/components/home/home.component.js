@@ -1,6 +1,7 @@
 //modules
 import React, { Component } from "react";
 import NavBar from "../navbar/navbar.component";
+import is from "is_js";
 //imagenes
 import imgFondo from "../../assets/img/home/creative1280.jpg";
 import imgFondoMed from "../../assets/img/home/creative760.jpg";
@@ -162,7 +163,7 @@ class Home extends Component {
           {/* <LightShadow factor={-10}> */}
           <h1 ref={this.titleRef}>
             <span>SwordVoice</span>
-            <SwordVoice delay={4} />
+            {is.edge() ? "SwordVoice" : <SwordVoice delay={4} />}
           </h1>
           {/* </LightShadow> */}
           <h2>
