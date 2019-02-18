@@ -18,10 +18,11 @@ import next from "../../assets/createPost/next.svg";
 import back from "../../assets/createPost/back.svg";
 //components
 import PostElement from "../postElement/postElement";
+import ProjectTitle from "../projectTitle/projectTitle";
+
 //services
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
-import ProjectTitle from "../projectTitle/projectTitle";
 import keywordsToArr from "../../../services/keywordsToArr";
 //react map
 /*

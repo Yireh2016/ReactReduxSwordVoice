@@ -70,6 +70,7 @@ class Dashboard extends Component {
             onClick={() => {
               if (window.location.pathname === "/cms/dashboard/createPost")
                 return;
+              this.props.onReset();
               history.push("/cms/dashboard/createPost");
             }}
           >
@@ -241,7 +242,8 @@ const mapDispachToProps = dispach => {
   return {
     //acciones
     onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    onLogOut: () => dispach({ type: "LOGGED_OUT" }),
+    onReset: () => dispach({ type: "RESET_EDIT" })
   };
 };
 

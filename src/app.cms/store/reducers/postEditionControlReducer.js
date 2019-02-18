@@ -115,8 +115,8 @@ const postEditCtlreducer = (state = initialState, action) => {
       break;
     }
 
-    case "DEFAULT": {
-      newState = state;
+    case "RESET_EDIT": {
+      newState = initialState;
       break;
     }
   }
