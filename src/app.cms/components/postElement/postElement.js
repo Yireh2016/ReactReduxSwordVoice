@@ -82,7 +82,6 @@ class PostElement extends Component {
       });
     }
   }
-  componentDidUpdate() {}
 
   inputTextHTMLHandler = e => {
     const {

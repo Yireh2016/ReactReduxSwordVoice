@@ -123,12 +123,6 @@ class CreatePost extends Component {
     const el = this.editionAreaRef.current;
 
     el.scroll({ top: top, left: 0, behavior: "smooth" });
-
-    this.setState(prevState => {
-      return {
-        isEditionMode: !prevState.isEditionMode
-      };
-    });
   };
   playBtnHandler = () => {};
   nextBtnHandler = val => {
