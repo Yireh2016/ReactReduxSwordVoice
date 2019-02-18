@@ -3,6 +3,8 @@ import ReactHtmlParser from "react-html-parser";
 import SimpleBar from "simplebar-react";
 //CSS
 import "./summary2.css";
+//services
+import dbDateToNormalDate from "../../../../../services/dbDateToNormalDate";
 
 class Summary2 extends React.Component {
   constructor(props) {
@@ -147,7 +149,7 @@ class Summary2 extends React.Component {
       const style = { fontSize };
       return (
         <span key={key} className={keywordsCSS} style={style}>
-          {keyword.category}
+          {keyword}
         </span>
       );
     };
@@ -176,8 +178,9 @@ class Summary2 extends React.Component {
     // const dateCSS = "summary2-date";
 
     const date = fontSize => {
+      let date = dbDateToNormalDate(this.props.date);
       const style = { fontSize };
-      return <time style={style}>{this.props.date}</time>;
+      return <time style={style}>{date}</time>;
     };
 
     //layout date

@@ -17,15 +17,16 @@
 }
 
 .summary2-keywords {
+  float: left;
   background-color: rgb(179, 232, 255);
   border-radius: 10px;
   padding: 5px;
-  margin: 0 5px;
+  margin: 2px 5px;
 }
-.summary2-layout-keywords {
+/* .summary2-layout-keywords {
   display: flex;
   flex-direction: row;
-}
+} */
 .summary2-layout-date time {
   text-align: right;
   display: block;

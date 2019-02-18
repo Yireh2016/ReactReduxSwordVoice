@@ -20,8 +20,8 @@ class Post extends React.Component {
       newPostHeight: "0",
       newPostWidth: "100%",
       postOpacity: "1",
-      postTitle: this.props.postTitle,
-      unModifiedPostTitle: this.props.postTitle,
+      postTitle: "",
+      unModifiedPostTitle: "",
       hasThreeDots:
         this.props.hasThreeDots === undefined ? true : this.props.hasThreeDots,
       isDetailsOpen: false
@@ -30,6 +30,7 @@ class Post extends React.Component {
 
   spaceThreeDots(postTitle, space) {
     // if (postTitle.length > space) {
+    console.log("postTitle", postTitle);
     let lastSpaceIndex;
     let title = postTitle + ".";
     let newTitle = "";
@@ -39,13 +40,24 @@ class Post extends React.Component {
         lastSpaceIndex = i;
       }
     }
+    console.log(
+      'newTitle.substr(0, lastSpaceIndex) + "..."',
+      newTitle.substr(0, lastSpaceIndex) + "..."
+    );
 
     return newTitle.substr(0, lastSpaceIndex) + "...";
     // }
     // return postTitle;
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (state.postTitle === "") {
+      return { postTitle: props.postTitle };
+    }
+  }
+
   componentDidUpdate() {
+    console.log("this.state.on did update", this.state);
     if (this.postTitleH2.current) {
       this.checkPostTitleOverflow();
     }
@@ -71,15 +83,18 @@ class Post extends React.Component {
     const element = this.postTitleH2.current;
 
     const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
-
+    console.log("hasOverflowingChildren", hasOverflowingChildren);
     if (!hasOverflowingChildren) {
       return;
-    }
-    let title = this.state.postTitle;
-    const space = title.length - 5 > 55 ? 55 : title.length - 5;
+    } else {
+      console.log("this.state.postTitle", this.state.postTitle);
+      let title = this.state.postTitle;
+      const space = title.length - 5 > 55 ? 55 : title.length - 5;
 
-    title = this.spaceThreeDots(title, space);
-    this.setState({ postTitle: title });
+      title = this.spaceThreeDots(title, space);
+      console.log("title after threedots", title);
+      this.setState({ postTitle: title });
+    }
   }
   componentDidMount() {
     this.handleResize();
@@ -151,7 +166,6 @@ class Post extends React.Component {
         ? "none"
         : borderWidth + "px solid #f95f0b";
     const threeDotsWidth = this.state.newPostHeigh / 9.72;
-
     return (
       <div
         className="postCompCont "

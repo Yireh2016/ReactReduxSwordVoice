@@ -8,6 +8,8 @@ import "react-table/react-table.css";
 import "./adminPost.css";
 //components
 import Loading from "../loading/loading";
+//services
+import keywordsToArr from "../../../services/keywordsToArr";
 
 class AdminPost extends Component {
   constructor(props) {
@@ -31,27 +33,8 @@ class AdminPost extends Component {
       });
   }
 
-  keywordsToArr = keywords => {
-    if (
-      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
-      keywords !== ""
-    ) {
-      keywords = keywords + ",";
-    }
-    let arr =
-      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
-
-    let arrLen = arr.length;
-
-    for (let i = 0; i < arrLen; i++) {
-      arr[i] = arr[i].substring(0, arr[i].length - 1);
-    }
-
-    return arr;
-  };
-
   updateReduxState = (data, history) => {
-    let arr = this.keywordsToArr(data.keywords);
+    let arr = keywordsToArr(data.keywords);
     const reduxStateFromDB = {
       elements: data.elements,
       seo: {

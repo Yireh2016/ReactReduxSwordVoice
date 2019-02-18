@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 //css
 import "./seoEditor.css";
+import keywordsToArr from "../../../services/keywordsToArr";
 
 class SeoEditor extends Component {
   constructor(props) {
@@ -26,24 +27,6 @@ class SeoEditor extends Component {
     ];
   }
 
-  keywordsToArr = keywords => {
-    if (
-      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
-      keywords !== ""
-    ) {
-      keywords = keywords + ",";
-    }
-    let arr =
-      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
-
-    let arrLen = arr.length;
-
-    for (let i = 0; i < arrLen; i++) {
-      arr[i] = arr[i].substring(0, arr[i].length - 1);
-    }
-
-    return arr;
-  };
   inputSEOHandler = e => {
     const {
       target: { name, value }
@@ -53,14 +36,14 @@ class SeoEditor extends Component {
       this.props.onProjectURLEdition(value);
       return;
     }
-    let arr = this.keywordsToArr(value);
+    let arr = keywordsToArr(value);
     this.props.onEditSEO({ keywords: value, keywordsList: arr });
   };
   tagOptionHandler = e => {
     const {
       target: { value }
     } = e;
-    let arr = this.keywordsToArr(this.props.seo.keywords);
+    let arr = keywordsToArr(this.props.seo.keywords);
     // let arr = this.props.seo.keywords.match(/([^,])*,/g)
     //   ? this.props.seo.keywords.match(/([^,])*,/g)
     //   : [];

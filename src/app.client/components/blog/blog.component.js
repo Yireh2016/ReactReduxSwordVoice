@@ -1,7 +1,7 @@
 //modules
 import React, { Component } from "react";
 import SimpleBar from "simplebar-react";
-
+import axios from "axios";
 //components
 import Navbar from "../navbar/navbar.component";
 import Post from "./post/post.component";
@@ -21,6 +21,8 @@ import avatarImg from "../../assets/img/general/avatar.jpg";
 import Summary2 from "../blog/common/summary/summary2.component";
 //services
 import isDevice from "../../../services/isDevice";
+import keywordsToArr from "../../../services/keywordsToArr";
+import paragraphService from "../../../services/paragraphService";
 
 class BlogComponent extends Component {
   constructor(props) {
@@ -35,25 +37,59 @@ class BlogComponent extends Component {
       asideTop: "100px",
       popPostSectionHeight: "100vh - 94px",
       popPostContWidth: null,
-      popPostsArray: this.fetchData(),
+      popPostsArray: [
+        {
+          articleProps: {
+            image: "",
+            title: "",
+
+            summaryText: ``,
+
+            author: "",
+            date: "",
+            authorAvatar: "",
+            categories: [""]
+          }
+        }
+      ],
       device: "",
-      recentPostsArray: this.fetchData(),
+      recentPostsArray: [
+        {
+          articleProps: {
+            image: "",
+            title: "",
+
+            summaryText: ``,
+
+            author: "",
+            date: "",
+            authorAvatar: "",
+            categories: [""]
+          }
+        }
+      ],
       recentPostContWidth: null,
       // summaryTextHeight: null,
-      newPostArray: this.fetchNewPost()
+      newPostArray: [
+        {
+          articleProps: {
+            image: "",
+            title: "",
+
+            summaryText: ``,
+
+            author: "",
+            date: "",
+            authorAvatar: "",
+            categories: [""]
+          }
+        }
+      ]
     };
   }
 
   componentDidMount() {
     const device = isDevice();
-
-    // const recentDataArray = this.fetchData();
-    // const popDataArray = this.fetchData();
-    // const newPostArray = this.fetchNewPost();
-
-    const recentDataArray = this.state.recentPostsArray;
-    const popDataArray = recentDataArray;
-    const newPostArray = this.state.newPostArray;
 
     const win = window.innerWidth * 0.6;
     // let summaryTextHeight;
@@ -69,220 +105,78 @@ class BlogComponent extends Component {
       });
       // summaryTextHeight = "25vh";
     }
-    this.setState({
-      popPostContWidth:
-        device === "pc" ? "100%" : popDataArray.length * win + "px",
-      recentPostContWidth:
-        device === "pc" ? "100%" : recentDataArray.length * win + "px",
-      recentPostsArray: recentDataArray,
-      popPostsArray: popDataArray,
-      // // summaryTextHeight: summaryTextHeight,
-      newPostArray: newPostArray
-    });
+
+    //esta parte debe ser asyncronica
+
+    // const newPostArray = this.fetchNewPost();
+    let data;
+    axios("/api/getPosts/")
+      .then(res => {
+        if (res.status === 200) {
+          data = res.data;
+          console.log("res en GET", res);
+          console.log("data en GET ", data);
+          let newDataArr = [];
+
+          for (let i = 0; i < data.length; i++) {
+            newDataArr[i] = {
+              articleProps: {
+                image: avatarImg,
+                title: data[i].title,
+
+                summaryText: paragraphService(data[i].description),
+
+                author: data[i].author,
+                date: data[i].date,
+                authorAvatar: avatarImg,
+                categories: keywordsToArr(data[i].keywords)
+              }
+            };
+          }
+
+          const recentDataArray = newDataArr.slice(1);
+          const popDataArray = newDataArr.slice(1);
+          const newPostArr = newDataArr.slice(0, 1);
+          console.log("newDataArr", newDataArr);
+          console.log("recentDataArray", recentDataArray);
+          console.log("popDataArray", popDataArray);
+          console.log("newPostArr", newPostArr);
+          this.setState({
+            popPostsArray: newDataArr,
+            recentPostsArray: newDataArr,
+            popPostContWidth:
+              device === "pc" ? "100%" : popDataArray.length * win + "px",
+            recentPostContWidth:
+              device === "pc" ? "100%" : recentDataArray.length * win + "px",
+            recentPostsArray: recentDataArray,
+            popPostsArray: popDataArray,
+            newPostArray: newPostArr
+          });
+        }
+      })
+      .catch(err => {
+        console.log("error ", err);
+      });
   }
 
-  fetchData() {
-    return [
-      //halar de la base de datos los ultimos 6 registros
-      {
-        articleProps: {
-          image: avatarImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
+  // keywordsToArr = keywords => {
+  //   if (
+  //     keywords.slice(keywords.length - 1, keywords.length) !== "," &&
+  //     keywords !== ""
+  //   ) {
+  //     keywords = keywords + ",";
+  //   }
+  //   let arr =
+  //     keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
 
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+  //   let arrLen = arr.length;
 
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
+  //   for (let i = 0; i < arrLen; i++) {
+  //     arr[i] = arr[i].substring(0, arr[i].length - 1);
+  //   }
 
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "Visual Hierarchy has become one of the most important concept in modern design.",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      }
-    ];
-  }
-
+  //   return arr;
+  // };
   fetchNewPost = () => {
     return [
       {
@@ -296,20 +190,7 @@ class BlogComponent extends Component {
           author: "Jainer Muñoz",
           date: "August, 21 2018",
           authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
+          categories: ["Desing", "UX/UI", "Web", "Mobile"]
         }
       }
     ];
@@ -331,7 +212,7 @@ class BlogComponent extends Component {
 
   seeMorePosts = newData => {
     //funcion para fetch la base de datos de nuevos post
-    const mockData = this.fetchData();
+    const mockData = this.fetchNewPost();
     newData.push(...mockData);
     return newData;
   };

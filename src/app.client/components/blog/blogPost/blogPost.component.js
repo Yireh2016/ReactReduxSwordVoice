@@ -176,7 +176,7 @@ class BlogArticle extends Component {
             "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",
@@ -204,7 +204,7 @@ class BlogArticle extends Component {
             "I just got a developer job at Facebook. Here’s how I prepped for my interviews.",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",
@@ -232,7 +232,7 @@ class BlogArticle extends Component {
             "5 Lessons Learned From Writing Over 300,000 Lines of Infrastructure Code",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",
@@ -259,7 +259,7 @@ class BlogArticle extends Component {
           title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",
@@ -286,7 +286,7 @@ class BlogArticle extends Component {
           title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
 
           summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
+      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",

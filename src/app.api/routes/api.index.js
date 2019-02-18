@@ -362,7 +362,7 @@ routerAPI.post("/createPost", authAPI, createPostCtrl);
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
-routerAPI.get("/getPosts", authAPI, getPostCtrl);
+routerAPI.get("/getPosts", guestAPI, getPostCtrl);
 
 routerAPI.get("/getPosts/:projectName", authAPI, getPostCtrl);
 

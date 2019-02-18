@@ -22,6 +22,7 @@ import PostElement from "../postElement/postElement";
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
 import ProjectTitle from "../projectTitle/projectTitle";
+import keywordsToArr from "../../../services/keywordsToArr";
 //react map
 /*
 
@@ -156,25 +157,6 @@ class CreatePost extends Component {
     this.setState({ [name]: value });
   };
 
-  keywordsToArr = keywords => {
-    if (
-      keywords.slice(keywords.length - 1, keywords.length) !== "," &&
-      keywords !== ""
-    ) {
-      keywords = keywords + ",";
-    }
-    let arr =
-      keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
-
-    let arrLen = arr.length;
-
-    for (let i = 0; i < arrLen; i++) {
-      arr[i] = arr[i].substring(0, arr[i].length - 1);
-    }
-
-    return arr;
-  };
-
   onFileRemove = fileName => {
     this.setState(prevState => {
       let arr = prevState.fileList;
@@ -255,7 +237,7 @@ class CreatePost extends Component {
       }
     }
 
-    let arr = this.keywordsToArr(this.props.seo.keywords);
+    let arr = keywordsToArr(this.props.seo.keywords);
     const finalPost = {
       article: {
         html: finalHTMl, //str

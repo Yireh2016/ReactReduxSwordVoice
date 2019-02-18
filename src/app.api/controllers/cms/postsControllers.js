@@ -45,7 +45,8 @@ export const getPostCtrl = (req, res) => {
         title: posts[i].title,
         description: posts[i].description,
         author: posts[i].author,
-        date: posts[i].date
+        date: posts[i].date,
+        keywords: posts[i].keywords[0]
       };
     }
     res.json(postMinimumData);
