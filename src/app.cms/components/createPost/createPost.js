@@ -186,8 +186,10 @@ class CreatePost extends Component {
   //   });
   //   this.props.onAddFile(file);
   // };
-  uploadFileHandler = file => {
-    if (file) {
+  uploadFileHandler = e => {
+    if (e.target.files[0]) {
+      const file = e.target.files[0];
+      console.log("file", file);
       this.setState(prevState => {
         for (let i = 0; i < prevState.fileListNames.length; i++) {
           if (file.name === prevState.fileListNames[i]) {
@@ -199,6 +201,26 @@ class CreatePost extends Component {
         prevState.fileListNames.push(file.name);
 
         this.props.onAddDeleteFile(prevState.fileListNames);
+
+        let data = new FormData();
+        console.log("file after", file);
+
+        data.append("file", file);
+        data.append("filename", file.name);
+        data.append("fileURL", this.props.project.url);
+
+        for (var pair of data.entries()) {
+          console.log(pair[0] + ", " + pair[1]);
+        }
+        axios
+          .post("/api/uploadFile", data)
+          .then(res => {
+            alert("file uploaded");
+            console.log("file uploaded", res);
+          })
+          .catch(err => {
+            alert("error on file uploadind", err);
+          });
         return {
           fileList: prevState.fileList,
           fileListNames: prevState.fileListNames
@@ -439,7 +461,7 @@ class CreatePost extends Component {
                 name="uploadedFile"
                 accept="*/*"
                 onChange={e => {
-                  this.uploadFileHandler(e.target.files[0]);
+                  this.uploadFileHandler(e);
                 }}
               />
               <img src={upload} alt="upload botton  " />

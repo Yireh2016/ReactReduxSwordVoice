@@ -4,7 +4,10 @@ import multer from "multer";
 import fs from "fs";
 import passport from "passport";
 //controllers
-import { createPostCtrl } from "../controllers/cms/postsControllers";
+import {
+  createPostCtrl,
+  uploadFileCtrl
+} from "../controllers/cms/postsControllers";
 import {
   getPostCtrl,
   updatePostCtrl
@@ -351,6 +354,7 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
 
 //Crear un nuevo proyecto para crear un articulo
 routerAPI.post("/createPost", authAPI, createPostCtrl);
+routerAPI.post("/uploadFile", authAPI, upload.single("file"), uploadFileCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

@@ -1,4 +1,14 @@
 import mongoose from "mongoose";
+import fs from "fs";
+import multer from "multer";
+
+// var fs = require('fs');
+// var dir = './tmp';
+
+// if (!fs.existsSync(dir)){
+//     fs.mkdirSync(dir);
+// }
+
 let articleModel = mongoose.model("Article");
 
 export const createPostCtrl = (req, res) => {
@@ -10,9 +20,33 @@ export const createPostCtrl = (req, res) => {
     if (err) {
       res.json(400, { code: 400, message: `there was an error: ${err}` });
     } else {
+      //creando carpeta con nuevo proyecto
+      if (!fs.existsSync(`./dist/assets/uploads/${projectData.article.url}`)) {
+        fs.mkdirSync(`./dist/assets/uploads/${projectData.article.url}`);
+      }
+
       res.json(200, data);
     }
   });
+};
+
+export const uploadFileCtrl = (req, res) => {
+  let fileObj = req.file;
+  const filename = req.body.filename;
+  const fileURL = req.body.fileURL;
+  console.log("fileObj REQUESTTTTTTTTt", fileObj);
+
+  fs.rename(
+    `./dist/assets/uploads/${fileObj.filename}`,
+    `./dist/assets/uploads/${fileURL}/${fileObj.originalname}`,
+    err => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json(200, "file was uploaded");
+      }
+    }
+  );
 };
 
 export const getPostCtrl = (req, res) => {
