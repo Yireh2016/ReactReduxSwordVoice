@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 // import is from "is_js";
 import smoothscroll from "smoothscroll-polyfill";
-
 //css
 import "./createPost.css";
 //assets
@@ -16,6 +15,7 @@ import check from "../../assets/createPost/check.svg";
 import plus from "../../assets/dashboard/plus.svg";
 import next from "../../assets/createPost/next.svg";
 import back from "../../assets/createPost/back.svg";
+import save from "../../assets/createPost/save.svg";
 //components
 import PostElement from "../postElement/postElement";
 import ProjectTitle from "../projectTitle/projectTitle";
@@ -24,6 +24,8 @@ import ProjectTitle from "../projectTitle/projectTitle";
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
 import keywordsToArr from "../../../services/keywordsToArr";
+import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
+import parseHTML2Object from "../../../services/parseHTML2Object";
 //react map
 /*
 
@@ -44,7 +46,6 @@ class CreatePost extends Component {
       isEditionMode: false,
       editionPage: 1,
       summaryElValue: this.props.summary,
-      fileList: [],
       fileListNames: this.props.fileNames,
       dateProgram: this.props.date,
       finalHTMLElement: "",
@@ -53,8 +54,11 @@ class CreatePost extends Component {
   }
 
   // kick off the polyfill!
-
   componentDidMount() {
+    window.addEventListener("beforeunload", e => {
+      this.leavePageHandler(e);
+    });
+
     if (this.state.elementList.length === 0) {
       this.addElementBtnHandler();
       this.setState({ isEditionMode: true });
@@ -62,32 +66,21 @@ class CreatePost extends Component {
     }
   }
 
-  htmlArrCosolidation = arr => {
-    let arrElements = arr;
-
-    let finalHTMLElement = "";
-    for (let i = 0; i < arrElements.length; i++) {
-      finalHTMLElement =
-        finalHTMLElement + "" + arrElements[i].finalHTMLElement;
+  leavePageHandler = e => {
+    if (!this.props.project.hasChanged) {
+      // e.returnValue = "Are you sure you want to leave the page withou save?";
+      return;
+    } else {
+      e.preventDefault();
+      // // Chrome requires returnValue to be set
+      e.returnValue = "Are you sure you want to leave the page withou save?";
     }
-    return finalHTMLElement;
-  };
-  parseHTML2Object = htmlStr => {
-    let handler = new htmlparser.DefaultHandler(function(error, dom) {
-      if (error) console.log("error", error);
-      else {
-        console.log("parser no error");
-      }
-    });
-    let parser = new htmlparser.Parser(handler);
-    parser.parseComplete(htmlStr);
-    return handler.dom;
   };
 
   previewBtnHandler = () => {
-    let finalHTMLElement = this.htmlArrCosolidation(this.props.elements);
+    let finalHTMLElement = htmlArrCosolidation(this.props.elements);
 
-    let dom = this.parseHTML2Object(finalHTMLElement);
+    let dom = parseHTML2Object(finalHTMLElement);
 
     this.setState({ finalHTMLElement: finalHTMLElement, dom: dom });
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
@@ -118,11 +111,16 @@ class CreatePost extends Component {
     this.props.onAddElement(this.props.elements.length + 1);
     this.setState({ elementList: this.props.elements, isEditionMode: true });
   };
-  isEditionModeHandler = top => {
+  inputSelectHTMLHandler = top => {
     smoothscroll.polyfill();
     const el = this.editionAreaRef.current;
 
     el.scroll({ top: top, left: 0, behavior: "smooth" });
+  };
+  editionBtnHandler = () => {
+    this.setState(prevState => {
+      return { isEditionMode: !prevState.isEditionMode };
+    });
   };
   playBtnHandler = () => {};
   nextBtnHandler = val => {
@@ -146,6 +144,8 @@ class CreatePost extends Component {
     });
   };
   summaryElHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { name, value }
     } = e;
@@ -153,37 +153,24 @@ class CreatePost extends Component {
   };
 
   onFileRemove = fileName => {
+    const deleteObj = { filename: fileName, url: this.props.project.url };
+
     this.setState(prevState => {
-      let arr = prevState.fileList;
-      arr = arr.filter(val => {
-        return val.name !== fileName;
-      });
-
       let arr2 = prevState.fileListNames;
-
       arr2 = arr2.filter(val => {
         return val !== fileName;
       });
       this.props.onAddDeleteFile(arr2);
-      return { fileList: arr, fileListNames: arr2 };
+      return { fileListNames: arr2 };
     });
 
-    // let arr = this.props.fileNames.filter((value, i, arr) => {
-    //   return arr[i] !== fileName;
-    // });
-    // this.props.onAddDeleteFile(arr);
+    alert(`file deleted`);
   };
-  // uploadFileHandler = file => {
-  //   this.setState(prevState => {
-  //     prevState.fileList.push(file);
-  //     return { fileList: prevState.fileList };
-  //   });
-  //   this.props.onAddFile(file);
-  // };
+
   uploadFileHandler = e => {
+    this.props.onProjectChange();
     if (e.target.files[0]) {
       const file = e.target.files[0];
-      console.log("file", file);
       this.setState(prevState => {
         for (let i = 0; i < prevState.fileListNames.length; i++) {
           if (file.name === prevState.fileListNames[i]) {
@@ -191,34 +178,28 @@ class CreatePost extends Component {
           }
         }
 
-        prevState.fileList.push(file);
+        // prevState.fileList.push(file);
         prevState.fileListNames.push(file.name);
-
         this.props.onAddDeleteFile(prevState.fileListNames);
-
         let data = new FormData();
-        console.log("file after", file);
 
         data.append("file", file);
         data.append("filename", file.name);
         data.append("fileURL", this.props.project.url);
 
-        for (var pair of data.entries()) {
-          console.log(pair[0] + ", " + pair[1]);
-        }
         axios
-          .post("/api/uploadFile", data)
+          .post("/api/uploadTempFile", data)
           .then(res => {
             alert("file uploaded");
             console.log("file uploaded", res);
+            return {
+              // fileList: prevState.fileList,
+              fileListNames: prevState.fileListNames
+            };
           })
           .catch(err => {
             alert("error on file uploadind", err);
           });
-        return {
-          fileList: prevState.fileList,
-          fileListNames: prevState.fileListNames
-        };
       });
     }
   };
@@ -228,15 +209,7 @@ class CreatePost extends Component {
     } = e;
     this.setState({ [name]: value });
   };
-  // saveProjectTitleHandler = () => {
-  //   const savedText = this.state.projectTitleText;
-  //   this.setState({ projectTitle: savedText });
-  //   this.props.onProjectURLEdition(savedText);
 
-  // };
-  // cancelProjectTitleHandler = () => {
-  //   this.props.history.push("/cms/dashboard");
-  // };
   programHandler = () => {
     //hacer validaciones antes de programar post
     let date =
@@ -244,10 +217,10 @@ class CreatePost extends Component {
         ? new Date()
         : this.state.dateProgram;
     this.props.onDateEdition(date);
-    let finalHTMl = this.htmlArrCosolidation(this.props.elements);
+    let finalHTMl = htmlArrCosolidation(this.props.elements);
     let rawBody = "";
 
-    let dom = this.parseHTML2Object(finalHTMl);
+    let dom = parseHTML2Object(finalHTMl);
     for (let i = 0; i < dom.length; i++) {
       if (dom[i].type === "tag" && dom[i].name === "p") {
         rawBody = rawBody + dom[i].children[0].data;
@@ -321,12 +294,27 @@ class CreatePost extends Component {
       .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
       .then(res => {
         console.log("res", res);
+        this.props.onSave();
       })
       .catch(err => {
         console.log("err", err);
       });
   };
-
+  fileNameCopyHandler = e => {
+    const filename = e.target.innerText;
+    console.log("filename", filename);
+    navigator.clipboard
+      .writeText(
+        `http://localhost:8080/uploads/${this.props.project.url}/${filename}`
+      )
+      .then(() => {
+        alert(
+          `http://localhost:8080/uploads/${
+            this.props.project.url
+          }/${filename} on clipboard`
+        );
+      });
+  };
   render() {
     if (this.props.project.name === "") {
       return <ProjectTitle />;
@@ -334,8 +322,11 @@ class CreatePost extends Component {
     const files = this.state.fileListNames.map((file, i) => {
       return (
         <React.Fragment key={i}>
-          <span>{file}</span>
+          <span onClick={this.fileNameCopyHandler} className="fileTitle">
+            {file}
+          </span>
           <span
+            className="fileDelete"
             onClick={() => {
               this.onFileRemove(file);
             }}
@@ -345,35 +336,13 @@ class CreatePost extends Component {
         </React.Fragment>
       );
     });
-    // const tags = this.tags.map((tag, i) => {
-    //   let checked = false;
-    //   if (this.props.seo.keywordsList.length > 0) {
-    //     let arr = this.props.seo.keywordsList;
-    //     for (let i = 0; i < arr.length; i++) {
-    //       if (tag === arr[i]) {
-    //         checked = true;
-    //       }
-    //     }
-    //   }
-    //   return (
-    //     <React.Fragment key={i}>
-    //       <input
-    //         onChange={this.tagOptionHandler}
-    //         checked={checked}
-    //         type="checkbox"
-    //         name="tagsList"
-    //         value={tag}
-    //       />
-    //       {tag}
-    //     </React.Fragment>
-    //   );
-    // });
     const elements = this.props.elements.map((element, i) => {
       return (
         <div key={i}>
           <PostElement
             HTMLid={i + 1}
-            isEditionModeHandler={this.isEditionModeHandler}
+            editionBtnHandler={this.editionBtnHandler}
+            inputSelectHTMLHandler={this.inputSelectHTMLHandler}
             isEditionMode={this.state.isEditionMode}
             HTMLElementType={element.HTMLElementType}
             HTMLElementContent={element.HTMLElementContent}
@@ -396,20 +365,7 @@ class CreatePost extends Component {
         </div>
       );
     });
-    const titles = () => {
-      const page = this.state.editionPage;
-      let result;
-      if (page === 1) {
-        result = <h1>Blog Post Edition</h1>;
-        return result;
-      } else if (page === 2) {
-        result = <h1>Summary Edition</h1>;
-        return result;
-      } else if (page === 3) {
-        result = <h1>SEO Edition</h1>;
-        return result;
-      }
-    };
+
     return (
       <div>
         {/* Create Bar */}
@@ -487,6 +443,16 @@ class CreatePost extends Component {
             <div
               className="createBarItem"
               onClick={() => {
+                this.programHandler();
+              }}
+            >
+              <h4>Save</h4>
+
+              <img src={save} alt="save botton  " />
+            </div>
+            <div
+              className="createBarItem"
+              onClick={() => {
                 this.nextBtnHandler(1);
               }}
             >
@@ -521,7 +487,6 @@ class CreatePost extends Component {
             <div
               className="editionArea style-7"
               ref={this.editionAreaRef}
-              // onChange={this.editionAreaChangeHandler}
               style={
                 this.state.editionPage === 1
                   ? { animation: "editionIn 500ms ease normal forwards" }
@@ -621,7 +586,8 @@ const mapStateToProps = state => {
     login: state.login,
     project: state.postCreation.project,
     fileNames: state.postCreation.files,
-    date: state.postCreation.date
+    date: state.postCreation.date,
+    postCreation: state.postCreation
   };
 };
 const mapDispachToProps = dispach => {
@@ -634,16 +600,12 @@ const mapDispachToProps = dispach => {
     onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
     onSummaryEdition: payload =>
       dispach({ type: "SUMMARY_EDITION", payload: payload }),
-    // onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
     onAddDeleteFile: payload =>
       dispach({ type: "ADD_DELETE_FILE", payload: payload }),
     onDateEdition: payload =>
-      dispach({ type: "DATE_EDITION", payload: payload })
-
-    // onProjectNameEdition: payload =>
-    //   dispach({ type: "PROJECT_NAME_EDITION", payload: payload }),
-    // onProjectURLEdition: payload =>
-    //   dispach({ type: "PROJECT_URL_EDITION", payload: payload })
+      dispach({ type: "DATE_EDITION", payload: payload }),
+    onSave: () => dispach({ type: "SAVE_POST" }),
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
   };
 };
 

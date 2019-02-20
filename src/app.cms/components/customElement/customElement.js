@@ -38,6 +38,8 @@ class CustomElement extends Component {
   };
 
   inputTextHTMLHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { value }
     } = e;
@@ -63,6 +65,12 @@ class CustomElement extends Component {
     );
   }
 }
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+  };
+};
 
 const mapStateToProps = state => {
   return {
@@ -70,4 +78,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(CustomElement);
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(CustomElement);

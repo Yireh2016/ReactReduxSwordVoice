@@ -6,7 +6,8 @@ import passport from "passport";
 //controllers
 import {
   createPostCtrl,
-  uploadFileCtrl
+  uploadTempFileCtrl,
+  deleteTempFileCtrl
 } from "../controllers/cms/postsControllers";
 import {
   getPostCtrl,
@@ -354,7 +355,13 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
 
 //Crear un nuevo proyecto para crear un articulo
 routerAPI.post("/createPost", authAPI, createPostCtrl);
-routerAPI.post("/uploadFile", authAPI, upload.single("file"), uploadFileCtrl);
+routerAPI.post(
+  "/uploadTempFile",
+  authAPI,
+  upload.single("file"),
+  uploadTempFileCtrl
+);
+// routerAPI.post("/deleteTempFile", authAPI, deleteTempFileCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

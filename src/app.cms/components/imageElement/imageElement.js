@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Compressor from "compressorjs";
+import { connect } from "react-redux";
+
 //services
 import isBrowser from "../../../services/isBrowser";
 
@@ -23,6 +25,8 @@ class ImageElement extends Component {
     };
   }
   qualityHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { name, value }
     } = e;
@@ -42,6 +46,7 @@ class ImageElement extends Component {
   };
 
   handleImgUpload = files => {
+    this.props.onProjectChange();
     this.setState({ image: files });
   };
 
@@ -180,4 +185,12 @@ class ImageElement extends Component {
   }
 }
 
-export default ImageElement;
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+  };
+};
+
+export default connect(mapDispachToProps)(ImageElement);

@@ -34,9 +34,10 @@ class PostElement extends Component {
 
     // PROPS
     // HTMLid indica el id del html element
-    // isEditionModeHandler  toogle edition mode flag
+    // inputSelectHTMLHandler  toogle edition mode flag
     //elements array of elements
     //isEditionMode
+    //fn editionBtnHandler
 
     this.state = {
       HTMLElementType: this.props.HTMLElementType,
@@ -84,6 +85,8 @@ class PostElement extends Component {
   }
 
   inputTextHTMLHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { value }
     } = e;
@@ -91,6 +94,8 @@ class PostElement extends Component {
   };
 
   stylesHTMLHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { name, value }
     } = e;
@@ -111,6 +116,8 @@ class PostElement extends Component {
   };
 
   atributesHTMLHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { name, value }
     } = e;
@@ -140,6 +147,8 @@ class PostElement extends Component {
   };
 
   classesHTMLHandler = e => {
+    this.props.onProjectChange();
+
     const {
       target: { name, value }
     } = e;
@@ -160,9 +169,9 @@ class PostElement extends Component {
   };
 
   inputSelectHTMLHandler = e => {
+    this.props.onProjectChange();
     const el = this.postElement.current;
-    // this.props.editionAreaChangeHandler(el.offsetTop);
-    this.props.isEditionModeHandler(el.offsetTop);
+    this.props.inputSelectHTMLHandler(el.offsetTop);
     const {
       target: { value }
     } = e;
@@ -190,24 +199,26 @@ class PostElement extends Component {
     alt,
     figcaption
   ) => {
-    if (styles !== "") {
-      str = str.replace("{styles}", `"${styles}"`);
-    } else {
-      str = str.replace(" style={styles}", "");
+    if (str) {
+      if (styles !== "") {
+        str = str.replace("{styles}", `"${styles}"`);
+      } else {
+        str = str.replace(" style={styles}", "");
+      }
+
+      if (classes !== "") {
+        str = str.replace("{classes}", `"${classes}"`);
+      } else {
+        str = str.replace(" class={classes}", "");
+      }
+
+      str = str.replace("{content}", content);
+      str = str.replace("{imgFile}", `"${file}"`);
+      str = str.replace("{imgAlt}", `"${alt}"`);
+      str = str.replace("{imgFigcaption}", figcaption);
+
+      return str;
     }
-
-    if (classes !== "") {
-      str = str.replace("{classes}", `"${classes}"`);
-    } else {
-      str = str.replace(" class={classes}", "");
-    }
-
-    str = str.replace("{content}", content);
-    str = str.replace("{imgFile}", `"${file}"`);
-    str = str.replace("{imgAlt}", `"${alt}"`);
-    str = str.replace("{imgFigcaption}", figcaption);
-
-    return str;
   };
   sendWordToJSXHandler = word => {
     // HTMLPreviewStr
@@ -217,65 +228,70 @@ class PostElement extends Component {
     e.preventDefault();
     const el = this.postElement.current;
     // this.props.editionAreaChangeHandler(el.offsetTop);
-    this.props.isEditionModeHandler(el.offsetTop);
-    // this.props.isEditionModey;
+    this.props.inputSelectHTMLHandler(el.offsetTop);
+    this.props.editionBtnHandler();
     this.setState(prevState => {
-      return { isEditionMode: !prevState.isEditionMode };
+      return {
+        isEditionMode: !prevState.isEditionMode
+      };
     });
 
-    let finalHTMLElement = this.state.HTMLPreviewStr;
-    let styles = this.state.HTMLStylesStr;
-    let classes = this.state.HTMLClassesStr;
-    let content = this.state.HTMLElementContent;
-    // let alt = "test";
-    // let imgFile = "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg";
-    // let figcaption = "test";
-    //images only
-    let alt = this.state.imgAlt;
-    let imgFile = this.state.imgFile;
-    let figcaption = this.state.imgFigcaption;
+    if (this.props.project.hasChanged) {
+      console.log("edition execued");
+      let finalHTMLElement = this.state.HTMLPreviewStr;
+      let styles = this.state.HTMLStylesStr;
+      let classes = this.state.HTMLClassesStr;
+      let content = this.state.HTMLElementContent;
+      // let alt = "test";
+      // let imgFile = "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg";
+      // let figcaption = "test";
+      //images only
+      let alt = this.state.imgAlt;
+      let imgFile = this.state.imgFile;
+      let figcaption = this.state.imgFigcaption;
 
-    finalHTMLElement = this.prepareHTMLFilter(
-      finalHTMLElement,
-      styles,
-      classes,
-      content,
-      imgFile,
-      alt,
-      figcaption
-    );
-    this.setState({ finalHTMLElement: finalHTMLElement });
+      finalHTMLElement = this.prepareHTMLFilter(
+        finalHTMLElement,
+        styles,
+        classes,
+        content,
+        imgFile,
+        alt,
+        figcaption
+      );
+      this.setState({ finalHTMLElement: finalHTMLElement });
 
-    let payload = {
-      HTMLElementType: this.state.HTMLElementType,
-      HTMLElementContent: this.state.HTMLElementContent,
-      HTMLAtributes: this.state.HTMLAtributes,
-      HTMLAtributesArr: this.state.HTMLAtributesArr,
-      HTMLAtributesStr: this.state.HTMLAtributesStr,
-      HTMLStyles: this.state.HTMLStyles,
-      HTMLStylesStr: this.state.HTMLStylesStr,
-      HTMLStylesArr: this.state.HTMLStylesArr,
-      HTMLClasses: this.state.HTMLClasses,
-      HTMLClassesArr: this.state.HTMLClassesArr,
-      HTMLClassesStr: this.state.HTMLClassesStr,
-      HTMLPreviewStr: this.state.HTMLPreviewStr,
-      HTMLid: this.state.HTMLid,
-      imgFile: "",
-      imgAlt: "",
-      imgFigcaption: ""
-    };
+      let payload = {
+        HTMLElementType: this.state.HTMLElementType,
+        HTMLElementContent: this.state.HTMLElementContent,
+        HTMLAtributes: this.state.HTMLAtributes,
+        HTMLAtributesArr: this.state.HTMLAtributesArr,
+        HTMLAtributesStr: this.state.HTMLAtributesStr,
+        HTMLStyles: this.state.HTMLStyles,
+        HTMLStylesStr: this.state.HTMLStylesStr,
+        HTMLStylesArr: this.state.HTMLStylesArr,
+        HTMLClasses: this.state.HTMLClasses,
+        HTMLClassesArr: this.state.HTMLClassesArr,
+        HTMLClassesStr: this.state.HTMLClassesStr,
+        HTMLPreviewStr: this.state.HTMLPreviewStr,
+        HTMLid: this.state.HTMLid,
+        imgFile: "",
+        imgAlt: "",
+        imgFigcaption: ""
+      };
 
-    payload = {
-      ...payload,
-      finalHTMLElement: finalHTMLElement
-    };
+      payload = {
+        ...payload,
+        finalHTMLElement: finalHTMLElement
+      };
 
-    if (this.props.elements.length >= this.props.HTMLid) {
-      this.props.onEditElement(payload);
-      return;
+      if (this.props.elements.length >= this.props.HTMLid) {
+        this.props.onEditElement(payload);
+        return;
+      }
+
+      this.props.onAddElement(payload);
     }
-
-    this.props.onAddElement(payload);
   };
 
   delBtnHandler = () => {
@@ -531,7 +547,8 @@ class PostElement extends Component {
 
 const mapStateToProps = state => {
   return {
-    elements: state.postCreation.elements
+    elements: state.postCreation.elements,
+    project: state.postCreation.project
   };
 };
 const mapDispachToProps = dispach => {
@@ -540,7 +557,7 @@ const mapDispachToProps = dispach => {
     onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
     onEditElement: payload =>
       dispach({ type: "EDIT_ELEMENT", payload: payload }),
-
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
     onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload })
   };
 };

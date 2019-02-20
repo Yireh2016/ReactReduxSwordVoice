@@ -28,7 +28,7 @@ const initialState = {
     title: ""
   },
   summary: "",
-  project: { name: "", url: "" },
+  project: { name: "", url: "", hasChanged: false },
   files: []
 };
 //estado inicial viene del CONFIG REDUCER.JS
@@ -56,6 +56,7 @@ const postEditCtlreducer = (state = initialState, action) => {
         }
       ];
       newState.elements = newElement;
+      newState.project.hasChanged = true;
       break;
     }
     case "ADD_ELEMENT": {
@@ -75,43 +76,62 @@ const postEditCtlreducer = (state = initialState, action) => {
         HTMLid: action.payload
       };
       newState.elements.push(newElement);
+      newState.project.hasChanged = true;
       break;
     }
     case "EDIT_ELEMENT": {
       newState.elements[action.payload.HTMLid - 1] = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
 
     case "DEL_ELEMENT": {
       newState.elements = action.payload;
+      newState.project.hasChanged = true;
+      break;
+    }
+    case "CHANGE_PROJECT": {
+      newState.project.hasChanged = true;
       break;
     }
     case "SEO_EDITION": {
       newState.seo = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
     case "SUMMARY_EDITION": {
       newState.summary = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
     case "PROJECT_NAME_EDITION": {
       newState.project.name = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
     case "PROJECT_URL_EDITION": {
       newState.project.url = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
     case "ADD_DELETE_FILE": {
       newState.files = action.payload;
+      newState.project.hasChanged = true;
       break;
     }
     case "FETCH_POST": {
       newState = action.payload;
+      newState.project.hasChanged = false;
       break;
     }
     case "DATE_EDITION": {
       newState.date = action.payload;
+      newState.project.hasChanged = true;
+      break;
+    }
+
+    case "SAVE_POST": {
+      newState.project.hasChanged = false;
       break;
     }
 

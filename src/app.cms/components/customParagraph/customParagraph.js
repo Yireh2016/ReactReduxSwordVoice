@@ -38,6 +38,7 @@ class CustomParagraph extends Component {
   };
 
   inputTextHTMLHandler = e => {
+    this.props.onProjectChange();
     const {
       target: { value }
     } = e;
@@ -70,4 +71,15 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(CustomParagraph);
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(CustomParagraph);

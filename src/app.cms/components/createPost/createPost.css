@@ -112,7 +112,7 @@
 
 .fileList {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 .fileList * {
   font-size: 16px;
@@ -128,7 +128,13 @@
 .fileList span:nth-child(even) {
   background-color: #eaedee;
 }
-
+.fileTitle:hover {
+  font-weight: bold;
+}
+.fileDelete:hover {
+  font-weight: bold;
+  color: red;
+}
 @keyframes editionIn {
   from {
     transform: translateX(100%);

@@ -30,11 +30,10 @@ export const createPostCtrl = (req, res) => {
   });
 };
 
-export const uploadFileCtrl = (req, res) => {
+export const uploadTempFileCtrl = (req, res) => {
   let fileObj = req.file;
   const filename = req.body.filename;
   const fileURL = req.body.fileURL;
-  console.log("fileObj REQUESTTTTTTTTt", fileObj);
 
   fs.rename(
     `./dist/assets/uploads/${fileObj.filename}`,
@@ -48,6 +47,18 @@ export const uploadFileCtrl = (req, res) => {
     }
   );
 };
+
+// export const deleteTempFileCtrl = (req, res) => {
+//   const filename = req.body.filename;
+//   const url = req.body.url;
+//   fs.unlink(`./dist/assets/uploads/${url}/${filename}`, err => {
+//     if (err) {
+//       res.json(400);
+//     } else {
+//       res.json(200, `file ${filename} erased`);
+//     }
+//   });
+// };
 
 export const getPostCtrl = (req, res) => {
   if (req.params.projectName) {
@@ -109,7 +120,24 @@ export const updatePostCtrl = (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        res.end("success");
+        // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
+        fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
+          files.forEach(file => {
+            console.log(file);
+            let found = false;
+            for (let i = 0; i < data.files.length; i++) {
+              if (file === data.files[i]) {
+                found = true;
+              }
+            }
+            if (!found) {
+              fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
+                console.log("error eliminando archivo", err);
+              });
+            }
+          });
+        });
+        res.json(200);
       }
     }
   );
