@@ -58,7 +58,6 @@ class PostElement extends Component {
       imgFile: this.props.imgFile,
       imgAlt: this.props.imgAlt,
       imgFigcaption: this.props.imgFigcaption,
-
       isImageUploader: false
     };
     this.elementsJSX = {
@@ -226,15 +225,18 @@ class PostElement extends Component {
   };
   editionBtnHandler = e => {
     e.preventDefault();
-    const el = this.postElement.current;
-    // this.props.editionAreaChangeHandler(el.offsetTop);
-    this.props.inputSelectHTMLHandler(el.offsetTop);
-    this.props.editionBtnHandler();
     this.setState(prevState => {
       return {
         isEditionMode: !prevState.isEditionMode
       };
     });
+    const el = this.postElement.current;
+    // this.props.editionAreaChangeHandler(el.offsetTop);
+    this.props.inputSelectHTMLHandler(el.offsetTop);
+
+    !this.state.isEditionMode
+      ? this.props.editionBtnHandler(this.state)
+      : this.props.editionBtnHandler("");
 
     if (this.props.project.hasChanged) {
       console.log("edition execued");
@@ -356,7 +358,7 @@ class PostElement extends Component {
       }
     };
     return (
-      <div>
+      <div style={this.props.style} className={this.props.className}>
         <div ref={this.postElement} className="elementEditionLayout">
           <div className="elementSelect">
             <div className="elementSelectLayout">

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import htmlparser from "htmlparser";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 // import is from "is_js";
@@ -49,6 +48,7 @@ class CreatePost extends Component {
       fileListNames: this.props.fileNames,
       dateProgram: this.props.date,
       finalHTMLElement: "",
+      copiedElement: "",
       dom: ""
     };
   }
@@ -104,7 +104,11 @@ class CreatePost extends Component {
   addElementBtnHandler = () => {
     if (!this.props.elements) {
       this.props.onCreateElement(1);
-      this.setState({ elementList: this.props.elements, isEditionMode: true });
+      this.setState({
+        elementList: this.props.elements,
+        isEditionMode: true,
+        copiedElement: ""
+      });
       return;
     }
 
@@ -115,16 +119,18 @@ class CreatePost extends Component {
     smoothscroll.polyfill();
     const el = this.editionAreaRef.current;
 
-    el.scroll({ top: top, left: 0, behavior: "smooth" });
+    el && el.scroll({ top: top, left: 0, behavior: "smooth" });
   };
-  editionBtnHandler = () => {
+  editionBtnHandler = copiedElement => {
     this.setState(prevState => {
-      return { isEditionMode: !prevState.isEditionMode };
+      return {
+        isEditionMode: !prevState.isEditionMode,
+        copiedElement: copiedElement
+      };
     });
   };
-  playBtnHandler = () => {};
   nextBtnHandler = val => {
-    if (this.state.editionPage === 2) {
+    if (this.state.editionPage === 2 && this.props.project.hasChanged) {
       let arr = this.state.summaryElValue.match(/.*[^\n]/g);
       let str = "";
       if (arr) {
@@ -144,7 +150,9 @@ class CreatePost extends Component {
     });
   };
   summaryElHandler = e => {
-    this.props.onProjectChange();
+    if (!this.props.project.hasChanged) {
+      this.props.onProjectChange();
+    }
 
     const {
       target: { name, value }
@@ -153,7 +161,7 @@ class CreatePost extends Component {
   };
 
   onFileRemove = fileName => {
-    const deleteObj = { filename: fileName, url: this.props.project.url };
+    // const deleteObj = { filename: fileName, url: this.props.project.url };
 
     this.setState(prevState => {
       let arr2 = prevState.fileListNames;
@@ -315,6 +323,11 @@ class CreatePost extends Component {
         );
       });
   };
+  testHandler = () => {
+    this.setState(prevState => {
+      return { isEditionMode: !prevState.isEditionMode };
+    });
+  };
   render() {
     if (this.props.project.name === "") {
       return <ProjectTitle />;
@@ -367,7 +380,109 @@ class CreatePost extends Component {
     });
 
     return (
-      <div>
+      <div style={{ position: "relative" }}>
+        {/* Edition Area  */}
+        {this.state.isEditionMode && (
+          <div className="createDarkLayout">
+            {this.state.copiedElement === "" ? (
+              <PostElement
+                className="postElementDarkLayout"
+                editionBtnHandler={this.editionBtnHandler}
+                inputSelectHTMLHandler={this.inputSelectHTMLHandler}
+                isEditionMode={this.state.isEditionMode}
+                HTMLElementType={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLElementType
+                }
+                HTMLElementContent={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLElementContent
+                }
+                HTMLAtributes={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLAtributes
+                }
+                HTMLAtributesArr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLAtributesArr
+                }
+                HTMLAtributesStr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLAtributesStr
+                }
+                HTMLStyles={
+                  this.props.elements[this.props.elements.length - 1].HTMLStyles
+                }
+                HTMLStylesStr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLStylesStr
+                }
+                HTMLStylesArr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLStylesArr
+                }
+                HTMLClasses={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLClasses
+                }
+                HTMLClassesArr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLClassesArr
+                }
+                HTMLClassesStr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLClassesStr
+                }
+                HTMLPreviewStr={
+                  this.props.elements[this.props.elements.length - 1]
+                    .HTMLPreviewStr
+                }
+                HTMLid={
+                  this.props.elements[this.props.elements.length - 1].HTMLid
+                }
+                finalHTMLElement={
+                  this.props.elements[this.props.elements.length - 1]
+                    .finalHTMLElement
+                }
+                imgFile={
+                  this.props.elements[this.props.elements.length - 1].imgFile
+                }
+                imgAlt={
+                  this.props.elements[this.props.elements.length - 1].imgAlt
+                }
+                imgFigcaption={
+                  this.props.elements[this.props.elements.length - 1]
+                    .imgFigcaption
+                }
+              />
+            ) : (
+              <PostElement
+                className="postElementDarkLayout"
+                editionBtnHandler={this.editionBtnHandler}
+                inputSelectHTMLHandler={this.inputSelectHTMLHandler}
+                isEditionMode={this.state.isEditionMode}
+                HTMLElementType={this.state.copiedElement.HTMLElementType}
+                HTMLElementContent={this.state.copiedElement.HTMLElementContent}
+                HTMLAtributes={this.state.copiedElement.HTMLAtributes}
+                HTMLAtributesArr={this.state.copiedElement.HTMLAtributesArr}
+                HTMLAtributesStr={this.state.copiedElement.HTMLAtributesStr}
+                HTMLStyles={this.state.copiedElement.HTMLStyles}
+                HTMLStylesStr={this.state.copiedElement.HTMLStylesStr}
+                HTMLStylesArr={this.state.copiedElement.HTMLStylesArr}
+                HTMLClasses={this.state.copiedElement.HTMLClasses}
+                HTMLClassesArr={this.state.copiedElement.HTMLClassesArr}
+                HTMLClassesStr={this.state.copiedElement.HTMLClassesStr}
+                HTMLPreviewStr={this.state.copiedElement.HTMLPreviewStr}
+                HTMLid={this.state.copiedElement.HTMLid}
+                finalHTMLElement={this.state.copiedElement.finalHTMLElement}
+                imgFile={this.state.copiedElement.imgFile}
+                imgAlt={this.state.copiedElement.imgAlt}
+                imgFigcaption={this.state.copiedElement.imgFigcaption}
+              />
+            )}
+          </div>
+        )}
+
         {/* Create Bar */}
         <div className="createBarCont">
           <div
@@ -440,17 +555,51 @@ class CreatePost extends Component {
               <h4>Publish</h4>
               <img src={check} alt="publish botton  " />
             </div>
-            <div
-              className="createBarItem"
-              onClick={() => {
-                this.programHandler();
-              }}
-            >
-              <h4>Save</h4>
 
-              <img src={save} alt="save botton  " />
-            </div>
+            {this.state.editionPage > 1 && (
+              <div
+                style={
+                  this.props.project.hasChanged && this.state.editionPage === 3
+                    ? { visibility: "visible" }
+                    : { visibility: "hidden" }
+                }
+                className="createBarItem"
+                onClick={() => {
+                  this.programHandler();
+                }}
+              >
+                <h4>Save</h4>
+
+                <img src={save} alt="save botton  " />
+              </div>
+            )}
+
+            {this.state.editionPage === 1 && (
+              <div
+                style={
+                  this.props.project.hasChanged &&
+                  this.state.editionPage === 1 &&
+                  !this.state.isEditionMode
+                    ? { visibility: "visible" }
+                    : { visibility: "hidden" }
+                }
+                className="createBarItem"
+                onClick={() => {
+                  this.programHandler();
+                }}
+              >
+                <h4>Save</h4>
+
+                <img src={save} alt="save botton  " />
+              </div>
+            )}
+
             <div
+              style={
+                this.state.editionPage !== 3 && !this.state.isEditionMode
+                  ? { visibility: "visible" }
+                  : { visibility: "hidden" }
+              }
               className="createBarItem"
               onClick={() => {
                 this.nextBtnHandler(1);
@@ -459,7 +608,13 @@ class CreatePost extends Component {
               <h4>Next</h4>
               <img src={next} alt="Next botton  " />
             </div>
+
             <div
+              style={
+                this.state.editionPage !== 1
+                  ? { visibility: "visible" }
+                  : { visibility: "hidden" }
+              }
               className="createBarItem"
               onClick={() => {
                 this.nextBtnHandler(-1);
@@ -471,108 +626,110 @@ class CreatePost extends Component {
           </div>
         </div>
         {/* Edition Area */}
-        <div className="createLayout">
-          {/* {titles()}
+        {!this.state.isEditionMode && (
+          <div className="createLayout">
+            {/* {titles()}
           <div>Project Name: {this.props.project.name}</div> */}
-          <div
-            style={{
-              height: "90vh",
-              position: "relative",
-              overflow: "hidden",
-              width: "80%"
-            }}
-          >
-            {/* first page post creation */}
-
             <div
-              className="editionArea style-7"
-              ref={this.editionAreaRef}
-              style={
-                this.state.editionPage === 1
-                  ? { animation: "editionIn 500ms ease normal forwards" }
-                  : {
-                      animation: "editionOut 500ms ease  normal forwards"
-                    }
-              }
+              style={{
+                height: "90vh",
+                position: "relative",
+                overflow: "hidden",
+                width: "80%"
+              }}
             >
-              {elements}
+              {/* first page post creation */}
+
               <div
-                style={{
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center"
-                }}
+                className="editionArea style-7"
+                ref={this.editionAreaRef}
+                style={
+                  this.state.editionPage === 1
+                    ? { animation: "editionIn 500ms ease normal forwards" }
+                    : {
+                        animation: "editionOut 500ms ease  normal forwards"
+                      }
+                }
               >
-                {!this.state.isEditionMode && (
-                  <button
-                    onClick={this.addElementBtnHandler}
-                    className="addElementBtn"
-                  >
-                    <span>Add Element</span>
-                    <img
-                      src={plus}
-                      title="add element"
-                      alt="add Element button"
-                    />
-                  </button>
-                )}
+                {elements}
+                <div
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    justifyContent: "center"
+                  }}
+                >
+                  {!this.state.isEditionMode && (
+                    <button
+                      onClick={this.addElementBtnHandler}
+                      className="addElementBtn"
+                    >
+                      <span>Add Element</span>
+                      <img
+                        src={plus}
+                        title="add element"
+                        alt="add Element button"
+                      />
+                    </button>
+                  )}
+                </div>
               </div>
+
+              {/* second page summary creation */}
+              {this.state.editionPage === 2 && (
+                <div
+                  className="summaryArea"
+                  style={
+                    this.state.editionPage === 2
+                      ? { animation: "editionIn 500ms ease normal forwards" }
+                      : {
+                          animation: "editionOut 500ms ease  normal forwards"
+                        }
+                  }
+                >
+                  <h2>Summary</h2>
+                  <textarea
+                    className="summaryElValue"
+                    value={this.state.summaryElValue}
+                    name="summaryElValue"
+                    onChange={this.summaryElHandler}
+                  >
+                    {this.state.summaryElValue}
+                  </textarea>
+                </div>
+              )}
+
+              {/* third page summary creation */}
+              {this.state.editionPage === 3 && (
+                <div
+                  className="seoArea"
+                  style={
+                    this.state.editionPage === 3
+                      ? { animation: "editionIn 500ms ease normal forwards" }
+                      : {
+                          animation: "editionOut 500ms ease  normal forwards"
+                        }
+                  }
+                >
+                  <h2>SEO Edition</h2>
+
+                  <SeoEditor />
+                </div>
+              )}
             </div>
 
-            {/* second page summary creation */}
-            {this.state.editionPage === 2 && (
-              <div
-                className="summaryArea"
-                style={
-                  this.state.editionPage === 2
-                    ? { animation: "editionIn 500ms ease normal forwards" }
-                    : {
-                        animation: "editionOut 500ms ease  normal forwards"
-                      }
-                }
-              >
-                <h2>Summary</h2>
-                <textarea
-                  className="summaryElValue"
-                  value={this.state.summaryElValue}
-                  name="summaryElValue"
-                  onChange={this.summaryElHandler}
-                >
-                  {this.state.summaryElValue}
-                </textarea>
-              </div>
-            )}
-
-            {/* third page summary creation */}
-            {this.state.editionPage === 3 && (
-              <div
-                className="seoArea"
-                style={
-                  this.state.editionPage === 3
-                    ? { animation: "editionIn 500ms ease normal forwards" }
-                    : {
-                        animation: "editionOut 500ms ease  normal forwards"
-                      }
-                }
-              >
-                <h2>SEO Edition</h2>
-
-                <SeoEditor />
-              </div>
-            )}
-          </div>
-
-          <div>
-            {/* <div className="tagList">
+            <div>
+              {/* <div className="tagList">
               <h6>Tags:</h6>
               {tags}
             </div> */}
-            <div className="fileList">
-              <h6>Available Files: </h6>
-              {files}
+              <div className="fileList">
+                <h6>Available Files: </h6>
+                {files}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

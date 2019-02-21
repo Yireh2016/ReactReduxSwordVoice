@@ -130,14 +130,13 @@ export default class ContactComponent extends React.Component {
           </div>
           <aside className="colorFondoAside grid col-2 col-10-md col-12-sm">
             <p>
-              {" "}
               Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Molestiae nesciunt eaque est voluptas facere itaque commodi saepe
               atque possimus, aliquid vel molestias sapiente quos optio, quia
               quam. Aspernatur, nostrum, veniam.
             </p>
           </aside>
-          <Summary2
+          {/* <Summary2
             textHTML={mockData[0].articleProps.summaryText}
             keywords={mockData[0].articleProps.categories}
             date={mockData[0].articleProps.date}
@@ -145,7 +144,7 @@ export default class ContactComponent extends React.Component {
             author={mockData[0].articleProps.author}
             width={387}
             height={401}
-          />
+          /> */}
         </div>
       </div>
     );

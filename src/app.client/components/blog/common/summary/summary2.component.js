@@ -98,15 +98,17 @@ class Summary2 extends React.Component {
     // textLayout
 
     // const layoutTextCSS = "summary2-layout-text";
-    const textHeightRatio = 0.4;
+    // const textHeightRatio = 0.4;
     const layoutText = (
       // <div className={layoutTextCSS}>
       <div>
         <SimpleBar
-          style={{
-            maxHeight: this.state.textMaxHeight,
-            height: this.props.height * textHeightRatio
-          }}
+          style={
+            {
+              // maxHeight: this.state.textMaxHeight,
+              // height: this.props.height * textHeightRatio
+            }
+          }
         >
           {text(fontStandardSize * 0.8)}
         </SimpleBar>
