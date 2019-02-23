@@ -1,24 +1,3 @@
-// const initialState = {
-//   elements: [
-//     {
-//       HTMLElementType: "",
-//       HTMLElementContent: "",
-//       HTMLAtributes: "",
-//       HTMLAtributesArr: [],
-//       HTMLAtributesStr: "",
-//       finalJSXElement: "",
-//       HTMLStyles: "",
-//       HTMLStylesStr: "",
-//       HTMLStylesArr: [],
-//       HTMLClasses: "",
-//       HTMLClassesArr: [],
-//       HTMLClassesStr: "",
-//       isEditionMode: false,
-//       HTMLid: 1
-//     }
-//   ]
-// };
-
 const initialState = {
   elements: [],
   seo: {
@@ -60,23 +39,13 @@ const postEditCtlreducer = (state = initialState, action) => {
       break;
     }
     case "ADD_ELEMENT": {
-      const newElement = {
-        HTMLElementType: "",
-        HTMLElementContent: "",
-        HTMLAtributes: "",
-        HTMLAtributesArr: [],
-        HTMLAtributesStr: "",
-        finalJSXElement: "",
-        HTMLStyles: "",
-        HTMLStylesStr: "",
-        HTMLStylesArr: [],
-        HTMLClasses: "",
-        HTMLClassesArr: [],
-        HTMLClassesStr: "",
-        HTMLid: action.payload
-      };
-      newState.elements.push(newElement);
+      newState.elements = action.payload;
       newState.project.hasChanged = true;
+      break;
+    }
+    case "MOVE_ELEMENT": {
+      newState.project.hasChanged = true;
+      newState.elements = action.payload;
       break;
     }
     case "EDIT_ELEMENT": {

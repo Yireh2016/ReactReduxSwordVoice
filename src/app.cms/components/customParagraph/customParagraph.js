@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import paragraphService from "../../../services/paragraphService";
+
 import { connect } from "react-redux";
+//services
+import HTLMtoParagraph from "../../../services/HTLMtoParagraph";
+import paragraphService from "../../../services/paragraphService";
 //react map
 /*
 
@@ -18,9 +21,11 @@ DashBoard
 class CustomParagraph extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      customElementContent: this.props.elements[this.props.HTMLid - 1]
-        .HTMLPreviewStr, //dynamic textarea content
+      customElementContent: HTLMtoParagraph(
+        this.props.elements[this.props.HTMLid - 1].HTMLPreviewStr
+      ), //dynamic textarea content
       customJSX: "", //all JSX
       customTagElement: "",
       customTagWordList: [], //word list inside tag

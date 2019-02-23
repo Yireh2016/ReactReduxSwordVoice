@@ -9,11 +9,13 @@ let keywordsToArr = keywords => {
     keywords.match(/([^,])*,/g) === null ? [] : keywords.match(/([^,])*,/g);
 
   let arrLen = arr.length;
-
   for (let i = 0; i < arrLen; i++) {
-    arr[i] = arr[i].substring(0, arr[i].length - 1);
+    arr[i] = arr[i].replace(",", "");
   }
 
+  arr = arr.filter(el => {
+    return el !== "";
+  });
   return arr;
 };
 

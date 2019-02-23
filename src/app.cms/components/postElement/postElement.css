@@ -1,14 +1,18 @@
+.elementEditionLayoutPreview,
 .elementEditionLayout {
-  background-color: #ffffff;
+  background-color: #e1e8ea;
   border-radius: 15px;
   padding: 20px;
+  margin: 10px 0;
   display: grid;
   grid-template-areas: " element element element editionBtn" "editionLayout editionLayout editionLayout .";
   grid-template-rows: auto auto;
   grid-template-columns: repeat(3, minmax(0, 1fr)) 5vw;
   grid-row-gap: 2vh;
 }
-
+.elementEditionLayoutPreview:hover {
+  background-color: #ffffff;
+}
 .elementSelect {
   grid-area: element;
 }

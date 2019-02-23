@@ -28,7 +28,7 @@ class Dashboard extends Component {
       adminMenuH: 0,
       toogleStats: false,
       isPostSaved: true, //eliminar ojo
-      showExitModal: false,
+      showExitModal: { show: false, url: "" },
       dateProgram: this.props.date
     };
     this.adminMenu = React.createRef();
@@ -198,6 +198,9 @@ class Dashboard extends Component {
       });
     }
   };
+  showExitModalHandler = showExitModal => {
+    this.setState({ showExitModal: showExitModal });
+  };
   render() {
     if (this.props.isUserLoggedIn) {
       const CreatePostBtn = withRouter(({ history }) => {
@@ -241,7 +244,7 @@ class Dashboard extends Component {
               }
               type="button"
             >
-              Save
+              Save & Exit
             </button>
             <button
               onClick={() =>
@@ -390,7 +393,11 @@ class Dashboard extends Component {
               <Route
                 exact
                 path="/cms/dashboard/createPost"
-                render={() => <CreatePost />}
+                render={() => (
+                  <CreatePost
+                    showExitModalHandler={this.showExitModalHandler}
+                  />
+                )}
               />
               <Route
                 exact

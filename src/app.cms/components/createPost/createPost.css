@@ -5,7 +5,7 @@
 .createBar {
   position: absolute;
   top: 3vmax;
-  right: 3vmax;
+  right: 1.5vmax;
   z-index: 2;
 }
 .createBarItem {
@@ -17,7 +17,18 @@
   color: var(--orange);
 }
 .createBarItem img {
-  width: 31px;
+  width: 20px;
+}
+.saveAnimation {
+  animation: saveAnim 1000ms ease infinite;
+}
+@keyframes saveAnim {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .createLayout {
   background-color: #f2f2f2;
@@ -31,12 +42,13 @@
 }
 .editionArea {
   overflow-y: scroll;
-  background-color: #f2f2f2;
+  background-color: #4e4d4f;
   height: 100%;
   width: 100%;
   border-radius: 15px;
   box-sizing: border-box;
   position: absolute;
+  padding: 20px 40px;
 }
 
 .style-7::-webkit-scrollbar-track {

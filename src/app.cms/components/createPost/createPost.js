@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 // import is from "is_js";
 import smoothscroll from "smoothscroll-polyfill";
 //css
@@ -15,8 +16,10 @@ import plus from "../../assets/dashboard/plus.svg";
 import next from "../../assets/createPost/next.svg";
 import back from "../../assets/createPost/back.svg";
 import save from "../../assets/createPost/save.svg";
+import exit from "../../assets/createPost/exit.svg";
 //components
 import PostElement from "../postElement/postElement";
+import PostElementPreview from "../postElement/postElementPreview";
 import ProjectTitle from "../projectTitle/projectTitle";
 
 //services
@@ -25,6 +28,10 @@ import SeoEditor from "../seoEditor/seoEditor";
 import keywordsToArr from "../../../services/keywordsToArr";
 import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
 import parseHTML2Object from "../../../services/parseHTML2Object";
+import insertIntoArr from "../../../services/insertIntoArr";
+
+//props list
+//showExitModalHandler tells component dashbord to set exit modal
 //react map
 /*
 
@@ -49,8 +56,11 @@ class CreatePost extends Component {
       dateProgram: this.props.date,
       finalHTMLElement: "",
       copiedElement: "",
-      dom: ""
+      dom: "",
+      scrollTopSave: ""
     };
+    window.localStorage.setItem("postActiveElID", "");
+    window.localStorage.setItem("postElTop", "");
   }
 
   // kick off the polyfill!
@@ -63,6 +73,30 @@ class CreatePost extends Component {
       this.addElementBtnHandler();
       this.setState({ isEditionMode: true });
       return;
+    }
+  }
+
+  componentDidUpdate() {
+    if (window.localStorage.getItem("postElTop") === "addElement") {
+      smoothscroll.polyfill();
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: el.scrollHeight,
+          left: 0,
+          behavior: "instant"
+        });
+      return;
+    }
+    if (window.localStorage.getItem("postElTop") !== "") {
+      smoothscroll.polyfill();
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: parseInt(window.localStorage.getItem("postElTop")) - 10,
+          left: 0,
+          behavior: "instant"
+        });
     }
   }
 
@@ -101,7 +135,8 @@ class CreatePost extends Component {
     this.setState({ finalHTMLElement: finalHTMLElement });
     window.localStorage.setItem("finalHTMLElement", finalHTMLElement);
   };
-  addElementBtnHandler = () => {
+  addElementBtnHandler = id => {
+    window.localStorage.setItem("postElTop", "addElement");
     if (!this.props.elements) {
       this.props.onCreateElement(1);
       this.setState({
@@ -112,37 +147,92 @@ class CreatePost extends Component {
       return;
     }
 
-    this.props.onAddElement(this.props.elements.length + 1);
-    this.setState({ elementList: this.props.elements, isEditionMode: true });
-  };
-  inputSelectHTMLHandler = top => {
-    smoothscroll.polyfill();
-    const el = this.editionAreaRef.current;
+    const newElement = {
+      HTMLElementType: "",
+      HTMLElementContent: "",
+      HTMLAtributes: "",
+      HTMLAtributesArr: [],
+      HTMLAtributesStr: "",
+      finalJSXElement: "",
+      HTMLStyles: "",
+      HTMLStylesStr: "",
+      HTMLStylesArr: [],
+      HTMLClasses: "",
+      HTMLClassesArr: [],
+      HTMLClassesStr: "",
+      HTMLid: id + 1 //id:3
+    };
+    let arr = this.props.elements;
+    arr = insertIntoArr(arr, id, newElement);
 
-    el && el.scroll({ top: top, left: 0, behavior: "smooth" });
+    for (let i = id + 1; i < arr.length; i++) {
+      //id: htmlid del elemento previo al nuevo que deseo ingresar
+      arr[i].HTMLid = i + 1;
+    }
+
+    window.localStorage.setItem("postActiveElID", id + 1);
+    this.setState({
+      elementList: arr,
+      isEditionMode: true,
+      copiedElement: newElement
+    });
+    this.props.onAddElement(arr);
   };
-  editionBtnHandler = copiedElement => {
+  postObjectManipulation = readOnlyObj => {
+    const {
+      isEditionMode,
+      HTMLElementType,
+      HTMLElementContent,
+      HTMLAtributes,
+      HTMLAtributesArr,
+      HTMLAtributesStr,
+      HTMLStyles,
+      HTMLStylesStr,
+      HTMLStylesArr,
+      HTMLClasses,
+      HTMLClassesArr,
+      HTMLClassesStr,
+      HTMLPreviewStr,
+      HTMLid,
+      finalHTMLElement,
+      imgFile,
+      imgAlt,
+      imgFigcaption
+    } = readOnlyObj;
+
+    let newObj = {
+      isEditionMode,
+      HTMLElementType,
+      HTMLElementContent,
+      HTMLAtributes,
+      HTMLAtributesArr,
+      HTMLAtributesStr,
+      HTMLStyles,
+      HTMLStylesStr,
+      HTMLStylesArr,
+      HTMLClasses,
+      HTMLClassesArr,
+      HTMLClassesStr,
+      HTMLPreviewStr,
+      HTMLid,
+      finalHTMLElement,
+      imgFile,
+      imgAlt,
+      imgFigcaption
+    };
+
+    newObj.HTMLPreviewStr = "HTMLPreviewStr";
+    return newObj;
+  };
+  editionBtnHandler = postState => {
     this.setState(prevState => {
       return {
         isEditionMode: !prevState.isEditionMode,
-        copiedElement: copiedElement
+        copiedElement: postState
       };
     });
   };
   nextBtnHandler = val => {
-    if (this.state.editionPage === 2 && this.props.project.hasChanged) {
-      let arr = this.state.summaryElValue.match(/.*[^\n]/g);
-      let str = "";
-      if (arr) {
-        for (let i = 0; i < arr.length; i++) {
-          str = str + `<p>${arr[i]}</p>`;
-        }
-      }
-      if (this.state.summaryElValue !== "") {
-        this.props.onSummaryEdition(this.state.summaryElValue);
-      }
-    }
-
     this.setState(prevState => {
       if (prevState.editionPage + val > 0 && prevState.editionPage + val < 4) {
         return { editionPage: prevState.editionPage + val };
@@ -150,14 +240,14 @@ class CreatePost extends Component {
     });
   };
   summaryElHandler = e => {
-    if (!this.props.project.hasChanged) {
-      this.props.onProjectChange();
-    }
-
     const {
       target: { name, value }
     } = e;
     this.setState({ [name]: value });
+    this.props.onSummaryEdition(value);
+    if (!this.props.project.hasChanged) {
+      this.props.onProjectChange();
+    }
   };
 
   onFileRemove = fileName => {
@@ -199,7 +289,6 @@ class CreatePost extends Component {
           .post("/api/uploadTempFile", data)
           .then(res => {
             alert("file uploaded");
-            console.log("file uploaded", res);
             return {
               // fileList: prevState.fileList,
               fileListNames: prevState.fileListNames
@@ -219,6 +308,7 @@ class CreatePost extends Component {
   };
 
   programHandler = () => {
+    this.scrollTopSaveHandler(0, 0);
     //hacer validaciones antes de programar post
     let date =
       this.state.dateProgram === "" || this.state.dateProgram === undefined
@@ -310,7 +400,6 @@ class CreatePost extends Component {
   };
   fileNameCopyHandler = e => {
     const filename = e.target.innerText;
-    console.log("filename", filename);
     navigator.clipboard
       .writeText(
         `http://localhost:8080/uploads/${this.props.project.url}/${filename}`
@@ -327,6 +416,30 @@ class CreatePost extends Component {
     this.setState(prevState => {
       return { isEditionMode: !prevState.isEditionMode };
     });
+  };
+  scrollTopSaveHandler = (top, id) => {
+    window.localStorage.setItem("postElTop", top);
+    window.localStorage.setItem("postActiveElID", id);
+  };
+  exitBtnHandler = history => {
+    if (!this.props.project.hasChanged) {
+      //ojo con state ispostsaved eliminar
+      //si no hay cambios ve a adminpost
+      history.push("/cms/dashboard");
+    } else {
+      this.props.showExitModalHandler({ show: true, url: "/cms/dashboard" });
+    }
+  };
+  editionAreaScroll = pos => {
+    console.log("haciendo scroll a ", pos);
+    smoothscroll.polyfill();
+    const el = this.editionAreaRef.current;
+    el &&
+      el.scroll({
+        top: pos,
+        left: 0,
+        behavior: "instant"
+      });
   };
   render() {
     if (this.props.project.name === "") {
@@ -350,11 +463,21 @@ class CreatePost extends Component {
       );
     });
     const elements = this.props.elements.map((element, i) => {
+      let selectedStyle = {};
+      const postref = `${element.HTMLid}`;
+      const id = parseInt(window.localStorage.getItem("postActiveElID"));
+      if (i === id - 1) {
+        selectedStyle = { background: "white" };
+      }
       return (
         <div key={i}>
-          <PostElement
+          <PostElementPreview
+            ref={`postEl${postref}`}
+            style={selectedStyle}
             HTMLid={i + 1}
+            editionAreaScroll={this.editionAreaScroll}
             editionBtnHandler={this.editionBtnHandler}
+            scrollTopSaveHandler={this.scrollTopSaveHandler}
             inputSelectHTMLHandler={this.inputSelectHTMLHandler}
             isEditionMode={this.state.isEditionMode}
             HTMLElementType={element.HTMLElementType}
@@ -375,6 +498,40 @@ class CreatePost extends Component {
             imgAlt={element.imgAlt}
             imgFigcaption={element.imgFigcaption}
           />
+
+          <div
+            style={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center"
+            }}
+          >
+            {!this.state.isEditionMode && (
+              <button
+                onClick={() => {
+                  this.addElementBtnHandler(i + 1);
+                }}
+                className="addElementBtn"
+              >
+                <span>Add Element</span>
+                <img src={plus} title="add element" alt="add Element button" />
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    });
+
+    const ExitBtn = withRouter(({ history }) => {
+      return (
+        <div
+          className="createBarItem"
+          onClick={() => {
+            this.exitBtnHandler(history);
+          }}
+        >
+          <h4>Exit</h4>
+          <img src={exit} alt="Exit botton" />
         </div>
       );
     });
@@ -386,7 +543,7 @@ class CreatePost extends Component {
           <div className="createDarkLayout">
             {this.state.copiedElement === "" ? (
               <PostElement
-                className="postElementDarkLayout"
+                className="postElementDarkLayout style-7"
                 editionBtnHandler={this.editionBtnHandler}
                 inputSelectHTMLHandler={this.inputSelectHTMLHandler}
                 isEditionMode={this.state.isEditionMode}
@@ -457,7 +614,7 @@ class CreatePost extends Component {
               />
             ) : (
               <PostElement
-                className="postElementDarkLayout"
+                className="postElementDarkLayout style-7"
                 editionBtnHandler={this.editionBtnHandler}
                 inputSelectHTMLHandler={this.inputSelectHTMLHandler}
                 isEditionMode={this.state.isEditionMode}
@@ -531,7 +688,20 @@ class CreatePost extends Component {
               />
               <img src={upload} alt="upload botton  " />
             </div>
-
+            <div
+              className="createBarItem"
+              onClick={() => {
+                this.addElementBtnHandler(this.props.elements.length);
+              }}
+              style={
+                this.state.editionPage < 2 && !this.state.isEditionMode
+                  ? { visibility: "visible" }
+                  : { visibility: "hidden" }
+              }
+            >
+              <h4>Add Element</h4>
+              <img src={plus} alt="Add Element botton  " />
+            </div>
             <div
               className="createBarItem"
               onClick={this.programHandler}
@@ -556,43 +726,21 @@ class CreatePost extends Component {
               <img src={check} alt="publish botton  " />
             </div>
 
-            {this.state.editionPage > 1 && (
-              <div
-                style={
-                  this.props.project.hasChanged && this.state.editionPage === 3
-                    ? { visibility: "visible" }
-                    : { visibility: "hidden" }
-                }
-                className="createBarItem"
-                onClick={() => {
-                  this.programHandler();
-                }}
-              >
-                <h4>Save</h4>
+            <div
+              style={
+                this.props.project.hasChanged && !this.state.isEditionMode
+                  ? { visibility: "visible" }
+                  : { visibility: "hidden" }
+              }
+              className="createBarItem"
+              onClick={() => {
+                this.programHandler();
+              }}
+            >
+              <h4>Save</h4>
 
-                <img src={save} alt="save botton  " />
-              </div>
-            )}
-
-            {this.state.editionPage === 1 && (
-              <div
-                style={
-                  this.props.project.hasChanged &&
-                  this.state.editionPage === 1 &&
-                  !this.state.isEditionMode
-                    ? { visibility: "visible" }
-                    : { visibility: "hidden" }
-                }
-                className="createBarItem"
-                onClick={() => {
-                  this.programHandler();
-                }}
-              >
-                <h4>Save</h4>
-
-                <img src={save} alt="save botton  " />
-              </div>
-            )}
+              <img src={save} alt="save botton  " className="saveAnimation" />
+            </div>
 
             <div
               style={
@@ -623,9 +771,11 @@ class CreatePost extends Component {
               <h4>Back</h4>
               <img src={back} alt="Next botton  " />
             </div>
+            <ExitBtn />
           </div>
         </div>
         {/* Edition Area */}
+        {/* <div className="createLayout" onWheel={this.editAreaScrollCtrl}> */}
         {!this.state.isEditionMode && (
           <div className="createLayout">
             {/* {titles()}
@@ -642,6 +792,9 @@ class CreatePost extends Component {
 
               <div
                 className="editionArea style-7"
+                onWheel={e => {
+                  e.stopPropagation();
+                }}
                 ref={this.editionAreaRef}
                 style={
                   this.state.editionPage === 1
@@ -659,7 +812,7 @@ class CreatePost extends Component {
                     justifyContent: "center"
                   }}
                 >
-                  {!this.state.isEditionMode && (
+                  {/* {!this.state.isEditionMode && (
                     <button
                       onClick={this.addElementBtnHandler}
                       className="addElementBtn"
@@ -671,7 +824,7 @@ class CreatePost extends Component {
                         alt="add Element button"
                       />
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
 

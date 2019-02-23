@@ -5,10 +5,13 @@ import { connect } from "react-redux";
 //assets
 import "./postElement.css";
 import edit from "../../assets/createPost/edit.svg";
-import paint from "../../assets/createPost/paint.svg";
+// import paint from "../../assets/createPost/paint.svg";
+
 import del from "../../assets/createPost/delete.svg";
 import check from "../../assets/dashboard/check.svg";
 import copy from "../../assets/createPost/copy.svg";
+import up from "../../assets/createPost/up.svg";
+import down from "../../assets/createPost/down.svg";
 //components
 import Paragraph from "../paragraph/paragraph";
 import Header from "../header/header";
@@ -35,7 +38,24 @@ class PostElement extends Component {
     // PROPS
     // HTMLid indica el id del html element
     // inputSelectHTMLHandler  toogle edition mode flag
-    //elements array of elements
+    //elements array of elements:
+    //         HTMLElementType
+    //         HTMLElementContent
+    //         HTMLAtributes
+    //         HTMLAtributesArr
+    //         HTMLAtributesStr
+    //         HTMLStyles
+    //         HTMLStylesStr
+    //         HTMLStylesArr
+    //         HTMLClasses
+    //         HTMLClassesArr
+    //         HTMLClassesStr
+    //         HTMLPreviewStr
+    //         HTMLid
+    //         finalHTMLElement
+    //         imgFile
+    //         imgAlt
+    //         imgFigcaption
     //isEditionMode
     //fn editionBtnHandler
 
@@ -58,7 +78,8 @@ class PostElement extends Component {
       imgFile: this.props.imgFile,
       imgAlt: this.props.imgAlt,
       imgFigcaption: this.props.imgFigcaption,
-      isImageUploader: false
+      isImageUploader: false,
+      isFinishEnabled: true
     };
     this.elementsJSX = {
       p: `<p style={styles} class={classes}> {content}</p>`,
@@ -69,11 +90,11 @@ class PostElement extends Component {
       h5: `<h5 style={styles} class={classes}> {content}</h5>`,
       h6: `<h6 style={styles} class={classes}> {content}</h6>`,
       figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
-      // figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
     };
   }
 
   componentDidMount() {
+    this.postElement.current.scrollTo(0, this.postElement.current.scrollHeight);
     if (this.props.HTMLid === 1) {
       let value = "<h1 style={styles} class={classes}> {content}</h1>";
       this.setState({
@@ -169,8 +190,6 @@ class PostElement extends Component {
 
   inputSelectHTMLHandler = e => {
     this.props.onProjectChange();
-    const el = this.postElement.current;
-    this.props.inputSelectHTMLHandler(el.offsetTop);
     const {
       target: { value }
     } = e;
@@ -178,17 +197,27 @@ class PostElement extends Component {
       this.setState({
         HTMLPreviewStr: value,
         isImageUploader: false,
-        HTMLElementType: value
+        HTMLElementType: value,
+        isFinishEnabled: true
       });
     }
 
     if (value === "image") {
-      this.setState({ isImageUploader: true });
+      this.setState({
+        isImageUploader: true,
+        HTMLElementType: value,
+        isFinishEnabled: true
+      });
     }
     if (value === "custom" || value === "manyParagraph") {
-      this.setState({ HTMLElementType: value, HTMLPreviewStr: "" });
+      this.setState({
+        HTMLElementType: value,
+        HTMLPreviewStr: "",
+        isFinishEnabled: false
+      });
     }
   };
+
   prepareHTMLFilter = (
     str,
     styles,
@@ -219,24 +248,21 @@ class PostElement extends Component {
       return str;
     }
   };
+
   sendWordToJSXHandler = word => {
     // HTMLPreviewStr
-    this.setState({ HTMLPreviewStr: word });
+    this.setState({ HTMLPreviewStr: word, isFinishEnabled: true });
   };
   editionBtnHandler = e => {
     e.preventDefault();
+
     this.setState(prevState => {
       return {
         isEditionMode: !prevState.isEditionMode
       };
     });
-    const el = this.postElement.current;
-    // this.props.editionAreaChangeHandler(el.offsetTop);
-    this.props.inputSelectHTMLHandler(el.offsetTop);
-
-    !this.state.isEditionMode
-      ? this.props.editionBtnHandler(this.state)
-      : this.props.editionBtnHandler("");
+    // const postState = this.state;
+    this.props.editionBtnHandler(this.state, false);
 
     if (this.props.project.hasChanged) {
       console.log("edition execued");
@@ -316,9 +342,7 @@ class PostElement extends Component {
   imgFileSet = image => {
     // this.setState({ imgFile: `url(${URL.createObjectURL(image)})` });
   };
-  finishEditionHandler = e => {
-    this.editionBtnHandler(e);
-  };
+
   render() {
     const parser = () => {
       if (
@@ -358,8 +382,8 @@ class PostElement extends Component {
       }
     };
     return (
-      <div style={this.props.style} className={this.props.className}>
-        <div ref={this.postElement} className="elementEditionLayout">
+      <div className={this.props.className} ref={this.postElement}>
+        <div style={this.props.style} className="elementEditionLayout">
           <div className="elementSelect">
             <div className="elementSelectLayout">
               <span>Element</span>
@@ -418,7 +442,7 @@ class PostElement extends Component {
                 style={{ opacity: "1", cursor: "pointer" }}
                 alt="edit"
               />
-              <img
+              {/* <img
                 style={
                   this.state.isEditionMode
                     ? { opacity: ".2" }
@@ -426,7 +450,7 @@ class PostElement extends Component {
                 }
                 src={paint}
                 alt="paint"
-              />
+              /> */}
               {!this.state.HTMLElementType.match(/h1/g) && (
                 <img
                   style={
@@ -535,10 +559,12 @@ class PostElement extends Component {
                   imgFigcaption={this.state.imgFigcaption}
                 />
               )}
-              <button className="cmsBtn" onClick={this.finishEditionHandler}>
-                <span style={{ marginRight: "5px" }}>Finish</span>
-                <img style={{ width: "10px" }} src={check} alt="check" />
-              </button>
+              {this.state.isFinishEnabled && (
+                <button className="cmsBtn" onClick={this.editionBtnHandler}>
+                  <span style={{ marginRight: "5px" }}>Finish</span>
+                  <img style={{ width: "10px" }} src={check} alt="check" />
+                </button>
+              )}
             </div>
           </div>
         )}
