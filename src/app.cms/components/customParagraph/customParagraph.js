@@ -23,9 +23,11 @@ class CustomParagraph extends Component {
     super(props);
 
     this.state = {
-      customElementContent: HTLMtoParagraph(
-        this.props.elements[this.props.HTMLid - 1].HTMLPreviewStr
-      ), //dynamic textarea content
+      customElementContent: this.props.elements[this.props.HTMLid - 1]
+        ? HTLMtoParagraph(
+            this.props.elements[this.props.HTMLid - 1].HTMLPreviewStr
+          )
+        : "", //dynamic textarea content
       customJSX: "", //all JSX
       customTagElement: "",
       customTagWordList: [], //word list inside tag

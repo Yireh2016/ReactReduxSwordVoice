@@ -42,7 +42,7 @@
 }
 .editionArea {
   overflow-y: scroll;
-  background-color: #4e4d4f;
+  background-color: #1a2225;
   height: 100%;
   width: 100%;
   border-radius: 15px;
@@ -132,6 +132,7 @@
   padding: 5px;
   margin: 0 0 10px 0;
 }
+
 .summaryElValue {
   box-sizing: border-box;
   padding: 20px;

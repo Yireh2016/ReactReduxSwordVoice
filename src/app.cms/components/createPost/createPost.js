@@ -21,6 +21,7 @@ import exit from "../../assets/createPost/exit.svg";
 import PostElement from "../postElement/postElement";
 import PostElementPreview from "../postElement/postElementPreview";
 import ProjectTitle from "../projectTitle/projectTitle";
+import ThumbNailEditor from "../thumbnailEditor/thumbnailEditor";
 
 //services
 import paragraph from "../../../services/paragraphService";
@@ -77,8 +78,9 @@ class CreatePost extends Component {
   }
 
   componentDidUpdate() {
+    smoothscroll.polyfill();
+
     if (window.localStorage.getItem("postElTop") === "addElement") {
-      smoothscroll.polyfill();
       const el = this.editionAreaRef.current;
       el &&
         el.scroll({
@@ -88,14 +90,25 @@ class CreatePost extends Component {
         });
       return;
     }
-    if (window.localStorage.getItem("postElTop") !== "") {
-      smoothscroll.polyfill();
+    if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
       const el = this.editionAreaRef.current;
       el &&
         el.scroll({
           top: parseInt(window.localStorage.getItem("postElTop")) - 10,
           left: 0,
           behavior: "instant"
+        });
+    }
+    if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
+      const strArr = window.localStorage
+        .getItem("postElTop")
+        .match(/postElement.*/g);
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: parseInt(window.localStorage.getItem(strArr)) - 10,
+          left: 0,
+          behavior: "smooth"
         });
     }
   }
@@ -137,7 +150,7 @@ class CreatePost extends Component {
   };
   addElementBtnHandler = id => {
     window.localStorage.setItem("postElTop", "addElement");
-    if (!this.props.elements) {
+    if (this.props.elements.length === 0) {
       this.props.onCreateElement(1);
       this.setState({
         elementList: this.props.elements,
@@ -234,7 +247,7 @@ class CreatePost extends Component {
   };
   nextBtnHandler = val => {
     this.setState(prevState => {
-      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 4) {
+      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 5) {
         return { editionPage: prevState.editionPage + val };
       }
     });
@@ -430,17 +443,7 @@ class CreatePost extends Component {
       this.props.showExitModalHandler({ show: true, url: "/cms/dashboard" });
     }
   };
-  editionAreaScroll = pos => {
-    console.log("haciendo scroll a ", pos);
-    smoothscroll.polyfill();
-    const el = this.editionAreaRef.current;
-    el &&
-      el.scroll({
-        top: pos,
-        left: 0,
-        behavior: "instant"
-      });
-  };
+
   render() {
     if (this.props.project.name === "") {
       return <ProjectTitle />;
@@ -475,7 +478,6 @@ class CreatePost extends Component {
             ref={`postEl${postref}`}
             style={selectedStyle}
             HTMLid={i + 1}
-            editionAreaScroll={this.editionAreaScroll}
             editionBtnHandler={this.editionBtnHandler}
             scrollTopSaveHandler={this.scrollTopSaveHandler}
             inputSelectHTMLHandler={this.inputSelectHTMLHandler}
@@ -744,7 +746,7 @@ class CreatePost extends Component {
 
             <div
               style={
-                this.state.editionPage !== 3 && !this.state.isEditionMode
+                this.state.editionPage !== 4 && !this.state.isEditionMode
                   ? { visibility: "visible" }
                   : { visibility: "hidden" }
               }
@@ -782,7 +784,7 @@ class CreatePost extends Component {
           <div>Project Name: {this.props.project.name}</div> */}
             <div
               style={{
-                height: "90vh",
+                height: "100vh",
                 position: "relative",
                 overflow: "hidden",
                 width: "80%"
@@ -867,6 +869,24 @@ class CreatePost extends Component {
                   <h2>SEO Edition</h2>
 
                   <SeoEditor />
+                </div>
+              )}
+
+              {/* Fourth page thumbNail creation */}
+              {this.state.editionPage === 4 && (
+                <div
+                  className="thumbnail seoArea"
+                  style={
+                    this.state.editionPage === 4
+                      ? { animation: "editionIn 500ms ease normal forwards" }
+                      : {
+                          animation: "editionOut 500ms ease  normal forwards"
+                        }
+                  }
+                >
+                  <h2>ThumbNail Edition </h2>
+
+                  <ThumbNailEditor />
                 </div>
               )}
             </div>

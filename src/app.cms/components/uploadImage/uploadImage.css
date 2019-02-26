@@ -1,0 +1,28 @@
+.uploadFormImage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.formImageLoad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 200px;
+  border-radius: 100%;
+  background-color: #c4c4c4;
+  text-align: center;
+  font-weight: bold;
+  color: #004059;
+  cursor: pointer;
+  position: relative;
+}
+.formImageLoad span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}

@@ -133,13 +133,9 @@ class PostElementPreview extends PureComponent {
       arr[actualPosition] = arr[actualPosition - 1];
       arr[actualPosition - 1] = mem;
       window.localStorage.setItem("postActiveElID", actualID - 1);
-      const up = parseInt(
-        window.localStorage.getItem(`postElement${actualID + 1}OffSetTop`)
-      );
-      this.props.editionAreaScroll(
-        parseInt(
-          window.localStorage.getItem(`postElement${actualID - 1}OffSetTop`)
-        )
+      window.localStorage.setItem(
+        "postElTop",
+        `postElement${this.props.HTMLid - 1}OffSetTop`
       );
     } else {
       arr[actualPosition].HTMLid = actualID + 1;
@@ -148,13 +144,9 @@ class PostElementPreview extends PureComponent {
       arr[actualPosition] = arr[actualPosition + 1];
       arr[actualPosition + 1] = mem;
       window.localStorage.setItem("postActiveElID", actualID + 1);
-      const down = parseInt(
-        window.localStorage.getItem(`postElement${actualID + 1}OffSetTop`)
-      );
-      this.props.editionAreaScroll(
-        parseInt(
-          window.localStorage.getItem(`postElement${actualID + 1}OffSetTop`)
-        )
+      window.localStorage.setItem(
+        "postElTop",
+        `postElement${this.props.HTMLid + 1}OffSetTop`
       );
     }
 

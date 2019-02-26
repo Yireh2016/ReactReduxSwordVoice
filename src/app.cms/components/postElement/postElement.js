@@ -10,8 +10,7 @@ import edit from "../../assets/createPost/edit.svg";
 import del from "../../assets/createPost/delete.svg";
 import check from "../../assets/dashboard/check.svg";
 import copy from "../../assets/createPost/copy.svg";
-import up from "../../assets/createPost/up.svg";
-import down from "../../assets/createPost/down.svg";
+
 //components
 import Paragraph from "../paragraph/paragraph";
 import Header from "../header/header";

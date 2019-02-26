@@ -20,7 +20,8 @@ class CustomElement extends Component {
     super(props);
     this.state = {
       customElementContent: this.props.elements[this.props.HTMLid - 1]
-        .HTMLPreviewStr, //dynamic textarea content
+        ? this.props.elements[this.props.HTMLid - 1].HTMLPreviewStr
+        : "", //dynamic textarea content
       customJSX: "", //all JSX
       customTagElement: "",
       customTagWordList: [], //word list inside tag

@@ -1,6 +1,6 @@
 //modules
 import React, { Component } from "react";
-import Compressor from "compressorjs";
+
 import axios from "axios";
 import SimpleBar from "simplebar-react";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ import isBrowser from "../../../../../services/isBrowser";
 
 //css
 import "./signUpForm.css";
+import UploadImage from "./uploadImage";
 //components
 // import CustomScrollBar from "../../../general/customScrollBar.component";
 
@@ -52,7 +53,7 @@ class SignUpForm extends Component {
       animControl3: undefined,
       formPage: 1
     };
-    this.inputFile = React.createRef();
+    // this.inputFile = React.createRef();
   }
 
   imageUpload = image => {
@@ -66,38 +67,47 @@ class SignUpForm extends Component {
     });
     alert("file Uploaded successfully");
   };
-  handleImgUpload = files => {
-    let Uploadfunction = this.imageUpload;
-    const browser = isBrowser();
-    const shouldCompress =
-      browser === "ie" || browser === "edge" ? false : true;
 
-    if (shouldCompress) {
-      new Compressor(files[0], {
-        quality: 0.6,
-        width: 200,
-        mimeType: "jpg",
-        convertSize: 200000,
-        success(result) {
-          Uploadfunction(result);
-        },
-        error(err) {
-          console.log("error", err);
-
-          this.setState(() => {
-            return {
-              userAvatarPreview: undefined,
-              uploadMessage: `${err}`
-            };
-          });
-          return;
-        }
-      });
-    } else {
-      console.log("cargando imagen sin comprimir");
-      Uploadfunction(files[0]);
-    }
+  imageUploadErr = err => {
+    this.setState(() => {
+      return {
+        userAvatarPreview: undefined,
+        uploadMessage: `${err}`
+      };
+    });
   };
+  // handleImgUpload = files => {
+  //   let Uploadfunction = this.imageUpload;
+  //   const browser = isBrowser();
+  //   const shouldCompress =
+  //     browser === "ie" || browser === "edge" ? false : true;
+
+  //   if (shouldCompress) {
+  //     new Compressor(files[0], {
+  //       quality: 0.6,
+  //       width: 200,
+  //       mimeType: "jpg",
+  //       convertSize: 200000,
+  //       success(result) {
+  //         Uploadfunction(result);
+  //       },
+  //       error(err) {
+  //         console.log("error", err);
+
+  //         this.setState(() => {
+  //           return {
+  //             userAvatarPreview: undefined,
+  //             uploadMessage: `${err}`
+  //           };
+  //         });
+  //         return;
+  //       }
+  //     });
+  //   } else {
+  //     console.log("cargando imagen sin comprimir");
+  //     Uploadfunction(files[0]);
+  //   }
+  // };
   handleOnInterestClick = event => {
     const texto = event.target.innerText;
     this.setState(prevState => {
@@ -681,7 +691,13 @@ class SignUpForm extends Component {
                 className={`fila signUpPage1 ${this.state.animControl1} `}
               >
                 <form id="userSignUpForm" className="signUpForm">
-                  <div className=" avatarContForm">
+                  <UploadImage
+                    imageUpload={this.imageUpload}
+                    imageUploadErr={this.imageUploadErr}
+                    userAvatarPreview={this.state.userAvatarPreview}
+                    uploadMessage={this.state.uploadMessage}
+                  />
+                  {/* <div className=" avatarContForm">
                     <input
                       ref={this.inputFile}
                       style={{
@@ -709,6 +725,7 @@ class SignUpForm extends Component {
                       <span>{this.state.uploadMessage}</span>
                     </div>
                   </div>
+                */}
                   <label>
                     Name <br />
                     <input

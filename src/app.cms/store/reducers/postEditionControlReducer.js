@@ -105,7 +105,18 @@ const postEditCtlreducer = (state = initialState, action) => {
     }
 
     case "RESET_EDIT": {
-      newState = initialState;
+      newState = {
+        elements: [],
+        seo: {
+          keywords: "",
+          keywordsList: [],
+          description: "",
+          title: ""
+        },
+        summary: "",
+        project: { name: "", url: "", hasChanged: false },
+        files: []
+      };
       break;
     }
   }

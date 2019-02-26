@@ -203,3 +203,7 @@ h6 {
     display: none;
   }
 }
+
+.example {
+  color: blueviolet;
+}
