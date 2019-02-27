@@ -51,7 +51,7 @@ class UploadImage extends Component {
           }}
           className="formImageLoad"
           style={{
-            backgroundImage: this.props.userAvatarPreview,
+            backgroundImage: this.props.imagePreview,
             backgroundSize: "cover"
           }}
         >
@@ -97,7 +97,10 @@ class UploadImage extends Component {
               />
               <span> {this.props.imgW + " px"}</span>
             </label>
-            {this.props.children}
+            <div>
+              {this.props.compressedImg &&
+                "File Size: " + this.props.compressedImg.size}
+            </div>
           </div>
         )}
       </div>

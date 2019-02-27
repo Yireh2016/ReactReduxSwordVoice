@@ -548,6 +548,7 @@ class CreatePost extends Component {
                 className="postElementDarkLayout style-7"
                 editionBtnHandler={this.editionBtnHandler}
                 inputSelectHTMLHandler={this.inputSelectHTMLHandler}
+                uploadFileHandler={this.uploadFileHandler}
                 isEditionMode={this.state.isEditionMode}
                 HTMLElementType={
                   this.props.elements[this.props.elements.length - 1]
@@ -619,6 +620,7 @@ class CreatePost extends Component {
                 className="postElementDarkLayout style-7"
                 editionBtnHandler={this.editionBtnHandler}
                 inputSelectHTMLHandler={this.inputSelectHTMLHandler}
+                uploadFileHandler={this.uploadFileHandler}
                 isEditionMode={this.state.isEditionMode}
                 HTMLElementType={this.state.copiedElement.HTMLElementType}
                 HTMLElementContent={this.state.copiedElement.HTMLElementContent}

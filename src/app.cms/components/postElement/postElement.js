@@ -111,7 +111,15 @@ class PostElement extends Component {
     } = e;
     this.setState({ HTMLElementContent: value });
   };
-
+  atrImgHTMLHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+    this.setState({ [name]: value });
+  };
+  imgFileSet = image => {
+    this.setState({ imgFile: image });
+  };
   stylesHTMLHandler = e => {
     this.props.onProjectChange();
 
@@ -261,7 +269,8 @@ class PostElement extends Component {
       };
     });
     // const postState = this.state;
-    this.props.editionBtnHandler(this.state, false);
+    // this.props.editionBtnHandler(this.state, false);
+    this.props.editionBtnHandler(this.state);
 
     if (this.props.project.hasChanged) {
       console.log("edition execued");
@@ -302,9 +311,9 @@ class PostElement extends Component {
         HTMLClassesStr: this.state.HTMLClassesStr,
         HTMLPreviewStr: this.state.HTMLPreviewStr,
         HTMLid: this.state.HTMLid,
-        imgFile: "",
-        imgAlt: "",
-        imgFigcaption: ""
+        imgFile: imgFile,
+        imgAlt: alt,
+        imgFigcaption: figcaption
       };
 
       payload = {
@@ -331,15 +340,6 @@ class PostElement extends Component {
     }
 
     this.props.onDelElement(payload);
-  };
-  atrImgHTMLHandler = e => {
-    const {
-      target: { name, value }
-    } = e;
-    this.setState({ [name]: value });
-  };
-  imgFileSet = image => {
-    // this.setState({ imgFile: `url(${URL.createObjectURL(image)})` });
   };
 
   render() {
@@ -546,6 +546,7 @@ class PostElement extends Component {
                   atributesHTMLHandler={this.atributesHTMLHandler}
                   stylesHTMLHandler={this.stylesHTMLHandler}
                   classesHTMLHandler={this.classesHTMLHandler}
+                  uploadFileHandler={this.props.uploadFileHandler}
                   HTMLElementContent={this.state.HTMLElementContent}
                   HTMLAtributes={this.state.HTMLAtributes}
                   HTMLStyles={this.state.HTMLStyles}

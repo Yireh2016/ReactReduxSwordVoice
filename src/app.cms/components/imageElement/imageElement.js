@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import Compressor from "compressorjs";
+// import Compressor from "compressorjs";
 import { connect } from "react-redux";
 
 //services
 import isBrowser from "../../../services/isBrowser";
+import UploadImage from "../uploadImage/uploadImage";
+import compressImage from "../../../services/compressImage";
 
 //react map
 /*
@@ -20,10 +22,24 @@ class ImageElement extends Component {
     super(props);
     isBrowser;
     this.state = {
-      quality: 0.8,
-      image: []
+      imagePreview: undefined,
+      uploadMessage: "Upload Image",
+      imgW: 200,
+      imgQuality: 0.6,
+      imageFile: null,
+      compressedImg: null
     };
   }
+  imgWidthHandler = e => {
+    const value = e.target.value;
+    compressImage(
+      this.state.imageFile,
+      this.state.imgQuality,
+      value,
+      this.imageUpload,
+      this.imageUploadErr
+    );
+  };
   qualityHandler = e => {
     this.props.onProjectChange();
 
@@ -32,50 +48,84 @@ class ImageElement extends Component {
     } = e;
     this.setState({ [name]: value });
   };
-  imageUpload = image => {
-    // this.setState(() => {
-    //   return {
-    //     userAvatar: image,
-    //     userAvatarPreview: `url(${URL.createObjectURL(image)})`,
-    //     uploadMessage: undefined
-    //   };
-    // });
-
-    this.props.imgFileSet(image);
-    alert("file Uploaded successfully");
-  };
 
   handleImgUpload = files => {
     this.props.onProjectChange();
     this.setState({ image: files });
   };
-
-  compressImageHandler = () => {
-    let Uploadfunction = this.imageUpload;
-    const browser = isBrowser();
-    const shouldCompress =
-      browser === "ie" || browser === "edge" ? false : true;
-    // const shouldCompress = false;
-
-    if (shouldCompress) {
-      new Compressor(this.state.image[0], {
-        quality: this.state.quality,
-        mimeType: "jpg",
-        convertSize: 200000,
-        success(result) {
-          Uploadfunction(result);
-        },
-        error(err) {
-          console.log("error", err);
-
-          return;
-        }
-      });
-    } else {
-      Uploadfunction(this.state.image[0]);
-    }
+  imageUploadErr = err => {
+    this.setState(() => {
+      return {
+        imagePreview: undefined,
+        uploadMessage: `${err}`
+      };
+    });
   };
 
+  imageUpload = image => {
+    console.log("image on upload or compressed", image);
+    const file = new File([image], image.name);
+    this.props.onProjectChange();
+    this.setState(() => {
+      return {
+        imagePreview: `url(${URL.createObjectURL(image)})`,
+        uploadMessage: undefined,
+        isImageUploaded: true,
+        compressedImg: file
+      };
+    });
+    alert("file Uploaded successfully");
+  };
+
+  originalImageSaver = image => {
+    console.log("originalImageSaver", image);
+    this.setState({ imageFile: image });
+  };
+  imgPropertiesHandler = e => {
+    const {
+      target: { name, value }
+    } = e;
+
+    this.setState({
+      [name]: value
+    });
+
+    if (name === "imgQuality") {
+      compressImage(
+        this.state.imageFile,
+        value,
+        this.state.imgW,
+        this.imageUpload,
+        this.imageUploadErr
+      );
+    }
+  };
+  imgWidthHandler = e => {
+    const value = e.target.value;
+    console.log("imgWidthHandler", value);
+    console.log("imgWidthHandler2", e.target.value);
+    compressImage(
+      this.state.imageFile,
+      this.state.imgQuality,
+      value,
+      this.imageUpload,
+      this.imageUploadErr
+    );
+  };
+
+  uploadingToServerHandler = () => {
+    console.log("this.state.compressedImg");
+    if (this.state.compressedImg) {
+      const file = [this.state.compressedImg];
+      const e = { target: { files: file } };
+      this.props.uploadFileHandler(e);
+      console.log("this.props.project.name", this.props.project.name);
+      console.log("file.name", file[0].name);
+      this.props.imgFileSet(
+        `uploads/${this.props.project.url}/${file[0].name}`
+      );
+    }
+  };
   render() {
     const atributes = this.props.HTMLAtributesArr.map((atribute, i) => {
       return <li key={i}>{atribute}</li>;
@@ -98,92 +148,102 @@ class ImageElement extends Component {
           name="HTMLElementContent"
           value={this.props.HTMLElementContent}
         /> */}
-          <input
-            type="file"
-            name="image"
-            onChange={e => {
-              this.handleImgUpload(e.target.files);
-            }}
-            accept="image/*"
+          <UploadImage
+            imageUpload={this.imageUpload}
+            imageUploadErr={this.imageUploadErr}
+            imgPropertiesHandler={this.imgPropertiesHandler}
+            imgWidthHandler={this.imgWidthHandler}
+            originalImageSaver={this.originalImageSaver}
+            imagePreview={this.state.imagePreview}
+            uploadMessage={this.state.uploadMessage}
+            imgQuality={this.state.imgQuality}
+            imgW={this.state.imgW}
+            compressedImg={this.state.compressedImg}
           />
-        </div>
-        <button onClick={this.compressImageHandler}>Process</button>
-        <div>
-          Quality:
-          <input
-            type="number"
-            name="quality"
-            min="0"
-            max="1"
-            step=".2"
-            value={this.state.quality}
-            onChange={this.qualityHandler}
-          />
-        </div>
-        <div className="elementAtributes">
-          Atributes
-          <div>
-            <input
-              type="text"
-              name="HTMLAtributes"
-              value={this.props.HTMLAtributes}
-              onChange={e => this.props.atributesHTMLHandler(e)}
-            />
-            <ul>{atributes}</ul>
-          </div>
-        </div>
-        <div className="elementStyles">
-          Styles
-          <div>
-            <input
-              type="text"
-              name="HTMLStyles"
-              value={this.props.HTMLStyles}
-              onChange={e => this.props.stylesHTMLHandler(e)}
-            />
-            <ul>{styles}</ul>
-          </div>
-        </div>
-        <div className="elementClasses">
-          Classes
-          <div>
-            <input
-              type="text"
-              name="HTMLClasses"
-              value={this.props.HTMLClasses}
-              onChange={e => this.props.classesHTMLHandler(e)}
-            />
-            <ul>{classes}</ul>
-          </div>
-        </div>
 
-        <div className="elementClasses">
-          Alt
           <div>
-            <input
-              type="text"
-              name="imgAlt"
-              value={this.props.imgAlt}
-              onChange={e => this.props.atrImgHTMLHandler(e)}
-            />
+            <div className="elementAtributes">
+              Atributes
+              <div>
+                <input
+                  type="text"
+                  name="HTMLAtributes"
+                  value={this.props.HTMLAtributes}
+                  onChange={e => this.props.atributesHTMLHandler(e)}
+                />
+                <ul>{atributes}</ul>
+              </div>
+            </div>
+            <div className="elementStyles">
+              Styles
+              <div>
+                <input
+                  type="text"
+                  name="HTMLStyles"
+                  value={this.props.HTMLStyles}
+                  onChange={e => this.props.stylesHTMLHandler(e)}
+                />
+                <ul>{styles}</ul>
+              </div>
+            </div>
+            <div className="elementClasses">
+              Classes
+              <div>
+                <input
+                  type="text"
+                  name="HTMLClasses"
+                  value={this.props.HTMLClasses}
+                  onChange={e => this.props.classesHTMLHandler(e)}
+                />
+                <ul>{classes}</ul>
+              </div>
+            </div>
+            <div className="elementClasses">
+              Alt
+              <div>
+                <input
+                  type="text"
+                  name="imgAlt"
+                  value={this.props.imgAlt}
+                  onChange={e => this.props.atrImgHTMLHandler(e)}
+                />
+              </div>
+            </div>
+            <div className="elementClasses">
+              FigCaption
+              <div>
+                <input
+                  type="text"
+                  name="imgFigcaption"
+                  value={this.props.imgFigcaption}
+                  onChange={e => this.props.atrImgHTMLHandler(e)}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="elementClasses">
-          FigCaption
           <div>
-            <input
-              type="text"
-              name="imgFigcaption"
-              value={this.props.imgFigcaption}
-              onChange={e => this.props.atrImgHTMLHandler(e)}
-            />
+            <button onClick={this.uploadingToServerHandler} type="button">
+              Upload Image
+            </button>
           </div>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    elements: state.postCreation.elements,
+    seo: state.postCreation.seo,
+    summary: state.postCreation.summary,
+    login: state.login,
+    project: state.postCreation.project,
+    fileNames: state.postCreation.files,
+    date: state.postCreation.date,
+    postCreation: state.postCreation
+  };
+};
 
 const mapDispachToProps = dispach => {
   return {
@@ -193,4 +253,7 @@ const mapDispachToProps = dispach => {
   };
 };
 
-export default connect(mapDispachToProps)(ImageElement);
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(ImageElement);

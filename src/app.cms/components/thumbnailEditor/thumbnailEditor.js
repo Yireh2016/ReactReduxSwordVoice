@@ -10,7 +10,7 @@ class ThumbNailEditor extends Component {
     super(props);
     this.state = {
       isImageUploaded: false,
-      userAvatarPreview: undefined,
+      imagePreview: undefined,
       uploadMessage: "Upload Thunbnail",
       imgW: 200,
       imgQuality: 0.6,
@@ -22,7 +22,7 @@ class ThumbNailEditor extends Component {
   imageUploadErr = err => {
     this.setState(() => {
       return {
-        userAvatarPreview: undefined,
+        imagePreview: undefined,
         uploadMessage: `${err}`
       };
     });
@@ -32,7 +32,7 @@ class ThumbNailEditor extends Component {
     console.log("imgupload ", image);
     this.setState(() => {
       return {
-        userAvatarPreview: `url(${URL.createObjectURL(image)})`,
+        imagePreview: `url(${URL.createObjectURL(image)})`,
         uploadMessage: undefined,
         isImageUploaded: true,
         compressedImg: image
@@ -65,8 +65,6 @@ class ThumbNailEditor extends Component {
   };
   imgWidthHandler = e => {
     const value = e.target.value;
-    console.log("imgWidthHandler", value);
-    console.log("imgWidthHandler2", e.target.value);
     compressImage(
       this.state.imageFile,
       this.state.imgQuality,
@@ -95,15 +93,16 @@ class ThumbNailEditor extends Component {
                 imgPropertiesHandler={this.imgPropertiesHandler}
                 imgWidthHandler={this.imgWidthHandler}
                 originalImageSaver={this.originalImageSaver}
-                userAvatarPreview={this.state.userAvatarPreview}
+                imagePreview={this.state.imagePreview}
                 uploadMessage={this.state.uploadMessage}
                 imgQuality={this.state.imgQuality}
                 imgW={this.state.imgW}
+                compressedImg={this.state.compressedImg}
               >
-                <div>
+                {/* <div>
                   {this.state.compressedImg &&
                     "File Size: " + this.state.compressedImg.size}
-                </div>
+                </div> */}
               </UploadImage>
             </div>
           </React.Fragment>
@@ -115,7 +114,7 @@ class ThumbNailEditor extends Component {
             widthHeightRatio={1.07}
             hasBorder={true}
             hasThreeDots={false}
-            postImage={this.state.userAvatarPreview}
+            postImage={this.state.imagePreview}
           />
         )}
       </div>
