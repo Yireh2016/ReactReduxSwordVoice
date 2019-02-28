@@ -7,7 +7,6 @@ import axios from "axios";
 import Welcome from "../welcome/welcome";
 import CreatePost from "../createPost/createPost";
 import AdminPost from "../adminPost/adminPost";
-import MenuItem from "../menuItem/menuItem";
 import Menu from "../menu/menu";
 //css
 import "./dashboard.css";

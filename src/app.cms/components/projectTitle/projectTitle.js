@@ -79,7 +79,9 @@ class ProjectTitle extends Component {
   };
 
   cancelProjectTitleHandler = () => {
-    this.props.history.push("/cms/dashboard");
+    this.props.onMenuChange({ main: true, create: false });
+    // this.props.history.push("/cms/dashboard");
+    this.props.exitBtnHandler(this.props.history);
   };
 
   render() {
@@ -123,7 +125,8 @@ const mapDispachToProps = dispach => {
     onProjectNameEdition: payload =>
       dispach({ type: "PROJECT_NAME_EDITION", payload: payload }),
     onProjectURLEdition: payload =>
-      dispach({ type: "PROJECT_URL_EDITION", payload: payload })
+      dispach({ type: "PROJECT_URL_EDITION", payload: payload }),
+    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
   };
 };
 

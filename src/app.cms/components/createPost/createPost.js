@@ -435,6 +435,7 @@ class CreatePost extends Component {
     window.localStorage.setItem("postActiveElID", id);
   };
   exitBtnHandler = history => {
+    this.props.onMenuChange({ main: true, create: false });
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
@@ -446,7 +447,7 @@ class CreatePost extends Component {
 
   render() {
     if (this.props.project.name === "") {
-      return <ProjectTitle />;
+      return <ProjectTitle exitBtnHandler={this.exitBtnHandler} />;
     }
     const files = this.state.fileListNames.map((file, i) => {
       return (
@@ -809,27 +810,6 @@ class CreatePost extends Component {
                 }
               >
                 {elements}
-                <div
-                  style={{
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center"
-                  }}
-                >
-                  {/* {!this.state.isEditionMode && (
-                    <button
-                      onClick={this.addElementBtnHandler}
-                      className="addElementBtn"
-                    >
-                      <span>Add Element</span>
-                      <img
-                        src={plus}
-                        title="add element"
-                        alt="add Element button"
-                      />
-                    </button>
-                  )} */}
-                </div>
               </div>
 
               {/* second page summary creation */}
@@ -937,7 +917,8 @@ const mapDispachToProps = dispach => {
     onDateEdition: payload =>
       dispach({ type: "DATE_EDITION", payload: payload }),
     onSave: () => dispach({ type: "SAVE_POST" }),
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
+    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
   };
 };
 
