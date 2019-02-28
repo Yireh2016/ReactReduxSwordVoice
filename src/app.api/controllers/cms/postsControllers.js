@@ -142,3 +142,15 @@ export const updatePostCtrl = (req, res) => {
     }
   );
 };
+
+export const deletePostCtrl = (req, res) => {
+  articleModel
+    .findOneAndDelete({ projectName: req.params.projectName })
+    .exec(err => {
+      if (err) {
+        res.json(404, err);
+        return;
+      }
+      res.json(204, { message: "Post removed" });
+    });
+};

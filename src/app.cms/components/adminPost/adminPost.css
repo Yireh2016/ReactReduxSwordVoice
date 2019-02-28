@@ -2,3 +2,25 @@
   overflow-y: scroll;
   height: 100vh;
 }
+
+.tableColumnElement {
+  text-align: center;
+}
+.tableNameElement:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+.tableControlBtnLay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tableControlBtn {
+  width: 25px;
+}
+.tableControlBtn:hover {
+  cursor: pointer;
+}
+.tableControlBtnAction {
+  padding: 0 10px;
+}

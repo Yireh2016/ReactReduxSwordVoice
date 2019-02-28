@@ -7,7 +7,7 @@ import passport from "passport";
 import {
   createPostCtrl,
   uploadTempFileCtrl,
-  deleteTempFileCtrl
+  deletePostCtrl
 } from "../controllers/cms/postsControllers";
 import {
   getPostCtrl,
@@ -387,3 +387,13 @@ routerAPI.get("/getPosts/:projectName", authAPI, getPostCtrl);
 
 routerAPI.put("/updatePost/:projectName", authAPI, updatePostCtrl);
 export default routerAPI;
+
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+////////    GET D of CRUD   //////////
+//////////////////////////////////////
+//////////////////////////////////////
+//////////////////////////////////////
+
+routerAPI.delete("/deletePost/:projectName", authAPI, deletePostCtrl);
