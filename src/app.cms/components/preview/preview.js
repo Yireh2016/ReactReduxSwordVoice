@@ -1,12 +1,16 @@
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
+import { Helmet } from "react-helmet";
 //css
 import "./preview.css";
 
 const Preview = props => {
   return (
     <div className="previewhtml blogArticleContainer">
-      <div className="blogArticle grid col-8 col-12-md">
+      <Helmet>
+        <title>Preview Post</title>
+      </Helmet>
+      <div className="blogArticle grid col-8 col-12-md helmetClass">
         {ReactHtmlParser(window.localStorage.getItem("finalHTMLElement"))}
       </div>
       <div className=" grid col-3 col-12-md" style={{ fontSize: "16px" }}>

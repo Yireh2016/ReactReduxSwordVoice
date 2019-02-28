@@ -1,0 +1,61 @@
+.menuItem {
+  flex-grow: 1;
+  padding: 20px 3vh;
+  text-align: start;
+}
+.menuItemAdmin {
+  display: flex;
+  justify-content: space-between;
+}
+.menuItemAdmin:hover {
+  cursor: pointer;
+}
+
+.menuItemDesplegable {
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: coral;
+  border-radius: 20px;
+  color: #1a2225;
+  position: relative;
+}
+.menuItemDesplegableLayout {
+  overflow: hidden;
+  transition: all ease 500ms;
+}
+
+/* .menuItemDesplegable > div {
+  width: 100%;
+  position: absolute;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: coral;
+  padding: 20px;
+  border-radius: 15px;
+  transition: all ease 500ms;
+} */
+/* .dashMenuAdmin > li {
+  text-align: left;
+  font-weight: bold;
+  list-style-type: none;
+  color: #1a2225;
+  padding: 5px;
+  transition: all ease 500ms;
+}
+.dashMenuAdmin li:hover {
+  cursor: pointer;
+  color: #fff;
+ 
+  letter-spacing: 3px;
+} */
+.menuItemDesplegableContainer {
+  width: 100%;
+  position: absolute;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: coral;
+  padding: 20px;
+  border-radius: 15px;
+  transition: all ease 500ms;
+}

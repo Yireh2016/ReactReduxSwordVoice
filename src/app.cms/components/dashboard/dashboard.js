@@ -7,7 +7,8 @@ import axios from "axios";
 import Welcome from "../welcome/welcome";
 import CreatePost from "../createPost/createPost";
 import AdminPost from "../adminPost/adminPost";
-
+import MenuItem from "../menuItem/menuItem";
+import Menu from "../menu/menu";
 //css
 import "./dashboard.css";
 //assets
@@ -208,9 +209,14 @@ class Dashboard extends Component {
           <button
             className="cmsBtn"
             onClick={() => {
-              if (window.location.pathname === "/cms/dashboard/createPost")
+              if (window.location.pathname === "/cms/dashboard/createPost") {
                 return;
+              }
               this.props.onReset();
+              this.props.onMenuChange({
+                main: false,
+                create: true
+              });
               history.push("/cms/dashboard/createPost");
             }}
           >
@@ -305,62 +311,35 @@ class Dashboard extends Component {
             <div className="dashCreatePost">
               <CreatePostBtn />
             </div>
-            <div className="dashMenu">
-              <div className="dashMenuAdmin" onClick={this.adminClickHandler}>
-                <p>Administration</p>
-                <img src={hamburger} alt="hamburger" />
-              </div>
+            <div>
+              {this.props.menu.main && (
+                <Menu itemsTitle={["Administration", "Stats"]}>
+                  <ul className="dashMenuAdminList">
+                    <li>Profiles</li>
 
-              <div
-                className="dashMenuDesplegable"
-                style={
-                  this.state.toogleAdmin
-                    ? { height: `${this.state.adminMenuH}px` }
-                    : { height: "0" }
-                }
-              >
-                <ul
-                  ref={this.adminMenu}
-                  style={
-                    // this.state.toogleAdmin ? { top: "0" } : { top: "100%" }
-                    { top: "0" }
-                  }
-                >
-                  <li>Profiles</li>
+                    <AdminPostBtn />
 
-                  <AdminPostBtn />
+                    <li>Users</li>
+                  </ul>
+                  <ul className="dashMenuAdminList">
+                    <li>Search Data</li>
 
-                  <li>Users</li>
-                </ul>
-              </div>
+                    <li>Interest Data</li>
 
-              <div className="dashMenuAdmin" onClick={this.statsClickHandler}>
-                <p>Stats</p>
-                <img src={hamburger} alt="hamburger" />
-              </div>
-              <div
-                className="dashMenuDesplegable"
-                style={
-                  this.state.toogleStats
-                    ? { height: `${this.state.statsMenuH}px` }
-                    : { height: "0" }
-                }
-              >
-                <ul
-                  ref={this.statsMenu}
-                  style={
-                    // this.state.toogleAdmin ? { top: "0" } : { top: "100%" }
-                    { top: "0" }
-                  }
-                >
-                  <li>Search Data</li>
+                    <li>Users Data</li>
+                  </ul>
+                </Menu>
+              )}
 
-                  <li>Interest Data</li>
-
-                  <li>Users Data</li>
-                </ul>
-              </div>
+              {this.props.menu.create && (
+                <Menu itemsTitle={["General Styling"]}>
+                  <ul className="dashMenuAdminList">
+                    <li>Classes</li>
+                  </ul>
+                </Menu>
+              )}
             </div>
+
             <div className="dashLogOut">
               <div>
                 <a href="/home">
@@ -426,7 +405,8 @@ const mapStateToProps = state => {
     login: state.login,
     fileNames: state.postCreation.files,
     date: state.postCreation.date,
-    postCreation: state.postCreation
+    postCreation: state.postCreation,
+    menu: state.menu
   };
 };
 const mapDispachToProps = dispach => {
@@ -437,7 +417,8 @@ const mapDispachToProps = dispach => {
     onReset: () => dispach({ type: "RESET_EDIT" }),
     onDateEdition: payload =>
       dispach({ type: "DATE_EDITION", payload: payload }),
-    onSave: () => dispach({ type: "SAVE_POST" })
+    onSave: () => dispach({ type: "SAVE_POST" }),
+    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
   };
 };
 

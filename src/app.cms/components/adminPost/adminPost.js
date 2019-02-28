@@ -56,12 +56,17 @@ class AdminPost extends Component {
   };
   projectNameClickHandler = (e, props) => {
     const updateReduxState = this.updateReduxState;
+    const changeMenu = this.props.onMenuChange({
+      main: false,
+      create: true
+    });
     this.setState({ isDataFetched: false });
 
     axios(`/api/getPosts/${props.original.projectName}`)
       .then(res => {
         if (res.status === 200) {
           updateReduxState(res.data);
+          changeMenu();
         }
       })
       .catch(err => {
@@ -170,7 +175,8 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onPostFetch: payload => dispach({ type: "FETCH_POST", payload: payload })
+    onPostFetch: payload => dispach({ type: "FETCH_POST", payload: payload }),
+    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
 
     // onProjectNameEdition: payload =>
     //   dispach({ type: "PROJECT_NAME_EDITION", payload: payload }),

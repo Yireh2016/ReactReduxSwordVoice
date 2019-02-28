@@ -99,26 +99,7 @@
   cursor: pointer;
 }
 
-.dashMenuDesplegable {
-  overflow: hidden;
-  padding: 0;
-  border-radius: 20px;
-  color: #1a2225;
-  position: relative;
-  transition: all ease 500ms;
-}
-
-.dashMenuDesplegable ul {
-  width: 100%;
-  position: absolute;
-  margin: 0;
-  box-sizing: border-box;
-  background-color: coral;
-  padding: 20px;
-  border-radius: 15px;
-  transition: all ease 500ms;
-}
-.dashMenuDesplegable ul li {
+.dashMenuAdminList li {
   text-align: left;
   font-weight: bold;
   list-style-type: none;
@@ -126,13 +107,17 @@
   padding: 5px;
   transition: all ease 500ms;
 }
-.dashMenuDesplegable ul li:hover {
+.dashMenuAdminList li:hover {
   cursor: pointer;
   color: #fff;
-  /* color: hsl(16, 20%, 20%); */
-  /* background-color: blanchedalmond; */
 
   letter-spacing: 3px;
+}
+
+.dashMenuAdminList {
+  padding: 0;
+  list-style-type: none;
+  margin: 0;
 }
 .dashLogOut {
   flex-grow: 1;

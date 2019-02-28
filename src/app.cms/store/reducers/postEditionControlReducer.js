@@ -43,6 +43,7 @@ const postEditCtlreducer = (state = initialState, action) => {
       newState.project.hasChanged = true;
       break;
     }
+
     case "MOVE_ELEMENT": {
       newState.project.hasChanged = true;
       newState.elements = action.payload;
