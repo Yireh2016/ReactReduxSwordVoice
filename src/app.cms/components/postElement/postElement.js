@@ -17,6 +17,7 @@ import Header from "../header/header";
 import CustomElement from "../customElement/customElement";
 import CustomParagraph from "../customParagraph/customParagraph";
 import ImageElement from "../imageElement/imageElement";
+// import insertIntoArr from "../../../services/insertIntoArr";
 //react map
 /*
 
@@ -120,20 +121,27 @@ class PostElement extends Component {
   imgFileSet = image => {
     this.setState({ imgFile: image });
   };
-  stylesHTMLHandler = e => {
+  stylesHTMLHandler = (e, flag) => {
+    let value = "";
+    let name = "";
+    if (flag) {
+      value = `${this.state.HTMLStyles};`;
+      name = "HTMLStyles";
+    } else {
+      value = e.target.value;
+      name = e.target.name;
+    }
     this.props.onProjectChange();
 
-    const {
-      target: { name, value }
-    } = e;
     if (value.match(/;/g)) {
       this.setState(prevState => {
-        let styles = value.slice(0, value.length);
+        // let styles = value.slice(0, value.length);
+        let styles = value.replace(";", "");
         let stylesArr = prevState.HTMLStylesArr;
         stylesArr.push(`${styles}`);
         return {
           HTMLstylesArr: stylesArr,
-          HTMLStylesStr: `${prevState.HTMLStylesStr} ${styles}`,
+          HTMLStylesStr: `${prevState.HTMLStylesStr} ${styles};`,
           HTMLStyles: ""
         };
       });
@@ -142,16 +150,22 @@ class PostElement extends Component {
     }
   };
 
-  atributesHTMLHandler = e => {
+  atributesHTMLHandler = (e, flag) => {
+    let value = "";
+    let name = "";
+    if (flag) {
+      value = `${this.state.HTMLAtributes},`;
+      name = "HTMLAtributes";
+    } else {
+      value = e.target.value;
+      name = e.target.name;
+    }
     this.props.onProjectChange();
-
-    const {
-      target: { name, value }
-    } = e;
 
     if (value.match(/,/g)) {
       this.setState(prevState => {
-        let atributes = value.slice(0, value.length - 1);
+        // let atributes = value.slice(0, value.length - 1);
+        let atributes = value.replace(",", "");
         let filter = /accept-charset|accept|accesskey|action|align|allow|alt|async|autocapitalize|autofocus|autoplay|bgcolor|border|buffered|challenge|charset|checked|cite|class|code|codebase|color|cols|colspan|content|contenteditable|contextmenu|controls|coords|data-*|data|datetime|decoding|default|defer|dir|dirname|disabled|download|draggable|dropzone|enctype|for|form|formaction|headers|height|hidden|high|href|hreflang|http-equiv|icon|id|importance|integrity|ismap|itemprop|keytype|kind|label|lang|language|lazyload|list|loop|low|manifest|max|maxlength|media|method|min|minlength|multiple|muted|name|novalidate|open|optimum|pattern|ping|placeholder|poster|preload|radiogroup|readonly|referrerpolicy|rel|required|reversed|rows|rowspan|sandbox|scope|scoped|selected|shape|size|sizes|slot|span|spellcheck|src|srcdoc|srclang|srcset|start|step|style|summary|tabindex|target|title|translate|type|usemap|value|width|wrap/g;
 
         if (atributes.match(filter)) {
@@ -172,16 +186,68 @@ class PostElement extends Component {
       this.setState({ [name]: value });
     }
   };
+  HTMLAtributesArrRemove = id => {
+    this.setState(prevState => {
+      let arr = prevState.HTMLAtributesArr;
 
-  classesHTMLHandler = e => {
+      const str = prevState.HTMLAtributesStr.replace(arr[id], "");
+      const previewStr = prevState.HTMLPreviewStr.replace(arr[id], "");
+      arr.splice(id, 1);
+      return {
+        HTMLAtributesArr: arr,
+        HTMLAtributesStr: str,
+        HTMLPreviewStr: previewStr
+      };
+    });
+    this.props.onProjectChange();
+  };
+
+  HTMLStylesArrRemove = id => {
+    this.setState(prevState => {
+      let arr = prevState.HTMLStylesArr;
+
+      const str = prevState.HTMLStylesStr.replace(arr[id], "");
+      const previewStr = prevState.HTMLPreviewStr.replace(arr[id], "");
+      arr.splice(id, 1);
+      return {
+        HTMLStylesArr: arr,
+        HTMLStylesStr: str,
+        HTMLPreviewStr: previewStr
+      };
+    });
+    this.props.onProjectChange();
+  };
+
+  HTMLClassesArrRemove = id => {
+    this.setState(prevState => {
+      let arr = prevState.HTMLClassesArr;
+
+      const str = prevState.HTMLClassesStr.replace(` ${arr[id]}`, "");
+      const previewStr = prevState.HTMLPreviewStr.replace(arr[id], "");
+      arr.splice(id, 1);
+      return {
+        HTMLClassesArr: arr,
+        HTMLClassesStr: str,
+        HTMLPreviewStr: previewStr
+      };
+    });
+    this.props.onProjectChange();
+  };
+  classesHTMLHandler = (e, flag) => {
+    let value = "";
+    let name = "";
+    if (flag) {
+      value = `${this.state.HTMLClasses},`;
+      name = "HTMLClasses";
+    } else {
+      value = e.target.value;
+      name = e.target.name;
+    }
     this.props.onProjectChange();
 
-    const {
-      target: { name, value }
-    } = e;
     if (value.match(/,/g)) {
       this.setState(prevState => {
-        let classes = value.slice(0, value.length - 1);
+        let classes = value.replace(",", "");
         let classesArr = prevState.HTMLClassesArr;
         classesArr.push(`${classes}`);
         return {
@@ -355,14 +421,9 @@ class PostElement extends Component {
             jsx={this.state.HTMLPreviewStr}
             bindings={{
               styles: this.state.HTMLStylesStr,
-              // styles: "width:100%",
               classes: this.state.HTMLClassesStr,
-              // classes: "grid",
               imgFile: this.state.imgFile,
-              // imgFile: "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg",
-              // imgAlt: "test",
               imgAlt: this.state.imgAlt,
-              // imgFigcaption: "test"
               imgFigcaption: this.state.imgFigcaption
             }}
           />
@@ -418,18 +479,6 @@ class PostElement extends Component {
               className="elementPreview blogArticle"
             >
               {parser()}
-              {/* {this.state.HTMLElementType !== "custom"  ? (
-                <JsxParser
-                  jsx={this.state.HTMLPreviewStr}
-                  bindings={{
-                    content: this.state.HTMLElementContent,
-                    styles: this.state.HTMLStylesStr,
-                    classes: this.state.HTMLClassesStr
-                  }}
-                />
-              ) : (
-                ReactHtmlParser(this.state.HTMLPreviewStr)
-              )} */}
             </div>
           </div>
 
@@ -441,15 +490,7 @@ class PostElement extends Component {
                 style={{ opacity: "1", cursor: "pointer" }}
                 alt="edit"
               />
-              {/* <img
-                style={
-                  this.state.isEditionMode
-                    ? { opacity: ".2" }
-                    : { opacity: "1", cursor: "pointer" }
-                }
-                src={paint}
-                alt="paint"
-              /> */}
+
               {!this.state.HTMLElementType.match(/h1/g) && (
                 <img
                   style={
@@ -520,6 +561,9 @@ class PostElement extends Component {
                   HTMLAtributesArr={this.state.HTMLAtributesArr}
                   HTMLStylesArr={this.state.HTMLStylesArr}
                   HTMLClassesArr={this.state.HTMLClassesArr}
+                  HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
+                  HTMLStylesArrRemove={this.HTMLStylesArrRemove}
+                  HTMLClassesArrRemove={this.HTMLClassesArrRemove}
                 />
               )}
               {this.state.HTMLElementType.match(/<h/g) && (
@@ -535,6 +579,9 @@ class PostElement extends Component {
                   HTMLAtributesArr={this.state.HTMLAtributesArr}
                   HTMLStylesArr={this.state.HTMLStylesArr}
                   HTMLClassesArr={this.state.HTMLClassesArr}
+                  HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
+                  HTMLStylesArrRemove={this.HTMLStylesArrRemove}
+                  HTMLClassesArrRemove={this.HTMLClassesArrRemove}
                 />
               )}
 
@@ -557,6 +604,12 @@ class PostElement extends Component {
                   imgFile={this.state.imgFile}
                   imgAlt={this.state.imgAlt}
                   imgFigcaption={this.state.imgFigcaption}
+                  HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
+                  HTMLStylesArrRemove={this.HTMLStylesArrRemove}
+                  HTMLClassesArrRemove={this.HTMLClassesArrRemove}
+                  HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
+                  HTMLStylesArrRemove={this.HTMLStylesArrRemove}
+                  HTMLClassesArrRemove={this.HTMLClassesArrRemove}
                 />
               )}
               {this.state.isFinishEnabled && (

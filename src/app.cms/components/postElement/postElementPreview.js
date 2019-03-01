@@ -11,7 +11,6 @@ import copy from "../../assets/createPost/copy.svg";
 import up from "../../assets/createPost/up.svg";
 import down from "../../assets/createPost/down.svg";
 //services
-import HTLMtoParagraph from "../../../services/HTLMtoParagraph";
 
 //react map
 /*
@@ -169,14 +168,9 @@ class PostElementPreview extends PureComponent {
             jsx={this.props.HTMLPreviewStr}
             bindings={{
               styles: this.props.HTMLStylesStr,
-              // styles: "width:100%",
               classes: this.props.HTMLClassesStr,
-              // classes: "grid",
               imgFile: this.props.imgFile,
-              // imgFile: "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg",
-              // imgAlt: "test",
               imgAlt: this.props.imgAlt,
-              // imgFigcaption: "test"
               imgFigcaption: this.props.imgFigcaption
             }}
           />

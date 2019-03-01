@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 // import Compressor from "compressorjs";
 import { connect } from "react-redux";
-
+//components
+import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
 //services
 import isBrowser from "../../../services/isBrowser";
 import UploadImage from "../uploadImage/uploadImage";
@@ -127,16 +128,6 @@ class ImageElement extends Component {
     }
   };
   render() {
-    const atributes = this.props.HTMLAtributesArr.map((atribute, i) => {
-      return <li key={i}>{atribute}</li>;
-    });
-
-    const styles = this.props.HTMLStylesArr.map((style, i) => {
-      return <li key={i}>{style}</li>;
-    });
-    const classes = this.props.HTMLClassesArr.map((clase, i) => {
-      return <li key={i}>{clase}</li>;
-    });
     return (
       <div>
         <div>
@@ -162,42 +153,20 @@ class ImageElement extends Component {
           />
 
           <div>
-            <div className="elementAtributes">
-              Atributes
-              <div>
-                <input
-                  type="text"
-                  name="HTMLAtributes"
-                  value={this.props.HTMLAtributes}
-                  onChange={e => this.props.atributesHTMLHandler(e)}
-                />
-                <ul>{atributes}</ul>
-              </div>
-            </div>
-            <div className="elementStyles">
-              Styles
-              <div>
-                <input
-                  type="text"
-                  name="HTMLStyles"
-                  value={this.props.HTMLStyles}
-                  onChange={e => this.props.stylesHTMLHandler(e)}
-                />
-                <ul>{styles}</ul>
-              </div>
-            </div>
-            <div className="elementClasses">
-              Classes
-              <div>
-                <input
-                  type="text"
-                  name="HTMLClasses"
-                  value={this.props.HTMLClasses}
-                  onChange={e => this.props.classesHTMLHandler(e)}
-                />
-                <ul>{classes}</ul>
-              </div>
-            </div>
+            <ElementCustomEdit
+              HTMLAtributes={props.HTMLAtributes}
+              HTMLAtributesArr={props.HTMLAtributesArr}
+              HTMLAtributesArrRemove={props.HTMLAtributesArrRemove}
+              HTMLStyles={props.HTMLStyles}
+              HTMLStylesArr={props.HTMLStylesArr}
+              HTMLStylesArrRemove={props.HTMLStylesArrRemove}
+              HTMLClasses={props.HTMLClasses}
+              HTMLClassesArr={props.HTMLClassesArr}
+              HTMLClassesArrRemove={props.HTMLClassesArrRemove}
+              stylesHTMLHandler={props.stylesHTMLHandler}
+              atributesHTMLHandler={props.atributesHTMLHandler}
+              classesHTMLHandler={props.classesHTMLHandler}
+            />
             <div className="elementClasses">
               Alt
               <div>

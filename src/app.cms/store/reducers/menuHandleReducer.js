@@ -8,7 +8,6 @@ const menuHandleReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case "CHANGE_MENU": {
-      console.log("change menu action.payload", action.payload);
       newState = action.payload;
       break;
     }

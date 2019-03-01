@@ -14,7 +14,7 @@ class Welcome extends Component {
         <div className="welcomeCont">
           <img src={svLogo} alt="SwordVoice Logo" />
           <h1>
-            <span>SwordVoice</span> Content Manager System
+            <span>SwordVoice</span> Content Managment System
           </h1>
         </div>
       </div>

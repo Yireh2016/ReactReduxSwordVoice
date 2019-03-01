@@ -1,0 +1,30 @@
+.elementAtributesInput {
+  align-items: center;
+  display: flex;
+}
+
+.elementAtributesInput img {
+  width: 12px;
+  padding: 0 5px;
+}
+
+.elementAtributesInputCont ul {
+  padding: 10px;
+  margin: 0;
+}
+
+.elementAtributesInputCont ul li {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.elementAtributesInputCont ul li img {
+  width: 12px;
+  padding: 0 5px;
+}
+.elementAtributesInputCont ul li img:hover,
+.elementAtributesInput img:hover {
+  cursor: pointer;
+}

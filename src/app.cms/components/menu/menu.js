@@ -18,12 +18,8 @@ class Menu extends Component {
     }
     this.setState({ itemToggle: itemToggle });
   }
-  componentDidUpdate() {
-    console.log("componentDidUpdate MENU this.state", this.state);
-  }
 
   adminClickHandler = id => {
-    console.log("id on adminClickHandler", id);
     this.setState(prevState => {
       const arrLen = prevState.itemToggle.length;
       let newState = [];
@@ -41,10 +37,6 @@ class Menu extends Component {
   };
 
   render() {
-    console.log(
-      "  this.props.children.length on render",
-      this.props.children.length
-    );
     const items = this.props.children.length ? (
       this.props.children.map((items, i) => {
         return (
@@ -71,7 +63,6 @@ class Menu extends Component {
       </MenuItem>
     );
 
-    console.log("items", items);
     return <div className="menuItem">{items}</div>;
   }
 }

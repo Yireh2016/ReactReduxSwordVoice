@@ -1,4 +1,6 @@
 import React from "react";
+//componets
+import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
 
 //react map
 /*
@@ -11,16 +13,16 @@ DashBoard
 */
 
 const Header = props => {
-  const atributes = props.HTMLAtributesArr.map((atribute, i) => {
-    return <li key={i}>{atribute}</li>;
-  });
+  // const atributes = props.HTMLAtributesArr.map((atribute, i) => {
+  //   return <li key={i}>{atribute}</li>;
+  // });
 
-  const styles = props.HTMLStylesArr.map((style, i) => {
-    return <li key={i}>{style}</li>;
-  });
-  const classes = props.HTMLClassesArr.map((clase, i) => {
-    return <li key={i}>{clase}</li>;
-  });
+  // const styles = props.HTMLStylesArr.map((style, i) => {
+  //   return <li key={i}>{style}</li>;
+  // });
+  // const classes = props.HTMLClassesArr.map((clase, i) => {
+  //   return <li key={i}>{clase}</li>;
+  // });
   return (
     <div className="elementContentLayout">
       <div className="elementInput">
@@ -37,7 +39,21 @@ const Header = props => {
           />
         </label>
       </div>
-      <div className="elementAtributes">
+      <ElementCustomEdit
+        HTMLAtributes={props.HTMLAtributes}
+        HTMLAtributesArr={props.HTMLAtributesArr}
+        HTMLAtributesArrRemove={props.HTMLAtributesArrRemove}
+        HTMLStyles={props.HTMLStyles}
+        HTMLStylesArr={props.HTMLStylesArr}
+        HTMLStylesArrRemove={props.HTMLStylesArrRemove}
+        HTMLClasses={props.HTMLClasses}
+        HTMLClassesArr={props.HTMLClassesArr}
+        HTMLClassesArrRemove={props.HTMLClassesArrRemove}
+        stylesHTMLHandler={props.stylesHTMLHandler}
+        atributesHTMLHandler={props.atributesHTMLHandler}
+        classesHTMLHandler={props.classesHTMLHandler}
+      />
+      {/* <div className="elementAtributes">
         Atributes
         <div>
           <input
@@ -73,6 +89,7 @@ const Header = props => {
           <ul>{classes}</ul>
         </div>
       </div>
+    */}
     </div>
   );
 };

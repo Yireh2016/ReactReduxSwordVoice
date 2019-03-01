@@ -1,4 +1,5 @@
 import React from "react";
+import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
 
 //react map
 /*
@@ -12,16 +13,6 @@ DashBoard
 */
 
 const Paragraph = props => {
-  const atributes = props.HTMLAtributesArr.map((atribute, i) => {
-    return <li key={i}>{atribute}</li>;
-  });
-
-  const styles = props.HTMLStylesArr.map((style, i) => {
-    return <li key={i}>{style}</li>;
-  });
-  const classes = props.HTMLClassesArr.map((clase, i) => {
-    return <li key={i}>{clase}</li>;
-  });
   return (
     <div className="elementContentLayout">
       <div className="elementInput">
@@ -35,42 +26,20 @@ const Paragraph = props => {
           {props.HTMLElementContent}
         </textarea>
       </div>
-      <div className="elementAtributes">
-        Atributes
-        <div>
-          <input
-            type="text"
-            name="HTMLAtributes"
-            value={props.HTMLAtributes}
-            onChange={e => props.atributesHTMLHandler(e)}
-          />
-          <ul>{atributes}</ul>
-        </div>
-      </div>
-      <div className="elementStyles">
-        Styles
-        <div>
-          <input
-            type="text"
-            name="HTMLStyles"
-            value={props.HTMLStyles}
-            onChange={e => props.stylesHTMLHandler(e)}
-          />
-          <ul>{styles}</ul>
-        </div>
-      </div>
-      <div className="elementClasses">
-        Classes
-        <div>
-          <input
-            type="text"
-            name="HTMLClasses"
-            value={props.HTMLClasses}
-            onChange={e => props.classesHTMLHandler(e)}
-          />
-          <ul>{classes}</ul>
-        </div>
-      </div>
+      <ElementCustomEdit
+        HTMLAtributes={props.HTMLAtributes}
+        HTMLAtributesArr={props.HTMLAtributesArr}
+        HTMLAtributesArrRemove={props.HTMLAtributesArrRemove}
+        HTMLStyles={props.HTMLStyles}
+        HTMLStylesArr={props.HTMLStylesArr}
+        HTMLStylesArrRemove={props.HTMLStylesArrRemove}
+        HTMLClasses={props.HTMLClasses}
+        HTMLClassesArr={props.HTMLClassesArr}
+        HTMLClassesArrRemove={props.HTMLClassesArrRemove}
+        stylesHTMLHandler={props.stylesHTMLHandler}
+        atributesHTMLHandler={props.atributesHTMLHandler}
+        classesHTMLHandler={props.classesHTMLHandler}
+      />
     </div>
   );
 };
