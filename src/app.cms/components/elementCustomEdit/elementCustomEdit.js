@@ -24,7 +24,7 @@ const ElementCustomEdit = props => {
   const styles = props.HTMLStylesArr.map((style, i) => {
     return (
       <li key={i}>
-        <span>{style}</span>{" "}
+        <span>{style}</span>
         <img
           onClick={() => {
             props.HTMLStylesArrRemove(i);
@@ -44,7 +44,7 @@ const ElementCustomEdit = props => {
             props.HTMLClassesArrRemove(i);
           }}
           src={subs}
-          alt="add class"
+          alt="remove class"
         />
       </li>
     );

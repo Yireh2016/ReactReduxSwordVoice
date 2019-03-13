@@ -16,9 +16,7 @@ class Modal extends Component {
                 <span onClick={this.props.modalHandler}>X</span>
               </button>
             </div>
-            <div className="modalBody">
-              <p>{this.props.body}</p>
-            </div>
+            <div className="modalBody">{this.props.body}</div>
             <div className="modalFooter">{this.props.children}</div>
           </div>
         </div>

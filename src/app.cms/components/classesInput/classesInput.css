@@ -1,0 +1,66 @@
+.flexColumnLayout,
+.flexRowLayout {
+  display: flex;
+}
+.flexColumnLayout {
+  flex-direction: column;
+}
+.flexRowLayout {
+  flex-direction: row;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+}
+.btn-info {
+  color: white;
+}
+.btn-icon--small,
+.icon--small {
+  width: 15px;
+}
+.btn-icon,
+.btn-text {
+  padding: 5px;
+}
+.transparent {
+  background-color: transparent !important;
+}
+.padding--small {
+  padding: 10px;
+  box-sizing: border-box;
+}
+.margin--small {
+  margin: 5px;
+}
+.borderRadius--small {
+  border-radius: 5px;
+}
+.scrollY {
+  overflow-y: scroll;
+}
+.centerAlign {
+  align-items: center;
+}
+.right-float {
+  float: right;
+}
+.right-flex {
+  justify-content: flex-end;
+}
+.halfWidth {
+  width: 50%;
+}
+.bold {
+  font-weight: bold;
+}
+.classesInputLayout {
+  max-height: calc(100vh - 200px);
+}
+.classesInputText {
+  width: 300px;
+  height: 200px;
+  padding: 15px;
+  box-sizing: border-box;
+}

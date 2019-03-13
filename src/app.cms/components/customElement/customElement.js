@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import addSuffixToCustomClasses from "../../../services/addSuffixtoCustomClasses";
 
 //react map
 /*
@@ -34,7 +35,7 @@ class CustomElement extends Component {
 
   HMTLCheckHandler = () => {
     let HTMLContent = this.state.customElementContent;
-
+    HTMLContent = addSuffixToCustomClasses(HTMLContent, this.props.project.url);
     this.props.sendWordToJSXHandler(HTMLContent);
   };
 
@@ -75,7 +76,8 @@ const mapDispachToProps = dispach => {
 
 const mapStateToProps = state => {
   return {
-    elements: state.postCreation.elements
+    elements: state.postCreation.elements,
+    project: state.postCreation.project
   };
 };
 

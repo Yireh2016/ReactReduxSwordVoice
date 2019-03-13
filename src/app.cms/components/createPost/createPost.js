@@ -308,7 +308,7 @@ class CreatePost extends Component {
             };
           })
           .catch(err => {
-            alert("error on file uploadind", err);
+            alert("error on file uploading", err);
           });
       });
     }
@@ -538,7 +538,7 @@ class CreatePost extends Component {
         </div>
       );
     });
-
+    const cssURL = this.props.project.url;
     return (
       <div style={{ position: "relative" }}>
         {/* Edition Area  */}
@@ -655,15 +655,16 @@ class CreatePost extends Component {
                 : { visibility: "visible" }
             }
           >
-            <div className="createBarItem" onClick={this.playBtnHandler}>
-              <h4>Preview</h4>
+            <div className="createBarItem">
               <Link
                 onClick={this.previewBtnHandler}
                 target="_blank"
                 to={{
-                  pathname: "/cms/preview"
+                  pathname: "/cms/preview",
+                  search: `${cssURL}`
                 }}
               >
+                <h4>Preview</h4>
                 <img src={play} alt="preview botton  " />
               </Link>
             </div>

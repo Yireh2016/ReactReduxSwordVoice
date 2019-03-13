@@ -8,13 +8,18 @@ const initialState = {
   },
   summary: "",
   project: { name: "", url: "", hasChanged: false },
-  files: []
+  files: [],
+  classes: []
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const postEditCtlreducer = (state = initialState, action) => {
   let newState = state;
 
   switch (action.type) {
+    case "ADD_CLASSES": {
+      newState.classes = action.payload;
+      break;
+    }
     case "CREATE_ELEMENT": {
       const newElement = [
         {

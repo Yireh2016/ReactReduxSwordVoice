@@ -7,7 +7,9 @@ import passport from "passport";
 import {
   createPostCtrl,
   uploadTempFileCtrl,
-  deletePostCtrl
+  deletePostCtrl,
+  addClassToPostCtrl,
+  getClassFromPostCtrl
 } from "../controllers/cms/postsControllers";
 import {
   getPostCtrl,
@@ -361,6 +363,7 @@ routerAPI.post(
   upload.single("file"),
   uploadTempFileCtrl
 );
+routerAPI.post("/addClass", authAPI, addClassToPostCtrl);
 // routerAPI.post("/deleteTempFile", authAPI, deleteTempFileCtrl);
 
 //////////////////////////////////////
@@ -377,10 +380,12 @@ routerAPI.get("/getPosts", guestAPI, getPostCtrl);
 
 routerAPI.get("/getPosts/:projectName", authAPI, getPostCtrl);
 
+routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
+
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
-////////    GET U of CRUD   //////////
+////////    UPDATE U of CRUD   //////////
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
@@ -391,7 +396,7 @@ export default routerAPI;
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
-////////    GET D of CRUD   //////////
+////////    DELETE D of CRUD   //////////
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////

@@ -39,12 +39,10 @@ const swordvoiceWeb = (req, res) => {
   let payload;
   console.log("req.cookies.sessionId", req.cookies.sessionId);
   if (req.cookies.sessionId) {
-    console.log("usuario esta logeuado");
     const sessionId = req.cookies.sessionId;
     let usersModel = mongoose.model("User");
     let query = usersModel.find({ userSessionId: sessionId });
     query.exec((err, user) => {
-      console.log(`user en CONTROLLER`, user);
       if (err) {
         console.log(`Server Error: Cannot Find Session ID ${sessionId}`, err);
       } else {
@@ -56,10 +54,8 @@ const swordvoiceWeb = (req, res) => {
             // ),
             userName: user[0].userName
           };
-          console.log("payload de usuario logueado");
           store.dispatch({ type: "LOGGED_IN", payload });
           preloadedState = store.getState();
-          console.log("preloadedState logueado", preloadedState);
 
           res.send(
             template({

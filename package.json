@@ -23,6 +23,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "htmlparser": "^1.7.7",
+    "htmlparser-to-html": "0.0.6",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.8",
     "multer": "^1.4.1",

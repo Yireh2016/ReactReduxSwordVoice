@@ -16,6 +16,12 @@
   cursor: pointer;
   color: var(--orange);
 }
+.createBarItem a {
+  text-decoration: none;
+}
+.createBarItem a:visited {
+  color: black;
+}
 .createBarItem img {
   width: 20px;
 }

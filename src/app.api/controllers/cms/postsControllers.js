@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import fs from "fs";
-import multer from "multer";
+import fs, { readFile } from "fs";
 
 // var fs = require('fs');
 // var dir = './tmp';
@@ -30,9 +29,57 @@ export const createPostCtrl = (req, res) => {
   });
 };
 
+export const addClassToPostCtrl = (req, res) => {
+  const { url, filename, classes } = req.body;
+
+  fs.writeFile(
+    `./dist/assets/uploads/${url}/${filename}.css`,
+    classes,
+    "utf-8",
+    function(err) {
+      if (err) {
+        throw err;
+      } else {
+        console.log("filelistAsync complete");
+        res.json(200, "Classes Added");
+      }
+    }
+  );
+};
+export const getClassFromPostCtrl = (req, res) => {
+  const { filename } = req.params;
+  const url = filename;
+  const path = `./dist/assets/uploads/${url}/${filename}.css`;
+  const readFile = () => {
+    fs.readFile(
+      `./dist/assets/uploads/${url}/${filename}.css`,
+      "utf-8",
+      (err, data) => {
+        if (err) {
+          console.log("there was an error reading file", err);
+          res.json(404);
+        } else {
+          res.json(200, data);
+        }
+      }
+    );
+  };
+
+  fs.access(path, fs.F_OK, err => {
+    if (err) {
+      console.log("file do not exist", err);
+      res.json(404);
+      return;
+    }
+
+    readFile();
+  });
+
+  console.log("getting data for classes handler");
+};
+
 export const uploadTempFileCtrl = (req, res) => {
   let fileObj = req.file;
-  const filename = req.body.filename;
   const fileURL = req.body.fileURL;
 
   fs.rename(
@@ -132,7 +179,7 @@ export const updatePostCtrl = (req, res) => {
             }
             if (!found) {
               fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
-                console.log("error eliminando archivo", err);
+                err && console.log("error eliminando archivo", err);
               });
             }
           });

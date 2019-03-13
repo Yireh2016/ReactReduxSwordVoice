@@ -249,10 +249,12 @@ class PostElement extends Component {
       this.setState(prevState => {
         let classes = value.replace(",", "");
         let classesArr = prevState.HTMLClassesArr;
-        classesArr.push(`${classes}`);
+        classesArr.push(`${classes}-${this.props.project.url}`);
         return {
           HTMLClassesArr: classesArr,
-          HTMLClassesStr: `${prevState.HTMLClassesStr} ${classes}`,
+          HTMLClassesStr: `${prevState.HTMLClassesStr} ${classes}-${
+            this.props.project.url
+          }`,
           HTMLClasses: ""
         };
       });
@@ -324,6 +326,7 @@ class PostElement extends Component {
 
   sendWordToJSXHandler = word => {
     // HTMLPreviewStr
+
     this.setState({ HTMLPreviewStr: word, isFinishEnabled: true });
   };
   editionBtnHandler = e => {

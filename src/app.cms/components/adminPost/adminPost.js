@@ -64,17 +64,17 @@ class AdminPost extends Component {
   };
   projectNameClickHandler = (e, props) => {
     const updateReduxState = this.updateReduxState;
-    const changeMenu = this.props.onMenuChange({
-      main: false,
-      create: true
-    });
+    const changeMenu = this.props.onMenuChange;
     this.setState({ isDataFetched: false });
 
     axios(`/api/getPosts/${props.original.projectName}`)
       .then(res => {
         if (res.status === 200) {
           updateReduxState(res.data);
-          changeMenu();
+          changeMenu({
+            main: false,
+            create: true
+          });
         }
       })
       .catch(err => {
@@ -236,7 +236,7 @@ class AdminPost extends Component {
           />
           {this.state.showDeleteModal && (
             <Modal
-              Title="Warning"
+              title="Warning"
               body="Are you sure you want to delete the post?"
               isVisible={this.state.deleteMode}
               modalHandler={this.modalHandler}

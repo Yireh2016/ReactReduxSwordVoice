@@ -3,11 +3,14 @@ import { withRouter, Redirect, Route, Switch } from "react-router-dom";
 import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
 import axios from "axios";
+import Helmet from "react-helmet";
 //components
 import Welcome from "../welcome/welcome";
 import CreatePost from "../createPost/createPost";
 import AdminPost from "../adminPost/adminPost";
 import Menu from "../menu/menu";
+import ClassesInput from "../classesInput/classesInput";
+
 //css
 import "./dashboard.css";
 //assets
@@ -15,10 +18,12 @@ import plus from "../../assets/dashboard/plus.svg";
 import exit from "../../assets/dashboard/exit.svg";
 import hamburger from "../../assets/dashboard/hamburger.svg";
 import Modal from "../../common/components/modal/modal";
-//serives
+//services
 import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
 import parseHTML2Object from "../../../services/parseHTML2Object";
 import keywordsToArr from "../../../services/keywordsToArr";
+import removeSuffixClasses from "../../../services/suffixClasses";
+import classesArrObjToStr from "../../../services/classesArrObjToStr";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +34,8 @@ class Dashboard extends Component {
       toogleStats: false,
       isPostSaved: true, //eliminar ojo
       showExitModal: { show: false, url: "" },
+      showClassesModal: false,
+
       dateProgram: this.props.date
     };
     this.adminMenu = React.createRef();
@@ -78,6 +85,14 @@ class Dashboard extends Component {
   modalHandler = () => {
     this.setState(prevState => {
       return { showExitModal: !prevState.showExitModal };
+    });
+  }; //ojo
+  showExitModalHandler = showExitModal => {
+    this.setState({ showExitModal: showExitModal });
+  }; //ojo
+  classesModalHandler = () => {
+    this.setState(prevState => {
+      return { showClassesModal: !prevState.showClassesModal };
     });
   };
   programHandler = (history, url) => {
@@ -198,8 +213,74 @@ class Dashboard extends Component {
       });
     }
   };
-  showExitModalHandler = showExitModal => {
-    this.setState({ showExitModal: showExitModal });
+
+  showClassesModalHandler = () => {
+    const viewClasses = classes => {
+      if (classes) {
+        this.props.onAddClasses(
+          removeSuffixClasses(classes, this.props.project.url)
+        );
+        this.setState(prevState => {
+          return {
+            showClassesModal: !prevState.showClassesModal
+          };
+        });
+      } else {
+        this.setState(prevState => {
+          return { showClassesModal: !prevState.showClassesModal };
+        });
+      }
+    };
+
+    axios
+      .get(`/api/getClasses/${this.props.project.url}`)
+      .then(res => {
+        if (res.data === 404) {
+          viewClasses();
+          return;
+        }
+        if (res.status === 200) {
+          viewClasses(res.data);
+        }
+      })
+      .catch(err => {
+        console.log(`error getting classes ${err}`);
+      });
+  };
+  addClassesHandler = () => {
+    const closeModal = () => {
+      this.setState({ showClassesModal: false });
+    };
+    const updateFileList = data => {
+      let fileArr = this.props.postCreation.files;
+      for (let i = 0; i < fileArr.length; i++) {
+        if (fileArr[i] === `${data.filename}.css`) {
+          return;
+        }
+      }
+      this.props.onAddFile([
+        ...this.props.postCreation.files,
+        `${data.filename}.css`
+      ]);
+    };
+    // const updateSiteHead = this.updateSiteHead;
+    const classesStr = classesArrObjToStr(
+      this.props.postCreation.classes,
+      this.props.project.url
+    );
+    if (this.props.project.hasChanged) {
+      const data = {
+        url: this.props.project.url,
+        filename: this.props.project.url,
+        classes: classesStr
+      };
+      axios.post("/api/addClass", data).then(res => {
+        if (res.status === 200) {
+          updateFileList(data);
+          closeModal();
+        }
+      });
+    }
   };
   render() {
     if (this.props.isUserLoggedIn) {
@@ -267,6 +348,8 @@ class Dashboard extends Component {
         );
       });
 
+      const classesInput = <ClassesInput />;
+
       return (
         <div
           className="dashboardLayout"
@@ -278,6 +361,25 @@ class Dashboard extends Component {
                 }
           }
         >
+          <Helmet>
+            <link
+              rel="stylesheet"
+              href={`./uploads/${this.props.project.url}/${
+                this.props.project.url
+              }.css`}
+            />
+          </Helmet>
+          {this.state.showClassesModal && (
+            <Modal
+              title="Classes"
+              body={classesInput}
+              isVisible={this.state.deleteMode}
+              modalHandler={this.classesModalHandler}
+            >
+              <button onClick={this.addClassesHandler}>Add Classes</button>
+              <button onClick={this.classesModalHandler}>Cancel</button>
+            </Modal>
+          )}
           {this.state.showExitModal.show && (
             <Modal
               title="Exit"
@@ -333,7 +435,7 @@ class Dashboard extends Component {
               {this.props.menu.create && (
                 <Menu itemsTitle={["General Styling"]}>
                   <ul className="dashMenuAdminList">
-                    <li>Classes</li>
+                    <li onClick={this.showClassesModalHandler}>Classes</li>
                   </ul>
                 </Menu>
               )}
@@ -417,7 +519,9 @@ const mapDispachToProps = dispach => {
     onDateEdition: payload =>
       dispach({ type: "DATE_EDITION", payload: payload }),
     onSave: () => dispach({ type: "SAVE_POST" }),
-    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
+    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload }),
+    onAddClasses: payload => dispach({ type: "ADD_CLASSES", payload: payload }),
+    onAddFile: payload => dispach({ type: "ADD_DELETE_FILE", payload })
   };
 };
 
