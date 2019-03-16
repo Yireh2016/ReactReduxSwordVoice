@@ -4,6 +4,10 @@ import isBrowser from "../../../services/isBrowser";
 //css
 import "./uploadImage.css";
 import compressImage from "../../../services/compressImage";
+
+//Component Tree
+// thumbnail editor
+//  uploadImage
 class UploadImage extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +34,7 @@ class UploadImage extends Component {
       return <option key={i} value={opt}>{`${opt}`}</option>;
     });
     return (
-      <div className=" uploadFormImage">
+      <div>
         <input
           ref={this.inputFile}
           style={{
@@ -45,28 +49,23 @@ class UploadImage extends Component {
           }}
         />
 
-        <div
+        <button
           onClick={() => {
             this.inputFile.current.click();
           }}
-          className="formImageLoad"
-          style={{
-            backgroundImage: this.props.imagePreview,
-            backgroundSize: "cover"
-          }}
+          className="cmsBtn "
         >
-          <span>{this.props.uploadMessage}</span>
-        </div>
+          Select file
+        </button>
         {isBrowser() !== "edge" && (
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center"
+              flexDirection: "row",
+              alignItems: "center"
             }}
           >
-            <label>
+            <label className="padding--small">
               Image Quality
               <select
                 value={this.props.imgQuality}
@@ -79,6 +78,7 @@ class UploadImage extends Component {
             </label>
 
             <label
+              className="padding--small"
               style={{
                 display: "flex",
                 alignItems: "center"
@@ -97,7 +97,7 @@ class UploadImage extends Component {
               />
               <span> {this.props.imgW + " px"}</span>
             </label>
-            <div>
+            <div className="padding--small">
               {this.props.compressedImg &&
                 "File Size: " + this.props.compressedImg.size}
             </div>

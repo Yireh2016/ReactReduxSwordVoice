@@ -24,6 +24,7 @@ import parseHTML2Object from "../../../services/parseHTML2Object";
 import keywordsToArr from "../../../services/keywordsToArr";
 import removeSuffixClasses from "../../../services/suffixClasses";
 import classesArrObjToStr from "../../../services/classesArrObjToStr";
+import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -162,8 +163,12 @@ class Dashboard extends Component {
       }
     };
     console.log("finalPost", finalPost);
+    const elementsArrNoPreviewData = erasePreviewDataFromElements(
+      this.props.elements
+    );
+
     let dataToUpdate = {
-      elements: this.props.elements,
+      elements: elementsArrNoPreviewData,
       files: this.props.fileNames,
       keywords: this.props.seo.keywords,
       author: this.props.login.loggedUserName,
@@ -172,7 +177,8 @@ class Dashboard extends Component {
       projectName: this.props.project.name,
       description: this.props.summary,
       title: this.props.elements[0].HTMLElementContent,
-      url: this.props.project.url
+      url: this.props.project.url,
+      thumbnail: this.props.thumbnail
     };
 
     axios

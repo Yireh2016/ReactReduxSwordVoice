@@ -56,7 +56,8 @@ class AdminPost extends Component {
         name: data.projectName,
         url: data.url
       },
-      files: data.files
+      files: data.files,
+      thumbnail: data.thumbnail
     };
 
     this.props.onPostFetch(reduxStateFromDB);

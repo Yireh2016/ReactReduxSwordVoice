@@ -13,7 +13,8 @@ const articleSchema = new Schema({
   keywords: { type: [String] }, //keywords
   structuredData: {}, //json,
   title: { type: String },
-  url: { type: String }
+  url: { type: String },
+  thumbnail: {}
 });
 
 mongoose.model("Article", articleSchema);

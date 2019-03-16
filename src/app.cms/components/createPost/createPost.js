@@ -30,6 +30,8 @@ import keywordsToArr from "../../../services/keywordsToArr";
 import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
 import parseHTML2Object from "../../../services/parseHTML2Object";
 import insertIntoArr from "../../../services/insertIntoArr";
+import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
+import uploadFileService from "../../../services/uploadFileService";
 
 //props list
 //showExitModalHandler tells component dashbord to set exit modal
@@ -53,7 +55,6 @@ class CreatePost extends Component {
       isEditionMode: false,
       editionPage: 1,
       summaryElValue: this.props.summary,
-      fileListNames: this.props.fileNames,
       dateProgram: this.props.date,
       finalHTMLElement: "",
       copiedElement: "",
@@ -266,53 +267,51 @@ class CreatePost extends Component {
   onFileRemove = fileName => {
     // const deleteObj = { filename: fileName, url: this.props.project.url };
 
-    this.setState(prevState => {
-      let arr2 = prevState.fileListNames;
-      arr2 = arr2.filter(val => {
-        return val !== fileName;
-      });
-      this.props.onAddDeleteFile(arr2);
-      return { fileListNames: arr2 };
+    let arr2 = this.props.fileNames;
+    arr2 = arr2.filter(val => {
+      return val !== fileName;
     });
+    this.props.onAddDeleteFile(arr2);
 
     alert(`file deleted`);
   };
 
-  uploadFileHandler = e => {
-    this.props.onProjectChange();
+  uploadFileHandler = (e, oldFileName) => {
     if (e.target.files[0]) {
+      this.props.onProjectChange(); //on image change
       const file = e.target.files[0];
-      this.setState(prevState => {
-        for (let i = 0; i < prevState.fileListNames.length; i++) {
-          if (file.name === prevState.fileListNames[i]) {
-            return;
-          }
-        }
+      // for (let i = 0; i < this.props.fileNames.length; i++) {
+      //   if (file.name === this.props.fileNames[i]) {
+      //     return;
+      //   }
+      // }
 
-        // prevState.fileList.push(file);
-        prevState.fileListNames.push(file.name);
-        this.props.onAddDeleteFile(prevState.fileListNames);
-        let data = new FormData();
-
-        data.append("file", file);
-        data.append("filename", file.name);
-        data.append("fileURL", this.props.project.url);
-
-        axios
-          .post("/api/uploadTempFile", data)
-          .then(res => {
-            alert("file uploaded");
-            return {
-              // fileList: prevState.fileList,
-              fileListNames: prevState.fileListNames
-            };
-          })
-          .catch(err => {
-            alert("error on file uploading", err);
-          });
+      let fileNamesArr = this.props.fileNames;
+      if (file.name !== oldFileName) {
+        fileNamesArr = fileNamesArr.filter(fileName => {
+          return fileName !== oldFileName;
+        });
+        console.log(
+          `fileNamesArr after filter oldFileName ${oldFileName}`,
+          fileNamesArr
+        );
+      }
+      fileNamesArr.push(file.name);
+      // this.props.onAddDeleteFile(fileNamesArr)
+      const successUpload = fileNamesArr => {
+        this.props.onAddDeleteFile(fileNamesArr);
+      };
+      const dataToUploadFromFile = {
+        file: file,
+        name: file.name,
+        url: this.props.project.url
+      };
+      uploadFileService(dataToUploadFromFile, () => {
+        successUpload(fileNamesArr);
       });
     }
   };
+
   projectTitleTextInputHandler = e => {
     const {
       target: { name, value }
@@ -388,8 +387,11 @@ class CreatePost extends Component {
       }
     };
     console.log("finalPost", finalPost);
+    const elementsArrNoPreviewData = erasePreviewDataFromElements(
+      this.props.elements
+    );
     let dataToUpdate = {
-      elements: this.props.elements,
+      elements: elementsArrNoPreviewData,
       files: this.props.fileNames,
       keywords: this.props.seo.keywords,
       author: this.props.login.loggedUserName,
@@ -398,7 +400,8 @@ class CreatePost extends Component {
       projectName: this.props.project.name,
       description: this.props.summary,
       title: this.props.elements[0].HTMLElementContent,
-      url: this.props.project.url
+      url: this.props.project.url,
+      thumbnail: this.props.thumbnail
     };
 
     axios
@@ -414,15 +417,9 @@ class CreatePost extends Component {
   fileNameCopyHandler = e => {
     const filename = e.target.innerText;
     navigator.clipboard
-      .writeText(
-        `http://localhost:8080/uploads/${this.props.project.url}/${filename}`
-      )
+      .writeText(`/uploads/${this.props.project.url}/${filename}`)
       .then(() => {
-        alert(
-          `http://localhost:8080/uploads/${
-            this.props.project.url
-          }/${filename} on clipboard`
-        );
+        alert(`/uploads/${this.props.project.url}/${filename} on clipboard`);
       });
   };
   testHandler = () => {
@@ -449,7 +446,7 @@ class CreatePost extends Component {
     if (this.props.project.name === "") {
       return <ProjectTitle exitBtnHandler={this.exitBtnHandler} />;
     }
-    const files = this.state.fileListNames.map((file, i) => {
+    const files = this.props.fileNames.map((file, i) => {
       return (
         <React.Fragment key={i}>
           <span onClick={this.fileNameCopyHandler} className="fileTitle">
@@ -900,7 +897,8 @@ const mapStateToProps = state => {
     project: state.postCreation.project,
     fileNames: state.postCreation.files,
     date: state.postCreation.date,
-    postCreation: state.postCreation
+    postCreation: state.postCreation,
+    thumbnail: state.postCreation.thumbnail
   };
 };
 const mapDispachToProps = dispach => {

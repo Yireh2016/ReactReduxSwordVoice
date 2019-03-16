@@ -7,15 +7,20 @@ const initialState = {
     title: ""
   },
   summary: "",
-  project: { name: "", url: "", hasChanged: false },
+  project: { name: "", url: "", hasChanged: false, imageHasChanged: false },
   files: [],
-  classes: []
+  classes: [],
+  thumbnail: ""
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const postEditCtlreducer = (state = initialState, action) => {
   let newState = state;
 
   switch (action.type) {
+    case "THUMBNAIL_CHANGE": {
+      newState.thumbnail = action.payload;
+      break;
+    }
     case "ADD_CLASSES": {
       newState.classes = action.payload;
       break;
@@ -67,6 +72,10 @@ const postEditCtlreducer = (state = initialState, action) => {
     }
     case "CHANGE_PROJECT": {
       newState.project.hasChanged = true;
+      break;
+    }
+    case "IMAGE_CHANGED": {
+      newState.project.imageHasChanged = true;
       break;
     }
     case "SEO_EDITION": {
@@ -121,7 +130,8 @@ const postEditCtlreducer = (state = initialState, action) => {
         },
         summary: "",
         project: { name: "", url: "", hasChanged: false },
-        files: []
+        files: [],
+        thumbnail: ""
       };
       break;
     }

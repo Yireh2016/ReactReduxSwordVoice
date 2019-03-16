@@ -80,6 +80,7 @@ export const getClassFromPostCtrl = (req, res) => {
 
 export const uploadTempFileCtrl = (req, res) => {
   let fileObj = req.file;
+  console.log("fileObj", fileObj);
   const fileURL = req.body.fileURL;
 
   fs.rename(
@@ -87,7 +88,7 @@ export const uploadTempFileCtrl = (req, res) => {
     `./dist/assets/uploads/${fileURL}/${fileObj.originalname}`,
     err => {
       if (err) {
-        res.json(err);
+        res.json(`error copiando archivo ${err}`);
       } else {
         res.json(200, "file was uploaded");
       }
@@ -160,7 +161,8 @@ export const updatePostCtrl = (req, res) => {
       html: data.html,
       description: data.description,
       title: data.title,
-      url: data.url
+      url: data.url,
+      thumbnail: data.thumbnail
     },
     { new: true },
     function(err) {

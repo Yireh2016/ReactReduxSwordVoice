@@ -115,6 +115,33 @@ const ElementCustomEdit = props => {
           <ul>{classes}</ul>
         </div>
       </div>
+
+      {props.imageElement && (
+        <React.Fragment>
+          <div className="elementAltAttr">
+            Alt
+            <div>
+              <input
+                type="text"
+                name="imgAlt"
+                value={props.imgAlt}
+                onChange={e => props.atrImgHTMLHandler(e)}
+              />
+            </div>
+          </div>
+          <div className="elementFigCaption">
+            FigCaption
+            <div>
+              <input
+                type="text"
+                name="imgFigcaption"
+                value={props.imgFigcaption}
+                onChange={e => props.atrImgHTMLHandler(e)}
+              />
+            </div>
+          </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };

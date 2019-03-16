@@ -169,7 +169,7 @@ class PostElementPreview extends PureComponent {
             bindings={{
               styles: this.props.HTMLStylesStr,
               classes: this.props.HTMLClassesStr,
-              imgFile: this.props.imgFile,
+              imgFile: this.props.imgFile.filename,
               imgAlt: this.props.imgAlt,
               imgFigcaption: this.props.imgFigcaption
             }}

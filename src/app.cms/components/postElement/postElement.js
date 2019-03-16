@@ -17,7 +17,9 @@ import Header from "../header/header";
 import CustomElement from "../customElement/customElement";
 import CustomParagraph from "../customParagraph/customParagraph";
 import ImageElement from "../imageElement/imageElement";
-// import insertIntoArr from "../../../services/insertIntoArr";
+//services
+import uploadFileService from "../../../services/uploadFileService";
+
 //react map
 /*
 
@@ -113,13 +115,14 @@ class PostElement extends Component {
     this.setState({ HTMLElementContent: value });
   };
   atrImgHTMLHandler = e => {
+    this.props.onProjectChange();
     const {
       target: { name, value }
     } = e;
     this.setState({ [name]: value });
   };
-  imgFileSet = image => {
-    this.setState({ imgFile: image });
+  imgFileSet = (previewURL, filename) => {
+    this.setState({ imgFile: { previewURL: previewURL, filename: filename } });
   };
   stylesHTMLHandler = (e, flag) => {
     let value = "";
@@ -330,7 +333,7 @@ class PostElement extends Component {
     this.setState({ HTMLPreviewStr: word, isFinishEnabled: true });
   };
   editionBtnHandler = e => {
-    e.preventDefault();
+    e && e.preventDefault();
 
     this.setState(prevState => {
       return {
@@ -341,26 +344,29 @@ class PostElement extends Component {
     // this.props.editionBtnHandler(this.state, false);
     this.props.editionBtnHandler(this.state);
 
-    if (this.props.project.hasChanged) {
+    const conditionToChangePreview = this.state.HTMLElementType.match("figure")
+      ? this.props.project.imageHasChanged
+      : this.props.project.hasChanged;
+
+    if (conditionToChangePreview) {
+      //tratamiento especial si es imagen
       console.log("edition execued");
       let finalHTMLElement = this.state.HTMLPreviewStr;
       let styles = this.state.HTMLStylesStr;
       let classes = this.state.HTMLClassesStr;
       let content = this.state.HTMLElementContent;
-      // let alt = "test";
-      // let imgFile = "/uploads/temp/878d607031a525228eaa95272b2720a8.jpg";
-      // let figcaption = "test";
+
       //images only
-      let alt = this.state.imgAlt;
-      let imgFile = this.state.imgFile;
-      let figcaption = this.state.imgFigcaption;
+      const alt = this.state.imgAlt;
+      const imgFile = this.state.imgFile;
+      const figcaption = this.state.imgFigcaption;
 
       finalHTMLElement = this.prepareHTMLFilter(
         finalHTMLElement,
         styles,
         classes,
         content,
-        imgFile,
+        imgFile.filename,
         alt,
         figcaption
       );
@@ -410,7 +416,39 @@ class PostElement extends Component {
 
     this.props.onDelElement(payload);
   };
+  uploadFileHandler = (e, oldFileName) => {
+    if (e.target.files[0]) {
+      this.props.onImageChange(); //on image change
+      const file = e.target.files[0];
 
+      let fileNamesArr = this.props.fileNames;
+      if (file.name !== oldFileName) {
+        fileNamesArr = fileNamesArr.filter(fileName => {
+          return fileName !== oldFileName;
+        });
+      }
+      let updateListFiles = true;
+      for (let i = 0; i < fileNamesArr.length; i++) {
+        if (file.name === fileNamesArr[i]) {
+          updateListFiles = false;
+        }
+      }
+
+      updateListFiles && fileNamesArr.push(file.name);
+      // this.props.onAddDeleteFile(fileNamesArr)
+      const successUpload = fileNamesArr => {
+        this.props.onAddDeleteFile(fileNamesArr);
+      };
+      const dataToUploadFromFile = {
+        file: file,
+        name: file.name,
+        url: this.props.project.url
+      };
+      uploadFileService(dataToUploadFromFile, () => {
+        successUpload(fileNamesArr);
+      });
+    }
+  };
   render() {
     const parser = () => {
       if (
@@ -419,13 +457,20 @@ class PostElement extends Component {
       ) {
         return ReactHtmlParser(this.state.HTMLPreviewStr);
       } else if (this.state.HTMLElementType.match(/figure/g)) {
+        this.state.imgFile && this.state.imgFile.previewURL;
+        let imgFile = "";
+        if (this.state.imgFile && this.state.imgFile.previewURL === "") {
+          imgFile = this.state.imgFile.filename;
+        } else if (this.state.imgFile) {
+          imgFile = this.state.imgFile.previewURL;
+        }
         return (
           <JsxParser
             jsx={this.state.HTMLPreviewStr}
             bindings={{
               styles: this.state.HTMLStylesStr,
               classes: this.state.HTMLClassesStr,
-              imgFile: this.state.imgFile,
+              imgFile: imgFile,
               imgAlt: this.state.imgAlt,
               imgFigcaption: this.state.imgFigcaption
             }}
@@ -590,13 +635,15 @@ class PostElement extends Component {
 
               {this.state.HTMLElementType.match(/<figure/g) && (
                 <ImageElement
+                  editionBtnHandler={this.editionBtnHandler}
                   atrImgHTMLHandler={this.atrImgHTMLHandler}
                   imgFileSet={this.imgFileSet}
                   inputTextHTMLHandler={this.inputTextHTMLHandler}
                   atributesHTMLHandler={this.atributesHTMLHandler}
                   stylesHTMLHandler={this.stylesHTMLHandler}
                   classesHTMLHandler={this.classesHTMLHandler}
-                  uploadFileHandler={this.props.uploadFileHandler}
+                  uploadFileHandler={this.uploadFileHandler}
+                  HTMLid={this.state.HTMLid}
                   HTMLElementContent={this.state.HTMLElementContent}
                   HTMLAtributes={this.state.HTMLAtributes}
                   HTMLStyles={this.state.HTMLStyles}
@@ -615,12 +662,13 @@ class PostElement extends Component {
                   HTMLClassesArrRemove={this.HTMLClassesArrRemove}
                 />
               )}
-              {this.state.isFinishEnabled && (
-                <button className="cmsBtn" onClick={this.editionBtnHandler}>
-                  <span style={{ marginRight: "5px" }}>Finish</span>
-                  <img style={{ width: "10px" }} src={check} alt="check" />
-                </button>
-              )}
+              {this.state.isFinishEnabled &&
+                this.state.HTMLElementType.match("figure") === null && (
+                  <button className="cmsBtn" onClick={this.editionBtnHandler}>
+                    <span style={{ marginRight: "5px" }}>Finish</span>
+                    <img style={{ width: "10px" }} src={check} alt="check" />
+                  </button>
+                )}
             </div>
           </div>
         )}
@@ -632,7 +680,9 @@ class PostElement extends Component {
 const mapStateToProps = state => {
   return {
     elements: state.postCreation.elements,
-    project: state.postCreation.project
+    project: state.postCreation.project,
+    fileNames: state.postCreation.files
+    //fileNames
   };
 };
 const mapDispachToProps = dispach => {
@@ -642,7 +692,11 @@ const mapDispachToProps = dispach => {
     onEditElement: payload =>
       dispach({ type: "EDIT_ELEMENT", payload: payload }),
     onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
-    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload })
+    onImageChange: () => dispach({ type: "IMAGE_CHANGED" }),
+    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
+    onAddDeleteFile: payload =>
+      dispach({ type: "ADD_DELETE_FILE", payload: payload })
+    //onadddeletefile
   };
 };
 

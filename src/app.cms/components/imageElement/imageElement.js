@@ -3,9 +3,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 //components
 import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
+import UploadImage from "../uploadImage/uploadImage";
+
 //services
 import isBrowser from "../../../services/isBrowser";
-import UploadImage from "../uploadImage/uploadImage";
 import compressImage from "../../../services/compressImage";
 
 //react map
@@ -23,23 +24,24 @@ class ImageElement extends Component {
     super(props);
     isBrowser;
     this.state = {
-      imagePreview: undefined,
       uploadMessage: "Upload Image",
       imgW: 200,
       imgQuality: 0.6,
       imageFile: null,
-      compressedImg: null
+      compressedImg: null,
+      oldFilename: this.props.imgFile && this.props.imgFile.filename
     };
   }
   imgWidthHandler = e => {
     const value = e.target.value;
-    compressImage(
-      this.state.imageFile,
-      this.state.imgQuality,
-      value,
-      this.imageUpload,
-      this.imageUploadErr
-    );
+    this.state.imageFile &&
+      compressImage(
+        this.state.imageFile,
+        this.state.imgQuality,
+        value,
+        this.imageUpload,
+        this.imageUploadErr
+      );
   };
   qualityHandler = e => {
     this.props.onProjectChange();
@@ -50,27 +52,29 @@ class ImageElement extends Component {
     this.setState({ [name]: value });
   };
 
-  handleImgUpload = files => {
-    this.props.onProjectChange();
-    this.setState({ image: files });
-  };
+  // handleImgUpload = files => {
+  //   this.props.onProjectChange();
+  //   this.setState({ image: files });
+  // };
   imageUploadErr = err => {
     this.setState(() => {
       return {
-        imagePreview: undefined,
         uploadMessage: `${err}`
       };
     });
   };
 
   imageUpload = image => {
-    console.log("image on upload or compressed", image);
+    console.log("image on upload or compressed", URL.createObjectURL(image));
     const file = new File([image], image.name);
-    this.props.onProjectChange();
+    // this.props.onProjectChange();
+    this.props.imgFileSet(
+      `${URL.createObjectURL(image)}`,
+      `/uploads/${this.props.project.url}/${image.name}`
+    );
     this.setState(() => {
       return {
-        imagePreview: `url(${URL.createObjectURL(image)})`,
-        uploadMessage: undefined,
+        // uploadMessage: undefined,
         isImageUploaded: true,
         compressedImg: file
       };
@@ -92,26 +96,28 @@ class ImageElement extends Component {
     });
 
     if (name === "imgQuality") {
-      compressImage(
-        this.state.imageFile,
-        value,
-        this.state.imgW,
-        this.imageUpload,
-        this.imageUploadErr
-      );
+      this.state.imageFile &&
+        compressImage(
+          this.state.imageFile,
+          value,
+          this.state.imgW,
+          this.imageUpload,
+          this.imageUploadErr
+        );
     }
   };
   imgWidthHandler = e => {
     const value = e.target.value;
     console.log("imgWidthHandler", value);
     console.log("imgWidthHandler2", e.target.value);
-    compressImage(
-      this.state.imageFile,
-      this.state.imgQuality,
-      value,
-      this.imageUpload,
-      this.imageUploadErr
-    );
+    this.state.imageFile &&
+      compressImage(
+        this.state.imageFile,
+        this.state.imgQuality,
+        value,
+        this.imageUpload,
+        this.imageUploadErr
+      );
   };
 
   uploadingToServerHandler = () => {
@@ -119,13 +125,22 @@ class ImageElement extends Component {
     if (this.state.compressedImg) {
       const file = [this.state.compressedImg];
       const e = { target: { files: file } };
-      this.props.uploadFileHandler(e);
-      console.log("this.props.project.name", this.props.project.name);
-      console.log("file.name", file[0].name);
-      this.props.imgFileSet(
-        `uploads/${this.props.project.url}/${file[0].name}`
-      );
+      if (this.state.oldFilename) {
+        //se esta editando la imagen por ende se debe borrar el archivo de la lista de archivos
+        let oldFilename = this.state.oldFilename.match(/[\w\s-]+\.\w*/g);
+        console.log("oldFilename", oldFilename);
+        console.log("this.state.oldFilename", this.state.oldFilename);
+        this.props.uploadFileHandler(e, oldFilename[0]);
+      } else {
+        this.props.uploadFileHandler(e); //add to la lista de files disponibles y subo file al server
+      }
+      // this.props.imgFileSet(
+      //   `/uploads/${this.props.project.url}/${file[0].name}`,
+      //   `/uploads/${this.props.project.url}/${file[0].name}`
+      // );
     }
+
+    this.props.editionBtnHandler();
   };
   render() {
     return (
@@ -145,29 +160,33 @@ class ImageElement extends Component {
             imgPropertiesHandler={this.imgPropertiesHandler}
             imgWidthHandler={this.imgWidthHandler}
             originalImageSaver={this.originalImageSaver}
-            imagePreview={this.state.imagePreview}
             uploadMessage={this.state.uploadMessage}
             imgQuality={this.state.imgQuality}
             imgW={this.state.imgW}
             compressedImg={this.state.compressedImg}
           />
 
-          <div>
+          <div className="elementContentLayout">
             <ElementCustomEdit
-              HTMLAtributes={props.HTMLAtributes}
-              HTMLAtributesArr={props.HTMLAtributesArr}
-              HTMLAtributesArrRemove={props.HTMLAtributesArrRemove}
-              HTMLStyles={props.HTMLStyles}
-              HTMLStylesArr={props.HTMLStylesArr}
-              HTMLStylesArrRemove={props.HTMLStylesArrRemove}
-              HTMLClasses={props.HTMLClasses}
-              HTMLClassesArr={props.HTMLClassesArr}
-              HTMLClassesArrRemove={props.HTMLClassesArrRemove}
-              stylesHTMLHandler={props.stylesHTMLHandler}
-              atributesHTMLHandler={props.atributesHTMLHandler}
-              classesHTMLHandler={props.classesHTMLHandler}
+              HTMLAtributes={this.props.HTMLAtributes}
+              HTMLAtributesArr={this.props.HTMLAtributesArr}
+              HTMLAtributesArrRemove={this.props.HTMLAtributesArrRemove}
+              HTMLStyles={this.props.HTMLStyles}
+              HTMLStylesArr={this.props.HTMLStylesArr}
+              HTMLStylesArrRemove={this.props.HTMLStylesArrRemove}
+              HTMLClasses={this.props.HTMLClasses}
+              HTMLClassesArr={this.props.HTMLClassesArr}
+              HTMLClassesArrRemove={this.props.HTMLClassesArrRemove}
+              imageElement={true}
+              imgAlt={this.props.imgAlt}
+              atrImgHTMLHandler={this.props.atrImgHTMLHandler}
+              imgFigcaption={this.props.imgFigcaption}
+              atrImgHTMLHandler={this.props.atrImgHTMLHandler}
+              stylesHTMLHandler={this.props.stylesHTMLHandler}
+              atributesHTMLHandler={this.props.atributesHTMLHandler}
+              classesHTMLHandler={this.props.classesHTMLHandler}
             />
-            <div className="elementClasses">
+            {/* <div className="elementClasses">
               Alt
               <div>
                 <input
@@ -189,12 +208,19 @@ class ImageElement extends Component {
                 />
               </div>
             </div>
+          */}
           </div>
-          <div>
-            <button onClick={this.uploadingToServerHandler} type="button">
-              Upload Image
-            </button>
-          </div>
+          {this.state.compressedImg && (
+            <div>
+              <button
+                className="cmsBtn"
+                onClick={this.uploadingToServerHandler}
+                type="button"
+              >
+                Upload Image
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );

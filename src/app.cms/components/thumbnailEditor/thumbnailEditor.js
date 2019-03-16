@@ -4,13 +4,17 @@ import { connect } from "react-redux";
 //components
 import UploadImage from "../uploadImage/uploadImage";
 import compressImage from "../../../services/compressImage";
+import uploadFileService from "../../../services/uploadFileService";
 
 class ThumbNailEditor extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isImageUploaded: false,
-      imagePreview: undefined,
+      imagePreview: this.props.thumbnail
+        ? `url(/uploads/${this.props.project.url}/${this.props.thumbnail.name})`
+        : null,
       uploadMessage: "Upload Thunbnail",
       imgW: 200,
       imgQuality: 0.6,
@@ -29,19 +33,56 @@ class ThumbNailEditor extends Component {
   };
 
   imageUpload = image => {
-    console.log("imgupload ", image);
+    image.name = "thumb-" + image.name;
+
+    this.props.onProjectChange();
+    this.props.onThumbnailChange(image);
+
     this.setState(() => {
       return {
         imagePreview: `url(${URL.createObjectURL(image)})`,
-        uploadMessage: undefined,
         isImageUploaded: true,
         compressedImg: image
       };
     });
     alert("file Uploaded successfully");
   };
+
+  uploadingToServerHandler = () => {
+    const file = new File(
+      [this.state.compressedImg],
+      this.props.thumbnail.name
+    );
+    // const file = this.state.compressedImg;
+    const dataToUploadFromFile = {
+      file: file,
+      name: this.props.thumbnail.name,
+      url: this.props.project.url
+    };
+    const successUpload = (fileNamesArr, filename) => {
+      console.log("fileNamesArr", fileNamesArr);
+      console.log(
+        "filter result",
+        fileNamesArr.filter(el => {
+          return !el.match(/thumb-.*/g);
+        })
+      );
+      console.log("fileNamesArr after filter", fileNamesArr);
+      fileNamesArr = fileNamesArr.filter(el => {
+        return !el.match(/thumb-.*/g);
+      });
+      fileNamesArr.push(filename);
+
+      this.props.onAddDeleteFile(fileNamesArr);
+    };
+    let fileNamesArr = this.props.fileNames;
+
+    uploadFileService(dataToUploadFromFile, () => {
+      successUpload(fileNamesArr, dataToUploadFromFile.name);
+    });
+  };
+
   originalImageSaver = image => {
-    console.log("originalImageSaver", image);
     this.setState({ imageFile: image });
   };
   imgPropertiesHandler = e => {
@@ -53,7 +94,7 @@ class ThumbNailEditor extends Component {
       [name]: value
     });
 
-    if (name === "imgQuality") {
+    if (name === "imgQuality" && this.state.imageFile) {
       compressImage(
         this.state.imageFile,
         value,
@@ -65,13 +106,14 @@ class ThumbNailEditor extends Component {
   };
   imgWidthHandler = e => {
     const value = e.target.value;
-    compressImage(
-      this.state.imageFile,
-      this.state.imgQuality,
-      value,
-      this.imageUpload,
-      this.imageUploadErr
-    );
+    this.state.imageFile &&
+      compressImage(
+        this.state.imageFile,
+        this.state.imgQuality,
+        value,
+        this.imageUpload,
+        this.imageUploadErr
+      );
   };
   render() {
     return (
@@ -93,20 +135,22 @@ class ThumbNailEditor extends Component {
                 imgPropertiesHandler={this.imgPropertiesHandler}
                 imgWidthHandler={this.imgWidthHandler}
                 originalImageSaver={this.originalImageSaver}
-                imagePreview={this.state.imagePreview}
                 uploadMessage={this.state.uploadMessage}
                 imgQuality={this.state.imgQuality}
                 imgW={this.state.imgW}
                 compressedImg={this.state.compressedImg}
-              >
-                {/* <div>
-                  {this.state.compressedImg &&
-                    "File Size: " + this.state.compressedImg.size}
-                </div> */}
-              </UploadImage>
+              />
             </div>
           </React.Fragment>
         )}
+
+        <button
+          className="cmsBtn"
+          onClick={this.uploadingToServerHandler}
+          type="button"
+        >
+          Upload Image
+        </button>
 
         {true && (
           <Post
@@ -130,29 +174,20 @@ const mapStateToProps = state => {
     project: state.postCreation.project,
     fileNames: state.postCreation.files,
     date: state.postCreation.date,
-    postCreation: state.postCreation
+    postCreation: state.postCreation,
+    thumbnail: state.postCreation.thumbnail
   };
 };
 const mapDispachToProps = dispach => {
   return {
-    //acciones
-    // onCreateElement: id => dispach({ type: "CREATE_ELEMENT", id: id }),
-    // onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
-    // onEditElement: payload =>
-    //   dispach({ type: "EDIT_ELEMENT", payload: payload }),
-    // onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
-    // onSummaryEdition: payload =>
-    //   dispach({ type: "SUMMARY_EDITION", payload: payload }),
-    // onAddDeleteFile: payload =>
-    //   dispach({ type: "ADD_DELETE_FILE", payload: payload }),
-    // onDateEdition: payload =>
-    //   dispach({ type: "DATE_EDITION", payload: payload }),
-    // onSave: () => dispach({ type: "SAVE_POST" }),
-    // onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+    onThumbnailChange: payload => {
+      dispach({ type: "THUMBNAIL_CHANGE", payload: payload });
+    },
+    onAddDeleteFile: payload =>
+      dispach({ type: "ADD_DELETE_FILE", payload: payload }),
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
   };
 };
-
-// const CreatePost2 = withRouter(CreatePost);
 
 export default connect(
   mapStateToProps,
