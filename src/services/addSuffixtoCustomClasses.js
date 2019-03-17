@@ -19,7 +19,11 @@ const getClassFromStrAddSuffix = (classes, suffix) => {
 
 const addSuffixToClassPropsOnDomArr = (arrHTMLparsed, suffix) => {
   for (let i = 0; i < arrHTMLparsed.length; i++) {
-    if (arrHTMLparsed[i].type === "tag" && arrHTMLparsed[i].attribs.class) {
+    if (
+      arrHTMLparsed[i].attribs &&
+      arrHTMLparsed[i].type === "tag" &&
+      arrHTMLparsed[i].attribs.class
+    ) {
       arrHTMLparsed[i].attribs.class = getClassFromStrAddSuffix(
         arrHTMLparsed[i].attribs.class,
         suffix

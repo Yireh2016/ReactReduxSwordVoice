@@ -366,7 +366,7 @@ class PostElement extends Component {
         styles,
         classes,
         content,
-        imgFile.filename,
+        imgFile ? imgFile.filename : "",
         alt,
         figcaption
       );
