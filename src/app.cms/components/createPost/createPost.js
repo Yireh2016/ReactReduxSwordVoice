@@ -394,7 +394,7 @@ class CreatePost extends Component {
       elements: elementsArrNoPreviewData,
       files: this.props.fileNames,
       keywords: this.props.seo.keywords,
-      author: this.props.login.loggedUserName,
+      author: this.props.login.loggedUserID,
       date: date,
       html: finalHTMl,
       projectName: this.props.project.name,
@@ -403,7 +403,7 @@ class CreatePost extends Component {
       url: this.props.project.url,
       thumbnail: this.props.thumbnail
     };
-
+    //debo almacenar el id del autor
     axios
       .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
       .then(res => {
@@ -781,8 +781,7 @@ class CreatePost extends Component {
         {/* <div className="createLayout" onWheel={this.editAreaScrollCtrl}> */}
         {!this.state.isEditionMode && (
           <div className="createLayout">
-            {/* {titles()}
-          <div>Project Name: {this.props.project.name}</div> */}
+     
             <div
               style={{
                 height: "100vh",

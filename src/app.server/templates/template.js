@@ -1,5 +1,6 @@
 export default ({ body, title, initialState }) => {
   console.log("template deploy");
+  //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
     <!DOCTYPE html>
     <html>

@@ -13,7 +13,8 @@ import {
 } from "../controllers/cms/postsControllers";
 import {
   getPostCtrl,
-  updatePostCtrl
+  updatePostCtrl,
+  getArticleCtrl
 } from "../controllers/cms/postsControllers";
 // import axios from "axios";
 
@@ -380,12 +381,14 @@ routerAPI.get("/getPosts", guestAPI, getPostCtrl);
 
 routerAPI.get("/getPosts/:projectName", authAPI, getPostCtrl);
 
+routerAPI.get("/getArticle/:projectName", guestAPI, getArticleCtrl);
+
 routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
-////////    UPDATE U of CRUD   //////////
+////////    UPDATE U of CRUD   ///////
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////

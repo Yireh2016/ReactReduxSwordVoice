@@ -26,7 +26,8 @@ class Login extends Component {
           if (res.status === 200) {
             const data = {
               userAvatar: res.data.userAvatar,
-              userName: res.data.userName
+              userName: res.data.userName,
+              userID: res.data._id
             };
             this.props.onLogIn(data);
           }
@@ -67,7 +68,9 @@ class Login extends Component {
 
             axios
               .put(`/api/sessionUpdate/${res.data.userName}`)
-              .then(response => {})
+              .then(res => {
+                console.log("res on put api/sessionUpdate ", res);
+              })
               .catch(err => {
                 console.log("err ", err);
               });
@@ -76,7 +79,8 @@ class Login extends Component {
 
             const data = {
               userAvatar: res.data.userAvatar,
-              userName: res.data.userName
+              userName: res.data.userName,
+              userID: res.data._id
             };
             this.props.onLogIn(data);
           }

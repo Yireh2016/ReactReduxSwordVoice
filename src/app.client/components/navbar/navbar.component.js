@@ -13,8 +13,13 @@ import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
 import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
-import { guestCookie } from "../../../app.client/services/cookieManager";
+
 //services
+
+import {
+  guestCookie,
+  removeCookie
+} from "../../../app.client/services/cookieManager";
 
 class NavBar extends Component {
   constructor(props) {
@@ -153,7 +158,8 @@ class NavBar extends Component {
   logOutClickHandler = () => {
     this.props.onLogOut();
     console.log("elimianndo session ID");
-    this.props.cookies.remove("sessionId");
+    removeCookie(this.props, "sessionId");
+
     console.log(" session ID eliminado ", this.props.cookies.cookies);
     window.localStorage.removeItem("userAvatar");
     this.setState({
@@ -630,7 +636,7 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+
     onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };

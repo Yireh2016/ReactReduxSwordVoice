@@ -4,6 +4,7 @@ import { Schema } from "mongoose";
 import crypto from "crypto";
 
 const userSchema = new Schema({
+  _id: Schema.Types.ObjectId,
   userAvatar: { type: { data: Buffer, contentType: String }, required: true },
   userFirstName: { type: String, required: true },
   userLastName: { type: String, required: true },

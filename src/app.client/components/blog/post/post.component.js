@@ -57,7 +57,6 @@ class Post extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("this.state.on did update", this.state);
     if (this.postTitleH2.current) {
       this.checkPostTitleOverflow();
     }
@@ -83,7 +82,6 @@ class Post extends React.Component {
     const element = this.postTitleH2.current;
 
     const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
-    console.log("hasOverflowingChildren", hasOverflowingChildren);
     if (!hasOverflowingChildren) {
       return;
     } else {

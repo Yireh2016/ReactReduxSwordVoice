@@ -48,8 +48,8 @@ class App extends Component {
           render={() => <Contact cookies={this.props.cookies} />}
         />
         <Route
-          exact
-          path="/blog/post"
+          strict
+          path="/blog/post/"
           render={() => <BlogArticle cookies={this.props.cookies} />}
         />
       </Switch>

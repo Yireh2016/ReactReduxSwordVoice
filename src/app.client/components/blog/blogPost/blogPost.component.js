@@ -1,6 +1,7 @@
 //modulos
 import React, { Component } from "react";
-import JsxParser from "react-jsx-parser";
+// import JsxParser from "react-jsx-parser";
+import ReactHtmlParser from "react-html-parser";
 import axios from "axios";
 import b64toBlob from "b64-to-blob";
 import { connect } from "react-redux";
@@ -13,27 +14,17 @@ import NewComment from "./newComment/newComment.component";
 import EnableComment from "./enableComment/enableComment.component";
 import Navbar from "../../navbar/navbar.component";
 import Post from "../post/post.component";
-import Summary from "../common/summary/summary.component";
+// import Summary from "../common/summary/summary.component";
 import Call2Action from "../../general/call2action.component";
 import FooterApp from "../../footer/footer.component";
 import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
 import Summary2 from "../common/summary/summary2.component";
-// import SearchBar from "../searchBar.component";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
 import fondoImg from "../../../assets/img/blog/fondoBlog.jpg";
 import avatarImg from "../../../assets/img/general/avatar.jpg";
-//servicios
-import {
-  isLoggedIn,
-  saveToken,
-  getTokenData,
-  getToken
-} from "../../../services/auth";
-
-// import CustomScrollBar from "../../general/customScrollBar.component";
 
 class BlogArticle extends Component {
   constructor(props) {
@@ -98,6 +89,7 @@ class BlogArticle extends Component {
       )} y this.state.loggedUserAvatar ${this.state.loggedUserAvatar}`
     );
     if (
+      //ojo esta asumiendo que el avatar estara en el localstorage, que passa si se llega aqui directo
       this.props.isUserLoggedIn &&
       window.localStorage.getItem("userAvatar") &&
       this.state.loggedUserAvatar === ""
@@ -514,7 +506,8 @@ class BlogArticle extends Component {
 
         this.props.onLogIn({
           userAvatar: imgBlob,
-          userName: res.data.userName
+          userName: res.data.userName,
+          userID: userId
         });
 
         this.setState({
@@ -671,10 +664,11 @@ class BlogArticle extends Component {
         <div className="blogArticleContainer">
           <div className="blogArticle grid col-8 col-12-md">
             <article>
-              <JsxParser
+              {ReactHtmlParser(this.props.article.html)}
+              {/* <JsxParser
                 bindings={bindings}
                 jsx={newPostData[0].articleProps.articleJSX}
-              />
+              /> */}
             </article>
             <div className="googleAdBanner grid col-12">
               Compra cosas que no quieres
@@ -745,7 +739,8 @@ const mapStateToProps2 = state => {
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
-    loggedUserAvatar: state.logInStatus.loggedUserAvatar
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar,
+    article: state.article
   };
 };
 const mapDispachToProps = dispach => {

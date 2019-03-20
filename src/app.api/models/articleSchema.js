@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
+//schemas
 
 const articleSchema = new Schema({
-  author: { type: String, required: true },
+  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   coments: { type: [{}] },
   date: { type: Date, default: Date.now },
   elements: [{}],

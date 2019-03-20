@@ -48,7 +48,7 @@ class ProjectTitle extends Component {
     const date = new Date();
     const finalPost = {
       article: {
-        author: this.props.login.loggedUserName,
+        author: this.props.login.loggedUserID,
         comments: [],
         date: date, //date
         files: [], //arr

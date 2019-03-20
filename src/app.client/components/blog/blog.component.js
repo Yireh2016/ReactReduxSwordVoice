@@ -121,14 +121,13 @@ class BlogComponent extends Component {
           for (let i = 0; i < data.length; i++) {
             newDataArr[i] = {
               articleProps: {
-                image: avatarImg,
+                image: `uploads/${data[i].url}/${data[i].imageURL}`,
                 title: data[i].title,
-
+                url: data[i].url,
                 summaryText: paragraphService(data[i].description),
-
                 author: data[i].author,
                 date: data[i].date,
-                authorAvatar: avatarImg,
+                authorAvatar: data[i].authorAvatar,
                 categories: keywordsToArr(data[i].keywords)
               }
             };
@@ -291,6 +290,7 @@ class BlogComponent extends Component {
               date={bindings.date}
               avatar={bindings.authorAvatar}
               author={bindings.author}
+              url={bindings.url}
               keywords={bindings.categories}
               width={height * 0.95}
               height={height}
@@ -327,6 +327,7 @@ class BlogComponent extends Component {
                 date={bindings.date}
                 avatar={bindings.authorAvatar}
                 author={bindings.author}
+                url={bindings.url}
                 keywords={bindings.categories}
                 width={height * 0.9263}
                 height={height}

@@ -69,6 +69,7 @@ class NewPost extends React.Component {
                 date={newPostArrayContent.articleProps.date}
                 avatar={newPostArrayContent.articleProps.authorAvatar}
                 author={newPostArrayContent.articleProps.author}
+                url={newPostArrayContent.articleProps.url}
                 keywords={newPostArrayContent.articleProps.categories}
                 width={this.state.postHeight * 0.66}
                 height={this.state.postHeight}
@@ -84,6 +85,7 @@ class NewPost extends React.Component {
               date={newPostArrayContent.articleProps.date}
               avatar={newPostArrayContent.articleProps.authorAvatar}
               author={newPostArrayContent.articleProps.author}
+              url={newPostArrayContent.articleProps.url}
               keywords={newPostArrayContent.articleProps.categories}
               width={this.state.summaryW}
               height={this.state.summaryH}

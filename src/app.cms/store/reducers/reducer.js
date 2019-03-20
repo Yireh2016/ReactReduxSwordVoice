@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
       newState.isUserLoggedIn = true;
       newState.loggedUserAvatar = action.payload.userAvatar;
       newState.loggedUserName = action.payload.userName;
-
+      newState.loggedUserID = action.payload.userID;
       break;
     }
 

@@ -526,7 +526,8 @@ class SignUpForm extends Component {
                     this.props.onLogIn({
                       //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
                       userAvatar: res.data.doc.userAvatar,
-                      userName: userData.userName
+                      userName: userData.userName,
+                      userID: userData.id
                     });
                   }
                 })
@@ -541,7 +542,8 @@ class SignUpForm extends Component {
               this.props.onLogIn({
                 //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
 
-                userName: userData.userName
+                userName: userData.userName,
+                userID: userData.id
               });
               alert("data submited without avatar");
             }

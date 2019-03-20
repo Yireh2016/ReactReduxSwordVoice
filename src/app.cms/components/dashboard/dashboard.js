@@ -519,7 +519,7 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+
     onLogOut: () => dispach({ type: "LOGGED_OUT" }),
     onReset: () => dispach({ type: "RESET_EDIT" }),
     onDateEdition: payload =>

@@ -125,7 +125,11 @@ class Summary2 extends React.Component {
       const fontStyle = { fontSize: `${fontSize}px` };
       return (
         <p>
-          <a href="/blog/post/" style={fontStyle} className={readMoreCSS}>
+          <a
+            href={`/blog/post/${this.props.url}`}
+            style={fontStyle}
+            className={readMoreCSS}
+          >
             Read More ...
           </a>
         </p>
@@ -199,7 +203,7 @@ class Summary2 extends React.Component {
     //props avatar
     //props author
     const avatarStyle = {
-      backgroundImage: `url(${this.props.avatar})`
+      backgroundImage: `url(data:image/jpeg;base64,${this.props.avatar})`
     };
     const avatarCSS = "summary2-avatar";
     const autorCSS = "summary2-author";

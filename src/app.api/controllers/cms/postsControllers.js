@@ -17,6 +17,7 @@ export const createPostCtrl = (req, res) => {
 
   article.save((err, data) => {
     if (err) {
+      console.log(`hubo error creando articulo ${err}`);
       res.json(400, { code: 400, message: `there was an error: ${err}` });
     } else {
       //creando carpeta con nuevo proyecto
@@ -109,6 +110,12 @@ export const uploadTempFileCtrl = (req, res) => {
 // };
 
 export const getPostCtrl = (req, res) => {
+  console.log("req.query", req.query);
+  let { skip } = req.query;
+  const limit = 7;
+
+  skip = skip ? parseInt(skip) : 0; //default number of post to fetch 7
+
   if (req.params.projectName) {
     articleModel.findOne(
       { projectName: req.params.projectName },
@@ -125,31 +132,65 @@ export const getPostCtrl = (req, res) => {
     return;
   }
 
-  articleModel.find().exec((err, posts) => {
-    if (err) {
-      console.log("err", err);
-      res.json(err);
-      return;
-    }
-    let postMinimumData = [];
-    for (let i = 0; i < posts.length; i++) {
-      postMinimumData[i] = {
-        projectName: posts[i].projectName,
-        title: posts[i].title,
-        description: posts[i].description,
-        author: posts[i].author,
-        date: posts[i].date,
-        keywords: posts[i].keywords[0]
-      };
-    }
-    res.json(postMinimumData);
-  });
+  articleModel
+    .find()
+    .select()
+    .limit(10)
+    .skip(skip)
+    .populate("author")
+    .exec()
+    .then(posts => {
+      console.log("posts on getpost", posts);
+      let postMinimumData = [];
+      for (let i = 0; i < posts.length; i++) {
+        postMinimumData[i] = {
+          url: posts[i].url,
+          imageURL: posts[i].thumbnail.name,
+          projectName: posts[i].projectName,
+          title: posts[i].title,
+          description: posts[i].description,
+          author:
+            `${posts[i].author.userFirstName} ` +
+            `${posts[i].author.userLastName}`,
+          authorAvatar: posts[i].author.userAvatar,
+          date: posts[i].date,
+          keywords: posts[i].keywords[0]
+        };
+        console.log(`postMinimumData[${i}] `, postMinimumData[i]);
+      }
+      res.json(postMinimumData);
+    })
+    .catch(err => {
+      if (err) {
+        console.log("err", err);
+        res.json(err);
+        return;
+      }
+    });
 };
 
+export const getArticleCtrl = (req, res) => {
+  const projectName = req.params.projectName;
+
+  articleModel
+    .findOne({ url: `${projectName}` })
+    .select()
+    .populate("author")
+    .exec()
+    .then(article => {
+      res.json(article);
+    })
+    .catch(err => {
+      if (err) {
+        console.log("err", err);
+        res.json(err);
+        return;
+      }
+    });
+};
 export const updatePostCtrl = (req, res) => {
   const projectName = req.params.projectName;
   let data = req.body;
-  console.log("data to update", data);
   articleModel.findOneAndUpdate(
     { projectName: projectName },
     {
