@@ -79,9 +79,7 @@ class Dashboard extends Component {
       };
     });
   };
-  routeChangeHandler = () => {
-    console.log("route has changed");
-  };
+
 
   modalHandler = () => {
     this.setState(prevState => {
@@ -162,7 +160,6 @@ class Dashboard extends Component {
         }
       }
     };
-    console.log("finalPost", finalPost);
     const elementsArrNoPreviewData = erasePreviewDataFromElements(
       this.props.elements
     );
@@ -194,7 +191,6 @@ class Dashboard extends Component {
   };
   saveAndExitHandler = (save, url, history) => {
     if (save) {
-      console.log("deberia salvar al salir");
       this.programHandler(history, url);
     } else {
       history.push(url);

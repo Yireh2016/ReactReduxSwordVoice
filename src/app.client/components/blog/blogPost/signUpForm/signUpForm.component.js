@@ -207,11 +207,6 @@ class SignUpForm extends Component {
             /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
           )
         ) {
-          console.log(`value.match(
-            /[a-z0-9!#$%&'*+/=?^_'{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_'{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-          ) ${value.match(
-            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-          )}`);
           this.setState({
             userEmailIsValid: {
               valid: false,
@@ -385,7 +380,6 @@ class SignUpForm extends Component {
   onNextClick = () => {
     this.setState(prevState => {
       let nextPage = prevState.formPage + 1;
-      console.log(`prevState es ${JSON.stringify(prevState)}`);
       if (
         nextPage === 2 &&
         prevState.userEmailIsValid.valid === true &&
@@ -538,7 +532,7 @@ class SignUpForm extends Component {
                   );
                 });
             } else {
-              console.log("no hay avatar solo se envia usuario");
+              // console.log("no hay avatar solo se envia usuario");
               this.props.onLogIn({
                 //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
 

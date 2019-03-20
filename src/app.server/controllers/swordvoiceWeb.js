@@ -15,7 +15,6 @@ import template from "../templates/template";
 import dbDateToNormalDate from "../../services/dbDateToNormalDate";
 
 const swordvoiceWeb = (req, res) => {
-  console.log("request", req.url);
   // const isMobile = false;
   const context = {};
   // const initialState = { isMobile };
@@ -24,8 +23,6 @@ const swordvoiceWeb = (req, res) => {
 
   const renderWithPreloadedState = finalResult => {
     preloadedState = store.getState();
-    console.log("preloadedState", preloadedState);
-    console.log("sending ..", finalResult);
 
     res.send(
       template({
@@ -47,7 +44,6 @@ const swordvoiceWeb = (req, res) => {
     }
   };
   const renderTemplate = store => {
-    console.log("rendering ...");
     const appString = renderToString(
       <CookiesProvider cookies={req.universalCookies}>
         <Provider store={store}>
@@ -67,8 +63,6 @@ const swordvoiceWeb = (req, res) => {
     new Promise(resolve => {
       if (req.url.match("/blog/post/")) {
         const url = req.url.replace("/blog/post/", "");
-        console.log("url", url);
-        console.log("req.url", req.url);
         let articleModel = mongoose.model("Article");
         articleModel
           .findOne({ url: `${url}` })
@@ -76,8 +70,6 @@ const swordvoiceWeb = (req, res) => {
           .populate("author") //traer solo lo que necesito
           .exec()
           .then(completeArticle => {
-            console.log("checking articles first ...");
-            console.log("article", completeArticle);
             const {
               date,
               html,
@@ -108,7 +100,6 @@ const swordvoiceWeb = (req, res) => {
 
   const userLoggedInPromise = article =>
     new Promise(resolve => {
-      console.log("checking for users logged  ...");
 
       if (req.cookies.sessionId) {
         const sessionId = req.cookies.sessionId;
@@ -118,7 +109,6 @@ const swordvoiceWeb = (req, res) => {
           .find({ userSessionId: sessionId })
           .exec()
           .then(user => {
-            console.log("user found", user);
             successOnFindingUser(user);
             if (article) {
               resolve({ ...article, user });

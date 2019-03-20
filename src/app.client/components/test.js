@@ -13,7 +13,6 @@ const Test = props => {
 };
 
 const mapStateToProps = state => {
-  console.log("mapStateToProps state", state);
   return {
     LoggedIn: state.isUserLoggedIn
   };

@@ -6,7 +6,6 @@ const cms = (req, res) => {
       title: "Hello World from the CMS"
     })
   );
-  console.log("Hello from CMS");
 };
 
 export default cms;

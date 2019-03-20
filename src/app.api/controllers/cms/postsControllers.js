@@ -12,7 +12,6 @@ let articleModel = mongoose.model("Article");
 
 export const createPostCtrl = (req, res) => {
   const projectData = req.body;
-  console.log("projectData", projectData.article);
   let article = new articleModel(projectData.article);
 
   article.save((err, data) => {
@@ -41,7 +40,6 @@ export const addClassToPostCtrl = (req, res) => {
       if (err) {
         throw err;
       } else {
-        console.log("filelistAsync complete");
         res.json(200, "Classes Added");
       }
     }
@@ -75,13 +73,10 @@ export const getClassFromPostCtrl = (req, res) => {
 
     readFile();
   });
-
-  console.log("getting data for classes handler");
 };
 
 export const uploadTempFileCtrl = (req, res) => {
   let fileObj = req.file;
-  console.log("fileObj", fileObj);
   const fileURL = req.body.fileURL;
 
   fs.rename(
@@ -110,7 +105,6 @@ export const uploadTempFileCtrl = (req, res) => {
 // };
 
 export const getPostCtrl = (req, res) => {
-  console.log("req.query", req.query);
   let { skip } = req.query;
   const limit = 7;
 
@@ -135,12 +129,12 @@ export const getPostCtrl = (req, res) => {
   articleModel
     .find()
     .select()
-    .limit(10)
+    .limit(7)
     .skip(skip)
     .populate("author")
+    .sort({ _id: "descending" })
     .exec()
     .then(posts => {
-      console.log("posts on getpost", posts);
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {
@@ -213,7 +207,6 @@ export const updatePostCtrl = (req, res) => {
         // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
         fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
           files.forEach(file => {
-            console.log(file);
             let found = false;
             for (let i = 0; i < data.files.length; i++) {
               if (file === data.files[i]) {

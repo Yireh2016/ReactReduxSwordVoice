@@ -350,7 +350,6 @@ class PostElement extends Component {
 
     if (conditionToChangePreview) {
       //tratamiento especial si es imagen
-      console.log("edition execued");
       let finalHTMLElement = this.state.HTMLPreviewStr;
       let styles = this.state.HTMLStylesStr;
       let classes = this.state.HTMLClassesStr;

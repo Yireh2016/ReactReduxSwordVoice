@@ -65,7 +65,6 @@ class ImageElement extends Component {
   };
 
   imageUpload = image => {
-    console.log("image on upload or compressed", URL.createObjectURL(image));
     const file = new File([image], image.name);
     // this.props.onProjectChange();
     this.props.imgFileSet(
@@ -83,7 +82,6 @@ class ImageElement extends Component {
   };
 
   originalImageSaver = image => {
-    console.log("originalImageSaver", image);
     this.setState({ imageFile: image });
   };
   imgPropertiesHandler = e => {
@@ -108,8 +106,6 @@ class ImageElement extends Component {
   };
   imgWidthHandler = e => {
     const value = e.target.value;
-    console.log("imgWidthHandler", value);
-    console.log("imgWidthHandler2", e.target.value);
     this.state.imageFile &&
       compressImage(
         this.state.imageFile,
@@ -121,15 +117,12 @@ class ImageElement extends Component {
   };
 
   uploadingToServerHandler = () => {
-    console.log("this.state.compressedImg");
     if (this.state.compressedImg) {
       const file = [this.state.compressedImg];
       const e = { target: { files: file } };
       if (this.state.oldFilename) {
         //se esta editando la imagen por ende se debe borrar el archivo de la lista de archivos
         let oldFilename = this.state.oldFilename.match(/[\w\s-]+\.\w*/g);
-        console.log("oldFilename", oldFilename);
-        console.log("this.state.oldFilename", this.state.oldFilename);
         this.props.uploadFileHandler(e, oldFilename[0]);
       } else {
         this.props.uploadFileHandler(e); //add to la lista de files disponibles y subo file al server

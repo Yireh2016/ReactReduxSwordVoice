@@ -291,10 +291,7 @@ class CreatePost extends Component {
         fileNamesArr = fileNamesArr.filter(fileName => {
           return fileName !== oldFileName;
         });
-        console.log(
-          `fileNamesArr after filter oldFileName ${oldFileName}`,
-          fileNamesArr
-        );
+      
       }
       fileNamesArr.push(file.name);
       // this.props.onAddDeleteFile(fileNamesArr)
@@ -386,7 +383,6 @@ class CreatePost extends Component {
         }
       }
     };
-    console.log("finalPost", finalPost);
     const elementsArrNoPreviewData = erasePreviewDataFromElements(
       this.props.elements
     );

@@ -192,7 +192,6 @@ class LogInForm extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log("mapStateToProps state", state);
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,

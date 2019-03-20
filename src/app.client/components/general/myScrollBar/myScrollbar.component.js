@@ -31,23 +31,15 @@ class MyScrollBar extends Component {
   }
   componentDidUpdate() {
     const grandParent = this.grandParentContainer.current.parentElement;
-    console.log(
-      "grandParent.offsetHeight did update",
-      grandParent.offsetHeight
-    );
-    console.log(
-      "grandParent.scrollHeight did update",
-      grandParent.scrollHeight
-    );
+   
+   
     if (grandParent.offsetHeight < grandParent.scrollHeight) {
       // yBarContWidth width: `${scrollWidth + 20}px !important` // default 5px
-      console.log("grandParent.clientWidth", grandParent.clientWidth);
       if (
         !this.state.isOverflowY &&
         this.state.yBarHeight !==
           Math.pow(grandParent.offsetHeight, 2) / grandParent.scrollHeight
       ) {
-        console.log("cambiando estado1", this.state.isOverflowY);
         this.setState({
           isOverflowY: true,
           yBarContHeight: grandParent.offsetHeight,
@@ -63,7 +55,6 @@ class MyScrollBar extends Component {
     }
 
     if (this.state.childWidth !== grandParent.clientWidth) {
-      console.log("cambiando estado2");
 
       this.setState({ childWidth: grandParent.clientWidth });
     }
@@ -133,12 +124,9 @@ class MyScrollBar extends Component {
 
   handleScrollOnWheel = e => {
     e.preventDefault();
-    console.log("moviendo wheel");
     this.movingScrollY(e.deltaY, 50);
   };
   mUpHandler = e => {
-    console.log("mUpHandler screenY", e.screenY);
-    console.log("mUpHandler clientY", e.clientY);
     // this.setState({ mouseDown: false, yBarContWidth: "initial" });
 
     if (this.state.mouseDown) {
@@ -155,8 +143,6 @@ class MyScrollBar extends Component {
   };
   mDownHandler = e => {
     e.preventDefault();
-    console.log("mDownHandler screenX", e.screenX);
-    console.log("mDownHandler clientX", e.clientX);
     const clientX = e.clientX;
 
     // this.setState({ mouseDown: true, yBarContWidth: "600px",yBarContLeft: prevState.yBarContLeft-300});
@@ -186,17 +172,9 @@ class MyScrollBar extends Component {
 
       grandParent.scrollTop =
         ((cursorY - grandParent.offsetTop) / boxSize) * overflowMax;
-      console.log(
-        "cursorY - grandParent.offsetTop",
-        cursorY - grandParent.offsetTop
-      );
-      console.log(
-        "boxSize - this.state.yBarHeight",
-        boxSize - this.state.yBarHeight
-      );
+ 
 
       if (cursorY - grandParent.offsetTop >= boxSize - this.state.yBarHeight) {
-        console.log("llego al final");
         this.setState({ yBarTopScroll: boxSize - this.state.yBarHeight });
         return;
       }

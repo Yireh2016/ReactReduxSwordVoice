@@ -25,7 +25,6 @@ let usersModel = mongoose.model("User");
 // let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
-  console.log("req.cookies.sessionId AL HACER POST", req.cookies.sessionId);
   if (req.cookies.sessionId) {
     return next();
   }
@@ -73,7 +72,7 @@ routerAPI.post(
         { new: true },
         (err, doc) => {
           if (err) {
-            console.log("Something wrong when updating data!");
+            console.log("Something wrong when updating data!", err);
             return;
           }
           fs.unlink(`${file.path}`, err => {
@@ -108,11 +107,9 @@ routerAPI.post("/signup", guestAPI, (req, res) => {
     });
     return;
   }
-  console.log("userData en POST sign up", userData);
   //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
   if (userData.userAvatar === "") {
     userData.userAvatar = new Buffer([]);
-    console.log("userData.userAvatar en IF de api sign up", userData);
   }
   let user = new usersModel(userData);
 
@@ -136,7 +133,6 @@ routerAPI.post("/signup", guestAPI, (req, res) => {
 //se usa en: logInForm
 routerAPI.post("/login", guestAPI, (req, res) => {
   const userData = req.body;
-  console.log("userData del post login", userData);
 
   if (!userData.userName || !userData.userPassword) {
     res.json(400, {
@@ -187,7 +183,6 @@ routerAPI.post("/login", guestAPI, (req, res) => {
 //se usa en: DEVELOPMENT ONLY
 routerAPI.get("/users", (req, res) => {
   usersModel.find().exec((err, users) => {
-    console.log("searching users");
     if (err) {
       console.log("err", err);
       res.json(err);
@@ -221,12 +216,10 @@ routerAPI.get("/users/:userId", authAPI, (req, res) => {
 // para verificar, en tiempo real, que el email del usuario no se encuentre duplicado
 routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
   const email = req.params.email;
-  console.log("usuario guest intentando hacer sigun up");
   usersModel.find({ userEmail: email }).exec((err, email) => {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
     } else {
-      console.log("specific email", email[0]);
       email[0] ? res.json(200, email) : res.json(404, email);
     }
   });
@@ -250,12 +243,10 @@ routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
 // para verificar, en tiempo real, que el username del usuario no se encuentre duplicado
 routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
   const userName = req.params.userName;
-  console.log("buscando usuario en DB");
   usersModel.find({ userName: userName }).exec(function(err, userName) {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
     } else {
-      console.log("specific userName", userName[0]);
       userName[0] ? res.json(200, userName) : res.json(404, userName);
     }
   });
@@ -266,13 +257,11 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
 // obtiene datos de usuario para hacer login en CMS
 routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
   const sessionID = req.params.sessionID;
-  console.log("buscando sessionID en DB");
   usersModel.find({ userSessionId: sessionID }).exec(function(err, data) {
     if (err) {
       res.json(501, `thre was an error: ${err}`);
     }
     if (data.length > 0) {
-      console.log("db data ", data);
       res.json(200, data[0]);
       return;
     }
@@ -323,8 +312,6 @@ routerAPI.delete("/allUsers", (req, res) => {
 routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
   const username = req.params.username;
   const sessionId = req.cookies.sessionId;
-  console.log("username on PUT", username);
-  console.log("sessionId", sessionId);
   usersModel.findOneAndUpdate(
     { userName: username },
     {

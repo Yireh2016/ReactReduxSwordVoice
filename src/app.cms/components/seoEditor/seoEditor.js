@@ -47,7 +47,6 @@ class SeoEditor extends Component {
     // let arr = this.props.seo.keywords.match(/([^,])*,/g)
     //   ? this.props.seo.keywords.match(/([^,])*,/g)
     //   : [];
-    // console.log("arr", arr);
     let arrLen = arr.length;
     // for (let i = 0; i < arrLen; i++) {
     //   arr[i] = arr[i].substring(0, arr[i].length - 1);

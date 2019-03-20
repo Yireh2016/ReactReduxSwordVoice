@@ -60,14 +60,7 @@ class ThumbNailEditor extends Component {
       url: this.props.project.url
     };
     const successUpload = (fileNamesArr, filename) => {
-      console.log("fileNamesArr", fileNamesArr);
-      console.log(
-        "filter result",
-        fileNamesArr.filter(el => {
-          return !el.match(/thumb-.*/g);
-        })
-      );
-      console.log("fileNamesArr after filter", fileNamesArr);
+      
       fileNamesArr = fileNamesArr.filter(el => {
         return !el.match(/thumb-.*/g);
       });

@@ -17,8 +17,6 @@ export default class PortfolioComponent extends React.Component {
   }
 
   leavePageHandler = e => {
-    console.log("event before go", e);
-    console.log("target href", e.target.activeElement.href);
     // // Cancel the event
     // e.preventDefault();
     // // Chrome requires returnValue to be set

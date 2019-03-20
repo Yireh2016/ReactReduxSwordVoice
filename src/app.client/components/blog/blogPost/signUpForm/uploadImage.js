@@ -53,7 +53,6 @@ class UploadImage extends Component {
         }
       });
     } else {
-      console.log("cargando imagen sin comprimir");
       Uploadfunction(files[0]);
     }
   };

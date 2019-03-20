@@ -7,7 +7,6 @@ const initialState = {
 //estado inicial viene del CONFIG REDUCER.JS
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
-  console.log("action.type", action.type);
   switch (action.type) {
     case "LOGGED_IN": {
       newState.isUserLoggedIn = true;

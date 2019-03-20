@@ -1,5 +1,4 @@
 export default ({ title }) => {
-  console.log("template deploy");
   return `
     <!DOCTYPE html>
     <html>

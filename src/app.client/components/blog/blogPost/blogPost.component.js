@@ -44,7 +44,6 @@ class BlogArticle extends Component {
     };
   }
   componentDidMount() {
-    console.log("this.props", this.props);
     const winWidth = window.innerWidth;
     let device;
 
@@ -81,26 +80,15 @@ class BlogArticle extends Component {
     });
   }
   componentDidUpdate() {
-    console.log(
-      `this.props.isLoggedIn es ${
-        this.props.isUserLoggedIn
-      } y window ${window.localStorage.getItem(
-        "userAvatar"
-      )} y this.state.loggedUserAvatar ${this.state.loggedUserAvatar}`
-    );
     if (
       //ojo esta asumiendo que el avatar estara en el localstorage, que passa si se llega aqui directo
       this.props.isUserLoggedIn &&
       window.localStorage.getItem("userAvatar") &&
       this.state.loggedUserAvatar === ""
     ) {
-      console.log("cambiando estado");
       this.setState({
         loggedUserAvatar: window.localStorage.getItem("userAvatar")
       });
-      console.log(" estado nuevo ", this.state);
-    } else {
-      console.log("nocambie estado");
     }
   }
   fetchData() {
@@ -502,8 +490,6 @@ class BlogArticle extends Component {
         let imgBlob = b64toBlob(res.data.userAvatar, "image/jpeg");
         //REDUX: despachar acciones redux que modifiquen el estado loggedUserAvatar,loggedUserName, isUserLoggedIn
 
-        console.log("dispatch LOGGED_IN");
-
         this.props.onLogIn({
           userAvatar: imgBlob,
           userName: res.data.userName,
@@ -735,7 +721,6 @@ class BlogArticle extends Component {
   }
 }
 const mapStateToProps2 = state => {
-  console.log("mapStateToProps state", state);
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,

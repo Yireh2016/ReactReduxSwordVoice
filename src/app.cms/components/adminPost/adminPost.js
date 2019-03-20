@@ -101,7 +101,6 @@ class AdminPost extends Component {
   };
 
   onEditClick = (e, props) => {
-    console.log("edit click", props);
     this.projectNameClickHandler(e, props);
   };
   modalHandler = () => {

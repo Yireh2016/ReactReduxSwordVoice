@@ -38,7 +38,6 @@ const compressImage = (
       }
     });
   } else {
-    console.log("cargando imagen sin comprimir");
     Uploadfunction(files[0]);
   }
 };

@@ -140,13 +140,9 @@ class NavBar extends Component {
     this.setState({ showDesplegable: false });
   };
   mouseOverAvatarHandler = () => {
-    console.log("this.state.showDesplegable ", this.state.showDesplegable);
 
     this.setState({ showDesplegable: true });
-    console.log(
-      "this.state.showDesplegable despues",
-      this.state.showDesplegable
-    );
+  
   };
   logInClickHandler = () => {
     this.setState({
@@ -157,10 +153,8 @@ class NavBar extends Component {
 
   logOutClickHandler = () => {
     this.props.onLogOut();
-    console.log("elimianndo session ID");
     removeCookie(this.props, "sessionId");
 
-    console.log(" session ID eliminado ", this.props.cookies.cookies);
     window.localStorage.removeItem("userAvatar");
     this.setState({
       showDesplegable: false,

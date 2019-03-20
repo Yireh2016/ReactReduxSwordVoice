@@ -31,7 +31,6 @@ class Post extends React.Component {
 
   spaceThreeDots(postTitle, space) {
     // if (postTitle.length > space) {
-    console.log("postTitle", postTitle);
     let lastSpaceIndex;
     let title = postTitle + ".";
     let newTitle = "";
@@ -41,10 +40,7 @@ class Post extends React.Component {
         lastSpaceIndex = i;
       }
     }
-    console.log(
-      'newTitle.substr(0, lastSpaceIndex) + "..."',
-      newTitle.substr(0, lastSpaceIndex) + "..."
-    );
+ 
 
     return newTitle.substr(0, lastSpaceIndex) + "...";
     // }
@@ -75,7 +71,6 @@ class Post extends React.Component {
     });
 
     // this.setState(prevState => {
-    //   console.log("prevState", prevState);
     //   return { isDetailsOpen: !prevState.isDetailsOpen };
     // });
   };
@@ -83,16 +78,13 @@ class Post extends React.Component {
     const element = this.postTitleH2.current;
 
     const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
-    console.log("hasOverflowingChildren", hasOverflowingChildren);
     if (!hasOverflowingChildren) {
       return;
     } else {
-      console.log("this.state.postTitle", this.state.postTitle);
       let title = this.state.postTitle;
       const space = title.length - 5 > 55 ? 55 : title.length - 5;
 
       title = this.spaceThreeDots(title, space);
-      console.log("title after threedots", title);
       this.setState({ postTitle: title });
     }
   }

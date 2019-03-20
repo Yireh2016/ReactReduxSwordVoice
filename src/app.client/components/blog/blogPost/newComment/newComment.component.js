@@ -6,7 +6,6 @@ import "./newComment.css";
 import userLogo from "../../../../assets/img/general/userLogo.svg";
 console.log("userLogo1", userLogo);
 const NewComment = props => {
-  console.log("userLogo2", userLogo);
   return (
     <div className="commentLayoutCont fila">
       <div className="grid col-2 relleno" />

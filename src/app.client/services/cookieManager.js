@@ -11,7 +11,6 @@ export const sessionCookie = props => {
 export const guestCookie = props => {
   const { cookies } = props;
   if (sessionStorage.getItem("guestID")) {
-    console.log("sessionStorage existe");
     cookies.set("guestID", sessionStorage.getItem("guestID"), { path: "/" });
     return;
   }
@@ -20,11 +19,7 @@ export const guestCookie = props => {
   sessionStorage.setItem("guestID", cookies.get("guestID"));
 };
 export const removeCookie = (props, cookieName) => {
-  console.log("document.cookie", document.cookie);
-  document.cookie = cookieName + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
   let { cookies } = props;
-  console.log("cookies", cookies);
-  console.log("props", props);
 
   cookies.remove(cookieName, {
     path: "/"

@@ -1,14 +1,9 @@
 let dbDateToNormalDate = dbDate => {
-  console.log("que es dbdate typeof objeto", typeof dbDate);
 
   if (typeof dbDate === "object") {
-    console.log("dbdate es objeto", typeof dbDate);
 
     dbDate = JSON.stringify(dbDate);
   }
-  console.log("dbdate", dbDate);
-  console.log("dbDate.match(/d*[-|T]/g)", dbDate.match(/\d*[-|T]/g));
-  console.log("dbdate typeof", typeof dbDate);
 
   if (dbDate.match(/\d*[-|T]/g)) {
     const months = [

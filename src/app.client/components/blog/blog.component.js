@@ -114,8 +114,6 @@ class BlogComponent extends Component {
       .then(res => {
         if (res.status === 200) {
           data = res.data;
-          console.log("res en GET", res);
-          console.log("data en GET ", data);
           let newDataArr = [];
 
           for (let i = 0; i < data.length; i++) {

@@ -35,7 +35,6 @@ class Summary extends React.Component {
         summaryTextH: this.myRef.current.clientHeight
       };
     });
-    console.log("se termino de montar el sumamary ", this.state.summaryTextH);
   }
   componentDidUpdate() {}
   getSnapshotBeforeUpdate() {
