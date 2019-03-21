@@ -6,6 +6,8 @@ import { ConnectedRouter } from "connected-react-router";
 import { renderToString } from "react-dom/server";
 import { StaticRouter as Router } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
+import { StyleRoot } from "radium";
+
 //store
 import { store, history } from "../../app.redux.store/store/configStore";
 //components
@@ -49,7 +51,11 @@ const swordvoiceWeb = (req, res) => {
         <Provider store={store}>
           <ConnectedRouter history={history}>
             <Router location={req.url} context={context}>
-              <App />
+              <StyleRoot
+                radiumConfig={{ userAgent: req.headers["user-agent"] }}
+              >
+                <App />
+              </StyleRoot>
             </Router>
           </ConnectedRouter>
         </Provider>
@@ -100,7 +106,6 @@ const swordvoiceWeb = (req, res) => {
 
   const userLoggedInPromise = article =>
     new Promise(resolve => {
-
       if (req.cookies.sessionId) {
         const sessionId = req.cookies.sessionId;
         let usersModel = mongoose.model("User");

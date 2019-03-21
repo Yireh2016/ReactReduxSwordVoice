@@ -1,8 +1,7 @@
 import React from "react";
+import Radium from "radium";
 
-import "./logo.css";
-
-const Logo = props => {
+const RadiumLogo = props => {
   return (
     <div className={props.className} style={props.style}>
       <svg
@@ -148,4 +147,4 @@ const Logo = props => {
   );
 };
 
-export default Logo;
+export default Radium(RadiumLogo);

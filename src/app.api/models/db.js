@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === "production") {
 } //si esta en produccion se conecta a la db de la nube MLAB AWS
 
 mongoose.connect(dbURI, { useNewUrlParser: true });
-
+mongoose.set("useCreateIndex", true);
 mongoose.connection.on("connected", function() {
   console.log("Mongoose connected to " + dbURI);
 });

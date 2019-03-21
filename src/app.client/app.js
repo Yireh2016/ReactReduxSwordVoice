@@ -10,6 +10,7 @@ import Blog from "./components/blog/blog.component";
 import Portolio from "./components/portfolio/portfolio.component";
 import Contact from "./components/contact/contact.component";
 import BlogArticle from "./components/blog/blogPost/blogPost.component";
+import NotFound from "./components/notFound/NotFound";
 
 class App extends Component {
   render() {
@@ -52,6 +53,11 @@ class App extends Component {
           path="/blog/post/"
           render={() => <BlogArticle cookies={this.props.cookies} />}
         />
+        <Route
+          path="/"
+          render={() => <NotFound cookies={this.props.cookies} />}
+        />
+        }/>
       </Switch>
     );
   }

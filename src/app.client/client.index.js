@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import "@babel/polyfill"; //para que axios funcione en ie11
 import { CookiesProvider } from "react-cookie";
 import { ConnectedRouter } from "connected-react-router";
+import { StyleRoot } from "radium";
 //components
 import App from "./app";
 import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTop.component";
@@ -19,7 +20,9 @@ hydrate(
         {/* <Router history={history}> */}
         <Router>
           <ScrollToTop>
-            <App />
+            <StyleRoot>
+              <App />
+            </StyleRoot>
           </ScrollToTop>
         </Router>
       </ConnectedRouter>

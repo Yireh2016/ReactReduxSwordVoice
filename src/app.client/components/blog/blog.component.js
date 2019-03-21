@@ -1,6 +1,7 @@
 //modules
 import React, { Component } from "react";
-import SimpleBar from "simplebar-react";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+
 import axios from "axios";
 //components
 import Navbar from "../navbar/navbar.component";
@@ -9,7 +10,6 @@ import NewPost from "./newPost/newPost.component";
 import Call2Action from "../general/call2action.component";
 import FooterApp from "../footer/footer.component";
 import Logo from "../general/logo.component";
-// import CustomScrollBar from "../general/customScrollBar.component";
 import SearchBar from "./searchBar/searchBar.component";
 import AsidePost from "../blog/asidePost/asidePost.component";
 // import LightShadow from "../general/lightShadow/lightShadow.component";
@@ -406,15 +406,9 @@ class BlogComponent extends Component {
                     width: this.state.recentPostContWidth
                   }}
                 >
-                  {/* <CustomScrollBar
-                    className="recentPostScroll"
-                    onScroll={this.recentPostScroll}
-                  >
+                  <div data-simplebar className="recentPost-layout">
                     {recentPostsJSX}
-                  </CustomScrollBar> */}
-                  <SimpleBar>
-                    <div className="recentPost-layout">{recentPostsJSX}</div>
-                  </SimpleBar>
+                  </div>
                 </div>
               </div>
             </div>

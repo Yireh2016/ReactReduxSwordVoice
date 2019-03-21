@@ -1,8 +1,8 @@
 //modules
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Route, NavLink } from "react-router-dom";
-import { withCookies, Cookies } from "react-cookie";
+import { Route, NavLink, withRouter } from "react-router-dom";
+import { withCookies } from "react-cookie";
 //css
 import "./navbar.css";
 //assets
@@ -140,9 +140,7 @@ class NavBar extends Component {
     this.setState({ showDesplegable: false });
   };
   mouseOverAvatarHandler = () => {
-
     this.setState({ showDesplegable: true });
-  
   };
   logInClickHandler = () => {
     this.setState({
@@ -205,6 +203,10 @@ class NavBar extends Component {
     }
   };
   render() {
+    if (process.env.SERVER) {
+      global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
+    }
+
     let animation;
     switch (this.state.menuIsOpaque) {
       case null: {
@@ -251,18 +253,28 @@ class NavBar extends Component {
       }
     ];
     const contentMenuSmall = menu.map((smallMenuContent, i) => {
+      const activeClass =
+        this.props.location.pathname ===
+        `/${smallMenuContent.nombre.toLowerCase()}`
+          ? "activeLink"
+          : "";
       return (
-        <React.Fragment key={i}>
-          <li>
-            <NavLink
+        <li key={i}>
+          {/* <NavLink
               to={"/" + smallMenuContent.nombre.toLowerCase()}
               activeClassName="activeLink"
               className="flyingLink"
             >
               {smallMenuContent.nombre}
-            </NavLink>
-          </li>
-        </React.Fragment>
+            </NavLink> */}
+          <a
+            key={i}
+            href={"/" + smallMenuContent.nombre.toLowerCase()}
+            className={"flyingLink " + activeClass}
+          >
+            {smallMenuContent.nombre}
+          </a>
+        </li>
       );
     });
     const contentMenuDesplegable = desplegableMenu.map((desplegableMenu, i) => {
@@ -639,4 +651,6 @@ const NavBar2 = connect(
   mapStateToProps,
   mapDispachToProps
 )(NavBar);
-export default withCookies(NavBar2);
+const NavBar3 = withRouter(NavBar2);
+
+export default withCookies(NavBar3);

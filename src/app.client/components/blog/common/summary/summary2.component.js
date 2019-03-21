@@ -1,6 +1,7 @@
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
-import SimpleBar from "simplebar-react";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+
 //CSS
 import "./summary2.css";
 //services
@@ -100,18 +101,8 @@ class Summary2 extends React.Component {
     // const layoutTextCSS = "summary2-layout-text";
     // const textHeightRatio = 0.4;
     const layoutText = (
-      // <div className={layoutTextCSS}>
-      <div>
-        <SimpleBar
-          style={
-            {
-              // maxHeight: this.state.textMaxHeight,
-              // height: this.props.height * textHeightRatio
-            }
-          }
-        >
-          {text(fontStandardSize * 0.8)}
-        </SimpleBar>
+      <div style={{ height: this.props.height * 0.3 }}>
+        <div data-simplebar>{text(fontStandardSize * 0.8)}</div>
       </div>
     );
     ////////////////////////////

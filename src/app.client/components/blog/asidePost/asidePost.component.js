@@ -1,9 +1,7 @@
 //modules
 import React from "react";
-import SimpleBar from "simplebar-react";
-//components
-// import CustomScrollBar from "../../general/customScrollBar.component";
-// import MyScrollBar from "../../general/myScrollBar/myScrollbar.component";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+
 //css
 import "./asidePost.css";
 
@@ -22,16 +20,13 @@ const AsidePost = props => {
             width: props.device === "pc" ? "inherit" : props.postContWidth
           }}
         >
-          {/* {props.device === "pc" ? (
-            <MyScrollBar>{props.children}</MyScrollBar>
-          ) : ( */}
-          {/* <CustomScrollBar className="popPostScroll" onScroll={props.onScroll}>
+          <div
+            data-simplebar
+            className="popPostScroll"
+            onScroll={props.onScroll}
+          >
             {props.children}
-          </CustomScrollBar> */}
-
-          <SimpleBar className="popPostScroll" onScroll={props.onScroll}>
-            {props.children}
-          </SimpleBar>
+          </div>
         </div>
       </div>
     </aside>

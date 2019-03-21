@@ -1,15 +1,11 @@
 import React from "react";
-import ReactHtmlParser, {
-  processNodes,
-  convertNodeToElement,
-  htmlparser2
-} from "react-html-parser";
-import SimpleBar from "simplebar-react";
+import ReactHtmlParser from "react-html-parser";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+
 //css
 
 import "./summary.css";
 //components
-// import CustomScrollBar from "../../../general/customScrollBar.component";
 
 class Summary extends React.Component {
   constructor(props) {
@@ -77,16 +73,9 @@ class Summary extends React.Component {
 
     const summaryText =
       this.state.isPC === true ? (
-        // <CustomScrollBar>
-        //   <div className={this.props.summaryText}>
-        //     {ReactHtmlParser(this.props.summary)}
-        //   </div>
-        // </CustomScrollBar>
-        <SimpleBar>
-          <div className={this.props.summaryText}>
-            {ReactHtmlParser(this.props.summary)}
-          </div>
-        </SimpleBar>
+        <div data-simplebar className={this.props.summaryText}>
+          {ReactHtmlParser(this.props.summary)}
+        </div>
       ) : (
         <div className={this.props.summaryText}>
           {ReactHtmlParser(this.props.summary)}

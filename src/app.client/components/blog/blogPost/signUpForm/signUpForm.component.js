@@ -2,11 +2,11 @@
 import React, { Component } from "react";
 
 import axios from "axios";
-import SimpleBar from "simplebar-react";
+import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+
 import { connect } from "react-redux";
-import { withCookies, Cookies } from "react-cookie";
+import { withCookies } from "react-cookie";
 //services
-import { saveToken } from "../../../../services/auth";
 import { sessionCookie } from "../../../../services/cookieManager";
 import isBrowser from "../../../../../services/isBrowser";
 
@@ -14,7 +14,6 @@ import isBrowser from "../../../../../services/isBrowser";
 import "./signUpForm.css";
 import UploadImage from "./uploadImage";
 //components
-// import CustomScrollBar from "../../../general/customScrollBar.component";
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -1155,12 +1154,9 @@ class SignUpForm extends Component {
                       </label>
 
                       <div className="otherInterestsCont ">
-                        {/* <CustomScrollBar style={{ minHeight: "32px" }}>
-                        {otherInterests}
-                      </CustomScrollBar> */}
-                        <SimpleBar style={{ maxHeight: "40px" }}>
+                        <div data-simplebar style={{ maxHeight: "40px" }}>
                           {otherInterests}
-                        </SimpleBar>
+                        </div>
                       </div>
                     </div>
 

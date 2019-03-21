@@ -41,7 +41,7 @@ class AdminPost extends Component {
     this.getPostsFromDb();
   }
 
-  updateReduxState = (data, history) => {
+  updateReduxState = data => {
     let arr = keywordsToArr(data.keywords);
     const reduxStateFromDB = {
       elements: data.elements,
