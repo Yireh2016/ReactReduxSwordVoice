@@ -106,7 +106,6 @@ export const uploadTempFileCtrl = (req, res) => {
 
 export const getPostCtrl = (req, res) => {
   let { skip } = req.query;
-  const limit = 7;
 
   skip = skip ? parseInt(skip) : 0; //default number of post to fetch 7
 
@@ -139,7 +138,7 @@ export const getPostCtrl = (req, res) => {
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {
           url: posts[i].url,
-          imageURL: posts[i].thumbnail.name,
+          imageURL: posts[i].thumbnail && posts[i].thumbnail.name,
           projectName: posts[i].projectName,
           title: posts[i].title,
           description: posts[i].description,
@@ -150,7 +149,6 @@ export const getPostCtrl = (req, res) => {
           date: posts[i].date,
           keywords: posts[i].keywords[0]
         };
-        console.log(`postMinimumData[${i}] `, postMinimumData[i]);
       }
       res.json(postMinimumData);
     })

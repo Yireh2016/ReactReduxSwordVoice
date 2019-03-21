@@ -40,7 +40,6 @@ class Post extends React.Component {
         lastSpaceIndex = i;
       }
     }
- 
 
     return newTitle.substr(0, lastSpaceIndex) + "...";
     // }
@@ -51,6 +50,7 @@ class Post extends React.Component {
     if (state.postTitle === "") {
       return { postTitle: props.postTitle };
     }
+    return null;
   }
 
   componentDidUpdate() {

@@ -20,12 +20,10 @@ const AsidePost = props => {
             width: props.device === "pc" ? "inherit" : props.postContWidth
           }}
         >
-          <div
-            data-simplebar
-            className="popPostScroll"
-            onScroll={props.onScroll}
-          >
-            {props.children}
+          <div data-simplebar>
+            <div className="popPostScroll" onScroll={props.onScroll}>
+              {props.children}
+            </div>
           </div>
         </div>
       </div>

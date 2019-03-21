@@ -87,7 +87,9 @@ class BlogComponent extends Component {
       ]
     };
   }
-
+  componentDidUpdate() {
+    console.log("BlogComponent uspdate");
+  }
   componentDidMount() {
     const device = isDevice();
 
@@ -347,6 +349,8 @@ class BlogComponent extends Component {
       }
     );
 
+    console.log("recentPostsJSX", recentPostsJSX);
+    console.log("this.state.recentPostsArray", this.state.recentPostsArray);
     const footerBlog = (
       <footer className=" footerBlogLayoutContainer grid col-4 col-12-md">
         <div className="footerBlogContainer">
@@ -406,8 +410,8 @@ class BlogComponent extends Component {
                     width: this.state.recentPostContWidth
                   }}
                 >
-                  <div data-simplebar className="recentPost-layout">
-                    {recentPostsJSX}
+                  <div data-simplebar>
+                    <div className="recentPost-layout">{recentPostsJSX}</div>
                   </div>
                 </div>
               </div>

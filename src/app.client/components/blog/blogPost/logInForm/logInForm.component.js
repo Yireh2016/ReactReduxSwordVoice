@@ -34,7 +34,7 @@ class LogInForm extends Component {
     axios
       .put(`/api/sessionUpdate/${userData.userName}`)
       .then(res => {
-        res.json(200);
+        console.log("res", res);
       })
       .catch(err => {
         console.log("err", err);

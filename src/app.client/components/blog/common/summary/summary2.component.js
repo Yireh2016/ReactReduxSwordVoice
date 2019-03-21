@@ -101,7 +101,7 @@ class Summary2 extends React.Component {
     // const layoutTextCSS = "summary2-layout-text";
     // const textHeightRatio = 0.4;
     const layoutText = (
-      <div style={{ height: this.props.height * 0.3 }}>
+      <div style={{ height: `${this.props.height * 0.3}px` }}>
         <div data-simplebar>{text(fontStandardSize * 0.8)}</div>
       </div>
     );

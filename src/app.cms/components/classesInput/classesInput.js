@@ -25,8 +25,9 @@ class ClassesInput extends Component {
       target: { name, value }
     } = e;
 
-    this.props.onProjectChange();
-
+    if (!this.props.project.hasChanged) {
+      this.props.onProjectChange();
+    }
     this.setState(prevState => {
       let classObjArr = prevState.classes;
       if (name === "classesName") {
@@ -88,7 +89,8 @@ class ClassesInput extends Component {
 
 const mapStateToProps = state => {
   return {
-    classes: state.postCreation.classes
+    classes: state.postCreation.classes,
+    project: state.postCreation.project
   };
 };
 
