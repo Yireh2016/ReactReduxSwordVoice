@@ -30,7 +30,13 @@ server.use(passport.initialize());
 //routes
 server.use("/api", routerAPI);
 server.use("/cms", cms);
-server.get("/*", swordvoiceWeb);
+server.get("/", swordvoiceWeb);
+server.get("/home", swordvoiceWeb);
+server.get("/about", swordvoiceWeb);
+server.get("/contact", swordvoiceWeb);
+server.get("/portfolio", swordvoiceWeb);
+server.get("/blog", swordvoiceWeb);
+server.get("/blog/post*", swordvoiceWeb);
 
 //starting server
 server.listen(8080);

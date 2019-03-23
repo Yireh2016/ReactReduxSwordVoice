@@ -11,6 +11,7 @@
 }
 .summary2-readMore {
   font-weight: bold;
+  color: var(--orange);
 }
 .summary2-layout-readMore p {
   margin: 0;

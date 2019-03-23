@@ -9,6 +9,7 @@ if (process.env.NODE_ENV === "production") {
 
 mongoose.connect(dbURI, { useNewUrlParser: true });
 mongoose.set("useCreateIndex", true);
+mongoose.set("useFindAndModify", false);
 mongoose.connection.on("connected", function() {
   console.log("Mongoose connected to " + dbURI);
 });

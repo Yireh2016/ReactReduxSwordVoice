@@ -80,7 +80,7 @@ routerAPI.post(
             console.log(`successfully deleted ${file.path}`);
           });
 
-          res.json(200, { doc });
+          res.status(200).json({ doc });
         }
       );
     });
@@ -89,7 +89,8 @@ routerAPI.post(
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
 routerAPI.post("/signup", guestAPI, (req, res) => {
-  const userData = req.body;
+  let userData = req.body;
+  console.log("userData on server sign up", userData);
 
   if (
     //verfing required fields
@@ -100,31 +101,41 @@ routerAPI.post("/signup", guestAPI, (req, res) => {
     !userData.userLastName ||
     !userData.userCountry ||
     !userData.userBirthDate ||
-    !userData.userGender
+    !userData.userGender ||
+    !userData.userSessionId
   ) {
-    res.json(400, {
+    res.status(400).json({
       message: "All fields required"
     });
     return;
   }
   //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
+
+  console.log("all required fields are CORRECT");
   if (userData.userAvatar === "") {
     userData.userAvatar = new Buffer([]);
   }
+  console.log("userdata with AVATAR");
+  userData = { ...userData, _id: mongoose.Types.ObjectId() };
   let user = new usersModel(userData);
 
   user.setPassword(userData.userPassword);
-
+  console.log("userData with crypto passwd and salt to save on SIGN UP", user);
   user.save((err, data) => {
     if (err) {
-      res.json(400, { code: 400, message: `there was an error: ${err}` });
+      console.log(
+        `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+      );
+      res.status(400).json({
+        code: 400,
+        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+      });
     } else {
       const responseUserData = {
         id: data._id,
-        userName: data.userName,
-        token: user.generateJwt()
+        userName: data.userName
       };
-      res.json(200, responseUserData); //user ID is returned to use it later for avatar upload
+      res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
     }
   });
 });
@@ -135,21 +146,21 @@ routerAPI.post("/login", guestAPI, (req, res) => {
   const userData = req.body;
 
   if (!userData.userName || !userData.userPassword) {
-    res.json(400, {
+    res.status(400).json({
       message: "All fields required"
     });
     return;
   }
 
   passport.authenticate("local", function(err, user, info) {
-    let token;
     if (err) {
-      res.json(404, err);
+      res.status(404).json(err);
       return;
     }
     if (user) {
       // token = user.generateJwt();
-      res.json(200, {
+      res.status(200).json({
+        _id: user._id,
         userAvatar: user.userAvatar,
         userFirstName: user.userFirstName,
         userLastName: user.userLastName,
@@ -166,7 +177,7 @@ routerAPI.post("/login", guestAPI, (req, res) => {
       });
     } else {
       console.log("dio un 401", info);
-      res.json(401, info);
+      res.status(401).json(info);
     }
   })(req, res);
 });
@@ -185,17 +196,17 @@ routerAPI.get("/users", (req, res) => {
   usersModel.find().exec((err, users) => {
     if (err) {
       console.log("err", err);
-      res.json(err);
+      res.status(404).json(err);
       return;
     }
 
-    res.json(users);
+    res.status(200).json(users);
   });
 
   // const users = await usersModel.find();
 
   // console.log('users', users);
-  // res.json(users);
+  // res.status().json(users);
 });
 
 // obtener usuario especifico must be AUTH
@@ -203,10 +214,10 @@ routerAPI.get("/users", (req, res) => {
 routerAPI.get("/users/:userId", authAPI, (req, res) => {
   usersModel.findById(req.params.userId).exec((err, user) => {
     if (err) {
-      res.json(501, `thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`);
     } else {
       console.log("specific user", user);
-      res.json(user);
+      res.status(200).json(user);
     }
   });
 });
@@ -218,9 +229,9 @@ routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
   const email = req.params.email;
   usersModel.find({ userEmail: email }).exec((err, email) => {
     if (err) {
-      res.json(501, `thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`);
     } else {
-      email[0] ? res.json(200, email) : res.json(404, email);
+      email[0] ? res.status(200).json(email) : res.status(404).json(email);
     }
   });
 });
@@ -230,10 +241,10 @@ routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
 //   const username = req.params.username;
 //   usersModel.find({ username }).exec((err, username) => {
 //     if (err) {
-//       res.json(501, `thre was an error: ${err}`);
+//       res.status().json(501, `thre was an error: ${err}`);
 //     } else {
 //       console.log("specific user", username[0]);
-//       username[0] ? res.json(200, username) : res.json(404, username);
+//       username[0] ? res.status().json(200, username) : res.status().json(404, username);
 //     }
 //   });
 // });
@@ -245,9 +256,11 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
   const userName = req.params.userName;
   usersModel.find({ userName: userName }).exec(function(err, userName) {
     if (err) {
-      res.json(501, `thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`);
     } else {
-      userName[0] ? res.json(200, userName) : res.json(404, userName);
+      userName[0]
+        ? res.status(200).json(userName)
+        : res.status(404).json(userName);
     }
   });
 });
@@ -259,13 +272,13 @@ routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
   const sessionID = req.params.sessionID;
   usersModel.find({ userSessionId: sessionID }).exec(function(err, data) {
     if (err) {
-      res.json(501, `thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`);
     }
     if (data.length > 0) {
-      res.json(200, data[0]);
+      res.status(200).json(data[0]);
       return;
     }
-    res.json(404, "not found");
+    res.status(404).json("not found");
   });
 });
 
@@ -282,10 +295,10 @@ routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
 routerAPI.delete("/users/:userId", authAPI, (req, res) => {
   usersModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
     if (err) {
-      res.json(404, err);
+      res.status(404).json(err);
       return;
     }
-    res.json(204, { message: "user removed" });
+    res.status(204).json({ message: "user removed" });
   });
 });
 
@@ -317,10 +330,12 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
     {
       userSessionId: sessionId
     },
-    function(err) {
+    function(err, doc) {
       if (err) {
         console.log(err);
       } else {
+        console.log("NEW SESSION ID ", sessionId);
+
         res.end("success");
       }
     }

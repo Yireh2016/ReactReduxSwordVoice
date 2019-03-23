@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
 import { Schema } from "mongoose";
 import crypto from "crypto";
 
@@ -19,6 +18,7 @@ const userSchema = new Schema({
   userSalt: { type: String, required: true },
   userSessionId: { type: String, required: true },
   userType: { type: String, required: true, default: "user" },
+  isUserActive: { type: Boolean, required: true, default: true },
   userCreationDate: { type: Date, required: true, default: Date.now() }
 });
 
@@ -34,20 +34,6 @@ userSchema.methods.verifyPassword = function(password) {
     .pbkdf2Sync(password, this.userSalt, 1000, 64, null)
     .toString("hex");
   return this.userPassword === hash;
-};
-
-userSchema.methods.generateJwt = function() {
-  let expiry = new Date();
-  expiry.setDate(expiry.getDate() + 1); //expire after 1 day
-  return jwt.sign(
-    {
-      userAvatar: this.userAvatar,
-      name: this.userName, //using the uniques userName and email as payload for
-      ramdomSeed: Math.random(),
-      exp: parseInt(expiry.getTime() / 1000)
-    },
-    process.env.JWT_SECRET //secret for signning JWT
-  );
 };
 
 mongoose.model("User", userSchema);

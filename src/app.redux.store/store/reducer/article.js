@@ -11,13 +11,12 @@ const article = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
     case "GET_ARTICLE": {
-
       newState = action.payload;
 
       break;
     }
 
-    case "DEFAULT": {
+    case "DEFAULT_ARTICLE": {
       break;
     }
   }

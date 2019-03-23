@@ -20,6 +20,10 @@ class Login extends Component {
   }
 
   componentDidMount() {
+    console.log(
+      "this.props.cookies.cookies.sessionId",
+      this.props.cookies.cookies.sessionId
+    );
     if (this.props.cookies.cookies.sessionId) {
       axios(`/api/searchSessionID/${this.props.cookies.cookies.sessionId}`)
         .then(res => {

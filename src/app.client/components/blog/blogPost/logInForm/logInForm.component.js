@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withCookies } from "react-cookie";
+import uuid from "uuid/v1";
 //css
 import "./logInForm.css";
 //components
@@ -9,7 +10,6 @@ import Logo from "../../../general/logo.component";
 import { connect } from "react-redux";
 
 //services
-import { saveToken } from "../../../../services/auth";
 import { sessionCookie } from "../../../../services/cookieManager";
 
 class LogInForm extends Component {
@@ -29,8 +29,8 @@ class LogInForm extends Component {
 
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
-
-    sessionCookie(this.props);
+    console.log("userData", userData);
+    sessionCookie(this.props, userData.userName, userData._id, uuid());
     axios
       .put(`/api/sessionUpdate/${userData.userName}`)
       .then(res => {
@@ -59,6 +59,7 @@ class LogInForm extends Component {
       userName: userData.userName,
       userID: userData._id
     });
+    console.log("Login Successful");
   };
 
   handleFormInputChange = event => {
@@ -91,8 +92,6 @@ class LogInForm extends Component {
         .then(this.handleErrors)
         .then(res => {
           if (res.status === 200) {
-            alert("Login Successful");
-
             this.props.onCancelClick();
             this.onSuccessLogIn(res.data);
           }

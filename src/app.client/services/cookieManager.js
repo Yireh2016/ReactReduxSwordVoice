@@ -1,11 +1,14 @@
 import uuid from "uuid/v1";
-export const sessionCookie = props => {
+export const sessionCookie = (props, username, id, uuid) => {
   //get this.props.cookies
   const { cookies } = props;
   //setting a cookie
   //verifica si el cookie de session existe
 
-  cookies.set("sessionId", uuid(), { path: "/", maxAge: 60 * 60 * 24 * 365 });
+  uuid &&
+    cookies.set("sessionId", uuid, { path: "/", maxAge: 60 * 60 * 24 * 365 });
+  cookies.set("username", username, { path: "/", maxAge: 60 * 60 * 24 * 365 });
+  cookies.set("usernameID", id, { path: "/", maxAge: 60 * 60 * 24 * 365 });
 };
 
 export const guestCookie = props => {

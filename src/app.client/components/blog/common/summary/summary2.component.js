@@ -1,23 +1,36 @@
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+import Radium from "radium";
 
 //CSS
 import "./summary2.css";
 //services
 import dbDateToNormalDate from "../../../../../services/dbDateToNormalDate";
+import isDevice from "../../../../../services/isDevice";
 
 class Summary2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontStandardSize: 0,
+      fontStandardSize: null,
       textMaxHeight: "auto"
     };
   }
 
+  componentDidUpdate() {
+    console.log("compoent updated");
+
+    this.checkDeviceForFontSizing();
+  }
   componentDidMount() {
-    if (window.innerWidth > 1050) {
+    console.log("compoent mounted");
+    this.checkDeviceForFontSizing();
+  }
+  checkDeviceForFontSizing = () => {
+    const device = isDevice();
+    console.log("device", device);
+    if (device === "pc") {
       //PC
       this.setState({
         fontStandardSize: this.props.height * 0.05
@@ -25,7 +38,7 @@ class Summary2 extends React.Component {
       return;
     }
 
-    if (window.innerWidth > 750) {
+    if (device === "tablet") {
       //tablet
       this.setState({
         fontStandardSize:
@@ -39,6 +52,26 @@ class Summary2 extends React.Component {
         this.props.height * 0.05 > 16 ? this.props.height * 0.05 : 16,
       textMaxHeight: "70px"
     });
+  };
+  shouldComponentUpdate(props, state) {
+    console.log("compoent should update?");
+
+    console.log(
+      `state.fontStandardSize ${JSON.stringify(
+        state
+      )} this.state.fontStandardSize ${JSON.stringify(this.state)} `
+    );
+    if (
+      state.fontStandardSize === this.state.fontStandardSize &&
+      this.state.fontStandardSize !== null
+    ) {
+      console.log("compoent should update? NOOOOO");
+
+      return null;
+    }
+    console.log("compoent should update? YESSSS", state);
+
+    return state;
   }
 
   ////////////////////////////
@@ -55,6 +88,7 @@ class Summary2 extends React.Component {
   //height
 
   render() {
+    console.log("rendering summary", this.props);
     const fontStandardSize = this.state.fontStandardSize;
     ////////////////////////////
     ////////////////////////////
@@ -113,7 +147,11 @@ class Summary2 extends React.Component {
 
     const readMoreCSS = "summary2-readMore";
     const readMore = fontSize => {
-      const fontStyle = { fontSize: `${fontSize}px` };
+      const fontStyle = {
+        fontSize: `${fontSize}px`,
+        fontSize: "20px",
+        textDecoration: "none"
+      };
       return (
         <p>
           <a
@@ -236,7 +274,7 @@ class Summary2 extends React.Component {
     };
 
     const layout = (
-      <div style={layoutStyle} className={layoutCSS}>
+      <div style={[layoutStyle, this.props.style]} className={layoutCSS}>
         {layoutTitle}
         {layoutText}
         {layoutReadMore}
@@ -249,4 +287,4 @@ class Summary2 extends React.Component {
   }
 }
 
-export default Summary2;
+export default Radium(Summary2);

@@ -1,6 +1,6 @@
 //modules
 import React, { Component } from "react";
-
+import uuid from "uuid/v1";
 import axios from "axios";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
@@ -493,10 +493,11 @@ class SignUpForm extends Component {
         userPassword,
         userAvatar
       };
-      sessionCookie(this.props);
-      //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
-      data = { ...data, userSessionId: this.props.cookies.cookies.sessionId };
 
+      //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
+      const sessionID = uuid();
+      data = { ...data, userSessionId: sessionID };
+      console.log("data to upload for sign up", data);
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome
@@ -505,6 +506,12 @@ class SignUpForm extends Component {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
 
             const userData = res.data;
+            sessionCookie(
+              this.props,
+              userData.userName,
+              userData.id,
+              sessionID
+            );
             if (userAvatar !== "") {
               let form = new FormData();
               form.append("avatar", userAvatar);

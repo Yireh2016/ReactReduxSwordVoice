@@ -152,6 +152,8 @@ class NavBar extends Component {
   logOutClickHandler = () => {
     this.props.onLogOut();
     removeCookie(this.props, "sessionId");
+    removeCookie(this.props, "username");
+    removeCookie(this.props, "usernameID");
 
     window.localStorage.removeItem("userAvatar");
     this.setState({
