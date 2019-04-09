@@ -5,14 +5,21 @@ import Radium from "radium";
 const Style = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const styles = {
   main: {
-    width: "80%"
+    width: "75%",
+    "@media (max-width: 1050px)": {
+      width: "100%"
+    }
   },
   aside: {
-    width: "20%"
+    width: "25%",
+    "@media (max-width: 1050px)": {
+      width: "100%"
+    }
   }
 };
 const TwoColumnAside = ({ children, aside, style, className }) => {

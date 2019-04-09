@@ -12,26 +12,6 @@ var productionPluginDefine = isProduction
     ]
   : [];
 
-// const env = dotenv.config().parsed;
-
-// // reduce it to a nice object, the same as before
-// const envKeys = Object.keys(env).reduce((prev, next) => {
-//   prev[`process.env.${next}`] = JSON.stringify(env[next]);
-//   return prev;
-// }, {});
-
-// var clientLoaders = isProduction
-//   ? productionPluginDefine.concat([
-//     new webpack.DefinePlugin(envKeys),
-//     new webpack.optimize.DedupePlugin(),
-//     new webpack.optimize.OccurrenceOrderPlugin(),
-//     new webpack.optimize.UglifyJsPlugin({
-//       compress: { warnings: false },
-//       sourceMap: false
-//     })
-//   ])
-//   : [new webpack.DefinePlugin(envKeys)];
-
 var clientLoaders = isProduction
   ? productionPluginDefine.concat([
       new webpack.optimize.DedupePlugin(),
@@ -82,29 +62,6 @@ module.exports = [
             fallback: "style-loader",
             use: "css-loader"
           })
-          // use: ExtractTextPlugin.extract({
-          //   fallback: "style-loader",
-          //   use: "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]"
-          // })
-          // use: [
-          //   // { loader: 'style-loader' },
-          //   // {
-          //   //   loader: 'css-loader'
-          //   // },
-
-          //   // ]
-          //   // use: ExtractTextPlugin.extract({
-          //   //   fallback: "isomorphic-style-loader",
-          //   //   use: "css-loader"
-          //   // })
-          //   // },
-          //   // {
-          //   //   test: /\.css$/,
-          //   //   use: ExtractTextPlugin.extract({
-          //   //     fallback: "style-loader",
-          //   //     use: "css-loader"
-          //   //   })
-          // ]
         },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,
@@ -145,23 +102,6 @@ module.exports = [
         },
         {
           test: /\.css$/,
-          // use: ExtractTextPlugin.extract({
-          //   fallback: "style-loader",
-          //   use: "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]"
-          // })
-          // use: [
-          //   // { loader: 'style-loader' },
-          //   {
-          //     loader: 'css-loader',
-          //     options: {
-          //       fallback: 'style-loader',
-          //       sourceMap: true,
-          //       modules: true,
-          //       localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
-          //     }
-          //   },
-
-          // ]
           use: ExtractTextPlugin.extract({
             fallback: "isomorphic-style-loader",
             use: "css-loader"
@@ -207,23 +147,6 @@ module.exports = [
         },
         {
           test: /\.css$/,
-          // use: ExtractTextPlugin.extract({
-          //   fallback: "style-loader",
-          //   use: "css-loader?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]"
-          // })
-          // use: [
-          //   // { loader: 'style-loader' },
-          //   {
-          //     loader: 'css-loader',
-          //     options: {
-          //       fallback: 'style-loader',
-          //       sourceMap: true,
-          //       modules: true,
-          //       localIdentName: '[path]___[name]__[local]___[hash:base64:5]'
-          //     }
-          //   },
-
-          // ]
           use: ExtractTextPlugin.extract({
             fallback: "isomorphic-style-loader",
             use: "css-loader"
