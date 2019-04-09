@@ -138,7 +138,11 @@ export const getPostCtrl = (req, res) => {
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {
           url: posts[i].url,
-          imageURL: posts[i].thumbnail && posts[i].thumbnail.name,
+          postImg:
+            posts[i].thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              posts[i].thumbnail.color
+            } 73.79%),url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
           projectName: posts[i].projectName,
           title: posts[i].title,
           description: posts[i].description,

@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import Post from "../post/post.component";
+import { SketchPicker } from "react-color";
 import { connect } from "react-redux";
 //components
 import UploadImage from "../uploadImage/uploadImage";
 import compressImage from "../../../services/compressImage";
 import uploadFileService from "../../../services/uploadFileService";
+import PostCard from "../../../app.client/pages/blog/postCard/PostCard";
 
 class ThumbNailEditor extends Component {
   constructor(props) {
@@ -60,7 +61,6 @@ class ThumbNailEditor extends Component {
       url: this.props.project.url
     };
     const successUpload = (fileNamesArr, filename) => {
-      
       fileNamesArr = fileNamesArr.filter(el => {
         return !el.match(/thumb-.*/g);
       });
@@ -108,6 +108,13 @@ class ThumbNailEditor extends Component {
         this.imageUploadErr
       );
   };
+  colorHandler = (color, e) => {
+    console.log("color", color);
+    const { h, s, l, a } = color.hsl;
+    this.props.onProjectChange();
+    this.props.setThumbnailColor(`hsla(${h},${s * 100}%,${l * 100}%,${a})`);
+    this.setState({ thumbnailColor: color });
+  };
   render() {
     return (
       <div
@@ -119,23 +126,25 @@ class ThumbNailEditor extends Component {
           boxSizing: "border-box"
         }}
       >
-        {true && (
-          <React.Fragment>
-            <div>
-              <UploadImage
-                imageUpload={this.imageUpload}
-                imageUploadErr={this.imageUploadErr}
-                imgPropertiesHandler={this.imgPropertiesHandler}
-                imgWidthHandler={this.imgWidthHandler}
-                originalImageSaver={this.originalImageSaver}
-                uploadMessage={this.state.uploadMessage}
-                imgQuality={this.state.imgQuality}
-                imgW={this.state.imgW}
-                compressedImg={this.state.compressedImg}
-              />
-            </div>
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          <div>
+            <UploadImage
+              imageUpload={this.imageUpload}
+              imageUploadErr={this.imageUploadErr}
+              imgPropertiesHandler={this.imgPropertiesHandler}
+              imgWidthHandler={this.imgWidthHandler}
+              originalImageSaver={this.originalImageSaver}
+              uploadMessage={this.state.uploadMessage}
+              imgQuality={this.state.imgQuality}
+              imgW={this.state.imgW}
+              compressedImg={this.state.compressedImg}
+            />
+            <SketchPicker
+              color={this.state.thumbnailColor}
+              onChangeComplete={this.colorHandler}
+            />
+          </div>
+        </React.Fragment>
 
         <button
           className="cmsBtn"
@@ -145,15 +154,13 @@ class ThumbNailEditor extends Component {
           Upload Image
         </button>
 
-        {true && (
-          <Post
-            postTitle={this.props.seo.title}
-            widthHeightRatio={1.07}
-            hasBorder={true}
-            hasThreeDots={false}
-            postImage={this.state.imagePreview}
-          />
-        )}
+        <PostCard
+          title={this.props.seo.title}
+          postH={300}
+          postImg={`linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+            this.props.thumbnail.color
+          } 73.79%),${this.state.imagePreview}`}
+        />
       </div>
     );
   }
@@ -175,6 +182,9 @@ const mapDispachToProps = dispach => {
   return {
     onThumbnailChange: payload => {
       dispach({ type: "THUMBNAIL_CHANGE", payload: payload });
+    },
+    setThumbnailColor: color => {
+      dispach({ type: "THUMBNAIL_COLOR", payload: color });
     },
     onAddDeleteFile: payload =>
       dispach({ type: "ADD_DELETE_FILE", payload: payload }),

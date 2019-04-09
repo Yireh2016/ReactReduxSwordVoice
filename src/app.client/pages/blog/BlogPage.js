@@ -103,7 +103,7 @@ class BlogPage extends React.Component {
 
           for (let i = 0; i < data.length; i++) {
             newDataArr[i] = {
-              postImg: `uploads/${data[i].url}/${data[i].imageURL}`,
+              postImg: data[i].postImg,
               title: data[i].title,
               url: data[i].url,
               summaryTextHtml: paragraphService(data[i].description),

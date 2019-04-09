@@ -74,7 +74,7 @@ class PostCard extends React.Component {
           style={[
             styles.post,
             {
-              backgroundImage: `url(${postImg}`,
+              backgroundImage: postImg,
               height: `${postH}px`,
               width: `${postH * 1.028}px`
             }

@@ -21,6 +21,10 @@ const postEditCtlreducer = (state = initialState, action) => {
       newState.thumbnail = action.payload;
       break;
     }
+    case "THUMBNAIL_COLOR": {
+      newState.thumbnail.color = action.payload;
+      break;
+    }
     case "ADD_CLASSES": {
       newState.classes = action.payload;
       break;
