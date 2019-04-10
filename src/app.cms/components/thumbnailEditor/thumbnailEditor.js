@@ -157,9 +157,10 @@ class ThumbNailEditor extends Component {
         <PostCard
           title={this.props.seo.title}
           postH={300}
-          postImg={`linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+          postImg={this.state.imagePreview}
+          postGradient={`linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
             this.props.thumbnail.color
-          } 73.79%),${this.state.imagePreview}`}
+          } 73.79%)`}
         />
       </div>
     );

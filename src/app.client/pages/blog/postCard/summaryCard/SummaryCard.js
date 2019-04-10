@@ -83,7 +83,8 @@ class SummaryCard extends React.Component {
           style={{
             color: "#024259",
             fontSize: `${fontSize}px`,
-            flexGrow: "5"
+            flexGrow: "5",
+            fontWeight: "normal"
           }}
         >
           Summary

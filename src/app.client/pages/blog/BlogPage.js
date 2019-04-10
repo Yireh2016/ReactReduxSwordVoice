@@ -5,6 +5,7 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import axios from "axios";
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
+import "./blog.css";
 
 //components
 // import Summary from "../../components/blog/common/summary/summary2.component";
@@ -26,6 +27,163 @@ import keywordsToArr from "../../../services/keywordsToArr";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
+
+const styles = {
+  tablet: {
+    "@media (max-width: 150px)": {
+      display: "none"
+    }
+  },
+  layout: {
+    flex: { display: "flex" },
+    flexRight: {
+      justifyContent: "flex-end"
+    },
+    flexCenter: {
+      justifyContent: "center"
+    },
+    fullCenter: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    fullContainerHeight: { height: "100%" },
+    fullContainerWidth: { width: "100%" },
+    halfContainerWidth: {
+      width: "50%"
+    },
+    flexRow: { flexDirection: "row" },
+    flexColumn: { flexDirection: "column" }
+  },
+  header: {
+    container: {
+      borderTop: "3px solid #F95F0B",
+      borderLeft: "3px solid #F95F0B",
+      borderRight: "3px solid #F95F0B",
+      borderBottom: "none",
+      backgroundSize: "cover",
+      backgroundPositionY: "center",
+      backgroundPositionX: "center",
+      boxSizing: "border-box",
+      "@media (max-width: 1050px)": {
+        marginTop: "14vw",
+        height: `calc(100vh - 14vw)`,
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      "@media (max-width: 700px)": {
+        marginTop: "21.4vw",
+        height: `calc(100vh - 21.4vw)`,
+        borderRadius: ` 0px ${headerRadius / 2}px 0px 0px`
+      }
+    }
+    // post: {
+    //   maxHeight: "100%",
+
+    //   color: "white",
+    //   position: "relative",
+    //   borderRadius: "5px ",
+    //   margin: "5vmin 0",
+    //   medium: {
+    //     height: `${mainPostH * 0.7}px`,
+    //     width: `${mainPostH * 1.028 * 0.7}px`
+    //   },
+    //   small: {
+    //     height: `${mainPostH * 0.4}px`,
+    //     width: `${mainPostH * 1.028 * 0.4}px`,
+    //     margin: `1.25vmin 2.5vmin`
+    //   }
+    // }
+  },
+  footer: {
+    layout: {
+      "@media (max-width: 1050px)": {
+        display: "none"
+      }
+    }
+  },
+  aside: {
+    postsContainer: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      "@media (max-width: 1050px)": {
+        flexDirection: "row"
+      }
+    },
+    title: {
+      textAlign: "center",
+      color: "#f95f0b",
+      position: "sticky",
+      top: "0",
+      zIndex: "4",
+      backgroundColor: "#00171f",
+      padding: "10px",
+      "@media (max-width: 1050px)": {
+        textAlign: "left",
+        position: "sticky",
+        left: "0"
+      }
+    },
+    layout: {
+      backgroundColor: "#00171f",
+      margin: "5vmin 0",
+      borderRadius: "8px",
+      height: "calc(100vh - 15vmin - 112px)",
+      "@media (max-width: 1050px)": {
+        height: "auto"
+      }
+    }
+  },
+  headerPostLayout: {
+    "@media (max-width: 1050px)": {
+      width: "auto",
+      flexDirection: "column"
+    }
+  },
+  headerSummaryLayout: {
+    "@media (max-width: 1050px)": {
+      display: "none"
+    }
+  },
+  recentPostTitleContainer: {
+    display: "flex",
+    position: "sticky",
+    top: "0",
+    backgroundColor: "white",
+    zIndex: "4",
+    justifyContent: "space-around",
+    padding: "15px 0 0 0",
+    "@media (max-width: 1050px)": {
+      position: "relative"
+    },
+    "@media (max-width: 700px)": {
+      flexDirection: "column"
+    },
+    title: {
+      fontWeight: "normal",
+      color: "#f95f0b"
+    }
+  },
+  recentPostLayout: {
+    padding: "2.5vmin",
+    boxSizing: "border-box",
+    display: "flex",
+    flexWrap: "wrap",
+    "@media (max-width:1050px)": {
+      flexWrap: "nowrap",
+      overflow: "scroll",
+      width: "100vw",
+      justifyContent: "flex-start"
+    }
+  },
+  popularPostLayout: {
+    height: "calc(100vh - 10vmin)",
+    "@media (max-width: 1050px)": {
+      height: "auto"
+    }
+  }
+};
 
 class BlogPage extends React.Component {
   constructor(props) {
@@ -74,7 +232,8 @@ class BlogPage extends React.Component {
       ]
     };
   }
-  componentDidMount() {
+
+  setPostDimensions = () => {
     const isDeviceResult = isDevice();
     let postH;
 
@@ -94,6 +253,30 @@ class BlogPage extends React.Component {
         break;
     }
 
+    this.setState({ mainPostH: postH });
+  };
+
+  componentDidMount() {
+    window.addEventListener("resize", this.setPostDimensions);
+    const isDeviceResult = isDevice();
+    let postH;
+
+    switch (isDeviceResult) {
+      case "pc":
+        postH = 520;
+        break;
+      case "tablet":
+        postH = (window.outerWidth * 0.8) / 1.028;
+        break;
+
+      case "phone":
+        postH = window.outerWidth / 1.028 - 24;
+        break;
+
+      default:
+        break;
+    }
+    // this.setPostDimensions();
     let data;
     axios("/api/getPosts/")
       .then(res => {
@@ -104,6 +287,7 @@ class BlogPage extends React.Component {
           for (let i = 0; i < data.length; i++) {
             newDataArr[i] = {
               postImg: data[i].postImg,
+              postGradient: data[i].postGradient,
               title: data[i].title,
               url: data[i].url,
               summaryTextHtml: paragraphService(data[i].description),
@@ -120,6 +304,7 @@ class BlogPage extends React.Component {
           console.log("newDataArr", newDataArr);
           console.log("recentDataArray", recentDataArray);
           console.log("popDataArray", popDataArray);
+
           this.setState({
             recentPostsArray: recentDataArray,
             popPostsArray: popDataArray,
@@ -163,92 +348,6 @@ class BlogPage extends React.Component {
       searchTranslateX
     } = this.state;
 
-    let styles = {
-      tablet: {
-        "@media (max-width: 150px)": {
-          display: "none"
-        }
-      },
-      layout: {
-        flex: { display: "flex" },
-        flexRight: {
-          justifyContent: "flex-end"
-        },
-        flexCenter: {
-          justifyContent: "center"
-        },
-        fullCenter: {
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
-        },
-        fullContainerHeight: { height: "100%" },
-        fullContainerWidth: { width: "100%" },
-        halfContainerWidth: {
-          width: "50%"
-        },
-        flexRow: { flexDirection: "row" },
-        flexColumn: { flexDirection: "column" }
-      },
-      header: {
-        container: {
-          marginTop: `${navBarHeight}`,
-          borderTop: "3px solid #F95F0B",
-          borderLeft: "3px solid #F95F0B",
-          borderRight: "3px solid #F95F0B",
-          borderBottom: "none",
-          backgroundImage: `radial-gradient(216.57px at 79.43% 71.15%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.41) 100%),url(${blogBackground})`,
-          backgroundSize: "cover",
-          backgroundPositionY: "center",
-          backgroundPositionX: "center",
-          height: `calc(100vh - ${navBarHeight})`,
-          borderRadius: ` 0px ${headerRadius}px 0px 0px`,
-          boxSizing: "border-box",
-          "@media (max-width: 1050px)": {
-            marginTop: "14vw",
-            height: `calc(100vh - 14vw)`,
-            alignItems: "center",
-            justifyContent: "center"
-          },
-          "@media (max-width: 700px)": {
-            marginTop: "21.4vw",
-            height: `calc(100vh - 21.4vw)`,
-            borderRadius: ` 0px ${headerRadius / 2}px 0px 0px`
-          }
-        },
-        post: {
-          backgroundImage: newPostArray[0].postImg,
-          maxHeight: "100%",
-          height: `${mainPostH}px`,
-          width: `${mainPostH * 1.028}px`,
-          color: "white",
-          position: "relative",
-          borderRadius: "5px ",
-          margin: "5vmin 0",
-          medium: {
-            height: `${mainPostH * 0.7}px`,
-            width: `${mainPostH * 1.028 * 0.7}px`
-          },
-          small: {
-            height: `${mainPostH * 0.4}px`,
-            width: `${mainPostH * 1.028 * 0.4}px`,
-            margin: `1.25vmin 2.5vmin`
-          }
-        }
-      },
-      headerPostLayout: {
-        "@media (max-width: 1050px)": {
-          width: "auto",
-          flexDirection: "column"
-        }
-      },
-      headerSummaryLayout: {
-        "@media (max-width: 1050px)": {
-          display: "none"
-        }
-      }
-    };
-
     if (process.env.SERVER) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
     }
@@ -256,8 +355,6 @@ class BlogPage extends React.Component {
     const footerBlog = (
       <footer className=" col-12 ">
         <div className="footerBlogContainer">
-          {/* <LightShadow factor={-10}> */}
-
           <Logo
             className="footerBlogLogo "
             style={{ top: "100px" }}
@@ -273,7 +370,6 @@ class BlogPage extends React.Component {
               />
             </React.Fragment>
           )}
-          {/* </LightShadow> */}
         </div>
       </footer>
     );
@@ -286,16 +382,26 @@ class BlogPage extends React.Component {
         url,
         avatar,
         summaryTextHtml,
-        postImg
+        postImg,
+        postGradient
       } = post;
+
+      const isDeviceResult = isDevice();
+      let asidePostH;
+      if (isDeviceResult === "phone") {
+        asidePostH = parseInt(mainPostH) * 0.8;
+      } else {
+        asidePostH = parseInt(mainPostH) * 0.55;
+      }
 
       return (
         <PostCard
           key={i}
-          postH={parseInt(mainPostH) * 0.55}
+          postH={asidePostH}
           hasSummary={true}
           title={title}
           postImg={postImg}
+          postGradient={postGradient}
           keywords={keywords}
           author={author}
           date={date}
@@ -308,29 +414,16 @@ class BlogPage extends React.Component {
     const aside = (
       <React.Fragment>
         <section id="popularPost">{footerBlog}</section>
-        <div
-          id="popularPostContainer"
-          style={{ position: "sticky", top: "5vmin" }}
-        >
-          <div
-            style={{
-              height: "calc(100vh - 10vmin)",
-              "@media (max-width: 1050px)": {
-                height: "auto"
-              }
-            }}
-          >
+
+        <div id="asideContainer" style={{ position: "sticky", top: "5vmin" }}>
+          <div id="asideLayout" style={styles.popularPostLayout}>
             <section>
               <div
                 style={[
                   styles.layout.fullCenter,
                   styles.layout.flex,
                   styles.layout.flexColumn,
-                  {
-                    "@media (max-width: 1050px)": {
-                      display: "none"
-                    }
-                  }
+                  styles.footer.layout
                 ]}
               >
                 <Call2Action className="call2ActionBlog" />
@@ -342,48 +435,10 @@ class BlogPage extends React.Component {
 
               <div
                 data-simplebar
-                style={[
-                  {
-                    backgroundColor: "#00171f",
-                    margin: "5vmin 0",
-                    borderRadius: "8px",
-                    height: "calc(100vh - 15vmin - 112px)",
-                    "@media (max-width: 1050px)": {
-                      height: "auto"
-                    }
-                  },
-                  styles.layout.flexColumn
-                ]}
+                style={[styles.aside.layout, styles.layout.flexColumn]}
               >
-                <h3
-                  style={{
-                    textAlign: "center",
-                    color: "#f95f0b",
-                    position: "sticky",
-                    top: "0",
-                    zIndex: "4",
-                    backgroundColor: "#00171f",
-                    padding: "10px",
-                    "@media (max-width: 1050px)": {
-                      textAlign: "left",
-                      position: "sticky",
-                      left: "0"
-                    }
-                  }}
-                >
-                  Popular Posts
-                </h3>
-                <div
-                  id="postsContainer"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    "@media (max-width: 1050px)": {
-                      flexDirection: "row"
-                    }
-                  }}
-                >
+                <h3 style={styles.aside.title}>Popular Posts</h3>
+                <div id="postsContainer" style={styles.aside.postsContainer}>
                   {asidePosts}
                 </div>
               </div>
@@ -397,6 +452,7 @@ class BlogPage extends React.Component {
       const {
         title,
         postImg,
+        postGradient,
         keywords,
         author,
         date,
@@ -405,19 +461,26 @@ class BlogPage extends React.Component {
         summaryTextHtml
       } = post;
       return (
-        <PostCard
+        <div
           key={i}
-          postH={parseInt(mainPostH) * 0.8}
-          hasSummary={true}
-          title={title}
-          postImg={postImg}
-          keywords={keywords}
-          author={author}
-          date={date}
-          url={url}
-          avatar={avatar}
-          summaryTextHtml={summaryTextHtml}
-        />
+          style={{
+            margin: "0 4vw 0 0"
+          }}
+        >
+          <PostCard
+            postH={parseInt(mainPostH) * 0.8}
+            hasSummary={true}
+            title={title}
+            postImg={postImg}
+            postGradient={postGradient}
+            keywords={keywords}
+            author={author}
+            date={date}
+            url={url}
+            avatar={avatar}
+            summaryTextHtml={summaryTextHtml}
+          />
+        </div>
       );
     });
 
@@ -442,7 +505,16 @@ class BlogPage extends React.Component {
         <NavBar hasBackground={true} />
         <header
           id="blogHeader"
-          style={[styles.layout.flex, styles.header.container]}
+          style={[
+            styles.layout.flex,
+            styles.header.container,
+            {
+              marginTop: `${navBarHeight}`,
+              height: `calc(100vh - ${navBarHeight})`,
+              borderRadius: ` 0px ${headerRadius}px 0px 0px`,
+              backgroundImage: `radial-gradient(216.57px at 79.43% 71.15%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.41) 100%),url(${blogBackground})`
+            }
+          ]}
         >
           <section
             id="headerPostLayout"
@@ -467,6 +539,7 @@ class BlogPage extends React.Component {
                 title={newPostArray[0].title}
                 postH={mainPostH}
                 postImg={newPostArray[0].postImg}
+                postGradient={newPostArray[0].postGradient}
               />
             </div>
 
@@ -484,6 +557,7 @@ class BlogPage extends React.Component {
                 title={newPostArray[0].title}
                 postH={mainPostH}
                 postImg={newPostArray[0].postImg}
+                postGradient={newPostArray[0].postGradient}
                 hasSummary={true}
                 keywords={newPostArray[0].keywords}
                 author={newPostArray[0].author}
@@ -546,28 +620,12 @@ class BlogPage extends React.Component {
         </header>
         <TwoColumnAside aside={aside}>
           <section
-            id="recentPostTitle"
-            style={{
-              display: "flex",
-              position: "sticky",
-              top: "0",
-              backgroundColor: "white",
-              zIndex: "4",
-              justifyContent: "space-around",
-              padding: "15px 0 0 0",
-              "@media (max-width: 1050px)": {
-                position: "relative"
-              },
-              "@media (max-width: 700px)": {
-                flexDirection: "column"
-              }
-            }}
+            id="recentPostTitleContainer"
+            style={styles.recentPostTitleContainer}
           >
             <h2
               id="recentPostTitleText"
-              style={{
-                color: "#f95f0b"
-              }}
+              style={styles.recentPostTitleContainer.title}
             >
               Recent Posts
             </h2>
@@ -595,21 +653,7 @@ class BlogPage extends React.Component {
               flexDirection: "column"
             }}
           >
-            <div
-              style={{
-                padding: "2.5vmin",
-                boxSizing: "border-box",
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-evenly",
-                "@media (max-width:1050px)": {
-                  flexWrap: "nowrap",
-                  overflow: "scroll",
-                  width: "100vw",
-                  justifyContent: "flex-start"
-                }
-              }}
-            >
+            <div id="recentPostLayout" style={styles.recentPostLayout}>
               {postCards}
             </div>
           </section>

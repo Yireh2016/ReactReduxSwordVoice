@@ -1,0 +1,358 @@
+/*::-webkit-scrollbar {
+	width: 12px;
+}
+
+::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}*/
+.summaryTextScrollPost > section {
+  height: 18vh;
+}
+#blogPage h2 {
+  letter-spacing: 2px;
+  font-size: 1.8rem;
+  color: #f95f0b;
+  color: var(--orange);
+}
+.contenedorMain-Blog {
+  margin-top: 94px;
+}
+
+.newPost {
+  border-radius: 154px 0 351px 0;
+  background-image: url("../../assets/img/blog/fondoBlog.jpg");
+  background-size: cover;
+  background-position-y: 27%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.newPostTitleCont {
+  padding: 0 2vw 0 8vw;
+  width: 70%;
+}
+
+.newPostSummaryCont {
+  border-radius: 0 47px;
+  box-sizing: border-box;
+  background-color: white;
+  transform: translateX(2px);
+  width: 30%;
+}
+.newPostSummarySection a {
+  font-size: 0.8rem;
+}
+.summaryTextGeneralBlog {
+  font-size: 0.7rem;
+  color: #024259;
+  padding: 0 20px;
+  margin: 0;
+}
+
+.summaryTextGeneralBlog > p:first-child {
+  margin-top: 0;
+}
+
+.newPost,
+.footerBlogLayoutContainer {
+  height: calc(100vh - 94px);
+}
+.footerBlogLayoutContainer {
+  position: relative;
+}
+
+.footerBlogContainer {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.footerBlogContainer > svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
+.footerBlogLogo {
+  margin-top: 20px;
+}
+
+.call2ActionBlog {
+  margin-top: 20px;
+}
+.footer-blog {
+  animation-delay: 1s;
+  margin-left: 36px;
+  padding-top: 20px;
+}
+
+.footer-blog svg {
+  margin-right: 15px;
+  float: left;
+
+  height: 32px;
+}
+
+.footer-blog svg:hover {
+  fill: #f95f0b;
+  fill: var(--orange);
+}
+
+/* .footer-blog svg:hover path {
+} */
+
+.footer-blog path {
+  stroke: none;
+}
+
+.redesSociales-blog {
+  width: 40px;
+}
+.asideContenedor {
+  padding: 0 34px;
+}
+/* .asideBackground {
+} */
+
+/*.popPostContainer {
+	overflow-y: scroll;
+}*/
+
+.popularPost-article {
+  margin-bottom: 20px;
+}
+.popularPost-article > *:last-child {
+  margin: 0;
+}
+.recentPost {
+  /* padding: 16px 0; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.recentPost h2 {
+  width: 40%;
+  margin: 25px 0 20px 0;
+  padding-left: 8vh;
+}
+.recentPostScroll > div:first-child {
+  overflow-x: hidden !important;
+  overflow-y: scroll !important;
+}
+.searchContainer,
+.searchBar {
+  transition: all 700ms cubic-bezier(0.75, -0.6, 0.35, 1.65);
+}
+.recentPostLayoutContainer {
+  overflow: visible;
+}
+.recentPostContainer {
+  border-radius: 0 0px 80px 0px;
+  border: 1px solid transparent;
+  /* padding-left: calc(8vh - 40px); */
+  height: calc(100vh - 93px);
+  /*overflow-y: scroll;
+	overflow-x: hidden;*/
+  overflow: hidden;
+}
+.recentPost-layout {
+  display: flex;
+  flex-wrap: wrap;
+}
+.recentPost-article {
+  padding: 0 0 40px 40px;
+  /* width: 45%; */
+  width: 45%;
+}
+
+.popularPost-article {
+  width: 100%;
+}
+
+@keyframes SummaryIN {
+  from {
+    opacity: 0;
+    transform: translateY(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+@media (max-width: 1050px) {
+  .contenedorMain-Blog {
+    margin-top: 14.3vw;
+  }
+  #blogPage h2 {
+    font-size: 5.5vw;
+  }
+  .newPost {
+    height: auto;
+    background-image: none;
+  }
+  .newPostTitleCont {
+    border-radius: 154px 0 0 0;
+    width: 100%;
+    padding: 7vh 2vw 7vh 3vw;
+  }
+
+  .newPostSummaryCont {
+    width: 100%;
+    padding: 0;
+    box-shadow: 0 1.4px 7.6px 3.1px #0000003d;
+    /* border: none; */
+    border-radius: 0;
+  }
+  .newPostSummaryCont > h1 {
+    margin: 20px 0 0 20px;
+    color: #f95f0b;
+    color: var(--orange);
+    letter-spacing: 0.5rem;
+  }
+  .newPostSummarySection {
+    box-shadow: 7px 2px 5px 1px #8080804d;
+    margin-left: -1px;
+    border-radius: 0 !important;
+  }
+  .newPostSummarySection > div:nth-child(3) {
+    margin: 5px 0 25px 0;
+  }
+  .newPostSummarySection a {
+    font-size: 1.2rem;
+  }
+
+  .newPostTitleCont {
+    background-image: url("../../assets/img/blog/fondoBlog.jpg");
+    background-position-x: center;
+    background-size: cover;
+  }
+  .summaryTextGeneralBlog {
+    font-size: 1.2rem;
+  }
+  .summaryTextGeneralBlog > p:first-child {
+    margin-top: 1em;
+  }
+  .footerBlogLayoutContainer {
+    height: auto;
+  }
+  .recentPostLayoutContainer,
+  .recentPostContainer {
+    height: calc(60vw * 1.07 + 10px);
+    border: none;
+  }
+  .recentPostLayoutContainer {
+    overflow-x: scroll;
+  }
+  .recentPostContainer {
+    overflow: hidden;
+
+    padding: 0;
+  }
+  .recentPostScroll > div:first-child {
+    overflow-x: scroll !important;
+    overflow-y: hidden !important;
+  }
+  .summaryTextScrollPost > section {
+    overflow: scroll;
+  }
+  .recentPost-layout {
+    flex-wrap: nowrap;
+    display: block;
+    height: calc(60vw * 1.07 + 10px);
+    overflow-y: hidden;
+  }
+  .recentPost-layout > div {
+    float: left;
+  }
+  .recentPost {
+    /*flex-direction: column;*/
+    margin-bottom: 15px;
+  }
+  .recentPost h2 {
+    padding-left: 3vh;
+    box-sizing: border-box;
+  }
+  .recentPost-article {
+    width: 60vw;
+  }
+  .popularPost-article {
+    margin: 0 0 0 0;
+    width: 60vw;
+    padding: 0 15px 0 0;
+  }
+  .asideContenedor {
+    padding: 0;
+    margin-top: 20px;
+  }
+
+  .footerBlogContainer {
+    margin-top: 0;
+    padding-bottom: 20px;
+  }
+  .footerBlogLogo {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .contenedorMain-Blog {
+    margin-top: 25.3vw;
+  }
+  .newPostTitleCont,
+  .newPostSummaryCont {
+    width: 100%;
+  }
+  .newPostSummaryCont {
+    padding: 0;
+  }
+  .newPostSummarySection a {
+    font-size: 1rem;
+  }
+  .newPost {
+    margin-top: -14.4px;
+    height: auto;
+  }
+  .newPostTitleCont {
+    border-radius: 15vw 0 0 0;
+    padding: 7vh 6vw;
+  }
+  .summaryTextGeneralBlog {
+    font-size: 0.8rem;
+  }
+  .summaryTextGeneralBlog > p:first-child {
+    margin-top: 1em;
+  }
+  .recentPost-layout {
+    height: calc(60vw * 1.07 + 60px);
+  }
+  .recentPostLayoutContainer,
+  .recentPostContainer {
+    height: calc((60vw * 1.07) + 30px + 1.8rem + 0.4vh);
+  }
+  .recentPost {
+    padding: 5px 0;
+    margin: 0;
+    flex-direction: column;
+  }
+  .recentPost h2 {
+    margin: 25px 0 10px 0;
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .searchContainer {
+    margin-top: 10px;
+    width: 90%;
+  }
+  .recentPost-article,
+  .popularPost-article {
+    padding: 5px 0 5px 10px;
+    width: 75vw;
+  }
+}

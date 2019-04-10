@@ -6,7 +6,6 @@ import "./index.css";
 
 import Home from "./components/home/home.component";
 import About from "./components/about/about.component";
-import Blog from "./components/blog/blog.component";
 import Portolio from "./components/portfolio/portfolio.component";
 import Contact from "./components/contact/contact.component";
 import BlogArticle from "./components/blog/blogPost/blogPost.component";
@@ -37,7 +36,7 @@ class App extends Component {
         <Route
           exact
           path="/blog"
-          render={() => <Blog cookies={this.props.cookies} />}
+          render={() => <BlogPage cookies={this.props.cookies} />}
         />
         <Route
           exact
@@ -49,11 +48,11 @@ class App extends Component {
           path="/contact"
           render={() => <Contact cookies={this.props.cookies} />}
         />
-        <Route
+        {/* <Route
           exact
           path="/newBlog"
           render={() => <BlogPage cookies={this.props.cookies} />}
-        />
+        /> */}
         <Route
           strict
           path="/blog/post/"

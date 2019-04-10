@@ -140,9 +140,10 @@ export const getPostCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%),url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
+            `url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
+          postGradient: `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+            posts[i].thumbnail.color
+          } 73.79%)`,
           projectName: posts[i].projectName,
           title: posts[i].title,
           description: posts[i].description,

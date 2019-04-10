@@ -10,7 +10,6 @@ import "./home.css";
 //componentes
 import FooterApp from "../footer/footer.component";
 import Call2Action from "../general/call2action.component";
-import LightShadow from "../general/lightShadow/lightShadow.component";
 import SwordVoice from "../general/swordVoice/swordVoice.component";
 
 class Home extends Component {

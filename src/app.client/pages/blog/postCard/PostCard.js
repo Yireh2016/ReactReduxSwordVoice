@@ -45,6 +45,7 @@ class PostCard extends React.Component {
     const {
       postH,
       postImg,
+      postGradient,
       hasSummary,
       avatar,
       url,
@@ -80,23 +81,32 @@ class PostCard extends React.Component {
             }
           ]}
         >
-          <h3
-            id="postTitle"
-            style={[
-              {
-                bottom: "0",
-                padding: `${postH * 0.05494505494505494505494505494505}px`,
-                position: "absolute",
-                color: "white",
-                fontFamily: "Work Sans",
-                fontSize: `${
-                  parseInt(postH * 0.07) < 12 ? 12 : parseInt(postH * 0.07)
-                }px`
-              }
-            ]}
+          <div
+            id="gradientBackground"
+            style={{
+              backgroundImage: postGradient,
+              width: "100%",
+              height: "100%"
+            }}
           >
-            {title}
-          </h3>
+            <h3
+              id="postTitle"
+              style={[
+                {
+                  bottom: "0",
+                  padding: `${postH * 0.05494505494505494505494505494505}px`,
+                  position: "absolute",
+                  color: "white",
+                  fontFamily: "Work Sans",
+                  fontSize: `${
+                    parseInt(postH * 0.07) < 12 ? 12 : parseInt(postH * 0.07)
+                  }px`
+                }
+              ]}
+            >
+              {title}
+            </h3>
+          </div>
           <div
             id="summaryCont"
             style={{
@@ -141,7 +151,7 @@ class PostCard extends React.Component {
             <img
               onClick={this.threeDotsHandler}
               style={{
-                width: `${postH * 0.18681318681318681318681318681319}px`
+                width: `${postH * 0.12019230769230769230769230769231}px`
               }}
               src={threeDotsButton}
               alt="three Dots Button"
