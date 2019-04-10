@@ -405,7 +405,7 @@ class BlogPage extends React.Component {
           keywords={keywords}
           author={author}
           date={date}
-          url={url}
+          url={`/blog/post/${url}`}
           avatar={avatar}
           summaryTextHtml={summaryTextHtml}
         />
@@ -476,7 +476,7 @@ class BlogPage extends React.Component {
             keywords={keywords}
             author={author}
             date={date}
-            url={url}
+            url={`/blog/post/${url}`}
             avatar={avatar}
             summaryTextHtml={summaryTextHtml}
           />
@@ -540,6 +540,7 @@ class BlogPage extends React.Component {
                 postH={mainPostH}
                 postImg={newPostArray[0].postImg}
                 postGradient={newPostArray[0].postGradient}
+                url={`/blog/post/${newPostArray[0].url}`}
               />
             </div>
 
@@ -562,7 +563,7 @@ class BlogPage extends React.Component {
                 keywords={newPostArray[0].keywords}
                 author={newPostArray[0].author}
                 date={newPostArray[0].date}
-                url={newPostArray[0].url}
+                url={`/blog/post/${newPostArray[0].url}`}
                 avatar={newPostArray[0].avatar}
                 summaryTextHtml={newPostArray[0].summaryTextHtml}
               />
@@ -608,7 +609,7 @@ class BlogPage extends React.Component {
                 keywords={newPostArray[0].keywords}
                 author={newPostArray[0].author}
                 date={newPostArray[0].date}
-                url={newPostArray[0].url}
+                url={`/blog/post/${newPostArray[0].url}`}
                 avatar={newPostArray[0].avatar}
                 summaryTextHtml={newPostArray[0].summaryTextHtml}
                 style={{

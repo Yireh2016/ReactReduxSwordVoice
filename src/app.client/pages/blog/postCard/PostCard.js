@@ -20,6 +20,11 @@ const styles = {
   postLayout: {
     position: "relative"
   }
+  // gradientBackground: {
+  //   ":hover": {
+  //     cursor: "pointer"
+  //   }
+  // }
 };
 
 class PostCard extends React.Component {
@@ -83,29 +88,34 @@ class PostCard extends React.Component {
         >
           <div
             id="gradientBackground"
-            style={{
-              backgroundImage: postGradient,
-              width: "100%",
-              height: "100%"
-            }}
+            style={[
+              // styles.gradientBackground,
+              {
+                backgroundImage: postGradient,
+                width: "100%",
+                height: "100%"
+              }
+            ]}
           >
-            <h3
-              id="postTitle"
-              style={[
-                {
-                  bottom: "0",
-                  padding: `${postH * 0.05494505494505494505494505494505}px`,
-                  position: "absolute",
-                  color: "white",
-                  fontFamily: "Work Sans",
-                  fontSize: `${
-                    parseInt(postH * 0.07) < 12 ? 12 : parseInt(postH * 0.07)
-                  }px`
-                }
-              ]}
-            >
-              {title}
-            </h3>
+            <a href={url}>
+              <h3
+                id="postTitle"
+                style={[
+                  {
+                    bottom: "0",
+                    padding: `${postH * 0.05494505494505494505494505494505}px`,
+                    position: "absolute",
+                    color: "white",
+                    fontFamily: "Work Sans",
+                    fontSize: `${
+                      parseInt(postH * 0.07) < 12 ? 12 : parseInt(postH * 0.07)
+                    }px`
+                  }
+                ]}
+              >
+                {title}
+              </h3>
+            </a>
           </div>
           <div
             id="summaryCont"
