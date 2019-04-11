@@ -136,7 +136,7 @@ class SummaryCard extends React.Component {
               padding: "10px 0 0 0"
             }}
           >
-            {dbDateToNormalDate(date)}
+            {date}
           </div>
           <div
             id="authorCont"

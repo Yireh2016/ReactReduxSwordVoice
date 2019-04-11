@@ -1,8 +1,9 @@
 import React from "react";
 import NavBar from "../../components/navbar/navbar.component";
 import Radium from "radium";
+import { connect } from "react-redux";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
-import axios from "axios";
+// import axios from "axios";
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
 import "./blog.css";
@@ -77,23 +78,6 @@ const styles = {
         borderRadius: ` 0px ${headerRadius / 2}px 0px 0px`
       }
     }
-    // post: {
-    //   maxHeight: "100%",
-
-    //   color: "white",
-    //   position: "relative",
-    //   borderRadius: "5px ",
-    //   margin: "5vmin 0",
-    //   medium: {
-    //     height: `${mainPostH * 0.7}px`,
-    //     width: `${mainPostH * 1.028 * 0.7}px`
-    //   },
-    //   small: {
-    //     height: `${mainPostH * 0.4}px`,
-    //     width: `${mainPostH * 1.028 * 0.4}px`,
-    //     margin: `1.25vmin 2.5vmin`
-    //   }
-    // }
   },
   footer: {
     layout: {
@@ -190,7 +174,7 @@ class BlogPage extends React.Component {
     super(props);
     this.state = {
       isDeviceResult: "pc",
-      isLoading: true,
+      isLoading: false, // true,
       mainPostH: 0,
       searchBorder: " 1px transparent solid",
       searchTranslateX: "70%",
@@ -276,53 +260,65 @@ class BlogPage extends React.Component {
       default:
         break;
     }
+
+    this.setState({
+      isDeviceResult: isDeviceResult,
+      isLoading: false,
+      mainPostH: postH,
+      searchBorder:
+        isDeviceResult === "phone"
+          ? "1px #0387b7 solid"
+          : "1px transparent solid",
+      searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
+    });
+
     // this.setPostDimensions();
-    let data;
-    axios("/api/getPosts/")
-      .then(res => {
-        if (res.status === 200) {
-          data = res.data;
-          let newDataArr = [];
+    // let data;
+    // axios("/api/getPosts/")
+    //   .then(res => {
+    //     if (res.status === 200) {
+    //       data = res.data;
+    //       let newDataArr = [];
 
-          for (let i = 0; i < data.length; i++) {
-            newDataArr[i] = {
-              postImg: data[i].postImg,
-              postGradient: data[i].postGradient,
-              title: data[i].title,
-              url: data[i].url,
-              summaryTextHtml: paragraphService(data[i].description),
-              author: data[i].author,
-              date: data[i].date,
-              avatar: data[i].authorAvatar,
-              keywords: keywordsToArr(data[i].keywords)
-            };
-          }
+    //       for (let i = 0; i < data.length; i++) {
+    //         newDataArr[i] = {
+    //           postImg: data[i].postImg,
+    //           postGradient: data[i].postGradient,
+    //           title: data[i].title,
+    //           url: data[i].url,
+    //           summaryTextHtml: paragraphService(data[i].description),
+    //           author: data[i].author,
+    //           date: data[i].date,
+    //           avatar: data[i].authorAvatar,
+    //           keywords: keywordsToArr(data[i].keywords)
+    //         };
+    //       }
 
-          const recentDataArray = newDataArr.slice(1);
-          const popDataArray = newDataArr.slice(1);
-          const newPostArr = newDataArr.slice(0, 1);
-          console.log("newDataArr", newDataArr);
-          console.log("recentDataArray", recentDataArray);
-          console.log("popDataArray", popDataArray);
+    //       const recentDataArray = newDataArr.slice(1);
+    //       const popDataArray = newDataArr.slice(1);
+    //       const newPostArr = newDataArr.slice(0, 1);
+    //       console.log("newDataArr", newDataArr);
+    //       console.log("recentDataArray", recentDataArray);
+    //       console.log("popDataArray", popDataArray);
 
-          this.setState({
-            recentPostsArray: recentDataArray,
-            popPostsArray: popDataArray,
-            newPostArray: newPostArr,
-            isDeviceResult: isDeviceResult,
-            isLoading: false,
-            mainPostH: postH,
-            searchBorder:
-              isDeviceResult === "phone"
-                ? "1px #0387b7 solid"
-                : "1px transparent solid",
-            searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
-          });
-        }
-      })
-      .catch(err => {
-        console.log("error ", err);
-      });
+    //       this.setState({
+    //         recentPostsArray: recentDataArray,
+    //         popPostsArray: popDataArray,
+    //         newPostArray: newPostArr,
+    //         isDeviceResult: isDeviceResult,
+    //         isLoading: false,
+    //         mainPostH: postH,
+    //         searchBorder:
+    //           isDeviceResult === "phone"
+    //             ? "1px #0387b7 solid"
+    //             : "1px transparent solid",
+    //         searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
+    //       });
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log("error ", err);
+    //   });
   }
 
   handleSearchBarFocus = () => {
@@ -341,12 +337,17 @@ class BlogPage extends React.Component {
   render() {
     const {
       mainPostH,
-      popPostsArray,
-      recentPostsArray,
-      newPostArray,
+      // popPostsArray,
+      // recentPostsArray,
+      // newPostArray,
       searchBorder,
       searchTranslateX
     } = this.state;
+    const { articlesArr } = this.props.blog;
+
+    const recentPostsArray = articlesArr.slice(1);
+    const popPostsArray = articlesArr.slice(1);
+    const newPostArray = articlesArr.slice(0, 1);
 
     if (process.env.SERVER) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
@@ -380,11 +381,17 @@ class BlogPage extends React.Component {
         author,
         date,
         url,
-        avatar,
         summaryTextHtml,
         postImg,
         postGradient
       } = post;
+
+      let avatar;
+      if (typeof post.avatar === "object") {
+        avatar = JSON.stringify(post.avatar);
+      } else if (typeof post.avatar === "string") {
+        avatar = post.avatar;
+      }
 
       const isDeviceResult = isDevice();
       let asidePostH;
@@ -457,9 +464,15 @@ class BlogPage extends React.Component {
         author,
         date,
         url,
-        avatar,
         summaryTextHtml
       } = post;
+
+      let avatar;
+      if (typeof post.avatar === "object") {
+        avatar = JSON.stringify(post.avatar);
+      } else if (typeof post.avatar === "string") {
+        avatar = post.avatar;
+      }
       return (
         <div
           key={i}
@@ -564,7 +577,11 @@ class BlogPage extends React.Component {
                 author={newPostArray[0].author}
                 date={newPostArray[0].date}
                 url={`/blog/post/${newPostArray[0].url}`}
-                avatar={newPostArray[0].avatar}
+                avatar={
+                  typeof newPostArray[0].avatar === "string"
+                    ? newPostArray[0].avatar
+                    : JSON.stringify(newPostArray[0].avatar)
+                }
                 summaryTextHtml={newPostArray[0].summaryTextHtml}
               />
             </div>
@@ -610,7 +627,11 @@ class BlogPage extends React.Component {
                 author={newPostArray[0].author}
                 date={newPostArray[0].date}
                 url={`/blog/post/${newPostArray[0].url}`}
-                avatar={newPostArray[0].avatar}
+                avatar={
+                  typeof newPostArray[0].avatar === "string"
+                    ? newPostArray[0].avatar
+                    : JSON.stringify(newPostArray[0].avatar)
+                }
                 summaryTextHtml={newPostArray[0].summaryTextHtml}
                 style={{
                   borderRadius: "5px"
@@ -664,4 +685,20 @@ class BlogPage extends React.Component {
   }
 }
 
-export default Radium(BlogPage);
+const mapStateToProps2 = state => {
+  return {
+    blog: state.blog
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+  };
+};
+
+const BlogPage2 = Radium(BlogPage);
+
+export default connect(
+  mapStateToProps2,
+  mapDispachToProps
+)(BlogPage2);

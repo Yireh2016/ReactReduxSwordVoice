@@ -5,6 +5,7 @@ import ReactHtmlParser from "react-html-parser";
 import axios from "axios";
 import b64toBlob from "b64-to-blob";
 import { connect } from "react-redux";
+import Radium from "radium";
 //css
 import "./blogPost.css";
 //componentes
@@ -21,10 +22,14 @@ import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
 import Summary2 from "../common/summary/summary2.component";
+import PostCard from "../../../pages/blog/postCard/PostCard";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
 import fondoImg from "../../../assets/img/blog/fondoBlog.jpg";
 import avatarImg from "../../../assets/img/general/avatar.jpg";
+
+//services
+import keywordsToArr from "../../../../services/keywordsToArr";
 
 class BlogArticle extends Component {
   constructor(props) {
@@ -520,6 +525,23 @@ class BlogArticle extends Component {
     });
   };
   render() {
+    let keywordsMap = keywordsToArr(this.props.article.categories);
+    keywordsMap = keywordsMap.map(word => {
+      return (
+        <span
+          key={word}
+          style={{
+            fontSize: 24 * 0.4 < 12 ? "10px" : 24 * 0.4 + "px",
+            backgroundColor: "hsla(196, 97%, 72%, 1)",
+            padding: `${5}px`,
+            margin: `0 ${10}px 0 0`,
+            borderRadius: "10px"
+          }}
+        >
+          {word}
+        </span>
+      );
+    });
     const newPostData = this.fetchArticle();
     const bindings = newPostData[0].articleProps;
     const widthHeightRatio = 1.07;
@@ -551,47 +573,30 @@ class BlogArticle extends Component {
         </div>
       </footer>
     );
-    const similarPostsArray = this.state.similPostsArray;
-    const similarPostsJSX = similarPostsArray.map((similarPostsContent, i) => {
-      const bindings = similarPostsContent.articleProps;
-      const summaryComponent = height => {
-        return (
-          <Summary2
-            textHTML={bindings.summaryText}
-            date={bindings.date}
-            avatar={bindings.authorAvatar}
-            author={bindings.author}
-            keywords={bindings.categories}
-            width={height * 0.95}
-            height={height}
-          />
-          // <Summary
-          //   widthHeightRatio="1.640107407407407"
-          //   summaryParagraphHeight={0.34}
-          //   summary={bindings.summaryText}
-          //   date={bindings.date}
-          //   avatar={bindings.authorAvatar}
-          //   author={bindings.author}
-          //   categories={bindings.categories}
-          //   summaryTextHeight={
-          //     this.state.device === "pc" ? `${height}` : "13vh"
-          //   }
-          //   summaryText="summaryTextBlogPost"
-          //   hasReadMore={true}
-          //   hasSummaryTitle={true}
-          //   className="summaryTextScrollPost"
-          // />
-        );
-      };
+    const similarPostArray = this.props.blog.articlesArr;
 
+    console.log("this.props", this.props);
+    const similarPostsJSX = similarPostArray.map((post, i) => {
+      let avatar;
+      if (typeof post.avatar === "object") {
+        avatar = JSON.stringify(post.avatar);
+      } else if (typeof post.avatar === "string") {
+        avatar = post.avatar;
+      }
       return (
         <div key={i} className="grid popularPost-article">
-          <Post
-            postImage={similarPostsContent.articleProps.image}
-            postTitle={similarPostsContent.articleProps.title}
-            widthHeightRatio={widthHeightRatio}
-            hasBorder={true}
-            summaryComponent={summaryComponent}
+          <PostCard
+            title={post.title}
+            postH={341}
+            postImg={post.postImg}
+            postGradient={post.postGradient}
+            hasSummary={true}
+            keywords={post.keywords}
+            author={post.author}
+            date={post.date}
+            url={`/blog/post/${post.url}`}
+            avatar={avatar}
+            summaryTextHtml={post.summaryTextHtml}
           />
         </div>
       );
@@ -599,58 +604,31 @@ class BlogArticle extends Component {
     return (
       <div id="blogPostPage">
         <Navbar hasBackground="true" />
-        {/* <div className="postHero fila">
-          <div
-            className="postHeroBack"
-            style={{
-              backgroundImage:
-                "linear-gradient(180deg, rgba(0, 64, 89, 0.58) 0, rgba(0, 0, 0, 0.72) 59.12%), url(" +
-                bindings.image +
-                ")",
-              borderRadius: "0px 80px 0 0",
-              transform: "matrix(1, 0, 0, 1, 0, 0)"
-            }}
-          />
-          <div className="grid col-1 relleno col-1-md" />
-          <div className="blogPostTitle grid col-7 col-10-md col-12-sm">
-            <div className="blogPostTitleBackCont">
-              <div
-                className="blogPostTitleBack"
-                style={{
-                  backgroundImage: "url(" + bindings.image + ")"
-                }}
-              />{" "}
-            </div>
-            <div className="blogPostTitleText">
-              <h1>{bindings.title}</h1>
-            </div>
-          </div>
-          <div className="blogPostSummary grid  ">
-            <Summary
-              hasSummaryTitle={true}
-              widthHeightRatio="1.640107407407407"
-              summary={bindings.summaryText}
-              date={bindings.date}
-              avatar={bindings.authorAvatar}
-              author={bindings.author}
-              categories={bindings.categories}
-              summaryTextHeight={this.state.device === "pc" ? "60vh" : "13vh"}
-              summaryParagraphHeight={2}
-              summaryText="summaryTextBlogPost"
-              hasReadMore={false}
-              className="summaryTextScroll"
-            />
-          </div>
-        </div>
 
-        <div className="grid col-0 relleno" /> */}
-        {/* <div className="googleAdBanner grid col-12">
-          Compra cosas que no quieres
-        </div> */}
         <div className="blogArticleContainer">
           <div className="blogArticle grid col-8 col-12-md">
             <article>
-              {ReactHtmlParser(this.props.article.html)}
+              <h1>{this.props.article.title}</h1>
+              <div id="articleDescriptionCard">
+                <div>{keywordsMap}</div>
+                <div>
+                  <div
+                    style={{
+                      background: `url(${`
+                      data:image/jpeg;base64,${this.props.article.avatar}
+                      `}) no-repeat center center`,
+                      width: "50px",
+                      height: "50px"
+                    }}
+                  />
+                  <span>{this.props.article.author}</span>
+                  <span>{this.props.article.date}</span>
+                </div>
+              </div>
+
+              {ReactHtmlParser(
+                this.props.article.html.replace(/<h1>.*<\/h1>/g, "")
+              )}
               {/* <JsxParser
                 bindings={bindings}
                 jsx={newPostData[0].articleProps.articleJSX}
@@ -725,7 +703,8 @@ const mapStateToProps2 = state => {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
-    article: state.article
+    article: state.article,
+    blog: state.blog
   };
 };
 const mapDispachToProps = dispach => {
@@ -735,9 +714,9 @@ const mapDispachToProps = dispach => {
     onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };
-
+const BlogArticle2 = Radium(BlogArticle);
 export default connect(
   mapStateToProps2,
   mapDispachToProps
-)(BlogArticle);
+)(BlogArticle2);
 // export default BlogArticle;

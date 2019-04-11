@@ -6,6 +6,7 @@ import morgan from "morgan";
 
 //controllers
 import swordvoiceWeb from "../app.server/controllers/swordvoiceWeb";
+import notFoundCtrl from "../app.server/controllers/notFoundCtrl";
 import cms from "../app.server/controllers/cms";
 
 //modelos para DB
@@ -38,6 +39,7 @@ server.get("/portfolio", swordvoiceWeb);
 server.get("/newBlog", swordvoiceWeb);
 server.get("/blog", swordvoiceWeb);
 server.get("/blog/post*", swordvoiceWeb);
+server.get("*", notFoundCtrl);
 
 //starting server
 server.listen(8080);

@@ -59,6 +59,7 @@ class App extends Component {
           render={() => <BlogArticle cookies={this.props.cookies} />}
         />
         <Route
+          strict
           path="/"
           render={() => <NotFound cookies={this.props.cookies} />}
         />

@@ -16,6 +16,8 @@ import App from "../../app.client/app";
 import template from "../templates/template";
 import dbDateToNormalDate from "../../services/dbDateToNormalDate";
 import successOnFindingUserAndDistpach from "../services/actions/successOnFindingUserAndDistpach";
+import paragraphService from "../../services/paragraphService";
+import keywordsToArr from "../../services/keywordsToArr";
 
 const renderTemplate = (req, store) => {
   const context = {};
@@ -48,49 +50,130 @@ const renderWithPreloadedState = (req, res, store) => {
   );
 };
 const swordvoiceWeb = async (req, res) => {
+  let articleModel = mongoose.model("Article");
   console.log("swordvoiceWeb INICIO");
 
-  const articlesPromise = () =>
+  const routerPromise = () =>
     new Promise(resolve => {
-      console.log(" articlesPromise EJECUTANDOSE");
+      console.log(" routerPromise EJECUTANDOSE");
 
       if (req.url.match("/blog/post/")) {
         const url = req.url.replace("/blog/post/", "");
-        let articleModel = mongoose.model("Article");
         articleModel
           .findOne({ url: `${url}` })
           .select("date html title description keywords author")
-          .populate({ path: "author", select: "userFirstName userLastName" }) //traer solo lo que necesito firstname y lastname
+          .populate({
+            path: "author",
+            select: "userFirstName userLastName userAvatar"
+          }) //traer solo lo que necesito firstname y lastname
           .exec()
           .then(completeArticle => {
-            const {
-              date,
-              html,
-              author,
-              title,
-              description,
-              keywords
-            } = completeArticle;
-            const article = {
-              title,
-              html,
-              author: author.userFirstName + " " + author.userLastName,
-              summary: description,
-              date: dbDateToNormalDate(date),
-              categories: keywords
-            };
-            store.dispatch({ type: "GET_ARTICLE", payload: article });
-            console.log("ARTICLE FOUND");
+            if (completeArticle) {
+              const {
+                date,
+                html,
+                author,
+                title,
+                description,
+                keywords
+              } = completeArticle;
 
-            resolve(article);
+              const article = {
+                title,
+                html,
+                author: author.userFirstName + " " + author.userLastName,
+                summary: description,
+                date: dbDateToNormalDate(date),
+                categories: keywords,
+                avatar: author.userAvatar
+              };
+              store.dispatch({ type: "GET_ARTICLE", payload: article });
+              console.log("ARTICLE FOUND");
+
+              console.log("SEARCHING SIMILAR ARTICLES");
+              articleModel
+                .find()
+                .select()
+                .limit(7)
+                .populate("author")
+                .sort({ _id: "descending" })
+                .exec()
+                .then(posts => {
+                  let postMinimumData = [];
+                  for (let i = 0; i < posts.length; i++) {
+                    postMinimumData[i] = {
+                      url: posts[i].url,
+                      postImg:
+                        posts[i].thumbnail &&
+                        `url(/uploads/${posts[i].url}/${
+                          posts[i].thumbnail.name
+                        })`,
+                      postGradient: `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                        posts[i].thumbnail.color
+                      } 73.79%)`,
+                      title: posts[i].title,
+                      summaryTextHtml: paragraphService(posts[i].description),
+                      author:
+                        `${posts[i].author.userFirstName} ` +
+                        `${posts[i].author.userLastName}`,
+                      avatar: posts[i].author.userAvatar,
+                      date: dbDateToNormalDate(posts[i].date),
+                      keywords: keywordsToArr(posts[i].keywords[0])
+                    };
+                  }
+
+                  store.dispatch({
+                    type: "ARTICLES_ARR",
+                    payload: postMinimumData
+                  });
+                  resolve();
+                });
+              // resolve();
+            } else {
+              console.log(" ARTICLE NOT FOUND");
+              store.dispatch({ type: "DEFAULT_ARTICLE" });
+              res.redirect("/notFound");
+            }
           })
           .catch(err => {
-            console.log("error on finding artice", err);
+            console.log("error on finding article", err);
+          });
+      } else if (req.url.match("/blog")) {
+        console.log("entrando a /BLOG");
+        articleModel
+          .find()
+          .select()
+          .limit(7)
+          .populate("author")
+          .sort({ _id: "descending" })
+          .exec()
+          .then(posts => {
+            let postMinimumData = [];
+            for (let i = 0; i < posts.length; i++) {
+              postMinimumData[i] = {
+                url: posts[i].url,
+                postImg:
+                  posts[i].thumbnail &&
+                  `url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
+                postGradient: `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                  posts[i].thumbnail.color
+                } 73.79%)`,
+                title: posts[i].title,
+                summaryTextHtml: paragraphService(posts[i].description),
+                author:
+                  `${posts[i].author.userFirstName} ` +
+                  `${posts[i].author.userLastName}`,
+                avatar: posts[i].author.userAvatar,
+                date: dbDateToNormalDate(posts[i].date),
+                keywords: keywordsToArr(posts[i].keywords[0])
+              };
+            }
+
+            store.dispatch({ type: "ARTICLES_ARR", payload: postMinimumData });
+            resolve();
           });
       } else {
-        console.log(" ARTICLE NOT FOUND");
-        store.dispatch({ type: "DEFAULT_ARTICLE" });
-        resolve("");
+        resolve();
       }
     });
 
@@ -99,8 +182,6 @@ const swordvoiceWeb = async (req, res) => {
       console.log("EJECUTANDO userLoggedInPromise");
 
       if (req.cookies.username) {
-        console.log("USER  ALREADY GOT HERE BEFORE ");
-
         console.log(
           "Checkiing if sessionid is updated ",
           req.cookies.sessionId
@@ -136,8 +217,8 @@ const swordvoiceWeb = async (req, res) => {
     });
 
   try {
-    await articlesPromise();
-    console.log("end articlesPromise");
+    await routerPromise();
+    console.log("end routerPromise");
     await userLoggedInPromise();
     console.log("end userLoggedInPromise");
 
