@@ -35,6 +35,7 @@ server.get("/", swordvoiceWeb);
 server.get("/home", swordvoiceWeb);
 server.get("/about", swordvoiceWeb);
 server.get("/contact", swordvoiceWeb);
+server.get("/courses", swordvoiceWeb);
 server.get("/portfolio", swordvoiceWeb);
 server.get("/newBlog", swordvoiceWeb);
 server.get("/blog", swordvoiceWeb);

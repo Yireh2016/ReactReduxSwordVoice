@@ -72,44 +72,6 @@ class Home extends Component {
               fill="white"
             />
           </svg>
-          {/* <LightShadow factor={5}> */}
-          {/* <svg
-              ref={this.fondoCursor}
-              id="imgFondo"
-              viewBox="0 0 1442.6248 1020.3935"
-              version="1.1"
-            >
-              <defs>
-                <pattern
-                  id="img1"
-                  patternUnits="userSpaceOnUse"
-                  width="100%"
-                  height="100%"
-                >
-                  <image
-                    height="110%"
-                    width="180%"
-                    xlinkHref={imgFondo}
-                    x="0"
-                    y="0"
-                  />
-                </pattern>
-              </defs>
-              <path
-                className="appear"
-                id="path"
-                transform="translate(-21.184839,22.419599)"
-                d="m 1424.8117,-21.427051 c -0.01,7.1e-4 -0.013,-4.5e-4 -0.02,0.002 0.01,0.002 0.018,-0.002 0.02,-0.002 z M 228.7844,138.57494 C -0.35967984,207.29913 22.901645,991.41736 22.794155,992.47926 305.44278,983.22885 1170.2121,1019.948 1293.958,824.96403 1417.704,629.98009 1449.5864,267.62537 1459.5771,89.805384 1388.13,80.191544 611.20039,31.718754 228.7844,138.57494 Z M 1462.8078,-6.546141 v 0.082 c 0.021,0.038568 0,-0.045039 0,-0.082 z"
-              />
-              <path
-                id="path2"
-                transform="translate(-21.184839,22.419599)"
-                className="bordeAnim orangeStroke"
-                d="m 1424.8117,-21.427051 c -0.01,7.1e-4 -0.013,-4.5e-4 -0.02,0.002 0.01,0.002 0.018,-0.002 0.02,-0.002 z M 228.7844,138.57494 C -0.35967984,207.29913 22.901645,991.41736 22.794155,992.47926 305.44278,983.22885 1170.2121,1019.948 1293.958,824.96403 1417.704,629.98009 1449.5864,267.62537 1459.5771,89.805384 1388.13,80.191544 611.20039,31.718754 228.7844,138.57494 Z M 1462.8078,-6.546141 v 0.082 c 0.021,0.038568 0,-0.045039 0,-0.082 z"
-              />
-            </svg>
-        */}
-          {/* </LightShadow> */}
         </div>
         {/*Fondo Tablet*/}
         <div id="imgFondoMd">
@@ -165,10 +127,7 @@ class Home extends Component {
             {is.edge() ? "SwordVoice" : <SwordVoice delay={4} />}
           </h1>
           {/* </LightShadow> */}
-          <h2>
-            Custom Web Design and
-            <br /> Development
-          </h2>
+          <h2>Custom Web Design and Development, Courses and more</h2>
         </section>
         {/*Boton de accion y footer*/}
         <Call2Action className="call2Action-home appear" />

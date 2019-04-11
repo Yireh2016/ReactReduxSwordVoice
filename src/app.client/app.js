@@ -11,6 +11,7 @@ import Contact from "./components/contact/contact.component";
 import BlogArticle from "./components/blog/blogPost/blogPost.component";
 import NotFound from "./components/notFound/NotFound";
 import BlogPage from "./pages/blog/BlogPage";
+import Courses from "./pages/courses/Courses";
 
 class App extends Component {
   render() {
@@ -47,6 +48,11 @@ class App extends Component {
           exact
           path="/contact"
           render={() => <Contact cookies={this.props.cookies} />}
+        />
+        <Route
+          exact
+          path="/courses"
+          render={() => <Courses cookies={this.props.cookies} />}
         />
         {/* <Route
           exact
