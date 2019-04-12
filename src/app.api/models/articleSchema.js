@@ -15,7 +15,13 @@ const articleSchema = new Schema({
   structuredData: {}, //json,
   title: { type: String },
   url: { type: String },
-  thumbnail: {}
+  thumbnail: {},
+  socialCount: {
+    like: { type: Number, required: true, default: 0 },
+    dislike: { type: Number, required: true, default: 0 },
+    share: { type: Number, required: true, default: 0 },
+    comments: { type: Number, required: true, default: 0 }
+  }
 });
 
 mongoose.model("Article", articleSchema);

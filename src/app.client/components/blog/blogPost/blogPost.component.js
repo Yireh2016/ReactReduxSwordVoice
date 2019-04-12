@@ -21,7 +21,7 @@ import FooterApp from "../../footer/footer.component";
 import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
-import Summary2 from "../common/summary/summary2.component";
+import SocialBar from "../../sicialBar/SocialBar";
 import PostCard from "../../../pages/blog/postCard/PostCard";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
@@ -30,6 +30,7 @@ import avatarImg from "../../../assets/img/general/avatar.jpg";
 
 //services
 import keywordsToArr from "../../../../services/keywordsToArr";
+import isDevice from "../../../../services/isDevice";
 
 class BlogArticle extends Component {
   constructor(props) {
@@ -45,22 +46,22 @@ class BlogArticle extends Component {
       showLogIn: false,
       similPostsArray: [],
       loggedUserAvatar: "",
-      loggedUserName: ""
+      loggedUserName: "",
+      authorAvatar: "",
+      similarPostsWidth: 341
     };
   }
   componentDidMount() {
-    const winWidth = window.innerWidth;
-    let device;
-
-    if (winWidth <= 700) {
-      device = "phone";
-    } else if (winWidth > 700 && winWidth < 1050) {
-      device = "tablet";
+    const device = isDevice();
+    let similarPostsWidth;
+    if (device === "pc") {
+      similarPostsWidth = ((window.outerWidth * 4) / 12) * 0.8;
+    } else if (device === "tablet") {
+      similarPostsWidth = window.outerWidth / 2;
     } else {
-      device = "pc";
+      similarPostsWidth = window.outerWidth * 0.7;
     }
-
-    this.setState({ device: device });
+    // this.setState({ device: device });
 
     const similDataArray = this.fetchData();
     //esto cabio porque ya no tengo token
@@ -72,16 +73,18 @@ class BlogArticle extends Component {
     //   // this.setUserFromId(userId);
     // }
 
-    const win = window.innerWidth * 0.6;
+    const win = window.outerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
     this.setState({
+      device: device,
+      similarPostsWidth,
+
       // isUserLoggedIn: isLoggedIn(),
       similPostContWidth:
-        this.state.device === "pc"
-          ? "100%"
-          : similDataArray.length * win + "px",
+        device === "pc" ? "100%" : similDataArray.length * win + "px",
 
-      similPostsArray: similDataArray
+      similPostsArray: similDataArray,
+      authorAvatar: this.props.article.avatar
     });
   }
   componentDidUpdate() {
@@ -109,7 +112,7 @@ class BlogArticle extends Component {
 
           author: "Jainer Muñoz",
           date: "August, 21 2018",
-          authorAvatar: avatarImg,
+          autorAvatar: avatarImg,
           categories: [
             {
               category: "Desing"
@@ -453,6 +456,7 @@ class BlogArticle extends Component {
     newData.push(...mockData);
     return newData;
   };
+
   nodeScrollControl = (e, newData) => {
     const node = e.target;
     //Redux leer device desde store
@@ -583,11 +587,12 @@ class BlogArticle extends Component {
       } else if (typeof post.avatar === "string") {
         avatar = post.avatar;
       }
+
       return (
         <div key={i} className="grid popularPost-article">
           <PostCard
             title={post.title}
-            postH={341}
+            postH={this.state.similarPostsWidth / 1.08}
             postImg={post.postImg}
             postGradient={post.postGradient}
             hasSummary={true}
@@ -609,20 +614,49 @@ class BlogArticle extends Component {
           <div className="blogArticle grid col-8 col-12-md">
             <article>
               <h1>{this.props.article.title}</h1>
-              <div id="articleDescriptionCard">
-                <div>{keywordsMap}</div>
-                <div>
+              <div
+                id="articleDescriptionCard"
+                style={{
+                  padding: "15px"
+                }}
+              >
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center"
+                  }}
+                >
                   <div
                     style={{
-                      background: `url(${`
-                      data:image/jpeg;base64,${this.props.article.avatar}
-                      `}) no-repeat center center`,
                       width: "50px",
-                      height: "50px"
+                      height: "50px",
+                      backgroundImage: `url('data:image/jpeg;base64,${
+                        this.state.authorAvatar
+                      }')`,
+                      backgroundPosition: "center center",
+                      backgroundSize: "cover",
+                      borderRadius: "100%"
                     }}
                   />
-                  <span>{this.props.article.author}</span>
-                  <span>{this.props.article.date}</span>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      fontSize: ".7rem",
+                      color: "#004059",
+                      textAlign: "right",
+                      padding: "0 0 0 10px"
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontWeight: "bold"
+                      }}
+                    >
+                      {this.props.article.author}
+                    </span>
+                    <span>{this.props.article.date}</span>
+                  </div>
                 </div>
               </div>
 
@@ -633,6 +667,26 @@ class BlogArticle extends Component {
                 bindings={bindings}
                 jsx={newPostData[0].articleProps.articleJSX}
               /> */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#004059"
+                }}
+              >
+                <span
+                  style={{
+                    color: "#f95f0b",
+                    fontSize: ".7rem",
+                    fontWeight: "bold",
+                    marginRight: "10px"
+                  }}
+                >
+                  Categories:
+                </span>
+                {keywordsMap}
+              </div>
+              <SocialBar />
             </article>
             <div className="googleAdBanner grid col-12">
               Compra cosas que no quieres

@@ -40,7 +40,7 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
-  console.log("RENDERING preloadedState to send to templeta", preloadedState);
+  console.log("RENDERING preloadedState to send to templeta");
   res.send(
     template({
       body: renderTemplate(req, store),
@@ -61,7 +61,7 @@ const swordvoiceWeb = async (req, res) => {
         const url = req.url.replace("/blog/post/", "");
         articleModel
           .findOne({ url: `${url}` })
-          .select("date html title description keywords author")
+          .select("date html title description keywords author socialCount")
           .populate({
             path: "author",
             select: "userFirstName userLastName userAvatar"
@@ -75,19 +75,21 @@ const swordvoiceWeb = async (req, res) => {
                 author,
                 title,
                 description,
-                keywords
+                keywords,
+                socialCount
               } = completeArticle;
 
               const article = {
                 title,
                 html,
+                socialCount,
                 author: author.userFirstName + " " + author.userLastName,
                 summary: description,
                 date: dbDateToNormalDate(date),
                 categories: keywords,
                 avatar: author.userAvatar
               };
-              store.dispatch({ type: "GET_ARTICLE", payload: article });
+              store.dispatch({ type: "SET_ARTICLE", payload: article });
               console.log("ARTICLE FOUND");
 
               console.log("SEARCHING SIMILAR ARTICLES");

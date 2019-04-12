@@ -88,6 +88,14 @@
 aside h2 {
   font-size: 1.8rem;
 }
+.blogArticle figure img {
+  width: 100%;
+}
+.blogArticle figure figcaption {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--blueDark);
+}
 .blogArticle p {
   font-size: 21px;
   line-height: 1.58;
