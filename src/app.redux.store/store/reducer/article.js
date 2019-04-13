@@ -8,7 +8,8 @@ const initialState = {
   socialCount: {
     claps: 0,
     share: 0,
-    comments: 0
+    comments: 0,
+    views: 0
   }
 };
 //estado inicial viene del CONFIG REDUCER.JS
@@ -21,8 +22,12 @@ const article = (state = initialState, action) => {
       break;
     }
 
+    case "ADD_VIEWS_COUNT": {
+      newState.socialCount.views = newState.socialCount.views + action.payload;
+      break;
+    }
+
     case "ADD_CLAPS_COUNT": {
-      console.log("action.payload", action.payload);
       newState.socialCount.claps = newState.socialCount.claps + action.payload;
       break;
     }

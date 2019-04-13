@@ -3,15 +3,28 @@ import mongoose from "mongoose";
 const articleModel = mongoose.model("Article");
 
 export const socialCtrl = (req, res) => {
-  console.log("req.query", req.query);
+  const claps = req.query.claps;
+  const share = req.query.share;
+  const comments = req.query.claps;
+  const views = req.query.views;
 
-  const claps = parseInt(req.query.claps);
   const title = req.query.title;
+
+  let socialObj;
+  if (claps) {
+    socialObj = { claps: parseInt(claps) };
+  } else if (share) {
+    socialObj = { share: parseInt(share) };
+  } else if (comments) {
+    socialObj = { comments: parseInt(comments) };
+  } else if (views) {
+    socialObj = { views: parseInt(views) };
+  }
 
   articleModel.findOneAndUpdate(
     { title },
     {
-      socialCount: { claps: claps }
+      socialCount: socialObj
     },
     function(err) {
       if (err) {

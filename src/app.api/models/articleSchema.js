@@ -19,7 +19,8 @@ const articleSchema = new Schema({
   socialCount: {
     claps: { type: Number, default: 0 },
     share: { type: Number, default: 0 },
-    comments: { type: Number, default: 0 }
+    comments: { type: Number, default: 0 },
+    views: { type: Number, default: 0 }
   }
 });
 

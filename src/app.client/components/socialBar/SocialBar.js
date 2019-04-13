@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { HashLink as Link } from "react-router-hash-link";
@@ -7,9 +7,13 @@ import { HashLink as Link } from "react-router-hash-link";
 import {
   claps as claps2,
   comments as comments2,
-  share as share2
+  share as share2,
+  views as view2
 } from "../../assets/svgIcons/SvgIcons";
+
+//api calls
 import updateClapsCount from "../../assets/apiCalls/updateClapsCount";
+import updateViewsCount from "../../assets/apiCalls/updateViewsCount";
 
 // {
 //   // article
@@ -27,10 +31,18 @@ const SocialBar = ({
   addClapsCount,
   setCommentsCount,
   setShareCount,
+  setViewsCount,
   title
 }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
+  useEffect(() => {
+    console.log("ejecutando useeffect", socialCount.views);
+    setTimeout(() => {
+      setViewsCount(1);
+      updateViewsCount(title, socialCount.views);
+    }, 60000);
+  }, []);
   const BarContainer = styled.div`
     display: inline-block;
     background: #ffffff;
@@ -51,10 +63,15 @@ const SocialBar = ({
   const Icon = styled.span`
     transform: ${props =>
       props.rotate === "true" ? "rotate(180deg)" : "rotate(0deg)"};
+
+    #clapsIcon {
+      width: 50px;
+      height: 50px;
+    }
     svg {
       height: 20px;
       width: 20px;
-      fill: #f95f0b;
+      fill: #ff9575;
       margin: 0 8px;
 
       &:hover {
@@ -74,19 +91,18 @@ const SocialBar = ({
       clearTimeout(clapsTimer);
     }
     setClapsAdder(clapsAdder + 1);
+    addClapsCount();
     const timer = setTimeout(() => {
-      //call axios api to add
-      console.log(`Se ha sumado ${clapsAdder + 1} claps al store en DB`);
-      addClapsCount(clapsAdder + 1);
-
       setClapsAdder(0);
 
+      //api call
       updateClapsCount(title, socialCount.claps);
 
       return;
     }, 1000);
     setClapsTimer(timer);
   };
+
   const claps = (
     <Icon
       style={{ position: "relative" }}
@@ -123,6 +139,7 @@ const SocialBar = ({
       {share2}
     </Icon>
   );
+  const views = <Icon id="views">{view2}</Icon>;
   const comments = (
     <Link
       scroll={el => el.scrollIntoView({ behavior: "smooth", block: "start" })}
@@ -142,15 +159,19 @@ const SocialBar = ({
   const socialItems = [
     {
       icon: claps,
-      socialCount: socialCount.claps
+      count: socialCount.claps
     },
     {
       icon: comments,
-      socialCount: socialCount.comments
+      count: socialCount.comments
     },
     {
       icon: share,
-      socialCount: socialCount.share
+      count: socialCount.share
+    },
+    {
+      icon: views,
+      count: socialCount.views
     }
   ];
 
@@ -158,7 +179,7 @@ const SocialBar = ({
     return (
       <SocialItem key={i}>
         {socialItem.icon}
-        <Counter>{socialItem.socialCount}</Counter>
+        <Counter>{socialItem.count}</Counter>
       </SocialItem>
     );
   });
@@ -183,7 +204,9 @@ const mapDispachToProps = dispatch => {
     setShareCount: (count = 1) =>
       dispatch({ type: "SET_SHARE_COUNT", payload: count }),
     setCommentsCount: (count = 1) =>
-      dispatch({ type: "SET_COMMENTS_COUNT", payload: count })
+      dispatch({ type: "SET_COMMENTS_COUNT", payload: count }),
+    setViewsCount: (count = 1) =>
+      dispatch({ type: "ADD_VIEWS_COUNT", payload: count })
   };
 };
 
