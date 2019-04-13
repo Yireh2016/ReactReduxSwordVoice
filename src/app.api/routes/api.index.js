@@ -9,13 +9,13 @@ import {
   uploadTempFileCtrl,
   deletePostCtrl,
   addClassToPostCtrl,
-  getClassFromPostCtrl
-} from "../controllers/cms/postsControllers";
-import {
+  getClassFromPostCtrl,
   getPostCtrl,
   updatePostCtrl,
   getArticleCtrl
 } from "../controllers/cms/postsControllers";
+import { socialCtrl } from "../controllers/client/socialCtrl";
+
 // import axios from "axios";
 
 let upload = multer({ dest: "dist/assets/uploads/" });
@@ -341,6 +341,9 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
     }
   );
 });
+
+//update post Social ej claps,share,comments
+routerAPI.put("/socialCounter", authAPI, socialCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

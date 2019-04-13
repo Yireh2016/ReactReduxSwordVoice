@@ -6,8 +6,7 @@ const initialState = {
   description: "",
   keywords: "",
   socialCount: {
-    like: 0,
-    dislike: 0,
+    claps: 0,
     share: 0,
     comments: 0
   }
@@ -22,16 +21,12 @@ const article = (state = initialState, action) => {
       break;
     }
 
-    case "SET_LIKE_COUNT": {
+    case "ADD_CLAPS_COUNT": {
       console.log("action.payload", action.payload);
-      newState.socialCount.like = newState.socialCount.like + action.payload;
+      newState.socialCount.claps = newState.socialCount.claps + action.payload;
       break;
     }
-    case "SET_DISLIKE_COUNT": {
-      newState.socialCount.dislike =
-        newState.socialCount.dislike + action.payload;
-      break;
-    }
+
     case "SET_SHARE_COUNT": {
       newState.socialCount.share = newState.socialCount.share + action.payload;
       break;

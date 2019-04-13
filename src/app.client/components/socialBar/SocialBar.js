@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { HashLink as Link } from "react-router-hash-link";
 
 //assets
 import {
-  like as like2,
+  claps as claps2,
   comments as comments2,
   share as share2
 } from "../../assets/svgIcons/SvgIcons";
+import updateClapsCount from "../../assets/apiCalls/updateClapsCount";
 
 // {
 //   // article
@@ -15,18 +17,20 @@ import {
 //   // dislikeCount = 0,
 //   // commentCount = 0,
 //   // shareCount = 0,
-//   // setLikeCount,
-//   // setDislikeCount,
+//   // addClapsCount,
+//   // ,
 //   // setCommentsCount,
 //   // setShareCount
 // }
 const SocialBar = ({
   socialCount,
-  setLikeCount,
-  setDislikeCount,
+  addClapsCount,
   setCommentsCount,
-  setShareCount
+  setShareCount,
+  title
 }) => {
+  const [clapsAdder, setClapsAdder] = useState(0);
+  const [clapsTimer, setClapsTimer] = useState();
   const BarContainer = styled.div`
     display: inline-block;
     background: #ffffff;
@@ -62,29 +66,53 @@ const SocialBar = ({
     color: #004059;
     font-weight: bold;
     font-size: 0.7rem;
+    user-select: none;
   `;
 
-  const like = (
+  const clapsAdderHandler = () => {
+    if (clapsTimer) {
+      clearTimeout(clapsTimer);
+    }
+    setClapsAdder(clapsAdder + 1);
+    const timer = setTimeout(() => {
+      //call axios api to add
+      console.log(`Se ha sumado ${clapsAdder + 1} claps al store en DB`);
+      addClapsCount(clapsAdder + 1);
+
+      setClapsAdder(0);
+
+      updateClapsCount(title, socialCount.claps);
+
+      return;
+    }, 1000);
+    setClapsTimer(timer);
+  };
+  const claps = (
     <Icon
-      id="like"
+      style={{ position: "relative" }}
+      id="claps"
       onClick={() => {
-        setLikeCount();
+        clapsAdderHandler();
       }}
     >
-      {like2}
+      {clapsAdder !== 0 && (
+        <Counter
+          style={{
+            position: "absolute",
+            backgroundColor: "#004059",
+            color: "white",
+            borderRadius: "100%",
+            padding: "7px",
+            top: "-30px"
+          }}
+        >
+          +{clapsAdder}
+        </Counter>
+      )}
+      {claps2}
     </Icon>
   );
-  const dislike = (
-    <Icon
-      id="dislike"
-      rotate="true"
-      onClick={() => {
-        setDislikeCount();
-      }}
-    >
-      {like2}
-    </Icon>
-  );
+
   const share = (
     <Icon
       id="share"
@@ -96,24 +124,25 @@ const SocialBar = ({
     </Icon>
   );
   const comments = (
-    <Icon
-      id="comments"
-      onClick={() => {
-        setCommentsCount();
-      }}
+    <Link
+      scroll={el => el.scrollIntoView({ behavior: "smooth", block: "start" })}
+      to="#commentsSection"
     >
-      {comments2}
-    </Icon>
+      <Icon
+        id="comments"
+        onClick={() => {
+          setCommentsCount();
+        }}
+      >
+        {comments2}
+      </Icon>
+    </Link>
   );
 
   const socialItems = [
     {
-      icon: like,
-      socialCount: socialCount.like
-    },
-    {
-      icon: dislike,
-      socialCount: socialCount.dislike
+      icon: claps,
+      socialCount: socialCount.claps
     },
     {
       icon: comments,
@@ -142,15 +171,15 @@ const SocialBar = ({
 
 const mapStateToProps = state => {
   return {
-    socialCount: state.article.socialCount
+    socialCount: state.article.socialCount,
+    title: state.article.title
   };
 };
 const mapDispachToProps = dispatch => {
   return {
-    setLikeCount: (count = 1) =>
-      dispatch({ type: "SET_LIKE_COUNT", payload: count }),
-    setDislikeCount: (count = 1) =>
-      dispatch({ type: "SET_DISLIKE_COUNT", payload: count }),
+    addClapsCount: (count = 1) =>
+      dispatch({ type: "ADD_CLAPS_COUNT", payload: count }),
+
     setShareCount: (count = 1) =>
       dispatch({ type: "SET_SHARE_COUNT", payload: count }),
     setCommentsCount: (count = 1) =>

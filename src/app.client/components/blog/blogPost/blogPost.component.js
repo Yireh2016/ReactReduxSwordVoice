@@ -6,6 +6,7 @@ import axios from "axios";
 import b64toBlob from "b64-to-blob";
 import { connect } from "react-redux";
 import Radium from "radium";
+import { HashLink as Link } from "react-router-hash-link";
 //css
 import "./blogPost.css";
 //componentes
@@ -21,7 +22,7 @@ import FooterApp from "../../footer/footer.component";
 import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
-import SocialBar from "../../sicialBar/SocialBar";
+import SocialBar from "../../socialBar/SocialBar";
 import PostCard from "../../../pages/blog/postCard/PostCard";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
@@ -693,7 +694,7 @@ class BlogArticle extends Component {
             </div>
 
             <section>
-              <h2>Leave your comments:</h2>
+              <h2 id="commentsSection">Leave your comments:</h2>
 
               {this.props.isUserLoggedIn ? (
                 <NewComment

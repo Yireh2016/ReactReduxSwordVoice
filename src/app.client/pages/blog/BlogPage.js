@@ -174,7 +174,7 @@ class BlogPage extends React.Component {
     super(props);
     this.state = {
       isDeviceResult: "pc",
-      isLoading: false, // true,
+      isLoading: true, // true,
       mainPostH: 0,
       searchBorder: " 1px transparent solid",
       searchTranslateX: "70%",
@@ -508,7 +508,7 @@ class BlogPage extends React.Component {
               left: "0",
               width: "100vw",
               height: "100vh",
-              zIndex: "5",
+              zIndex: "100",
               backgroundColor: "white"
             }}
           >

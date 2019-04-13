@@ -39,5 +39,6 @@
 @media (max-width: 750px) {
   .searchBar input {
     width: 35vh;
+    margin: 0;
   }
 }

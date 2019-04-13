@@ -13,14 +13,13 @@ const articleSchema = new Schema({
   description: { type: String },
   keywords: { type: [String] }, //keywords
   structuredData: {}, //json,
-  title: { type: String },
+  title: { type: String, unique: true },
   url: { type: String },
   thumbnail: {},
   socialCount: {
-    like: { type: Number, required: true, default: 0 },
-    dislike: { type: Number, required: true, default: 0 },
-    share: { type: Number, required: true, default: 0 },
-    comments: { type: Number, required: true, default: 0 }
+    claps: { type: Number, default: 0 },
+    share: { type: Number, default: 0 },
+    comments: { type: Number, default: 0 }
   }
 });
 

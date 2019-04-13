@@ -153,7 +153,10 @@ class SummaryCard extends React.Component {
                 borderRadius: "100%",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundImage: `url(data:image/jpeg;base64,${avatar})`
+                backgroundImage: `url(data:image/jpeg;base64,${avatar})`.replace(
+                  /"/g,
+                  ""
+                )
               }}
             />
             <span
