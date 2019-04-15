@@ -6,7 +6,6 @@ import axios from "axios";
 import b64toBlob from "b64-to-blob";
 import { connect } from "react-redux";
 import Radium from "radium";
-import { HashLink as Link } from "react-router-hash-link";
 //css
 import "./blogPost.css";
 //componentes
@@ -15,7 +14,7 @@ import OldComment from "./oldComment/oldComment.component";
 import NewComment from "./newComment/newComment.component";
 import EnableComment from "./enableComment/enableComment.component";
 import Navbar from "../../navbar/navbar.component";
-import Post from "../post/post.component";
+import Comment from "../../comment/Comment";
 // import Summary from "../common/summary/summary.component";
 import Call2Action from "../../general/call2action.component";
 import FooterApp from "../../footer/footer.component";
@@ -400,17 +399,16 @@ class BlogArticle extends Component {
                 {
                   userName: "Jainer Munoz",
                   userAvatar: avatarImg,
-                  comment:
-                    "This is my second Comment on this...I've had to said it again. Thankssssss",
+                  reply:
+                    "This is my second REPLYYYYYY on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
                   likes: 5
                 },
                 {
-                  userName: "Jainer Munoz",
+                  userName: "Franci Calvetti",
                   userAvatar: avatarImg,
-                  comment:
-                    "This is my second Comment on this...I've had to said it again. Thankssssss",
-                  date: "August 21th, 2018",
+                  reply: "This is my second Comment on this...JAJAJAJAJA",
+                  date: "August 25th, 2018",
                   likes: 5
                 }
               ]
@@ -418,14 +416,15 @@ class BlogArticle extends Component {
             {
               userName: "Anais Valera",
               userAvatar: fondoImg,
-              comment: "jejejej",
+              comment:
+                "I found this very amazing. Can you take this even further???",
               date: "April 30th, 2016",
               likes: 5,
               replies: [
                 {
                   userName: "Jainer Munoz",
                   userAvatar: avatarImg,
-                  comment:
+                  reply:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
                   likes: 5
@@ -433,7 +432,7 @@ class BlogArticle extends Component {
                 {
                   userName: "Jainer Munoz",
                   userAvatar: avatarImg,
-                  comment:
+                  reply:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
                   likes: 5
@@ -542,11 +541,14 @@ class BlogArticle extends Component {
       );
     });
     const newPostData = this.fetchArticle();
-
+    console.log(
+      "newPostData[0].articleProps.comments",
+      newPostData[0].articleProps.comments
+    );
     const comments = newPostData[0].articleProps.comments.map(
       (commentsData, i) => {
         return (
-          <OldComment
+          <Comment
             key={i}
             userAvatar={commentsData.userAvatar}
             userName={commentsData.userName}
@@ -719,7 +721,6 @@ class BlogArticle extends Component {
             </section>
             <section>
               {/*oldComments*/}
-
               {comments}
             </section>
           </div>
