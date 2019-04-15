@@ -2,9 +2,24 @@ import mongoose from "mongoose";
 import { Schema } from "mongoose";
 //schemas
 
+const responseSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  message: { type: String },
+  date: { type: Date, default: Date.now },
+  likes: { type: Number, default: 0 }
+});
+
+const commentSchema = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  message: { type: String },
+  date: { type: Date, default: Date.now },
+  responses: [responseSchema],
+  likes: { type: Number, default: 0 }
+});
+
 const articleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  coments: { type: [{}] },
+  coments: { type: [commentSchema] },
   date: { type: Date, default: Date.now },
   elements: [{}],
   files: { type: [String] },

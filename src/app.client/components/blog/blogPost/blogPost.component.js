@@ -396,16 +396,14 @@ class BlogArticle extends Component {
                 "This is my second Comment on this...I've had to said it again. Thankssssss",
               date: "August 21th, 2018",
               likes: 5,
-              dislikes: 2,
-              reply: [
+              replies: [
                 {
                   userName: "Jainer Munoz",
                   userAvatar: avatarImg,
                   comment:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
-                  likes: 5,
-                  dislikes: 2
+                  likes: 5
                 },
                 {
                   userName: "Jainer Munoz",
@@ -413,8 +411,7 @@ class BlogArticle extends Component {
                   comment:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
-                  likes: 5,
-                  dislikes: 2
+                  likes: 5
                 }
               ]
             },
@@ -424,16 +421,14 @@ class BlogArticle extends Component {
               comment: "jejejej",
               date: "April 30th, 2016",
               likes: 5,
-              dislikes: 2,
-              reply: [
+              replies: [
                 {
                   userName: "Jainer Munoz",
                   userAvatar: avatarImg,
                   comment:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
-                  likes: 5,
-                  dislikes: 2
+                  likes: 5
                 },
                 {
                   userName: "Jainer Munoz",
@@ -441,8 +436,7 @@ class BlogArticle extends Component {
                   comment:
                     "This is my second Comment on this...I've had to said it again. Thankssssss",
                   date: "August 21th, 2018",
-                  likes: 5,
-                  dislikes: 2
+                  likes: 5
                 }
               ]
             }
@@ -548,8 +542,6 @@ class BlogArticle extends Component {
       );
     });
     const newPostData = this.fetchArticle();
-    const bindings = newPostData[0].articleProps;
-    const widthHeightRatio = 1.07;
 
     const comments = newPostData[0].articleProps.comments.map(
       (commentsData, i) => {
@@ -560,6 +552,8 @@ class BlogArticle extends Component {
             userName={commentsData.userName}
             comments={commentsData.comment}
             date={commentsData.date}
+            likes={commentsData.likes}
+            replies={commentsData.replies}
           />
         );
       }
