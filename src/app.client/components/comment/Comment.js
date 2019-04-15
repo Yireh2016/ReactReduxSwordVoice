@@ -80,7 +80,7 @@ const Text = styled.div`
   }
   @media (max-width: 700px) {
     p {
-      font-size: 1.1rem;
+      font-size: 14px;
     }
   }
 `;
@@ -125,13 +125,13 @@ const ReplyBtn = styled.div`
     }
     border: 1px solid rgba(249, 95, 11, 0.38);
     border-radius: 50px;
-    color: #00171f;
-    background-color: transparent;
+    color: white;
+    background-color: var(--orange);
     float: right;
   }
   button:hover {
-    color: white;
-    background-color: #00171f;
+    color: var(--orange);
+    background-color: white;
     cursor: pointer;
   }
 `;
@@ -144,10 +144,12 @@ const MoreBtn = styled.button`
     height: 40px;
   }
   background: transparent;
-  border: 1px solid rgba(249, 95, 11, 0.38);
+  border: 1px solid rgba(249, 95, 11, 0);
   border-radius: 20px;
   margin: 15px 0;
   cursor: pointer;
+  text-decoration: underline;
+  color: blue;
 `;
 
 const ReplyCardLayout = styled.div`
@@ -155,6 +157,9 @@ const ReplyCardLayout = styled.div`
   flex-direction: column;
   align-items: center;
   width: 80%;
+  @media (max-width: 700px) {
+    width: 90%;
+  }
 `;
 
 const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {

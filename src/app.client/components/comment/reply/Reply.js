@@ -4,13 +4,11 @@ import styled from "styled-components";
 //assets
 import { like } from "../../../assets/svgIcons/SvgIcons";
 
-const ReplyCardLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 const ReplyCard = styled.div`
   padding: 15px 30px 20px 15px;
+  @media (max-width: 700px) {
+    padding: 0 0 15px 0;
+  }
   display: flex;
   box-sizing: border-box;
   width: 100%;
@@ -21,6 +19,7 @@ const AvatarCont = styled.div`
   margin: 0 15px 0 0;
   @media (max-width: 700px) {
     margin: 0 10px 0 0;
+    width: 35px;
   }
 `;
 
@@ -45,7 +44,7 @@ const ReplyCont = styled.div`
 const UserInfo = styled.div`
   margin: 10px 0 10px 0;
   @media (max-width: 700px) {
-    margin: 15px 0 15px 0;
+    margin: 10px 0 10px 0;
   }
   display: flex;
   flex-direction: column;
@@ -69,9 +68,11 @@ const ReplyDate = styled.span`
 
 const Text = styled.div`
   font-weight: normal;
+  p {
+    font-size: 18px;
+  }
   p:first-child {
     margin-top: 0;
-    font-size: 18px;
   }
   @media (max-width: 700px) {
     p {
