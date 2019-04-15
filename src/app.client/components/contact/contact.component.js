@@ -102,7 +102,6 @@ export default class ContactComponent extends React.Component {
               }}
             >
               <p>
-                {" "}
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Molestiae nesciunt eaque est voluptas facere itaque commodi
                 saepe atque possimus, aliquid vel molestias sapiente quos optio,

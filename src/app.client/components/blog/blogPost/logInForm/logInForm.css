@@ -39,22 +39,30 @@
 .controlButtonLogin {
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
   justify-content: center;
+  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .controlButtonLogin button {
-  width: 150px;
-  height: 50px;
-  border-radius: 15px;
+  border-radius: 10px;
   font-weight: bold;
   font-size: 1.1rem;
   margin-right: 10px;
+  padding: 10px 20px;
   box-sizing: border-box;
   background: #00171f;
-  border: 3px solid #00b7fb;
+  border: none;
   color: #fff;
 }
 
+.cancelBtn {
+  background: #f95f0b00 !important;
+  border: 1px solid #ebeff1 !important;
+  color: #ebeff1 !important;
+}
 .formCardLogin {
   position: relative;
   border: 3px solid #f95f0b;

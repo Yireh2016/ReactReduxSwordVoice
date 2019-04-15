@@ -1,11 +1,8 @@
-.contsignCard {
-  padding: 10px;
-  margin-bottom: 20px;
+.contSignCard {
+  margin: 20px 0;
 }
 .signInCard {
   margin: 10px;
-  background: #c2e5f2;
-  border-radius: 35px 35px 0px 35px;
   padding: 40px;
   display: flex;
   flex-direction: column;
@@ -34,19 +31,15 @@
 }
 .signButton,
 .logButton {
-  width: 150px;
-  height: 50px;
-  border-radius: 15px;
-  font-weight: bold;
-  font-size: 1.1rem;
-
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 0.8rem;
   box-sizing: border-box;
 }
 .signButton {
   background: #00171f;
-  border: 3px solid #f95f0b;
   color: white;
-  border: 3px solid var(--orange);
+  border: 1px solid var(--orange);
 }
 .signButton:hover,
 .logButton:hover {
@@ -57,7 +50,7 @@
 }
 .logButton {
   background: #00b7fb;
-  border: 3px solid #1381ab;
+  border: 1px solid #1381ab;
 }
 .logButton:hover {
   background: #004059;

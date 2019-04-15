@@ -583,7 +583,11 @@ class SignUpForm extends Component {
       case 1: {
         controlButtons = (
           <React.Fragment>
-            <button onClick={this.props.onCancelClick} type="button">
+            <button
+              onClick={this.props.onCancelClick}
+              className="cancelBtn"
+              type="button"
+            >
               Cancel
             </button>
             <button onClick={this.onNextClick} type="button">
@@ -597,7 +601,11 @@ class SignUpForm extends Component {
       case 2: {
         controlButtons = (
           <React.Fragment>
-            <button onClick={this.onBackClick} type="button">
+            <button
+              onClick={this.onBackClick}
+              className="cancelBtn"
+              type="button"
+            >
               Back
             </button>
             <button onClick={this.onNextClick} type="button">
@@ -610,7 +618,11 @@ class SignUpForm extends Component {
       case 3: {
         controlButtons = (
           <React.Fragment>
-            <button onClick={this.onBackClick} type="button">
+            <button
+              onClick={this.onBackClick}
+              className="cancelBtn"
+              type="button"
+            >
               Back
             </button>
             <button onClick={this.onSubmitClick} type="button">
@@ -624,7 +636,11 @@ class SignUpForm extends Component {
       default: {
         controlButtons = (
           <React.Fragment>
-            <button onClick={this.props.onCancelClick} type="button">
+            <button
+              onClick={this.props.onCancelClick}
+              className="cancelBtn"
+              type="button"
+            >
               Cancel
             </button>
             <button onClick={this.onNextClick} type="button">
@@ -1334,7 +1350,7 @@ class SignUpForm extends Component {
                         fontWeight: "300"
                       }}
                     >
-                      I accept the{" "}
+                      I accept the
                       <a
                         href="#"
                         style={{
@@ -1351,9 +1367,7 @@ class SignUpForm extends Component {
               </section>
             )}
 
-            <div className="controlButtons controlButtonsSignUp">
-              {controlButtons}
-            </div>
+            <div className="controlButtonLogin">{controlButtons}</div>
           </div>
         </div>
       </div>

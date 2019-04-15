@@ -123,7 +123,11 @@ class LogInForm extends Component {
   render() {
     let controlButtons = (
       <React.Fragment>
-        <button onClick={this.props.onCancelClick} type="button">
+        <button
+          onClick={this.props.onCancelClick}
+          className="cancelBtn"
+          type="button"
+        >
           Cancel
         </button>
         <button onClick={this.tryLogIn} type="button">

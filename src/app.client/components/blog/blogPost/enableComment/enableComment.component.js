@@ -9,7 +9,7 @@ class EnableComment extends Component {
           <p>
             Ups!!! it seems you are not logged in already. Please,{" "}
             <span className="cardLink">Log in</span> or{" "}
-            <span className="cardLink">Sign Up</span> to enable comments:{" "}
+            <span className="cardLink">Sign Up</span> to enable comments:
           </p>
           <div className="signInButtonCont">
             <button

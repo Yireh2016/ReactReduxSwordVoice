@@ -1,45 +1,38 @@
 .call2Action {
-	background: #00171f;
-	background: var(--blueDark);
-	border: 2px solid #f95f0b;
-	border: 2px solid var(--orange);
-	box-sizing: border-box;
-	font-style: normal;
-	font-weight: bold;
-	line-height: normal;
-
-	font-size: 0.6rem;
-	width: 120px;
-	height: 40px;
-	border-radius: 10px;
+  background: #00171f;
+  background: var(--blueDark);
+  border: 2px solid #f95f0b;
+  border: 2px solid var(--orange);
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  text-decoration: none;
+  color: white;
+  font-size: 0.6rem;
+  padding: 10px 15px;
+  border-radius: 10px;
 }
 
 .call2Action:hover {
-	cursor: pointer;
-	background: #f95f0b;
-	background: var(--orange);
-}
-
-.call2Action {
-	text-decoration: none;
-	color: #ffffff;
-	color: var(--white);
-	padding: 8px 6px;
+  cursor: pointer;
+  background: #f95f0b;
+  background: var(--orange);
 }
 
 @media (max-width: 1050px) /*and (orientation: portrait) */ {
-	.call2Action {
-		font-size: 2.3vh;
-		border-radius: 2vmin;
-		width: 16vh;
-		height: 6vh;
-	}
+  .call2Action {
+    font-size: 2.3vh;
+    border-radius: 2vmin;
+    width: 16vh;
+    height: 6vh;
+  }
 }
 @media (max-width: 700px) {
-	.call2Action {
-		font-size: 1rem;
-		border-radius: 15px;
-		width: 130px;
-		height: 45px;
-	}
+  .call2Action {
+    font-size: 1rem;
+    border-radius: 15px;
+    width: 130px;
+    height: 45px;
+  }
 }

@@ -38,7 +38,7 @@ const ElementCustomEdit = props => {
   const classes = props.HTMLClassesArr.map((clase, i) => {
     return (
       <li key={i}>
-        <span>{clase}</span>{" "}
+        <span>{clase}</span>
         <img
           onClick={() => {
             props.HTMLClassesArrRemove(i);
