@@ -4,17 +4,17 @@
 
 .footer {
   position: fixed;
-  right: 5%;
-  bottom: 5%;
+  left: 50%;
+  bottom: 3%;
   animation-delay: 3.5s;
+  transform: translateX(-50%);
 }
 
 .footer svg {
   margin-right: 15px;
   float: left;
-  fill: #00171f;
-  fill: var(--blueDark);
-  height: 32px;
+  fill: #f95f0b;
+  height: 25px;
 }
 
 .footer svg:hover {
@@ -24,11 +24,6 @@
 
 .footer svg:hover path {
   stroke: none;
-}
-.footer path {
-  stroke: #f95f0b;
-  stroke: var(--orange);
-  stroke-width: 2px;
 }
 
 @media (max-width: 1050px) /*and (orientation: portrait) */ {

@@ -4,7 +4,11 @@ import "./logo.css";
 
 const Logo = props => {
   return (
-    <div className={props.className} style={props.style}>
+    <div
+      className={props.className}
+      style={props.style}
+      onClick={props.onClick}
+    >
       <svg
         viewBox="0 0 45.943593 51.839252"
         version="1.1"

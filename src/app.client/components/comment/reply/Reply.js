@@ -38,7 +38,7 @@ const Avatar = styled.div`
 const ReplyCont = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 92%;
 `;
 
 const UserInfo = styled.div`

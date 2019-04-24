@@ -19,7 +19,7 @@
 }
 
 .contenedorTexto {
-  padding-left: 15.4vw;
+  padding-left: 14vw;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -78,6 +78,9 @@
 .asideRedes {
   margin-top: 6vh;
 }
+.asideRedes svg {
+  margin-right: 10px;
+}
 
 .contenedorFila-about {
   border: 2px var(--orange) solid;
@@ -98,7 +101,7 @@
   display: block;
 }
 .footer-about-pcSize {
-  width: 20%;
+  height: 25px;
 }
 .footer-about-path {
   stroke: #f95f0b;

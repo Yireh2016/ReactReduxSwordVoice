@@ -62,6 +62,11 @@ class NavBar extends Component {
     });
   }
 
+  logoClickHandler() {
+    console.log("going home");
+    window.location.href = "./home";
+  }
+
   handleScroll() {
     //evita que hayan llamadas innecesarioas al setstate, ya que el scroll es un evento que puede llenar la cola de tareas facilmente
     if (
@@ -364,23 +369,38 @@ class NavBar extends Component {
             id="menu-pc"
             className="fila"
             style={{
-              marginTop: this.state.navBarMarginTop + "px",
+              // marginTop: this.state.navBarMarginTop + "px",
 
               position: "relative"
             }}
           >
+            <Logo
+              className="fixedPcLogo"
+              style={{
+                top: "20px",
+                position: "fixed",
+                left: "50%",
+                transform: "translateX(-50%)"
+              }}
+              logoWidth={this.state.logoWidth}
+              onClick={this.logoClickHandler}
+            />
             <div className="fondoMenuPc" style={{ backgroundColor: "white" }} />
-            <div className="grid col-2 relleno" />
+            <div className="grid col-2 relleno">
+              <div onClick={this.logoClickHandler} id="titulo">
+                <h1>SwordVoice</h1>
+              </div>
+            </div>
             <div className="grid " style={{ width: "40%" }}>
               <a href="/home">
                 <Logo
                   className="logoTransition"
-                  style={{ top: "100px" }}
+                  style={{ visibility: "hidden" }}
                   logoWidth={this.state.logoWidth}
                 />
-                <div id="titulo">
+                {/* <div id="titulo">
                   <h1>SwordVoice</h1>
-                </div>
+                </div> */}
               </a>
             </div>
             <div className="menuPcCont">
@@ -389,48 +409,60 @@ class NavBar extends Component {
               </div>
 
               <div
-                className="menuAvatar"
-                onMouseLeave={this.onMouseLeaveHandler}
-                onMouseEnter={this.mouseOverAvatarHandler}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexGrow: "1",
+                  flexDirection: "row-reverse"
+                }}
+                // onMouseLeave={this.onMouseLeaveHandler}
+                // onMouseEnter={this.mouseOverAvatarHandler}
                 onClick={
                   this.state.showDesplegable
                     ? this.onMouseLeaveHandler
                     : this.mouseOverAvatarHandler
                 }
               >
-                {this.avatarToRender()}
-
-                {this.state.showDesplegable && (
-                  <div
-                    onMouseOver={this.mouseOverAvatarHandler}
-                    onMouseLeave={this.onMouseLeaveHandler}
-                    className="menuAvatarDesplegable"
-                  >
-                    <div className="desplegableFlecha" />
-                    <div className="despleglableContenido">
-                      <ul>
-                        {this.props.isUserLoggedIn ? (
-                          <li>
-                            <a href="cms">Profile</a>
-                          </li>
-                        ) : (
-                          <li onClick={this.signClickHandler}>Sign Up</li>
-                        )}
-                        {this.props.isUserLoggedIn ? (
-                          <li onClick={this.logOutClickHandler}>Log Out</li>
-                        ) : (
-                          <li onClick={this.logInClickHandler}>Log In</li>
-                        )}
-                      </ul>
+                <div className="menuAvatar">
+                  {this.avatarToRender()}
+                  {this.state.showDesplegable && (
+                    <div
+                      onMouseOver={this.mouseOverAvatarHandler}
+                      onMouseLeave={this.onMouseLeaveHandler}
+                      className="menuAvatarDesplegable"
+                    >
+                      <div className="desplegableFlecha" />
+                      <div className="despleglableContenido">
+                        <ul>
+                          {this.props.isUserLoggedIn ? (
+                            <li>
+                              <a href="cms">Profile</a>
+                            </li>
+                          ) : (
+                            <li onClick={this.signClickHandler}>Sign Up</li>
+                          )}
+                          {this.props.isUserLoggedIn ? (
+                            <li onClick={this.logOutClickHandler}>Log Out</li>
+                          ) : (
+                            <li onClick={this.logInClickHandler}>Log In</li>
+                          )}
+                        </ul>
+                      </div>
                     </div>
+                  )}
+                </div>
+                {this.props.isUserLoggedIn ? (
+                  <div className="menuPcWelcome">
+                    Welcome <br /> <span>{this.props.loggedUserName}</span>
+                  </div>
+                ) : (
+                  <div className="menuPcWelcome">
+                    Click!!! <br />
+                    <span style={{ color: "#f95f0b" }}> for sign up</span>
                   </div>
                 )}
               </div>
-              {this.props.isUserLoggedIn && (
-                <div className="menuPcWelcome">
-                  Welcome <span>{this.props.loggedUserName}</span>
-                </div>
-              )}
             </div>
           </div>
 

@@ -20,10 +20,6 @@ class Home extends Component {
     this.fondoCursor = React.createRef();
   }
   render() {
-    const estilos = {
-      generales: "footer appear"
-    };
-
     return (
       <div>
         <header>
