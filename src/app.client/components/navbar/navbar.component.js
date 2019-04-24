@@ -187,6 +187,9 @@ class NavBar extends Component {
             <div
               className="avatarImg "
               style={{
+                backgroundSize: "cover",
+                borderRadius: "100%",
+                backgroundPosition: "center",
                 height: "45px",
                 width: "45px",
                 backgroundImage: `url('data:image/jpeg;base64,${

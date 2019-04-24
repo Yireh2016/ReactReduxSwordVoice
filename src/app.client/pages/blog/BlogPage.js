@@ -8,6 +8,8 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
 import "./blog.css";
 
+//layouts
+
 //components
 // import Summary from "../../components/blog/common/summary/summary2.component";
 import SummaryCard from "./postCard/summaryCard/SummaryCard";
@@ -23,8 +25,8 @@ import Loading from "../../components/loading/loading";
 import isDevice from "../../../services/isDevice";
 // import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 import PostCard from "./postCard/PostCard";
-import paragraphService from "../../../services/paragraphService";
-import keywordsToArr from "../../../services/keywordsToArr";
+// import paragraphService from "../../../services/paragraphService";
+// import keywordsToArr from "../../../services/keywordsToArr";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
@@ -155,6 +157,8 @@ const styles = {
     display: "flex",
     flexWrap: "wrap",
     "@media (max-width:1050px)": {
+      flexDirection: "column",
+      alignItems: "center",
       flexWrap: "nowrap",
       overflow: "scroll",
       width: "100vw",
@@ -223,7 +227,10 @@ class BlogPage extends React.Component {
 
     switch (isDeviceResult) {
       case "pc":
-        postH = 520;
+        postH =
+          (window.outerWidth * 0.4) / 1.028 >= 520
+            ? 520
+            : (window.outerWidth * 0.4) / 1.028;
         break;
       case "tablet":
         postH = (window.outerWidth * 0.8) / 1.028;
@@ -420,6 +427,10 @@ class BlogPage extends React.Component {
     });
     const aside = (
       <React.Fragment>
+        <div className="nolandscape">
+          <span>This site is not landscape friendly</span>
+          <span>Please, turn your device to portrait position. Thanks </span>
+        </div>
         <section id="popularPost">{footerBlog}</section>
 
         <div id="asideContainer" style={{ position: "sticky", top: "5vmin" }}>
@@ -499,7 +510,7 @@ class BlogPage extends React.Component {
 
     const { isLoading } = this.state;
     return (
-      <div>
+      <React.Fragment>
         {isLoading && (
           <div
             style={{
@@ -680,7 +691,7 @@ class BlogPage extends React.Component {
             </div>
           </section>
         </TwoColumnAside>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -29,6 +29,7 @@ const NotFound = () => {
       }
     },
     NotFoundType: {
+      textAlign: "center",
       fontSize: "120px",
       "@media (max-width: 1050px)": {
         fontSize: "10vh"

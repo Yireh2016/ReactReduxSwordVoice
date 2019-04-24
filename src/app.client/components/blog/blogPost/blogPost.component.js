@@ -8,9 +8,9 @@ import { connect } from "react-redux";
 import Radium from "radium";
 //css
 import "./blogPost.css";
+
 //componentes
 import AsidePost from "../asidePost/asidePost.component";
-import OldComment from "./oldComment/oldComment.component";
 import NewComment from "./newComment/newComment.component";
 import EnableComment from "./enableComment/enableComment.component";
 import Navbar from "../../navbar/navbar.component";
@@ -604,147 +604,155 @@ class BlogArticle extends Component {
       );
     });
     return (
-      <div id="blogPostPage">
-        <Navbar hasBackground="true" />
+      <React.Fragment>
+        <div className="nolandscape">
+          <span>This site is not landscape friendly</span>
+          <span>Please, turn your device to portrait position. Thanks </span>
+        </div>
+        <div id="blogPostPage">
+          <Navbar hasBackground="true" />
 
-        <div className="blogArticleContainer">
-          <div className="blogArticle grid col-8 col-12-md">
-            <article>
-              <h1>{this.props.article.title}</h1>
-              <div
-                id="articleDescriptionCard"
-                style={{
-                  padding: "15px"
-                }}
-              >
+          <div className="blogArticleContainer">
+            <div className="blogArticle grid col-8 col-12-md">
+              <article>
+                <h1>{this.props.article.title}</h1>
                 <div
+                  id="articleDescriptionCard"
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center"
+                    padding: "15px"
                   }}
                 >
                   <div
                     style={{
-                      width: "50px",
-                      height: "50px",
-                      backgroundImage: `url('data:image/jpeg;base64,${
-                        this.state.authorAvatar
-                      }')`,
-                      backgroundPosition: "center center",
-                      backgroundSize: "cover",
-                      borderRadius: "100%"
-                    }}
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      fontSize: ".7rem",
-                      color: "#004059",
-                      textAlign: "right",
-                      padding: "0 0 0 10px"
+                      display: "inline-flex",
+                      alignItems: "center"
                     }}
                   >
-                    <span
+                    <div
                       style={{
-                        fontWeight: "bold"
+                        width: "50px",
+                        height: "50px",
+                        backgroundImage: `url('data:image/jpeg;base64,${
+                          this.state.authorAvatar
+                        }')`,
+                        backgroundPosition: "center center",
+                        backgroundSize: "cover",
+                        borderRadius: "100%"
+                      }}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        fontSize: ".7rem",
+                        color: "#004059",
+                        textAlign: "right",
+                        padding: "0 0 0 10px"
                       }}
                     >
-                      {this.props.article.author}
-                    </span>
-                    <span>{this.props.article.date}</span>
+                      <span
+                        style={{
+                          fontWeight: "bold"
+                        }}
+                      >
+                        {this.props.article.author}
+                      </span>
+                      <span>{this.props.article.date}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {ReactHtmlParser(
-                this.props.article.html.replace(/<h1>.*<\/h1>/g, "")
-              )}
-              {/* <JsxParser
+                {ReactHtmlParser(
+                  this.props.article.html.replace(/<h1>.*<\/h1>/g, "")
+                )}
+                {/* <JsxParser
                 bindings={bindings}
                 jsx={newPostData[0].articleProps.articleJSX}
               /> */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  color: "#004059"
-                }}
-              >
-                <span
+                <div
                   style={{
-                    color: "#f95f0b",
-                    fontSize: ".7rem",
-                    fontWeight: "bold",
-                    marginRight: "10px"
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#004059"
                   }}
                 >
-                  Categories:
-                </span>
-                {keywordsMap}
+                  <span
+                    style={{
+                      color: "#f95f0b",
+                      fontSize: ".7rem",
+                      fontWeight: "bold",
+                      marginRight: "10px"
+                    }}
+                  >
+                    Categories:
+                  </span>
+                  {keywordsMap}
+                </div>
+                <SocialBar />
+              </article>
+              <div className="googleAdBanner grid col-12">
+                Compra cosas que no quieres
               </div>
-              <SocialBar />
-            </article>
-            <div className="googleAdBanner grid col-12">
-              Compra cosas que no quieres
+
+              <section>
+                <h2 id="commentsSection">Leave your comments:</h2>
+
+                {this.props.isUserLoggedIn ? (
+                  <NewComment
+                    loggedUserName={this.props.loggedUserName}
+                    loggedUserAvatar={this.state.loggedUserAvatar}
+                  />
+                ) : (
+                  <EnableComment
+                    onSignUpClick={this.onSignUpClick}
+                    onLogInClick={this.onLogInClick}
+                  />
+                )}
+              </section>
+              <section>
+                {this.state.showSignUp && (
+                  <SignUpForm
+                    // onSuccessSignUp={userData => this.onSuccessSignUp(userData)}
+                    onCancelClick={this.onSignUpClick}
+                  />
+                )}
+
+                {this.state.showLogIn && (
+                  <LogInForm
+                    onCancelClick={this.onLogInClick}
+                    onSuccessLogIn={userData =>
+                      this.handleSuccessLogIn(userData)
+                    }
+                  />
+                )}
+              </section>
+              <section>
+                {/*oldComments*/}
+                {comments}
+              </section>
             </div>
+            {footerBlog}
 
-            <section>
-              <h2 id="commentsSection">Leave your comments:</h2>
-
-              {this.props.isUserLoggedIn ? (
-                <NewComment
-                  loggedUserName={this.props.loggedUserName}
-                  loggedUserAvatar={this.state.loggedUserAvatar}
-                />
-              ) : (
-                <EnableComment
-                  onSignUpClick={this.onSignUpClick}
-                  onLogInClick={this.onLogInClick}
-                />
-              )}
-            </section>
-            <section>
-              {this.state.showSignUp && (
-                <SignUpForm
-                  // onSuccessSignUp={userData => this.onSuccessSignUp(userData)}
-                  onCancelClick={this.onSignUpClick}
-                />
-              )}
-
-              {this.state.showLogIn && (
-                <LogInForm
-                  onCancelClick={this.onLogInClick}
-                  onSuccessLogIn={userData => this.handleSuccessLogIn(userData)}
-                />
-              )}
-            </section>
-            <section>
-              {/*oldComments*/}
-              {comments}
-            </section>
-          </div>
-          {footerBlog}
-
-          <div className="grid col-4 col-12-md  asideContenedor">
-            <AsidePost
-              asideTitle="Similar Posts"
-              onScroll={this.similPostScroll}
-              device={this.state.device}
-              postSectionHeight={this.state.similPostSectionHeight}
-              postContWidth={this.state.similPostContWidth}
-            >
-              {similarPostsJSX}
-            </AsidePost>
-          </div>
-          <div className="googleAdVertical grid col-4 col-12-md">
-            compra lo que no quieres
-          </div>
-          <div className="googleAdVertical grid col-4 col-12-md ">
-            compra lo que no quieres
+            <div className="grid col-4 col-12-md  asideContenedor">
+              <AsidePost
+                asideTitle="Similar Posts"
+                onScroll={this.similPostScroll}
+                device={this.state.device}
+                postSectionHeight={this.state.similPostSectionHeight}
+                postContWidth={this.state.similPostContWidth}
+              >
+                {similarPostsJSX}
+              </AsidePost>
+            </div>
+            <div className="googleAdVertical grid col-4 col-12-md">
+              compra lo que no quieres
+            </div>
+            <div className="googleAdVertical grid col-4 col-12-md ">
+              compra lo que no quieres
+            </div>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

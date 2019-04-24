@@ -13,6 +13,8 @@ import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTo
 //Store
 import { store, history } from "../app.redux.store/store/configStore";
 
+//layouts
+
 hydrate(
   <CookiesProvider>
     <Provider store={store}>
