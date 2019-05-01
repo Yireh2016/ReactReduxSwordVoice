@@ -48,7 +48,7 @@
 }
 .postItCont svg {
   display: inline;
-  /* width: 20px; */
+  width: 20px;
 }
 .postItCont svg:hover {
   cursor: pointer;

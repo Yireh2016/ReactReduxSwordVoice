@@ -1,11 +1,35 @@
 //modules
-import React from "react";
+import React, { useState } from "react";
+import { connect } from "react-redux";
 //css
 import "./newComment.css";
 //imagenes
 import userLogo from "../../../../assets/img/general/userLogo.svg";
+import axios from "axios";
 console.log("userLogo1", userLogo);
-const NewComment = props => {
+
+const NewComment = ({ loggedUserAvatar, username, title }) => {
+  const [comment, setComment] = useState("");
+
+  const sendCommentHandler = () => {
+    console.log("comment on sendCommentHandler", comment);
+    axios
+      .put(
+        `api/setComment?message=${comment}&userName=${username}&title=${title}`
+      )
+      .then(res => {
+        console.log("res on set comment post", res);
+      })
+      .catch(err => {
+        console.log("err on setComment", err);
+      });
+  };
+
+  const commentHandler = e => {
+    console.log("e.target", e.target);
+    setComment(e.target.value);
+  };
+
   return (
     <div className="commentLayoutCont fila">
       <div className="grid col-2 relleno" />
@@ -18,12 +42,13 @@ const NewComment = props => {
           />
         </svg>
         <div className=" commentText">
-          <textarea />
+          <textarea onChange={commentHandler} value={comment} />
         </div>
 
         <div className="postItCont">
           <span>Post it</span>
           <svg
+            onClick={sendCommentHandler}
             viewBox="0 0 41 48"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -46,18 +71,18 @@ const NewComment = props => {
             className="avatarImg"
             style={{
               //`url('data:image/jpeg;base64,${
-              // this.props.loggedUserAvatar
+              // this.loggedUserAvatar
               //       }`
               backgroundImage: `url(${
-                props.loggedUserAvatar
-                  ? `data:image/jpeg;base64,${props.loggedUserAvatar}`
+                loggedUserAvatar
+                  ? `data:image/jpeg;base64,${loggedUserAvatar}`
                   : userLogo
               })`
             }}
           />
 
           <p>
-            <span id="name">{props.loggedUserName} </span>
+            <span id="name">{username} </span>
             <span>comment</span>
           </p>
         </div>
@@ -66,4 +91,20 @@ const NewComment = props => {
   );
 };
 
-export default NewComment;
+const mapStateToProps2 = state => {
+  return {
+    username: state.logInStatus.loggedUserName,
+    title: state.article.title
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+    // onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    // onLogOut: () => dispach({ type: "LOGGED_OUT" })
+  };
+};
+export default connect(
+  mapStateToProps2,
+  mapDispachToProps
+)(NewComment);

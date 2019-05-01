@@ -19,7 +19,7 @@ const commentSchema = new Schema({
 
 const articleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  coments: { type: [commentSchema] },
+  comments: { type: [commentSchema] },
   date: { type: Date, default: Date.now },
   elements: [{}],
   files: { type: [String] },

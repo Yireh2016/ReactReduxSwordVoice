@@ -14,7 +14,7 @@ import {
   updatePostCtrl,
   getArticleCtrl
 } from "../controllers/cms/postsControllers";
-import { socialCtrl } from "../controllers/client/socialCtrl";
+import { socialCtrl, setCommentCtrl } from "../controllers/client/articleCtrl";
 
 // import axios from "axios";
 
@@ -341,6 +341,9 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
     }
   );
 });
+
+//add comments
+routerAPI.put("/setComment", authAPI, setCommentCtrl);
 
 //update post Social ej claps,share,comments
 routerAPI.put("/socialCounter", authAPI, socialCtrl);

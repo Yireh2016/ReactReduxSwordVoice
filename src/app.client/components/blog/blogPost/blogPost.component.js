@@ -698,10 +698,7 @@ class BlogArticle extends Component {
                 <h2 id="commentsSection">Leave your comments:</h2>
 
                 {this.props.isUserLoggedIn ? (
-                  <NewComment
-                    loggedUserName={this.props.loggedUserName}
-                    loggedUserAvatar={this.state.loggedUserAvatar}
-                  />
+                  <NewComment loggedUserAvatar={this.state.loggedUserAvatar} />
                 ) : (
                   <EnableComment
                     onSignUpClick={this.onSignUpClick}
