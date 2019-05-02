@@ -1,7 +1,9 @@
 let dbDateToNormalDate = dbDate => {
-
+  console.log("dbDate on dbDateToNormalDate", dbDate);
+  if (dbDate === undefined) {
+    return;
+  }
   if (typeof dbDate === "object") {
-
     dbDate = JSON.stringify(dbDate);
   }
 

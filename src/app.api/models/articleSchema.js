@@ -3,14 +3,16 @@ import { Schema } from "mongoose";
 //schemas
 
 const responseSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userName: { type: String, required: true },
+  userAvatar: { type: { data: Buffer, contentType: String } },
   message: { type: String },
   date: { type: Date, default: Date.now },
   likes: { type: Number, default: 0 }
 });
 
 const commentSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userName: { type: String, required: true },
+  userAvatar: { type: { data: Buffer, contentType: String } },
   message: { type: String },
   date: { type: Date, default: Date.now },
   responses: [responseSchema],

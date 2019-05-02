@@ -3,7 +3,8 @@ const successOnFindingUserAndDistpach = (user, store) => {
   if (user) {
     payload = {
       userName: user.userName,
-      userID: user._id
+      userID: user._id,
+      userAvatar: user.userAvatar
     };
     store.dispatch({ type: "LOGGED_IN", payload });
   }

@@ -40,7 +40,10 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
-  console.log("RENDERING preloadedState to send to templeta");
+  console.log(
+    "RENDERING preloadedState to send to templeta preloadedState",
+    preloadedState
+  );
   res.send(
     template({
       body: renderTemplate(req, store),
@@ -61,7 +64,9 @@ const swordvoiceWeb = async (req, res) => {
         const url = req.url.replace("/blog/post/", "");
         articleModel
           .findOne({ url: `${url}` })
-          .select("date html title description keywords author socialCount")
+          .select(
+            "date html title description keywords author socialCount comments"
+          )
           .populate({
             path: "author",
             select: "userFirstName userLastName userAvatar"
@@ -69,6 +74,7 @@ const swordvoiceWeb = async (req, res) => {
           .exec()
           .then(completeArticle => {
             if (completeArticle) {
+              let commentsArr = [...completeArticle.comments];
               const {
                 date,
                 html,
@@ -83,6 +89,7 @@ const swordvoiceWeb = async (req, res) => {
                 title,
                 html,
                 socialCount,
+                comments: commentsArr,
                 author: author.userFirstName + " " + author.userLastName,
                 summary: description,
                 date: dbDateToNormalDate(date),
@@ -193,7 +200,7 @@ const swordvoiceWeb = async (req, res) => {
 
         usersModel
           .find({ userSessionId: sessionId })
-          .select("userName _id")
+          .select("userName _id userAvatar")
           .exec()
           .then(user => {
             if (user[0]) {

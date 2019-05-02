@@ -99,6 +99,15 @@ class BlogArticle extends Component {
       });
     }
   }
+  static getDerivedStateFromProps(props, state) {
+    console.log("getDerivedStateFromProps props", props);
+    console.log("getDerivedStateFromProps state", state);
+
+    if (props.isUserLoggedIn) {
+      return { loggedUserAvatar: props.loggedUserAvatar };
+    }
+    return null;
+  }
   fetchData() {
     return [
       //halar de la base de datos los ultimos 6 registros
@@ -540,26 +549,24 @@ class BlogArticle extends Component {
         </span>
       );
     });
-    const newPostData = this.fetchArticle();
-    console.log(
-      "newPostData[0].articleProps.comments",
-      newPostData[0].articleProps.comments
-    );
-    const comments = newPostData[0].articleProps.comments.map(
-      (commentsData, i) => {
-        return (
-          <Comment
-            key={i}
-            userAvatar={commentsData.userAvatar}
-            userName={commentsData.userName}
-            comments={commentsData.comment}
-            date={commentsData.date}
-            likes={commentsData.likes}
-            replies={commentsData.replies}
-          />
-        );
-      }
-    );
+    // const newPostData = this.fetchArticle();
+    // console.log(
+    //   "newPostData[0].articleProps.comments",
+    //   newPostData[0].articleProps.comments
+    // );
+    const comments = this.props.article.comments.map((commentsData, i) => {
+      return (
+        <Comment
+          key={i}
+          userAvatar={commentsData.userAvatar}
+          userName={commentsData.userName}
+          comments={commentsData.message}
+          date={commentsData.date}
+          likes={commentsData.likes}
+          replies={commentsData.responses}
+        />
+      );
+    });
 
     const footerBlog = (
       <footer className=" footerBlogLayoutContainer grid col-4 col-12-md">
@@ -576,7 +583,6 @@ class BlogArticle extends Component {
     );
     const similarPostArray = this.props.blog.articlesArr;
 
-    console.log("this.props", this.props);
     const similarPostsJSX = similarPostArray.map((post, i) => {
       let avatar;
       if (typeof post.avatar === "object") {

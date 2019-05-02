@@ -6,18 +6,50 @@ import "./newComment.css";
 //imagenes
 import userLogo from "../../../../assets/img/general/userLogo.svg";
 import axios from "axios";
+
+//services
+
 console.log("userLogo1", userLogo);
 
-const NewComment = ({ loggedUserAvatar, username, title }) => {
+const NewComment = ({
+  loggedUserAvatar,
+  userName,
+  title,
+  comments,
+  setGlobalComments
+}) => {
   const [comment, setComment] = useState("");
 
   const sendCommentHandler = () => {
     console.log("comment on sendCommentHandler", comment);
+
+    if (comment === "") {
+      return;
+    }
     axios
       .put(
-        `api/setComment?message=${comment}&userName=${username}&title=${title}`
+        `api/setComment?message=${comment}&userName=${userName}&title=${title}`,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          loggedUserAvatar
+        }
       )
       .then(res => {
+        if (res.data.message === "ok") {
+          let commentsToSet = comments;
+          let commentToPush = {
+            userName: userName,
+            userAvatar: loggedUserAvatar,
+            message: comment,
+            date: new Date(),
+            likes: 0
+          };
+          commentsToSet = [commentToPush, ...commentsToSet];
+          setGlobalComments(commentsToSet);
+          setComment("");
+        }
         console.log("res on set comment post", res);
       })
       .catch(err => {
@@ -75,14 +107,14 @@ const NewComment = ({ loggedUserAvatar, username, title }) => {
               //       }`
               backgroundImage: `url(${
                 loggedUserAvatar
-                  ? `data:image/jpeg;base64,${loggedUserAvatar}`
+                  ? `'data:image/jpeg;base64,${loggedUserAvatar}'`
                   : userLogo
               })`
             }}
           />
 
           <p>
-            <span id="name">{username} </span>
+            <span id="name">{userName} </span>
             <span>comment</span>
           </p>
         </div>
@@ -93,14 +125,16 @@ const NewComment = ({ loggedUserAvatar, username, title }) => {
 
 const mapStateToProps2 = state => {
   return {
-    username: state.logInStatus.loggedUserName,
-    title: state.article.title
+    userName: state.logInStatus.loggedUserName,
+    title: state.article.title,
+    comments: state.article.comments
   };
 };
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    // onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    setGlobalComments: comments =>
+      dispach({ type: "SET_COMMENTS", payload: comments })
     // onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };

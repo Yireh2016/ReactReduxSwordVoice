@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Reply from "./reply/Reply";
+import "./comment.css";
 
 //assets
 import { like } from "../../assets/svgIcons/SvgIcons";
+import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -163,19 +165,22 @@ const ReplyCardLayout = styled.div`
 `;
 
 const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {
-  const repliesMap = replies.map((replyObj, i) => {
-    const { userName, userAvatar, reply, date, likes } = replyObj;
-    return (
-      <Reply
-        key={i}
-        userName={userName}
-        userAvatar={userAvatar}
-        reply={reply}
-        date={date}
-        likes={likes}
-      />
-    );
-  });
+  let repliesMap;
+  if (replies) {
+    repliesMap = replies.map((replyObj, i) => {
+      const { userName, userAvatar, reply, date, likes } = replyObj;
+      return (
+        <Reply
+          key={i}
+          userName={userName}
+          userAvatar={userAvatar}
+          reply={reply}
+          date={dbDateToNormalDate(date)}
+          likes={likes}
+        />
+      );
+    });
+  }
 
   return (
     <CommentCardLayout>
@@ -183,14 +188,14 @@ const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {
         <AvatarCont>
           <Avatar
             style={{
-              backgroundImage: `url(${userAvatar})`
+              backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
             }}
           />
         </AvatarCont>
         <CommentCont>
           <UserInfo>
             <UserName>{userName}</UserName>
-            <CommentDate>{date}</CommentDate>
+            <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
           </UserInfo>
           <Text>
             <p>{comments}</p>
@@ -207,7 +212,7 @@ const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {
         </CommentCont>
       </CommentCard>
       <MoreBtn>More...</MoreBtn>
-      <ReplyCardLayout>{repliesMap}</ReplyCardLayout>
+      {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
     </CommentCardLayout>
   );
 };

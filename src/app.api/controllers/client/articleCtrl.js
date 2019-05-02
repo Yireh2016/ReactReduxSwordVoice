@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const articleModel = mongoose.model("Article");
-const usersModel = mongoose.model("User");
+// const usersModel = mongoose.model("User");
 
 export const socialCtrl = (req, res) => {
   const claps = req.query.claps;
@@ -42,40 +42,34 @@ export const socialCtrl = (req, res) => {
 
 export const setCommentCtrl = async (req, res) => {
   const { userName, title, message } = req.query;
-  let user;
+  console.log("req.body on setCommentCtrl", req.body);
+  const userAvatar = req.body.loggedUserAvatar;
 
-  usersModel.find({ userName }, (err, _user) => {
+  let comment = { userName, message, userAvatar };
+  console.log(`comment to save on article ${title}`, comment);
+  let comments = [];
+
+  articleModel.find({ title }, (err, article) => {
     if (err) {
+      console.log("err", err);
       res.status(404).json(err);
       return;
     }
-    user = _user[0]._id;
 
-    let comment = { user, message };
-    let comments = [];
+    console.log("article.comments", article[0].comments);
+    console.log("comment", comment);
+    comments = article[0].comments;
+    comments = [comment, ...comments];
+    console.log("comments", comments);
 
-    articleModel.find({ title }, (err, article) => {
+    articleModel.findOneAndUpdate({ title }, { comments }, err => {
       if (err) {
         console.log("err", err);
         res.status(404).json(err);
         return;
       }
-
-      console.log("article.comments", article[0].comments);
-      console.log("comment", comment);
-      comments = article[0].comments;
-      comments.push(comment);
-      console.log("comments", comments);
-
-      articleModel.findOneAndUpdate({ title }, { comments }, err => {
-        if (err) {
-          console.log("err", err);
-          res.status(404).json(err);
-          return;
-        }
-      });
-
-      res.status(200).json({ message: "ok" });
     });
+
+    res.status(200).json({ message: "ok" });
   });
 };

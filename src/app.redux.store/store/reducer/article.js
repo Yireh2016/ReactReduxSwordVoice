@@ -5,6 +5,7 @@ const initialState = {
   title: "",
   description: "",
   keywords: "",
+  comments: [],
   socialCount: {
     claps: 0,
     share: 0,
@@ -39,6 +40,10 @@ const article = (state = initialState, action) => {
     case "SET_COMMENTS_COUNT": {
       newState.socialCount.comments =
         newState.socialCount.comments + action.payload;
+      break;
+    }
+    case "SET_COMMENTS": {
+      newState.comments = action.payload;
       break;
     }
 
