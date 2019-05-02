@@ -19,17 +19,13 @@ class Summary2 extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("compoent updated");
-
     this.checkDeviceForFontSizing();
   }
   componentDidMount() {
-    console.log("compoent mounted");
     this.checkDeviceForFontSizing();
   }
   checkDeviceForFontSizing = () => {
     const device = isDevice();
-    console.log("device", device);
     if (device === "pc") {
       //PC
       this.setState({
@@ -54,22 +50,12 @@ class Summary2 extends React.Component {
     });
   };
   shouldComponentUpdate(props, state) {
-    console.log("compoent should update?");
-
-    console.log(
-      `state.fontStandardSize ${JSON.stringify(
-        state
-      )} this.state.fontStandardSize ${JSON.stringify(this.state)} `
-    );
     if (
       state.fontStandardSize === this.state.fontStandardSize &&
       this.state.fontStandardSize !== null
     ) {
-      console.log("compoent should update? NOOOOO");
-
       return null;
     }
-    console.log("compoent should update? YESSSS", state);
 
     return state;
   }
@@ -88,7 +74,6 @@ class Summary2 extends React.Component {
   //height
 
   render() {
-    console.log("rendering summary", this.props);
     const fontStandardSize = this.state.fontStandardSize;
     ////////////////////////////
     ////////////////////////////

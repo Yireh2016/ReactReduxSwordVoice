@@ -29,7 +29,6 @@ class LogInForm extends Component {
 
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
-    console.log("userData", userData);
     sessionCookie(this.props, userData.userName, userData._id, uuid());
     axios
       .put(`/api/sessionUpdate/${userData.userName}`)

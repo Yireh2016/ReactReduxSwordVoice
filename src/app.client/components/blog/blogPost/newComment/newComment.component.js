@@ -9,8 +9,6 @@ import axios from "axios";
 
 //services
 
-console.log("userLogo1", userLogo);
-
 const NewComment = ({
   loggedUserAvatar,
   userName,
@@ -21,8 +19,6 @@ const NewComment = ({
   const [comment, setComment] = useState("");
 
   const sendCommentHandler = () => {
-    console.log("comment on sendCommentHandler", comment);
-
     if (comment === "") {
       return;
     }
@@ -50,7 +46,6 @@ const NewComment = ({
           setGlobalComments(commentsToSet);
           setComment("");
         }
-        console.log("res on set comment post", res);
       })
       .catch(err => {
         console.log("err on setComment", err);
@@ -58,7 +53,6 @@ const NewComment = ({
   };
 
   const commentHandler = e => {
-    console.log("e.target", e.target);
     setComment(e.target.value);
   };
 

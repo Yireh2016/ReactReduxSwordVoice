@@ -87,9 +87,7 @@ class BlogComponent extends Component {
       ]
     };
   }
-  componentDidUpdate() {
-    console.log("BlogComponent uspdate");
-  }
+
   componentDidMount() {
     const device = isDevice();
 
@@ -136,10 +134,6 @@ class BlogComponent extends Component {
           const recentDataArray = newDataArr.slice(1);
           const popDataArray = newDataArr.slice(1);
           const newPostArr = newDataArr.slice(0, 1);
-          console.log("newDataArr", newDataArr);
-          console.log("recentDataArray", recentDataArray);
-          console.log("popDataArray", popDataArray);
-          console.log("newPostArr", newPostArr);
           this.setState({
             popPostsArray: newDataArr,
             recentPostsArray: newDataArr,

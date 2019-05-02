@@ -100,9 +100,6 @@ class BlogArticle extends Component {
     }
   }
   static getDerivedStateFromProps(props, state) {
-    console.log("getDerivedStateFromProps props", props);
-    console.log("getDerivedStateFromProps state", state);
-
     if (props.isUserLoggedIn) {
       return { loggedUserAvatar: props.loggedUserAvatar };
     }

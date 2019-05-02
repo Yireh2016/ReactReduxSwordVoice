@@ -56,7 +56,6 @@ class SignUpForm extends Component {
   }
 
   imageUpload = image => {
-    console.log("imgupload ", image);
     this.setState(() => {
       return {
         userAvatar: image,
@@ -497,7 +496,6 @@ class SignUpForm extends Component {
       //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
       const sessionID = uuid();
       data = { ...data, userSessionId: sessionID };
-      console.log("data to upload for sign up", data);
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome

@@ -63,7 +63,6 @@ class NavBar extends Component {
   }
 
   logoClickHandler() {
-    console.log("going home");
     window.location.href = "./home";
   }
 

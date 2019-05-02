@@ -32,7 +32,6 @@ export const socialCtrl = (req, res) => {
         console.log(err);
         res.send(err);
       } else {
-        console.log("NEW claps count");
         res.sendStatus(200);
         res.end("success");
       }
@@ -42,11 +41,9 @@ export const socialCtrl = (req, res) => {
 
 export const setCommentCtrl = async (req, res) => {
   const { userName, title, message } = req.query;
-  console.log("req.body on setCommentCtrl", req.body);
   const userAvatar = req.body.loggedUserAvatar;
 
   let comment = { userName, message, userAvatar };
-  console.log(`comment to save on article ${title}`, comment);
   let comments = [];
 
   articleModel.find({ title }, (err, article) => {
@@ -56,11 +53,8 @@ export const setCommentCtrl = async (req, res) => {
       return;
     }
 
-    console.log("article.comments", article[0].comments);
-    console.log("comment", comment);
     comments = article[0].comments;
     comments = [comment, ...comments];
-    console.log("comments", comments);
 
     articleModel.findOneAndUpdate({ title }, { comments }, err => {
       if (err) {

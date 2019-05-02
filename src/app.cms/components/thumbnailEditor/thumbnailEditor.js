@@ -109,7 +109,6 @@ class ThumbNailEditor extends Component {
       );
   };
   colorHandler = (color, e) => {
-    console.log("color", color);
     const { h, s, l, a } = color.hsl;
     this.props.onProjectChange();
     this.props.setThumbnailColor(`hsla(${h},${s * 100}%,${l * 100}%,${a})`);
