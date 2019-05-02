@@ -561,6 +561,7 @@ class BlogArticle extends Component {
           date={commentsData.date}
           likes={commentsData.likes}
           replies={commentsData.responses}
+          index={i}
         />
       );
     });

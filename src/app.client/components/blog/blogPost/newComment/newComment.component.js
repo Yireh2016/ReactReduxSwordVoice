@@ -14,7 +14,8 @@ const NewComment = ({
   userName,
   title,
   comments,
-  setGlobalComments
+  setGlobalComments,
+  setCommentsCount
 }) => {
   const [comment, setComment] = useState("");
 
@@ -44,6 +45,7 @@ const NewComment = ({
           };
           commentsToSet = [commentToPush, ...commentsToSet];
           setGlobalComments(commentsToSet);
+          setCommentsCount(1);
           setComment("");
         }
       })
@@ -132,12 +134,14 @@ const mapStateToProps2 = state => {
     comments: state.article.comments
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
     setGlobalComments: comments =>
-      dispach({ type: "SET_COMMENTS", payload: comments })
-    // onLogOut: () => dispach({ type: "LOGGED_OUT" })
+      dispatch({ type: "SET_COMMENTS", payload: comments }),
+    setCommentsCount: (count = 1) =>
+      dispatch({ type: "SET_COMMENTS_COUNT", payload: count })
+    // onLogOut: () => dispatch({ type: "LOGGED_OUT" })
   };
 };
 export default connect(

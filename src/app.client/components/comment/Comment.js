@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import Reply from "./reply/Reply";
+
 import "./comment.css";
 
 //assets
 import { like } from "../../assets/svgIcons/SvgIcons";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
+//component
+import ReplyEditor from "./replyEditor/ReplyEditor";
+import Reply from "./reply/Reply";
+
+//store
+import { store } from "../../../app.redux.store/store/configStore";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -164,23 +170,41 @@ const ReplyCardLayout = styled.div`
   }
 `;
 
-const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {
+const Comment = ({
+  index,
+  userAvatar,
+  userName,
+  comments,
+  date,
+  likes,
+  replies
+}) => {
+  const [isReplyEditor, setReplyEditor] = useState(false);
+  const state = store.getState();
+
+  //reduxState
+  const isUserLoggedIn = state.logInStatus.isUserLoggedIn;
+
   let repliesMap;
   if (replies) {
     repliesMap = replies.map((replyObj, i) => {
-      const { userName, userAvatar, reply, date, likes } = replyObj;
+      const { userName, userAvatar, message, date, likes } = replyObj;
       return (
         <Reply
           key={i}
           userName={userName}
           userAvatar={userAvatar}
-          reply={reply}
+          message={message}
           date={dbDateToNormalDate(date)}
           likes={likes}
         />
       );
     });
   }
+
+  const replyHandler = () => {
+    setReplyEditor(!isReplyEditor);
+  };
 
   return (
     <CommentCardLayout>
@@ -205,13 +229,23 @@ const Comment = ({ userAvatar, userName, comments, date, likes, replies }) => {
               <Icon>{like}</Icon>
               <Counter>{likes}</Counter>
             </SocialInteractions>
-            <ReplyBtn>
-              <button>Reply</button>
-            </ReplyBtn>
+            {isUserLoggedIn && (
+              <ReplyBtn>
+                <button onClick={replyHandler}>Reply</button>
+              </ReplyBtn>
+            )}
           </CommentFooter>
         </CommentCont>
       </CommentCard>
       <MoreBtn>More...</MoreBtn>
+      {isReplyEditor && (
+        <ReplyEditor
+          setReplyEditor={isReply => {
+            setReplyEditor(isReply);
+          }}
+          index={index}
+        />
+      )}
       {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
     </CommentCardLayout>
   );

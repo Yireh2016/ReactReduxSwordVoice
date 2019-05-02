@@ -14,7 +14,11 @@ import {
   updatePostCtrl,
   getArticleCtrl
 } from "../controllers/cms/postsControllers";
-import { socialCtrl, setCommentCtrl } from "../controllers/client/articleCtrl";
+import {
+  socialCtrl,
+  setCommentCtrl,
+  setReplyCtrl
+} from "../controllers/client/articleCtrl";
 
 // import axios from "axios";
 
@@ -344,6 +348,7 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
 
 //add comments
 routerAPI.put("/setComment", authAPI, setCommentCtrl);
+routerAPI.put("/setReply", authAPI, setReplyCtrl);
 
 //update post Social ej claps,share,comments
 routerAPI.put("/socialCounter", authAPI, socialCtrl);

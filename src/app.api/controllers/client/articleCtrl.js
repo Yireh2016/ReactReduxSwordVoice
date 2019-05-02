@@ -67,3 +67,40 @@ export const setCommentCtrl = async (req, res) => {
     res.status(200).json({ message: "ok" });
   });
 };
+
+export const setReplyCtrl = async (req, res) => {
+  const { userName, title, message, index } = req.query;
+  let intIndex = parseInt(index);
+  const userAvatar = req.body.userAvatar;
+
+  let reply = { userName, message, userAvatar };
+  let responses;
+  let comments = [];
+
+  articleModel.find({ title }, (err, article) => {
+    if (err) {
+      console.log("err", err);
+      res.status(404).json(err);
+      return;
+    }
+
+    comments = article[0].comments;
+    comments.forEach((comment, i) => {
+      if (i === intIndex) {
+        responses = comment.responses;
+        responses = [reply, ...responses];
+      }
+    });
+    comments[intIndex].responses = responses;
+
+    articleModel.findOneAndUpdate({ title }, { comments }, err => {
+      if (err) {
+        console.log("err", err);
+        res.status(404).json(err);
+        return;
+      }
+    });
+
+    res.status(200).json({ message: "ok" });
+  });
+};

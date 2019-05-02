@@ -110,14 +110,14 @@ const Counter = styled.span`
   user-select: none;
 `;
 
-const Reply = ({ userAvatar, userName, reply, date, likes }) => {
+const Reply = ({ userAvatar, userName, message, date, likes }) => {
   return (
     // <ReplyCardLayout>
     <ReplyCard>
       <AvatarCont>
         <Avatar
           style={{
-            backgroundImage: `url(${userAvatar})`
+            backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
           }}
         />
       </AvatarCont>
@@ -127,7 +127,7 @@ const Reply = ({ userAvatar, userName, reply, date, likes }) => {
           <ReplyDate>{date}</ReplyDate>
         </UserInfo>
         <Text>
-          <p>{reply}</p>
+          <p>{message}</p>
         </Text>
         <ReplyFooter>
           <SocialInteractions>
@@ -143,7 +143,7 @@ const Reply = ({ userAvatar, userName, reply, date, likes }) => {
 
 // userAvatar={replyData.userAvatar}
 //             userName={replyData.userName}
-//             reply={replyData.reply}
+//             message={replyData.reply}
 //             date={replyData.date}
 //             likes={replyData.likes}
 //             replies={replyData.replies}

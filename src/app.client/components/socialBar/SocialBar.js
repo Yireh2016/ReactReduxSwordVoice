@@ -32,7 +32,8 @@ const SocialBar = ({
   setCommentsCount,
   setShareCount,
   setViewsCount,
-  title
+  title,
+  article
 }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
@@ -145,14 +146,7 @@ const SocialBar = ({
       scroll={el => el.scrollIntoView({ behavior: "smooth", block: "start" })}
       to="#commentsSection"
     >
-      <Icon
-        id="comments"
-        onClick={() => {
-          setCommentsCount();
-        }}
-      >
-        {comments2}
-      </Icon>
+      <Icon id="comments">{comments2}</Icon>
     </Link>
   );
 
@@ -193,7 +187,8 @@ const SocialBar = ({
 const mapStateToProps = state => {
   return {
     socialCount: state.article.socialCount,
-    title: state.article.title
+    title: state.article.title,
+    article: state.article
   };
 };
 const mapDispachToProps = dispatch => {
@@ -203,8 +198,6 @@ const mapDispachToProps = dispatch => {
 
     setShareCount: (count = 1) =>
       dispatch({ type: "SET_SHARE_COUNT", payload: count }),
-    setCommentsCount: (count = 1) =>
-      dispatch({ type: "SET_COMMENTS_COUNT", payload: count }),
     setViewsCount: (count = 1) =>
       dispatch({ type: "ADD_VIEWS_COUNT", payload: count })
   };
