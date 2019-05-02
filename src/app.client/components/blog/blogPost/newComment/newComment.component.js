@@ -56,6 +56,26 @@ const NewComment = ({
     setComment(e.target.value);
   };
 
+  let avatar;
+
+  if (typeof loggedUserAvatar === "string") {
+    avatar = (
+      <div
+        className="avatarImg"
+        style={{
+          //`url('data:image/jpeg;base64,${
+          // this.loggedUserAvatar
+          //       }`
+          backgroundImage: loggedUserAvatar
+            ? `url('data:image/jpeg;base64,${loggedUserAvatar.replace(
+                /"/g,
+                ""
+              )}')`
+            : userLogo
+        }}
+      />
+    );
+  }
   return (
     <div className="commentLayoutCont fila">
       <div className="grid col-2 relleno" />
@@ -93,19 +113,7 @@ const NewComment = ({
 
       <div className="grid col-4 avatarCont">
         <div>
-          <div
-            className="avatarImg"
-            style={{
-              //`url('data:image/jpeg;base64,${
-              // this.loggedUserAvatar
-              //       }`
-              backgroundImage: `url(${
-                loggedUserAvatar
-                  ? `'data:image/jpeg;base64,${loggedUserAvatar}'`
-                  : userLogo
-              })`
-            }}
-          />
+          {avatar}
 
           <p>
             <span id="name">{userName} </span>

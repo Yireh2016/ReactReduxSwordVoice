@@ -99,7 +99,7 @@ class BlogArticle extends Component {
       });
     }
   }
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(props) {
     if (props.isUserLoggedIn) {
       return { loggedUserAvatar: props.loggedUserAvatar };
     }
