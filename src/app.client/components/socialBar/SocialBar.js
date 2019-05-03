@@ -12,8 +12,8 @@ import {
 } from "../../assets/svgIcons/SvgIcons";
 
 //api calls
-import updateClapsCount from "../../assets/apiCalls/updateClapsCount";
-import updateViewsCount from "../../assets/apiCalls/updateViewsCount";
+
+import updateSocialCount from "../../assets/apiCalls/updateSocialCount";
 
 // {
 //   // article
@@ -29,11 +29,9 @@ import updateViewsCount from "../../assets/apiCalls/updateViewsCount";
 const SocialBar = ({
   socialCount,
   addClapsCount,
-  setCommentsCount,
   setShareCount,
   setViewsCount,
-  title,
-  article
+  title
 }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
@@ -41,7 +39,7 @@ const SocialBar = ({
     console.log("ejecutando useeffect", socialCount.views);
     setTimeout(() => {
       setViewsCount(1);
-      updateViewsCount(title, socialCount.views);
+      updateSocialCount(title, socialCount);
     }, 60000);
   }, []);
   const BarContainer = styled.div`
@@ -62,6 +60,7 @@ const SocialBar = ({
     align-items: center;
   `;
   const Icon = styled.span`
+    display: flex;
     transform: ${props =>
       props.rotate === "true" ? "rotate(180deg)" : "rotate(0deg)"};
 
@@ -97,7 +96,7 @@ const SocialBar = ({
       setClapsAdder(0);
 
       //api call
-      updateClapsCount(title, socialCount.claps);
+      updateSocialCount(title, socialCount);
 
       return;
     }, 1000);
@@ -170,10 +169,17 @@ const SocialBar = ({
   ];
 
   const socialItemsMap = socialItems.map((socialItem, i) => {
+    let count = socialItem.count;
+
+    if (socialItem.count >= 1000 && socialItem.count < 1000000) {
+      count = `${Math.floor(socialItem.count / 1000)}K`;
+    } else if (socialItem.count >= 1000000) {
+      count = `${Math.floor(socialItem.count / 1000000)}M`;
+    }
     return (
       <SocialItem key={i}>
         {socialItem.icon}
-        <Counter>{socialItem.count}</Counter>
+        <Counter>{count}</Counter>
       </SocialItem>
     );
   });

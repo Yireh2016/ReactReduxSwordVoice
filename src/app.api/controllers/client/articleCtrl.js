@@ -4,28 +4,16 @@ const articleModel = mongoose.model("Article");
 // const usersModel = mongoose.model("User");
 
 export const socialCtrl = (req, res) => {
-  const claps = req.query.claps;
-  const share = req.query.share;
-  const comments = req.query.claps;
-  const views = req.query.views;
-
   const title = req.query.title;
+  const socialCount = req.body;
 
-  let socialObj;
-  if (claps) {
-    socialObj = { claps: parseInt(claps) };
-  } else if (share) {
-    socialObj = { share: parseInt(share) };
-  } else if (comments) {
-    socialObj = { comments: parseInt(comments) };
-  } else if (views) {
-    socialObj = { views: parseInt(views) };
-  }
+  console.log("title", title);
+  console.log("socialCount", socialCount);
 
   articleModel.findOneAndUpdate(
     { title },
     {
-      socialCount: socialObj
+      socialCount
     },
     function(err) {
       if (err) {
@@ -55,14 +43,21 @@ export const setCommentCtrl = async (req, res) => {
 
     comments = article[0].comments;
     comments = [comment, ...comments];
+    let socialCount = article[0].socialCount;
 
-    articleModel.findOneAndUpdate({ title }, { comments }, err => {
-      if (err) {
-        console.log("err", err);
-        res.status(404).json(err);
-        return;
+    socialCount.comments = socialCount.comments + 1;
+
+    articleModel.findOneAndUpdate(
+      { title },
+      { comments, socialCount },
+      (err, article) => {
+        if (err) {
+          console.log("err", err);
+          res.status(404).json(err);
+          return;
+        }
       }
-    });
+    );
 
     res.status(200).json({ message: "ok" });
   });
@@ -92,6 +87,33 @@ export const setReplyCtrl = async (req, res) => {
       }
     });
     comments[intIndex].responses = responses;
+
+    articleModel.findOneAndUpdate({ title }, { comments }, err => {
+      if (err) {
+        console.log("err", err);
+        res.status(404).json(err);
+        return;
+      }
+    });
+
+    res.status(200).json({ message: "ok" });
+  });
+};
+
+export const updateCommentClaps = (req, res) => {
+  const { title, index } = req.query;
+  const { claps } = req.body;
+
+  articleModel.find({ title }, (err, article) => {
+    if (err) {
+      console.log("err", err);
+      res.status(404).json(err);
+      return;
+    }
+
+    let comments = article[0].comments;
+
+    comments[index].claps = claps;
 
     articleModel.findOneAndUpdate({ title }, { comments }, err => {
       if (err) {

@@ -17,7 +17,8 @@ import {
 import {
   socialCtrl,
   setCommentCtrl,
-  setReplyCtrl
+  setReplyCtrl,
+  updateCommentClaps
 } from "../controllers/client/articleCtrl";
 
 // import axios from "axios";
@@ -348,6 +349,8 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
 
 //add comments
 routerAPI.put("/setComment", authAPI, setCommentCtrl);
+routerAPI.put("/updateCommentClaps", authAPI, updateCommentClaps);
+
 routerAPI.put("/setReply", authAPI, setReplyCtrl);
 
 //update post Social ej claps,share,comments

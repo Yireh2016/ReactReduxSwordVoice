@@ -7,16 +7,16 @@ const responseSchema = new Schema({
   userAvatar: { type: { data: Buffer, contentType: String } },
   message: { type: String },
   date: { type: Date, default: Date.now },
-  likes: { type: Number, default: 0 }
+  claps: { type: Number, default: 0 }
 });
 
 const commentSchema = new Schema({
   userName: { type: String, required: true },
   userAvatar: { type: { data: Buffer, contentType: String } },
   message: { type: String },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: new Date() },
   responses: [responseSchema],
-  likes: { type: Number, default: 0 }
+  claps: { type: Number, default: 0 }
 });
 
 const articleSchema = new Schema({

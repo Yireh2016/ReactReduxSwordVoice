@@ -5,7 +5,22 @@ const initialState = {
   title: "",
   description: "",
   keywords: "",
-  comments: [],
+  comments: [
+    {
+      userName: "",
+      message: "",
+      date: new Date(),
+      responses: [
+        {
+          userName: "",
+          message: "",
+          date: new Date(),
+          claps: 0
+        }
+      ],
+      claps: 0
+    }
+  ],
   socialCount: {
     claps: 0,
     share: 0,
@@ -17,6 +32,18 @@ const initialState = {
 const article = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
+    case "SET_COMMENT_CLAPS": {
+      const { index, count } = action.payload;
+      newState.comments[index].claps = count;
+      break;
+    }
+
+    case "SET_RESPONSE_CLAPS": {
+      const { iComment, iResponse, count } = action.payload;
+      newState.comments[iComment].response[iResponse].claps = count;
+      break;
+    }
+
     case "SET_ARTICLE": {
       newState = action.payload;
 

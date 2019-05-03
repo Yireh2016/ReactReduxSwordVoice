@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./comment.css";
 
 //assets
-import { like } from "../../assets/svgIcons/SvgIcons";
+import { claps } from "../../assets/svgIcons/SvgIcons";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 //component
 import ReplyEditor from "./replyEditor/ReplyEditor";
@@ -12,6 +12,9 @@ import Reply from "./reply/Reply";
 
 //store
 import { store } from "../../../app.redux.store/store/configStore";
+
+//api calls
+import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -102,8 +105,8 @@ const SocialInteractions = styled.div`
 `;
 const Icon = styled.span`
   svg {
-    height: 20px;
-    width: 20px;
+    height: 30px;
+    width: 30px;
     fill: #ff9575;
     margin: 0 8px;
     transform: ${props =>
@@ -170,17 +173,19 @@ const ReplyCardLayout = styled.div`
   }
 `;
 
-const Comment = ({
-  index,
-  userAvatar,
-  userName,
-  comments,
-  date,
-  likes,
-  replies
-}) => {
+const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
   const [isReplyEditor, setReplyEditor] = useState(false);
+  const [clapsAdder, setClapsAdder] = useState(0);
+  const [clapsTimer, setClapsTimer] = useState();
   const state = store.getState();
+
+  let article = state.article;
+  const setCommentClaps = (index, count) => {
+    store.dispatch({
+      type: "SET_COMMENT_CLAPS",
+      payload: { index, count }
+    });
+  };
 
   //reduxState
   const isUserLoggedIn = state.logInStatus.isUserLoggedIn;
@@ -206,6 +211,27 @@ const Comment = ({
     setReplyEditor(!isReplyEditor);
   };
 
+  const clapsAdderHandler = () => {
+    if (clapsTimer) {
+      clearTimeout(clapsTimer);
+    }
+    setClapsAdder(clapsAdder + 1);
+    setCommentClaps(index, article.comments[index].claps + 1);
+    const timer = setTimeout(() => {
+      setClapsAdder(0);
+
+      console.log(
+        "article.comments[index].claps",
+        article.comments[index].claps
+      );
+      //api call
+      updateCommentClaps(article.title, index, article.comments[index].claps);
+
+      return;
+    }, 1000);
+    setClapsTimer(timer);
+  };
+
   return (
     <CommentCardLayout>
       <CommentCard>
@@ -222,12 +248,33 @@ const Comment = ({
             <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
           </UserInfo>
           <Text>
-            <p>{comments}</p>
+            <p>{message}</p>
           </Text>
           <CommentFooter>
             <SocialInteractions>
-              <Icon>{like}</Icon>
-              <Counter>{likes}</Counter>
+              <Icon
+                style={{ position: "relative" }}
+                onClick={() => {
+                  clapsAdderHandler();
+                }}
+              >
+                {clapsAdder !== 0 && (
+                  <Counter
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "#004059",
+                      color: "white",
+                      borderRadius: "100%",
+                      padding: "7px",
+                      top: "-30px"
+                    }}
+                  >
+                    +{clapsAdder}
+                  </Counter>
+                )}
+                {claps}
+              </Icon>
+              <Counter>{article.comments[index].claps}</Counter>
             </SocialInteractions>
             {isUserLoggedIn && (
               <ReplyBtn>
@@ -250,12 +297,5 @@ const Comment = ({
     </CommentCardLayout>
   );
 };
-
-// userAvatar={commentsData.userAvatar}
-//             userName={commentsData.userName}
-//             comments={commentsData.comment}
-//             date={commentsData.date}
-//             likes={commentsData.likes}
-//             replies={commentsData.replies}
 
 export default Comment;

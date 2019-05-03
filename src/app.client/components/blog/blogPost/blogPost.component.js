@@ -557,7 +557,7 @@ class BlogArticle extends Component {
           key={i}
           userAvatar={commentsData.userAvatar}
           userName={commentsData.userName}
-          comments={commentsData.message}
+          message={commentsData.message}
           date={commentsData.date}
           likes={commentsData.likes}
           replies={commentsData.responses}
