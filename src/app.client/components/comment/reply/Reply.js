@@ -19,7 +19,7 @@ const AvatarCont = styled.div`
   margin: 0 15px 0 0;
   @media (max-width: 700px) {
     margin: 0 10px 0 0;
-    width: 35px;
+    width: 30px;
   }
 `;
 
@@ -27,8 +27,8 @@ const Avatar = styled.div`
   width: 50px;
   height: 50px;
   @media (max-width: 700px) {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
   }
   border-radius: 100%;
   background-size: cover;
@@ -70,6 +70,7 @@ const Text = styled.div`
   font-weight: normal;
   p {
     font-size: 18px;
+    word-break: break-word;
   }
   p:first-child {
     margin-top: 0;

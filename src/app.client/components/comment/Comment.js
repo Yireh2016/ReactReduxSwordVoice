@@ -36,6 +36,7 @@ const AvatarCont = styled.div`
   margin: 0 15px 0 0;
   @media (max-width: 700px) {
     margin: 0 10px 0 0;
+    width: 40px;
   }
 `;
 
@@ -43,8 +44,8 @@ const Avatar = styled.div`
   width: 80px;
   height: 80px;
   @media (max-width: 700px) {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
   border-radius: 100%;
 
@@ -87,6 +88,10 @@ const CommentDate = styled.span`
 
 const Text = styled.div`
   font-weight: 500;
+
+  p {
+    word-break: break-word;
+  }
   p:first-child {
     margin-top: 0;
   }
