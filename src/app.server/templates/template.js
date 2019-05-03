@@ -16,7 +16,11 @@ export default ({ body, title, initialState }) => {
       <body>
         <div id="root">${body}</div>
       </body>
-      
+
+
+
+
+
       <script src="bundle.js"></script>
     </html>
   `;

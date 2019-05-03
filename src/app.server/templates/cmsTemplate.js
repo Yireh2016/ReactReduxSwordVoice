@@ -16,6 +16,10 @@ export default ({ title }) => {
         <div id="root"></div>
       </body>
       
+
+
+
+
       <script src="bundleCMS.js"></script>
     </html>
   `;
