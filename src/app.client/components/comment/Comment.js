@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./comment.css";
 
 //assets
-import { claps as clapsIcon } from "../../assets/svgIcons/SvgIcons";
+import { claps as clapsIcon, ellipsis } from "../../assets/svgIcons/SvgIcons";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 //component
 import ReplyEditor from "./replyEditor/ReplyEditor";
@@ -22,6 +22,7 @@ const CommentCardLayout = styled.div`
   align-items: center;
 `;
 const CommentCard = styled.div`
+  position: relative;
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   padding: 15px 30px 20px 15px;
@@ -173,13 +174,63 @@ const ReplyCardLayout = styled.div`
   }
 `;
 
+const Ellipsis = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+
+  @media (max-width: 700px) {
+    right: 5vw;
+  }
+  svg {
+    width: 4px;
+
+    @media (max-width: 700px) {
+      width: 3px;
+    }
+    fill: rgba(0, 0, 0, 0.61);
+  }
+
+  svg:hover {
+    cursor: pointer;
+  }
+`;
+
+const MiniModal = styled.ul`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 5px 10px;
+  box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  list-style-type: none;
+
+  @media (max-width: 700px) {
+    right: 5vw;
+  }
+  li {
+    color: var(--blueDark);
+    font-size: 14px;
+  }
+
+  li:hover {
+    cursor: pointer;
+  }
+
+  li:first-child {
+    margin-bottom: 5px;
+  }
+`;
+
 const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
   const [isReplyEditor, setReplyEditor] = useState(false);
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
+  const [isModal, setModal] = useState(false);
   const state = store.getState();
 
   let article = state.article;
+  const logInStatus = state.logInStatus;
   const setCommentClaps = (index, count) => {
     store.dispatch({
       type: "SET_COMMENT_CLAPS",
@@ -207,6 +258,9 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
     });
   }
 
+  const showModalHandler = () => {
+    setModal(!isModal);
+  };
   const replyHandler = () => {
     setReplyEditor(!isReplyEditor);
   };
@@ -242,6 +296,15 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
   return (
     <CommentCardLayout>
       <CommentCard>
+        {logInStatus.loggedUserName === userName && (
+          <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
+        )}
+        {isModal && (
+          <MiniModal>
+            <li>Delete</li>
+            <li>Edit</li>
+          </MiniModal>
+        )}
         <AvatarCont>
           <Avatar
             style={{
