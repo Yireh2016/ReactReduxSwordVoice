@@ -559,7 +559,6 @@ class BlogArticle extends Component {
           userName={commentsData.userName}
           message={commentsData.message}
           date={commentsData.date}
-          likes={commentsData.likes}
           replies={commentsData.responses}
           index={i}
         />

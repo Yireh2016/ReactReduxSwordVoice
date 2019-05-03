@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./comment.css";
 
 //assets
-import { claps } from "../../assets/svgIcons/SvgIcons";
+import { claps as clapsIcon } from "../../assets/svgIcons/SvgIcons";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 //component
 import ReplyEditor from "./replyEditor/ReplyEditor";
@@ -216,7 +216,14 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
       clearTimeout(clapsTimer);
     }
     setClapsAdder(clapsAdder + 1);
-    setCommentClaps(index, article.comments[index].claps + 1);
+
+    let clapsToSet;
+    if (article.comments[index].claps) {
+      clapsToSet = article.comments[index].claps;
+    } else {
+      clapsToSet = 0;
+    }
+    setCommentClaps(index, clapsToSet + 1);
     const timer = setTimeout(() => {
       setClapsAdder(0);
 
@@ -272,9 +279,12 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
                     +{clapsAdder}
                   </Counter>
                 )}
-                {claps}
+                {clapsIcon}
               </Icon>
-              <Counter>{article.comments[index].claps}</Counter>
+              <Counter>
+                {article.comments[index].claps > 0 &&
+                  article.comments[index].claps}
+              </Counter>
             </SocialInteractions>
             {isUserLoggedIn && (
               <ReplyBtn>

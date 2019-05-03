@@ -94,10 +94,7 @@ const swordvoiceWeb = async (req, res) => {
                 avatar: author.userAvatar
               };
               store.dispatch({ type: "SET_ARTICLE", payload: article });
-              store.dispatch({
-                type: "SET_COMMENTS_COUNT",
-                payload: commentsArr.length
-              });
+
               console.log("ARTICLE FOUND");
 
               console.log("SEARCHING SIMILAR ARTICLES");
