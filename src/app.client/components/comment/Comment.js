@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ReactMarkdown from "react-markdown";
 
 import "./comment.css";
 
@@ -323,7 +324,7 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
             <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
           </UserInfo>
           <Text>
-            <p>{message}</p>
+            <ReactMarkdown source={message} />
           </Text>
           <CommentFooter>
             <SocialInteractions>

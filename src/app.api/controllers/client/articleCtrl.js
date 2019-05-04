@@ -28,8 +28,9 @@ export const socialCtrl = (req, res) => {
 };
 
 export const setCommentCtrl = async (req, res) => {
-  const { userName, title, message } = req.query;
+  const { userName, title } = req.query;
   const userAvatar = req.body.loggedUserAvatar;
+  const message = req.body.message;
 
   let comment = { userName, message, userAvatar };
   let comments = [];

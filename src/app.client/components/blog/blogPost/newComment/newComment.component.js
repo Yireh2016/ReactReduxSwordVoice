@@ -24,15 +24,13 @@ const NewComment = ({
       return;
     }
     axios
-      .put(
-        `api/setComment?message=${comment}&userName=${userName}&title=${title}`,
-        {
-          headers: {
-            "Content-Type": "application/json"
-          },
-          loggedUserAvatar
-        }
-      )
+      .put(`api/setComment?userName=${userName}&title=${title}`, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        loggedUserAvatar,
+        message: comment
+      })
       .then(res => {
         if (res.data.message === "ok") {
           let commentsToSet = comments;
@@ -123,6 +121,13 @@ const NewComment = ({
           </p>
         </div>
       </div>
+      <p>
+        You may write comments in{" "}
+        <a href="https://commonmark.org/help/">Markdown</a>. This is the best
+        way to post any code, inline like `&lt;div&gt;this&lt;/div&gt;` or
+        multiline blocks within triple backtick fences (```) with double new
+        lines before and after.
+      </p>
     </div>
   );
 };
