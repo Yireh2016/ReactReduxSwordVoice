@@ -11,7 +11,8 @@ import "./blogPost.css";
 
 //componentes
 import AsidePost from "../asidePost/asidePost.component";
-import NewComment from "./newComment/newComment.component";
+
+import NewComment from "./newComment/NewComment";
 import EnableComment from "./enableComment/enableComment.component";
 import Navbar from "../../navbar/navbar.component";
 import Comment from "../../comment/Comment";
@@ -701,7 +702,9 @@ class BlogArticle extends Component {
                 <h2 id="commentsSection">Leave your comments:</h2>
 
                 {this.props.isUserLoggedIn ? (
-                  <NewComment loggedUserAvatar={this.state.loggedUserAvatar} />
+                  <React.Fragment>
+                    <NewComment />
+                  </React.Fragment>
                 ) : (
                   <EnableComment
                     onSignUpClick={this.onSignUpClick}
