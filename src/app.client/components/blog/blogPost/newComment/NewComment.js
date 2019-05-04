@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 
 //assets
 import { esquinaChat, check } from "../../../../assets/svgIcons/SvgIcons";
+import apiSetComment from "../../../../apiCalls/apiSetComment";
 
 const Container = styled.div`
   margin: 50px 0;
@@ -159,34 +160,21 @@ const NewComment = ({
     }
 
     setCommentDisabled(true);
-    axios
-      .put(`api/setComment?userName=${userName}&title=${title}`, {
-        headers: {
-          "Content-Type": "application/json"
-        },
-        avatar,
-        message: comment
-      })
-      .then(res => {
-        if (res.data.message === "ok") {
-          let commentsToSet = comments;
-          let commentToPush = {
-            userName: userName,
-            userAvatar: avatar,
-            message: comment,
-            date: new Date(),
-            likes: 0
-          };
-          commentsToSet = [commentToPush, ...commentsToSet];
-          setGlobalComments(commentsToSet);
-          setCommentsCount(1);
-          setComment("");
-          setCommentDisabled(false);
-        }
-      })
-      .catch(err => {
-        console.log("err on setComment", err);
-      });
+    apiSetComment(userName, title, avatar, comment, () => {
+      let commentsToSet = comments;
+      let commentToPush = {
+        userName: userName,
+        userAvatar: avatar,
+        message: comment,
+        date: new Date(),
+        likes: 0
+      };
+      commentsToSet = [commentToPush, ...commentsToSet];
+      setGlobalComments(commentsToSet);
+      setCommentsCount(1);
+      setComment("");
+      setCommentDisabled(false);
+    });
   };
 
   const commentHandler = e => {

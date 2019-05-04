@@ -233,6 +233,7 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   const [isModal, setModal] = useState(false);
+
   const state = store.getState();
 
   let article = state.article;
@@ -300,7 +301,17 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
   };
 
   return (
-    <CommentCardLayout>
+    <CommentCardLayout
+      onMouseLeave={() => {
+        isModal && setModal(false);
+      }}
+      onClick={() => {
+        isModal && setModal(false);
+      }}
+      onTouchMove={() => {
+        isModal && setModal(false);
+      }}
+    >
       <CommentCard>
         {logInStatus.loggedUserName === userName && (
           <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
