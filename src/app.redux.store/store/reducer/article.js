@@ -1,4 +1,5 @@
 const initialState = {
+  id: "",
   date: "",
   html: "",
   author: "",
@@ -7,16 +8,12 @@ const initialState = {
   keywords: "",
   comments: [
     {
+      _id: "",
       userName: "",
       message: "",
       date: new Date(),
       responses: [
-        {
-          userName: "",
-          message: "",
-          date: new Date(),
-          claps: 0
-        }
+        { _id: "", userName: "", message: "", date: new Date(), claps: 0 }
       ],
       claps: 0
     }

@@ -1,7 +1,7 @@
 //modules
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Route, NavLink, withRouter } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import { withCookies } from "react-cookie";
 //css
 import "./navbar.css";
@@ -294,13 +294,9 @@ class NavBar extends Component {
         <React.Fragment key={i}>
           <li>
             {desplegableMenu.nombre === "Profile" ? (
-              <NavLink
-                to={"/" + desplegableMenu.nombre}
-                activeClassName="activeLink"
-                className="flyingLink"
-              >
+              <a href="cms" activeClassName="activeLink" className="flyingLink">
                 {desplegableMenu.nombre}
-              </NavLink>
+              </a>
             ) : (
               <span
                 style={{

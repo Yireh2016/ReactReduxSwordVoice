@@ -18,7 +18,8 @@ import {
   socialCtrl,
   setCommentCtrl,
   setReplyCtrl,
-  updateCommentClaps
+  updateCommentClaps,
+  deleteCommentCtrl
 } from "../controllers/client/articleCtrl";
 
 // import axios from "axios";
@@ -307,17 +308,19 @@ routerAPI.delete("/users/:userId", authAPI, (req, res) => {
   });
 });
 
+routerAPI.delete("/deleteComment", authAPI, deleteCommentCtrl);
+
 // Eliminar todos
 //se usa en: DEVELOPMENT ONLY
-routerAPI.delete("/allUsers", (req, res) => {
-  usersModel.remove({}, function(err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.end("success");
-    }
-  });
-});
+// routerAPI.delete("/allUsers", (req, res) => {
+//   usersModel.remove({}, function(err) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.end("success");
+//     }
+//   });
+// });
 
 //////////////////////////////////////
 //////////////////////////////////////

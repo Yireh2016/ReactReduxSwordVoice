@@ -144,6 +144,7 @@ const ReplyEditor = ({ setReplyEditor, index }) => {
         if (res.data.message === "ok") {
           let responses;
           let replyToPush = {
+            _id: res.data.id,
             userName: userName,
             userAvatar: userAvatar,
             message: responseText,
@@ -164,7 +165,6 @@ const ReplyEditor = ({ setReplyEditor, index }) => {
             }
           });
           comments[index].responses = responses;
-          console.log("comments[index].responses", comments[index].responses);
           setGlobalComments(comments);
           setReplyEditor(false);
           setResponseText("");

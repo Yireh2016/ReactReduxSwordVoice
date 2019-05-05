@@ -11,7 +11,7 @@ const apiSetComment = (userName, title, avatar, comment, callback) => {
     })
     .then(res => {
       if (res.data.message === "ok") {
-        callback();
+        callback(res.data.id);
       }
     })
     .catch(err => {

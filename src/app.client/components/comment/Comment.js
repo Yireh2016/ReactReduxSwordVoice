@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ReactMarkdown from "react-markdown";
+import { connect } from "react-redux";
 
 import "./comment.css";
 
@@ -10,12 +11,15 @@ import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 //component
 import ReplyEditor from "./replyEditor/ReplyEditor";
 import Reply from "./reply/Reply";
+import Modal from "../modal/modal";
 
 //store
-import { store } from "../../../app.redux.store/store/configStore";
+// import { store } from "../../../app.redux.store/store/configStore";
 
 //api calls
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
+
+import apiDeleteComment from "../../apiCalls/apiDeleteComment";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -183,7 +187,15 @@ const ReplyCardLayout = styled.div`
 const Ellipsis = styled.div`
   position: absolute;
   top: 10px;
-  right: 20px;
+  right: 12px;
+  display: flex;
+  width: 20px;
+  justify-content: center;
+  height: 40px;
+
+  :hover {
+    cursor: pointer;
+  }
 
   @media (max-width: 700px) {
     right: 5vw;
@@ -197,9 +209,7 @@ const Ellipsis = styled.div`
     fill: rgba(0, 0, 0, 0.61);
   }
 
-  svg:hover {
-    cursor: pointer;
-  }
+  svg
 `;
 
 const MiniModal = styled.ul`
@@ -228,25 +238,57 @@ const MiniModal = styled.ul`
   }
 `;
 
-const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
+const CancelBtn = styled.button`
+  color: black !important;
+  background: transparent !important;
+  :hover {
+    color: white !important;
+    background: var(--blueLigth) !important;
+  }
+`;
+
+const DeleteBtn = styled.button`
+  color: white !important;
+  background: var(--blueDark) !important;
+  :hover {
+    color: red !important;
+    background: transparent !important;
+  }
+`;
+
+const Comment = ({
+  index,
+  userAvatar,
+  userName,
+  date,
+  replies,
+  message,
+  article,
+  logInStatus,
+  setCommentClaps,
+  setComments
+}) => {
   const [isReplyEditor, setReplyEditor] = useState(false);
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   const [isModal, setModal] = useState(false);
+  const [isDeleteConfirm, setDeleteConfirm] = useState(false);
 
-  const state = store.getState();
+  // const state = store.getState();
 
-  let article = state.article;
-  const logInStatus = state.logInStatus;
-  const setCommentClaps = (index, count) => {
-    store.dispatch({
-      type: "SET_COMMENT_CLAPS",
-      payload: { index, count }
-    });
-  };
+  // let article = state.article;
+  // const logInStatus = state.logInStatus;
+  // const setCommentClaps = (index, count) => {
+  //   store.dispatch({
+  //     type: "SET_COMMENT_CLAPS",
+  //     payload: { index, count }
+  //   });
+  // };
 
   //reduxState
-  const isUserLoggedIn = state.logInStatus.isUserLoggedIn;
+  // const isUserLoggedIn = state.logInStatus.isUserLoggedIn;
+
+  const isUserLoggedIn = logInStatus.isUserLoggedIn;
 
   let repliesMap;
   if (replies) {
@@ -300,92 +342,144 @@ const Comment = ({ index, userAvatar, userName, date, replies, message }) => {
     setClapsTimer(timer);
   };
 
+  const confirmDeletionHandler = () => {
+    apiDeleteComment(article.comments[index]._id, () => {
+      let commentsAfterDeletion = article.comments.filter(comment => {
+        return comment !== article.comments[index];
+      });
+
+      setComments(commentsAfterDeletion);
+      setDeleteConfirm(false);
+    });
+  };
+
+  const deleteCommentHandler = async () => {
+    setDeleteConfirm(true); //show modal
+  };
+
+  const editCommentHandler = () => {};
+
   return (
-    <CommentCardLayout
-      onMouseLeave={() => {
-        isModal && setModal(false);
-      }}
-      onClick={() => {
-        isModal && setModal(false);
-      }}
-      onTouchMove={() => {
-        isModal && setModal(false);
-      }}
-    >
-      <CommentCard>
-        {logInStatus.loggedUserName === userName && (
-          <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
-        )}
-        {isModal && (
-          <MiniModal>
-            <li>Delete</li>
-            <li>Edit</li>
-          </MiniModal>
-        )}
-        <AvatarCont>
-          <Avatar
-            style={{
-              backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
-            }}
-          />
-        </AvatarCont>
-        <CommentCont>
-          <UserInfo>
-            <UserName>{userName}</UserName>
-            <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
-          </UserInfo>
-          <Text>
-            <ReactMarkdown source={message} />
-          </Text>
-          <CommentFooter>
-            <SocialInteractions>
-              <Icon
-                style={{ position: "relative" }}
-                onClick={() => {
-                  clapsAdderHandler();
-                }}
-              >
-                {clapsAdder !== 0 && (
-                  <Counter
-                    style={{
-                      position: "absolute",
-                      backgroundColor: "#004059",
-                      color: "white",
-                      borderRadius: "100%",
-                      padding: "7px",
-                      top: "-30px"
-                    }}
-                  >
-                    +{clapsAdder}
-                  </Counter>
-                )}
-                {clapsIcon}
-              </Icon>
-              <Counter>
-                {article.comments[index].claps > 0 &&
-                  article.comments[index].claps}
-              </Counter>
-            </SocialInteractions>
-            {isUserLoggedIn && (
-              <ReplyBtn>
-                <button onClick={replyHandler}>Reply</button>
-              </ReplyBtn>
-            )}
-          </CommentFooter>
-        </CommentCont>
-      </CommentCard>
-      <MoreBtn>More...</MoreBtn>
-      {isReplyEditor && (
-        <ReplyEditor
-          setReplyEditor={isReply => {
-            setReplyEditor(isReply);
+    <React.Fragment>
+      {isDeleteConfirm && (
+        <Modal
+          title="Warning"
+          body="Are You Sure?"
+          modalTitleClass="modalTitle"
+          modalHandler={() => {
+            setDeleteConfirm(false);
           }}
-          index={index}
-        />
+        >
+          <CancelBtn>Cancel</CancelBtn>
+          <DeleteBtn onClick={confirmDeletionHandler}>Delete</DeleteBtn>
+        </Modal>
       )}
-      {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
-    </CommentCardLayout>
+      <CommentCardLayout
+        onMouseLeave={() => {
+          isModal && setModal(false);
+        }}
+        onClick={() => {
+          isModal && setModal(false);
+        }}
+        onTouchMove={() => {
+          isModal && setModal(false);
+        }}
+      >
+        <CommentCard>
+          {logInStatus.loggedUserName === userName && (
+            <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
+          )}
+          {isModal && (
+            <MiniModal>
+              <li onClick={deleteCommentHandler}>Delete</li>
+              <li onClick={editCommentHandler}>Edit</li>
+            </MiniModal>
+          )}
+          <AvatarCont>
+            <Avatar
+              style={{
+                backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
+              }}
+            />
+          </AvatarCont>
+          <CommentCont>
+            <UserInfo>
+              <UserName>{userName}</UserName>
+              <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
+            </UserInfo>
+            <Text>
+              <ReactMarkdown source={message} />
+            </Text>
+            <CommentFooter>
+              <SocialInteractions>
+                <Icon
+                  style={{ position: "relative" }}
+                  onClick={() => {
+                    clapsAdderHandler();
+                  }}
+                >
+                  {clapsAdder !== 0 && (
+                    <Counter
+                      style={{
+                        position: "absolute",
+                        backgroundColor: "#004059",
+                        color: "white",
+                        borderRadius: "100%",
+                        padding: "7px",
+                        top: "-30px"
+                      }}
+                    >
+                      +{clapsAdder}
+                    </Counter>
+                  )}
+                  {clapsIcon}
+                </Icon>
+                <Counter>
+                  {article.comments[index].claps > 0 &&
+                    article.comments[index].claps}
+                </Counter>
+              </SocialInteractions>
+              {isUserLoggedIn && (
+                <ReplyBtn>
+                  <button onClick={replyHandler}>Reply</button>
+                </ReplyBtn>
+              )}
+            </CommentFooter>
+          </CommentCont>
+        </CommentCard>
+        <MoreBtn>More...</MoreBtn>
+        {isReplyEditor && (
+          <ReplyEditor
+            setReplyEditor={isReply => {
+              setReplyEditor(isReply);
+            }}
+            index={index}
+          />
+        )}
+        {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
+      </CommentCardLayout>
+    </React.Fragment>
   );
 };
 
-export default Comment;
+const mapStateToProps = state => {
+  return {
+    article: state.article,
+    logInStatus: state.logInStatus
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+
+    setCommentClaps: (index, count) =>
+      dispach({ type: "SET_COMMENT_CLAPS", payload: { index, count } }),
+    setComments: comments =>
+      dispach({ type: "SET_COMMENTS", payload: comments })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(Comment);

@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "../navbar/navbar.component.js";
 //components
-import Modal from "../../../app.cms/common/components/modal/modal.js";
+import Modal from "../modal/modal";
 
 export default class PortfolioComponent extends React.Component {
   constructor(props) {

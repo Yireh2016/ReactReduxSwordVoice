@@ -62,7 +62,7 @@ const swordvoiceWeb = async (req, res) => {
         articleModel
           .findOne({ url: `${url}` })
           .select(
-            "date html title description keywords author socialCount comments"
+            "_id date html title description keywords author socialCount comments"
           )
           .populate({
             path: "author",
@@ -81,8 +81,10 @@ const swordvoiceWeb = async (req, res) => {
                 keywords,
                 socialCount
               } = completeArticle;
+              const id = completeArticle._id;
 
               const article = {
+                id,
                 title,
                 html,
                 socialCount,

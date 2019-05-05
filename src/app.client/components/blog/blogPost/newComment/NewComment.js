@@ -160,9 +160,10 @@ const NewComment = ({
     }
 
     setCommentDisabled(true);
-    apiSetComment(userName, title, avatar, comment, () => {
+    apiSetComment(userName, title, avatar, comment, id => {
       let commentsToSet = comments;
       let commentToPush = {
+        _id: id,
         userName: userName,
         userAvatar: avatar,
         message: comment,

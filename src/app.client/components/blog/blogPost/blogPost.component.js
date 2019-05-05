@@ -11,12 +11,10 @@ import "./blogPost.css";
 
 //componentes
 import AsidePost from "../asidePost/asidePost.component";
-
 import NewComment from "./newComment/NewComment";
 import EnableComment from "./enableComment/enableComment.component";
 import Navbar from "../../navbar/navbar.component";
 import Comment from "../../comment/Comment";
-// import Summary from "../common/summary/summary.component";
 import Call2Action from "../../general/call2action.component";
 import FooterApp from "../../footer/footer.component";
 import Logo from "../../general/logo.component";

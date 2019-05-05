@@ -40,5 +40,5 @@ const articleSchema = new Schema({
     views: { type: Number, default: 0 }
   }
 });
-
+mongoose.model("Comment", commentSchema);
 mongoose.model("Article", articleSchema);

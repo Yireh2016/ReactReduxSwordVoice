@@ -1,0 +1,101 @@
+.modalLayout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.637);
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalLayout button {
+  cursor: pointer;
+}
+
+.modalDialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  /* background: linear-gradient(180deg, #1a2225 19.02%, #0088ba 74.38%); */
+  /* border: 0.5px solid #f95f0b; */
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 25px 10px 10px;
+  max-width: 30vw;
+  min-width: 20vw;
+}
+.modalHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader h3 {
+  background: #00171f;
+  border-radius: 4px;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #ffcb2f;
+  padding: 8px 0;
+}
+
+.modalTitle {
+  background: #00171f;
+  border-radius: 4px;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #ffcb2f;
+  padding: 8px 0;
+  text-align: center;
+}
+.modalCancelBtn {
+  color: #00171f;
+  position: absolute;
+  top: 5px;
+  right: 4px;
+  background-color: transparent;
+  border: none;
+}
+.modalCancelBtn span {
+  font-size: 14px;
+}
+
+.modalBody {
+  margin: 0;
+  padding: 20px 10px;
+}
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modalFooter button {
+  min-width: 80px;
+  min-height: 30px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.6rem;
+  box-sizing: border-box;
+  background: #00171f;
+  border: 1px solid #00b7fb;
+  color: #fff;
+}
+.modalFooter button:first-child {
+  margin-right: 10px;
+}
+
+@media (max-width: 1050px) {
+  .modalDialog {
+    max-width: 50vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .modalDialog {
+    max-width: 100vw;
+  }
+}
