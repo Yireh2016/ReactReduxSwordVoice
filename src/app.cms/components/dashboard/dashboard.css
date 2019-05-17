@@ -5,8 +5,12 @@
   grid-template-columns: 20% auto;
   grid-template-rows: 100vh;
   transition: all ease 1s;
+  transform: translateX(0);
 }
 
+.dashboardLayoutExpand {
+  transform: translateX(-20%);
+}
 .dashAside {
   grid-area: aside;
   background-color: #1a2225;
@@ -19,6 +23,7 @@
 .dashMain {
   grid-area: main;
   transition: all ease 1s;
+  /* position: relative; */
 }
 .dashAvatar {
   flex-grow: 0.15;
@@ -149,6 +154,9 @@
   .dashboardLayout {
     grid-template-columns: 30% auto;
   }
+  .dashboardLayoutExpand {
+    transform: translateX(-30%);
+  }
   .mainToogleMenu {
     opacity: 1;
   }
@@ -180,13 +188,12 @@
 
 @media (max-width: 700px) {
   .dashboardLayout {
-    grid-template-areas: " main";
-    grid-template-columns: 100%;
-    grid-template-rows: 100vh;
-    height: 100vh;
-    box-sizing: border-box;
+    grid-template-columns: 80% auto;
   }
-  .dashAside {
-    display: none;
+  .dashboardLayoutExpand {
+    transform: translateX(-80%);
+  }
+  .dashMainOpaque {
+    opacity: 0;
   }
 }

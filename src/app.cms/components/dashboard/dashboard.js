@@ -29,7 +29,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMenu: true,
+      isMenu: false,
       toogleAdmin: false,
       adminMenuH: 0,
       toogleStats: false,
@@ -79,7 +79,6 @@ class Dashboard extends Component {
       };
     });
   };
-
 
   modalHandler = () => {
     this.setState(prevState => {
@@ -202,6 +201,9 @@ class Dashboard extends Component {
   };
 
   adminPostBtnHandler = history => {
+    this.setState({
+      isMenu: false
+    });
     if (window.location.pathname === "/cms/dashboard/adminPost") {
       return;
     }
@@ -352,25 +354,9 @@ class Dashboard extends Component {
 
       const classesInput = <ClassesInput />;
 
+      const expand = this.state.isMenu ? "" : "dashboardLayoutExpand";
       return (
-        <div
-          className="dashboardLayout"
-          style={
-            this.state.isMenu
-              ? { transform: "translate(0)" }
-              : {
-                  transform: "translate(-20%)"
-                }
-          }
-        >
-          <Helmet>
-            <link
-              rel="stylesheet"
-              href={`./uploads/${this.props.project.url}/${
-                this.props.project.url
-              }.css`}
-            />
-          </Helmet>
+        <div>
           {this.state.showClassesModal && (
             <Modal
               title="Classes"
@@ -392,102 +378,121 @@ class Dashboard extends Component {
               <SaveAndExitBtn />
             </Modal>
           )}
-          <aside className="dashAside">
-            <div className="dashAvatar">
-              <p>
-                Welcome <span>{this.props.loggedUserName}</span>
-              </p>
-              <div>
-                <div
-                  className="dashAvatarImg"
-                  style={{
-                    backgroundSize: "cover",
-                    borderRadius: "100%",
 
-                    backgroundImage: `url('data:image/jpeg;base64,${
-                      this.props.loggedUserAvatar
-                    }`
-                  }}
-                />
-              </div>
-            </div>
-            <div className="dashCreatePost">
-              <CreatePostBtn />
-            </div>
-            <div>
-              {this.props.menu.main && (
-                <Menu itemsTitle={["Administration", "Stats"]}>
-                  <ul className="dashMenuAdminList">
-                    <li>Profiles</li>
+          <div className={`dashboardLayout ${expand}`}>
+            <Helmet>
+              <link
+                rel="stylesheet"
+                href={`./uploads/${this.props.project.url}/${
+                  this.props.project.url
+                }.css`}
+              />
+            </Helmet>
 
-                    <AdminPostBtn />
+            <aside className="dashAside">
+              <div className="dashAvatar">
+                <p>
+                  Welcome <span>{this.props.loggedUserName}</span>
+                </p>
+                <div>
+                  <div
+                    className="dashAvatarImg"
+                    style={{
+                      backgroundSize: "cover",
+                      borderRadius: "100%",
 
-                    <li>Users</li>
-                  </ul>
-                  <ul className="dashMenuAdminList">
-                    <li>Search Data</li>
-
-                    <li>Interest Data</li>
-
-                    <li>Users Data</li>
-                  </ul>
-                </Menu>
-              )}
-
-              {this.props.menu.create && (
-                <Menu itemsTitle={["General Styling"]}>
-                  <ul className="dashMenuAdminList">
-                    <li onClick={this.showClassesModalHandler}>Classes</li>
-                  </ul>
-                </Menu>
-              )}
-            </div>
-
-            <div className="dashLogOut">
-              <div>
-                <a href="/home">
-                  <button className="cmsBtn">
-                    <span>Home</span>
-                    <img src={exit} alt="Exit" />
-                  </button>
-                </a>
-              </div>
-            </div>
-          </aside>
-          <section
-            className="dashMain"
-            style={
-              this.state.isMenu
-                ? {
-                    width: "100%"
-                  }
-                : {
-                    width: "100vw"
-                  }
-            }
-          >
-            <div onClick={this.toogleClickHandler} className="mainToogleMenu">
-              <img src={hamburger} alt="hamburger" />
-            </div>
-
-            <Switch>
-              <Route exact path="/cms/dashboard/" render={() => <Welcome />} />
-              <Route
-                exact
-                path="/cms/dashboard/createPost"
-                render={() => (
-                  <CreatePost
-                    showExitModalHandler={this.showExitModalHandler}
+                      backgroundImage: `url('data:image/jpeg;base64,${
+                        this.props.loggedUserAvatar
+                      }`
+                    }}
                   />
+                </div>
+              </div>
+              <div className="dashCreatePost">
+                <CreatePostBtn />
+              </div>
+              <div>
+                {this.props.menu.main && (
+                  <Menu itemsTitle={["Administration", "Stats"]}>
+                    <ul className="dashMenuAdminList">
+                      <li>Profiles</li>
+
+                      <AdminPostBtn />
+
+                      <li>Users</li>
+                    </ul>
+                    <ul className="dashMenuAdminList">
+                      <li>Search Data</li>
+
+                      <li>Interest Data</li>
+
+                      <li>Users Data</li>
+                    </ul>
+                  </Menu>
                 )}
-              />
-              <Route
-                exact
-                path="/cms/dashboard/adminPost"
-                render={() => <AdminPost />}
-              />
-            </Switch>
-          </section>
+
+                {this.props.menu.create && (
+                  <Menu itemsTitle={["General Styling"]}>
+                    <ul className="dashMenuAdminList">
+                      <li onClick={this.showClassesModalHandler}>Classes</li>
+                    </ul>
+                  </Menu>
+                )}
+              </div>
+
+              <div className="dashLogOut">
+                <div>
+                  <a href="/home">
+                    <button className="cmsBtn">
+                      <span>Home</span>
+                      <img src={exit} alt="Exit" />
+                    </button>
+                  </a>
+                </div>
+              </div>
+            </aside>
+            <section
+              className="dashMain"
+              style={
+                this.state.isMenu
+                  ? {
+                      width: "100%"
+                    }
+                  : {
+                      width: "100vw"
+                    }
+              }
+            >
+              <div onClick={this.toogleClickHandler} className="mainToogleMenu">
+                <img src={hamburger} alt="hamburger" />
+              </div>
+              <div
+                className={this.state.isMenu ? " dashMainOpaque" : undefined}
+              >
+                <Switch>
+                  <Route
+                    exact
+                    path="/cms/dashboard/"
+                    render={() => <Welcome />}
+                  />
+                  <Route
+                    exact
+                    path="/cms/dashboard/createPost"
+                    render={() => (
+                      <CreatePost
+                        showExitModalHandler={this.showExitModalHandler}
+                      />
+                    )}
+                  />
+                  <Route
+                    exact
+                    path="/cms/dashboard/adminPost"
+                    render={() => <AdminPost />}
+                  />
+                </Switch>
+              </div>
+            </section>
+          </div>
         </div>
       );
     }

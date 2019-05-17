@@ -291,7 +291,6 @@ class CreatePost extends Component {
         fileNamesArr = fileNamesArr.filter(fileName => {
           return fileName !== oldFileName;
         });
-      
       }
       fileNamesArr.push(file.name);
       // this.props.onAddDeleteFile(fileNamesArr)
@@ -774,18 +773,9 @@ class CreatePost extends Component {
           </div>
         </div>
         {/* Edition Area */}
-        {/* <div className="createLayout" onWheel={this.editAreaScrollCtrl}> */}
         {!this.state.isEditionMode && (
           <div className="createLayout">
-     
-            <div
-              style={{
-                height: "100vh",
-                position: "relative",
-                overflow: "hidden",
-                width: "80%"
-              }}
-            >
+            <div className="createCont">
               {/* first page post creation */}
 
               <div

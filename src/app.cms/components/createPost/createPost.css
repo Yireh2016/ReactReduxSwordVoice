@@ -46,6 +46,13 @@
   height: 100vh;
   overflow: hidden;
 }
+
+.createCont {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  width: 80%;
+}
 .editionArea {
   overflow-y: scroll;
   background-color: #1a2225;
@@ -193,4 +200,21 @@
     transform: translateX(-100%);
     opacity: 0;
   }
+}
+
+@media (max-width: 1050px) {
+  .createBar {
+    border: 2px #f95f0b solid;
+    border-radius: 5px;
+    background: #e1e8ea;
+    padding: 5px 7px;
+    top: calc(50vh - 255px);
+    right: 0;
+  }
+  .createCont {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
 }

@@ -24,3 +24,11 @@
 .tableControlBtnAction {
   padding: 0 10px;
 }
+
+@media (max-width: 1050px) {
+  .reactTableLay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

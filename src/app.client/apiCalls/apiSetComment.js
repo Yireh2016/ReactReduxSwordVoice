@@ -2,13 +2,15 @@ import axios from "axios";
 
 const apiSetComment = (userName, title, avatar, comment, callback) => {
   return axios
-    .put(`api/setComment?userName=${userName}&title=${title}`, {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      avatar,
-      message: comment
-    })
+    .put(
+      `api/setComment`,
+      { avatar, message: comment, userName, title },
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
     .then(res => {
       if (res.data.message === "ok") {
         callback(res.data.id);

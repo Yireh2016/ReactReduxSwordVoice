@@ -165,7 +165,7 @@ const NewComment = ({
       let commentToPush = {
         _id: id,
         userName: userName,
-        userAvatar: avatar,
+        userAvatar: avatar, //ojo
         message: comment,
         date: new Date(),
         likes: 0
