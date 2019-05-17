@@ -10,5 +10,7 @@ server
 uploads
 # vscode config
 .vscode
+# docker config
+Dockerfile
 #junk
 junk

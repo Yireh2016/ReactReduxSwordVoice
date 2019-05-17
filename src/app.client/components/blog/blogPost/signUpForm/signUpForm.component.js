@@ -208,7 +208,7 @@ class SignUpForm extends Component {
           this.setState({
             userEmailIsValid: {
               valid: false,
-              message: "Please, insert a valid Email address"
+              message: "Please, insert a valid Email"
             }
           });
           return;

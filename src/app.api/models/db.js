@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const dbURI = "mongodb://localhost/swordvoiceBlog"; //mongodb://username:password@localhost:27027/database
+let dbURI = "mongodb://localhost/swordvoiceBlog"; //mongodb://username:password@localhost:27027/database
 
 if (process.env.NODE_ENV === "production") {
   //dbURI = 'mongodb://<user>:<password>.@ds147044.mlab.com:47044/loc8r';process.env.MONGOLAB_URI;
