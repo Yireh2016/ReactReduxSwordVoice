@@ -9,7 +9,7 @@
     "dev-mongo": "cd /Program Files/MongoDB/Server/4.0/bin/ && start mongod",
     "build": " webpack --config webpack.config.js --mode=production",
     "start": "node server/server.js",
-    "build-start": "concurrently \"webpack --config webpack.config.js --mode=production\" \"node server/server.js\""
+    "build-start": "npm run build && npm run start"
   },
   "author": "Jainer Munoz",
   "license": "ISC",
