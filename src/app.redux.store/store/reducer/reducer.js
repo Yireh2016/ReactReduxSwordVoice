@@ -2,7 +2,8 @@ const initialState = {
   isUserLoggedIn: false,
   loggedUserAvatar: undefined,
   loggedUserName: undefined,
-  loggedUserID: undefined
+  loggedUserID: undefined,
+  loggedUserType: "user"
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const reducer = (state = initialState, action) => {

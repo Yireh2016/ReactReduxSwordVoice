@@ -2,6 +2,7 @@
 import React from "react";
 import { render } from "react-dom";
 import { CookiesProvider } from "react-cookie";
+import "raf/polyfill";
 import "@babel/polyfill"; //para que axios funcione en ie11
 import { BrowserRouter as Router } from "react-router-dom";
 import { createStore, combineReducers } from "redux";

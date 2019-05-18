@@ -1,4 +1,5 @@
 import express from "express";
+import "@babel/polyfill"; //para que axios funcione en ie11
 import passport from "passport"; //modulo debe estar declarado antes que los modelos
 import cookieParser from "cookie-parser";
 require("dotenv").config();
