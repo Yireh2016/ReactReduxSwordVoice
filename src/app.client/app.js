@@ -9,7 +9,7 @@ import About from "./components/about/about.component";
 import Portolio from "./components/portfolio/portfolio.component";
 import Contact from "./components/contact/contact.component";
 import BlogArticle from "./components/blog/blogPost/blogPost.component";
-import NotFound from "./components/notFound/NotFound";
+import NotFound from "./components/notFound/notFound2";
 import BlogPage from "./pages/blog/BlogPage";
 import Courses from "./pages/courses/Courses";
 

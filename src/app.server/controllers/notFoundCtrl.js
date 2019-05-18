@@ -1,6 +1,6 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import NotFound from "../../app.client/components/notFound/notFound";
+import NotFound from "../../app.client/components/notFound/notFound2";
 import { StyleRoot } from "radium";
 
 import template from "../templates/template";
