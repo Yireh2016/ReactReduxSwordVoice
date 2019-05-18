@@ -54,7 +54,7 @@ const swordvoiceWeb = async (req, res) => {
   console.log("swordvoiceWeb INICIO");
 
   const routerPromise = () =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       console.log(" routerPromise EJECUTANDOSE");
 
       if (req.url.match("/blog/post/")) {
@@ -158,15 +158,18 @@ const swordvoiceWeb = async (req, res) => {
           .exec()
           .then(posts => {
             let postMinimumData = [];
+            console.log("posts", posts);
             for (let i = 0; i < posts.length; i++) {
               postMinimumData[i] = {
                 url: posts[i].url,
                 postImg:
                   posts[i].thumbnail &&
                   `url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
-                postGradient: `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                  posts[i].thumbnail.color
-                } 73.79%)`,
+                postGradient:
+                  posts[i].thumbnail &&
+                  `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                    posts[i].thumbnail.color
+                  } 73.79%)`,
                 title: posts[i].title,
                 summaryTextHtml: paragraphService(posts[i].description),
                 author:
@@ -180,6 +183,10 @@ const swordvoiceWeb = async (req, res) => {
 
             store.dispatch({ type: "ARTICLES_ARR", payload: postMinimumData });
             resolve();
+          })
+          .catch(err => {
+            console.log("error en blog ", err);
+            reject(err);
           });
       } else {
         resolve();
