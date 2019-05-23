@@ -74,38 +74,7 @@ class SignUpForm extends Component {
       };
     });
   };
-  // handleImgUpload = files => {
-  //   let Uploadfunction = this.imageUpload;
-  //   const browser = isBrowser();
-  //   const shouldCompress =
-  //     browser === "ie" || browser === "edge" ? false : true;
 
-  //   if (shouldCompress) {
-  //     new Compressor(files[0], {
-  //       quality: 0.6,
-  //       width: 200,
-  //       mimeType: "jpg",
-  //       convertSize: 200000,
-  //       success(result) {
-  //         Uploadfunction(result);
-  //       },
-  //       error(err) {
-  //         console.log("error", err);
-
-  //         this.setState(() => {
-  //           return {
-  //             userAvatarPreview: undefined,
-  //             uploadMessage: `${err}`
-  //           };
-  //         });
-  //         return;
-  //       }
-  //     });
-  //   } else {
-  //     console.log("cargando imagen sin comprimir");
-  //     Uploadfunction(files[0]);
-  //   }
-  // };
   handleOnInterestClick = event => {
     const texto = event.target.innerText;
     this.setState(prevState => {
@@ -525,7 +494,8 @@ class SignUpForm extends Component {
                       //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
                       userAvatar: res.data.doc.userAvatar,
                       userName: userData.userName,
-                      userID: userData.id
+                      userID: userData.id,
+                      userType: userData.userType
                     });
                   }
                 })
@@ -541,7 +511,8 @@ class SignUpForm extends Component {
                 //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
 
                 userName: userData.userName,
-                userID: userData.id
+                userID: userData.id,
+                userType: userData.userType
               });
               alert("data submited without avatar");
             }

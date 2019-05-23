@@ -15,6 +15,7 @@ import "./cms.index.css";
 import reducer from "./store/reducers/reducer";
 import postEditCtlreducer from "./store/reducers/postEditionControlReducer";
 import menuHandleReducer from "./store/reducers/menuHandleReducer";
+import userProfileReducer from "./store/reducers/userProfileReducer";
 
 //components
 import App from "./app.cms";
@@ -25,7 +26,8 @@ import App from "./app.cms";
 const rootReducer = combineReducers({
   login: reducer,
   postCreation: postEditCtlreducer,
-  menu: menuHandleReducer
+  menu: menuHandleReducer,
+  userProfile: userProfileReducer
 });
 const store = createStore(
   rootReducer,

@@ -98,13 +98,14 @@ const styles = {
       }
     },
     title: {
+      borderRadius: "5px",
       textAlign: "center",
       color: "#f95f0b",
       position: "sticky",
       top: "0",
       zIndex: "4",
       backgroundColor: "#00171f",
-      padding: "10px",
+      padding: "15px 10px",
       "@media (max-width: 1050px)": {
         textAlign: "left",
         position: "sticky",

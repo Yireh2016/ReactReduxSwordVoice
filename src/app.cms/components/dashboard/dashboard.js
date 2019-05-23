@@ -4,12 +4,15 @@ import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
 import axios from "axios";
 import Helmet from "react-helmet";
+
 //components
+import ProfilesTable from "../profilesTable/ProfilesTable";
 import Welcome from "../welcome/welcome";
 import CreatePost from "../createPost/createPost";
 import AdminPost from "../adminPost/adminPost";
 import Menu from "../menu/menu";
 import ClassesInput from "../classesInput/classesInput";
+import UserProfile from "../userProfile/UserProfile";
 
 //css
 import "./dashboard.css";
@@ -25,6 +28,10 @@ import keywordsToArr from "../../../services/keywordsToArr";
 import removeSuffixClasses from "../../../services/suffixClasses";
 import classesArrObjToStr from "../../../services/classesArrObjToStr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
+
+//api calls
+import getUserFromId from "../../apiCalls/getUserFromId";
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -200,20 +207,20 @@ class Dashboard extends Component {
     });
   };
 
-  adminPostBtnHandler = history => {
+  linkBtnHandler = (history, link) => {
     this.setState({
       isMenu: false
     });
-    if (window.location.pathname === "/cms/dashboard/adminPost") {
+    if (window.location.pathname === `/cms/dashboard/${link}`) {
       return;
     }
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
-      history.push("/cms/dashboard/adminPost");
+      history.push(`/cms/dashboard/${link}`);
     } else {
       this.setState({
-        showExitModal: { show: true, url: "/cms/dashboard/adminPost" }
+        showExitModal: { show: true, url: `/cms/dashboard/${link}` }
       });
     }
   };
@@ -313,10 +320,41 @@ class Dashboard extends Component {
         return (
           <li
             onClick={() => {
-              this.adminPostBtnHandler(history);
+              this.linkBtnHandler(history, "adminPost");
             }}
           >
-            Post
+            Posts
+          </li>
+        );
+      });
+
+      const ProfilePostBtn = withRouter(({ history }) => {
+        return (
+          <li
+            onClick={async () => {
+              const getUserRes = await getUserFromId(this.props.userId);
+              if (getUserRes.status === "OK") {
+                this.props.setUserProfile(getUserRes.data);
+
+                this.linkBtnHandler(history, "userProfile");
+              }
+            }}
+          >
+            Profile
+          </li>
+        );
+
+        //modal de error OJO
+      });
+
+      const ProfilesTableBtn = withRouter(({ history }) => {
+        return (
+          <li
+            onClick={() => {
+              this.linkBtnHandler(history, "usersList");
+            }}
+          >
+            Profiles
           </li>
         );
       });
@@ -415,7 +453,11 @@ class Dashboard extends Component {
                 {this.props.menu.main && (
                   <Menu itemsTitle={["Administration", "Stats"]}>
                     <ul className="dashMenuAdminList">
-                      <li>Profiles</li>
+                      {this.props.userType === "admin" ? (
+                        <ProfilesTableBtn />
+                      ) : (
+                        <ProfilePostBtn />
+                      )}
 
                       <AdminPostBtn />
 
@@ -489,6 +531,16 @@ class Dashboard extends Component {
                     path="/cms/dashboard/adminPost"
                     render={() => <AdminPost />}
                   />
+                  <Route
+                    exact
+                    path="/cms/dashboard/userProfile"
+                    render={() => <UserProfile />}
+                  />
+                  <Route
+                    exact
+                    path="/cms/dashboard/usersList"
+                    render={() => <ProfilesTable />}
+                  />
                 </Switch>
               </div>
             </section>
@@ -506,6 +558,8 @@ const mapStateToProps = state => {
     loggedUserName: state.login.loggedUserName,
     isUserLoggedIn: state.login.isUserLoggedIn,
     loggedUserAvatar: state.login.loggedUserAvatar,
+    userId: state.login.loggedUserID,
+    userType: state.login.userType,
     project: state.postCreation.project,
     elements: state.postCreation.elements,
     seo: state.postCreation.seo,
@@ -517,18 +571,21 @@ const mapStateToProps = state => {
     menu: state.menu
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
-
-    onLogOut: () => dispach({ type: "LOGGED_OUT" }),
-    onReset: () => dispach({ type: "RESET_EDIT" }),
+    setUserProfile: profile =>
+      dispatch({ type: "SET_USER_PROFILE", payload: profile }),
+    onLogOut: () => dispatch({ type: "LOGGED_OUT" }),
+    onReset: () => dispatch({ type: "RESET_EDIT" }),
     onDateEdition: payload =>
-      dispach({ type: "DATE_EDITION", payload: payload }),
-    onSave: () => dispach({ type: "SAVE_POST" }),
-    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload }),
-    onAddClasses: payload => dispach({ type: "ADD_CLASSES", payload: payload }),
-    onAddFile: payload => dispach({ type: "ADD_DELETE_FILE", payload })
+      dispatch({ type: "DATE_EDITION", payload: payload }),
+    onSave: () => dispatch({ type: "SAVE_POST" }),
+    onMenuChange: payload =>
+      dispatch({ type: "CHANGE_MENU", payload: payload }),
+    onAddClasses: payload =>
+      dispatch({ type: "ADD_CLASSES", payload: payload }),
+    onAddFile: payload => dispatch({ type: "ADD_DELETE_FILE", payload })
   };
 };
 

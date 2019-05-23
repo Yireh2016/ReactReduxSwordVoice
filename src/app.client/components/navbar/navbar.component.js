@@ -35,7 +35,8 @@ class NavBar extends Component {
       showDesplegable: false,
       loggedUserAvatar: "",
       toggleAnim: false,
-      tempUnmount: false
+      tempUnmount: false,
+      endOfAnimation: false
     };
 
     if (
@@ -99,6 +100,10 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      endOfAnimation: true
+    });
+
     if (
       window.localStorage.getItem("userAvatar") &&
       this.props.isUserLoggedIn
@@ -294,7 +299,7 @@ class NavBar extends Component {
         <React.Fragment key={i}>
           <li>
             {desplegableMenu.nombre === "Profile" ? (
-              <a href="cms" activeClassName="activeLink" className="flyingLink">
+              <a href="cms" className="flyingLink">
                 {desplegableMenu.nombre}
               </a>
             ) : (
@@ -530,65 +535,49 @@ class NavBar extends Component {
             </a>
           </div>
 
-          <div id="menu-desplegable" style={{ transform: isVisible }}>
-            <div
-              onClick={() => {
-                this.handleClick();
-              }}
-              className="desplegable-equis"
-            >
-              <svg viewBox="0 0 64 64" fill="none">
-                <rect
-                  width="45"
-                  height="45"
-                  fill="black"
-                  fillOpacity="0"
-                  transform="translate(0 31.8198) rotate(-45)"
-                />
-                <line
-                  x1="15.9099"
-                  y1="15.91"
-                  x2="47.7297"
-                  y2="47.7298"
-                  stroke="#F95F0B"
-                  strokeWidth="5"
-                />
-                <line
-                  x1="15.91"
-                  y1="47.7298"
-                  x2="47.7298"
-                  y2="15.91"
-                  stroke="#F95F0B"
-                  strokeWidth="5"
-                />
-              </svg>
-            </div>
-            <div>
-              <h1 className="desplegable-title">SwordVoice</h1>
-            </div>
+          {this.state.endOfAnimation && (
+            <div id="menu-desplegable" style={{ transform: isVisible }}>
+              <div
+                onClick={() => {
+                  this.handleClick();
+                }}
+                className="desplegable-equis"
+              >
+                <svg viewBox="0 0 64 64" fill="none">
+                  <rect
+                    width="45"
+                    height="45"
+                    fill="black"
+                    fillOpacity="0"
+                    transform="translate(0 31.8198) rotate(-45)"
+                  />
+                  <line
+                    x1="15.9099"
+                    y1="15.91"
+                    x2="47.7297"
+                    y2="47.7298"
+                    stroke="#F95F0B"
+                    strokeWidth="5"
+                  />
+                  <line
+                    x1="15.91"
+                    y1="47.7298"
+                    x2="47.7298"
+                    y2="15.91"
+                    stroke="#F95F0B"
+                    strokeWidth="5"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h1 className="desplegable-title">SwordVoice</h1>
+              </div>
 
-            <div className="fila fila-menu">
-              <div className="col-6-md col-6-sm grid desplegable-toggle-navbar">
-                <ul
-                  style={
-                    !this.state.toggleAnim
-                      ? {
-                          transform: "translateX(0)",
-                          opacity: "1"
-                        }
-                      : {
-                          transform: "translateX(-200%)",
-                          opacity: "0"
-                        }
-                  }
-                >
-                  {contentMenuSmall}
-                </ul>
-
-                {this.state.tempUnmount && (
+              <div className="fila fila-menu">
+                <div className="col-6-md col-6-sm grid desplegable-toggle-navbar">
                   <ul
                     style={
-                      this.state.toggleAnim
+                      !this.state.toggleAnim
                         ? {
                             transform: "translateX(0)",
                             opacity: "1"
@@ -599,68 +588,86 @@ class NavBar extends Component {
                           }
                     }
                   >
-                    {contentMenuDesplegable}
+                    {contentMenuSmall}
                   </ul>
-                )}
+
+                  {this.state.tempUnmount && (
+                    <ul
+                      style={
+                        this.state.toggleAnim
+                          ? {
+                              transform: "translateX(0)",
+                              opacity: "1"
+                            }
+                          : {
+                              transform: "translateX(-200%)",
+                              opacity: "0"
+                            }
+                      }
+                    >
+                      {contentMenuDesplegable}
+                    </ul>
+                  )}
+                </div>
+
+                <div className="grid col-6-md col-6-sm avatarMenuLayout">
+                  {this.props.isUserLoggedIn && (
+                    <div className="avatarMenuContainer">
+                      <div
+                        className="avatarMenu"
+                        onClick={this.onAvatarClick}
+                        style={{
+                          backgroundImage: `url('data:image/jpeg;base64,${
+                            this.state.loggedUserAvatar
+                          }`
+                        }}
+                      />
+                      <div className="desplegable-login">
+                        <p>
+                          Welcome
+                          <span>
+                            {` ${this.props.loggedUserName}`} <span />
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {!this.props.isUserLoggedIn && (
+                    <div className="avatarMenuContainer">
+                      <div className="avatarMenu">
+                        <img src={userLogo} alt="User Avatar Logo" />
+                      </div>
+                      <div className="desplegable-login">
+                        <button onClick={this.logInClickHandler}>Log In</button>
+                        <button onClick={this.signClickHandler}>Sign Up</button>
+                      </div>
+                    </div>
+                  )}
+                  <a href="/home">
+                    <Logo className="col-6-md col-12-sm grid desplegable-logo" />
+                  </a>
+                </div>
               </div>
 
-              <div className="grid col-6-md col-6-sm avatarMenuLayout">
-                {this.props.isUserLoggedIn && (
-                  <div className="avatarMenuContainer">
-                    <div
-                      className="avatarMenu"
-                      onClick={this.onAvatarClick}
-                      style={{
-                        backgroundImage: `url('data:image/jpeg;base64,${
-                          this.state.loggedUserAvatar
-                        }`
-                      }}
-                    />
-                    <div className="desplegable-login">
-                      <p>
-                        Welcome
-                        <span>
-                          {` ${this.props.loggedUserName}`} <span />
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                )}
-                {!this.props.isUserLoggedIn && (
-                  <div className="avatarMenuContainer">
-                    <div className="avatarMenu">
-                      <img src={userLogo} alt="User Avatar Logo" />
-                    </div>
-                    <div className="desplegable-login">
-                      <button onClick={this.logInClickHandler}>Log In</button>
-                      <button onClick={this.signClickHandler}>Sign Up</button>
-                    </div>
-                  </div>
-                )}
-                <a href="/home">
-                  <Logo className="col-6-md col-12-sm grid desplegable-logo" />
-                </a>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: " 0vh",
+                  display: " flex",
+                  width: " 100%",
+                  flexDirection: " column",
+                  alignItems: " center",
+                  justifyContent: " center",
+                  height: " 13vh"
+                }}
+              >
+                <Footer
+                  estilos="   desplegable-footer center-flex"
+                  size="desplegable-footer-size"
+                />
               </div>
             </div>
-
-            <div
-              style={{
-                position: "absolute",
-                bottom: " 0vh",
-                display: " flex",
-                width: " 100%",
-                flexDirection: " column",
-                alignItems: " center",
-                justifyContent: " center",
-                height: " 13vh"
-              }}
-            >
-              <Footer
-                estilos="   desplegable-footer center-flex"
-                size="desplegable-footer-size"
-              />
-            </div>
-          </div>
+          )}
         </nav>
       </div>
     );

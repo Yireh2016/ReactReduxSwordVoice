@@ -43,7 +43,8 @@ class LogInForm extends Component {
       this.props.onLogIn({
         userAvatar: undefined,
         userName: userData.userName,
-        userID: userData._id
+        userID: userData._id,
+        userType: userData.userType
       });
       return;
     }
@@ -56,7 +57,8 @@ class LogInForm extends Component {
     this.props.onLogIn({
       userAvatar: userData.userAvatar,
       userName: userData.userName,
-      userID: userData._id
+      userID: userData._id,
+      userType: userData.userType
     });
     console.log("Login Successful");
   };

@@ -211,6 +211,11 @@ export const updatePostCtrl = (req, res) => {
       } else {
         // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
         fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log("files", files);
           files.forEach(file => {
             let found = false;
             for (let i = 0; i < data.files.length; i++) {

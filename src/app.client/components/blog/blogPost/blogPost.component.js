@@ -501,7 +501,8 @@ class BlogArticle extends Component {
         this.props.onLogIn({
           userAvatar: imgBlob,
           userName: res.data.userName,
-          userID: userId
+          userID: userId,
+          userType: res.data.userType
         });
 
         this.setState({

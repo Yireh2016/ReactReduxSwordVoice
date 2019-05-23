@@ -31,7 +31,8 @@ class Login extends Component {
             const data = {
               userAvatar: res.data.userAvatar,
               userName: res.data.userName,
-              userID: res.data._id
+              userID: res.data._id,
+              userType: res.data.userType
             };
             this.props.onLogIn(data);
           }
@@ -84,7 +85,8 @@ class Login extends Component {
             const data = {
               userAvatar: res.data.userAvatar,
               userName: res.data.userName,
-              userID: res.data._id
+              userID: res.data._id,
+              userType: res.data.userType
             };
             this.props.onLogIn(data);
           }
@@ -130,9 +132,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUserName: state.login.loggedUserName,
-    isUserLoggedIn: state.login.isUserLoggedIn,
-    loggedUserAvatar: state.login.loggedUserAvatar
+    isUserLoggedIn: state.login.isUserLoggedIn
   };
 };
 const mapDispachToProps = dispach => {

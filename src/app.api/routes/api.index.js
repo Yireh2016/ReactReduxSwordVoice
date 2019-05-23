@@ -82,7 +82,11 @@ routerAPI.post(
             return;
           }
           fs.unlink(`${file.path}`, err => {
-            if (err) throw err;
+            if (err) {
+              res.status(404).json(err);
+              console.log(err);
+              return;
+            }
             console.log(`successfully deleted ${file.path}`);
           });
 
@@ -198,16 +202,24 @@ routerAPI.post("/login", guestAPI, (req, res) => {
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
-routerAPI.get("/users", (req, res) => {
-  usersModel.find().exec((err, users) => {
-    if (err) {
-      console.log("err", err);
-      res.status(404).json(err);
-      return;
-    }
+routerAPI.get("/users", authAPI, (req, res) => {
+  const { limit, skip } = req.body;
+  usersModel
+    .find()
+    .select(
+      "userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate"
+    )
+    .limit(limit)
+    .skip(skip)
+    .exec((err, users) => {
+      if (err) {
+        console.log("err", err);
+        res.status(404).json(err);
+        return;
+      }
 
-    res.status(200).json(users);
-  });
+      res.status(200).json(users);
+    });
 
   // const users = await usersModel.find();
 
@@ -218,14 +230,19 @@ routerAPI.get("/users", (req, res) => {
 // obtener usuario especifico must be AUTH
 //se usa en: signUpForm
 routerAPI.get("/users/:userId", authAPI, (req, res) => {
-  usersModel.findById(req.params.userId).exec((err, user) => {
-    if (err) {
-      res.status(501).json(`thre was an error: ${err}`);
-    } else {
-      console.log("specific user", user);
-      res.status(200).json(user);
-    }
-  });
+  usersModel
+    .findById(req.params.userId)
+    .select(
+      "userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate"
+    )
+    .exec((err, user) => {
+      if (err) {
+        res.status(501).json(`thre was an error: ${err}`);
+      } else {
+        console.log("specific user", user);
+        res.status(200).json(user);
+      }
+    });
 });
 
 // Obtener email
@@ -281,7 +298,8 @@ routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
       res.status(501).json(`thre was an error: ${err}`);
     }
     if (data.length > 0) {
-      res.status(200).json(data[0]);
+      const { userAvatar, userName, _id, userType } = data[0];
+      res.status(200).json({ userAvatar, userName, _id, userType });
       return;
     }
     res.status(404).json("not found");
