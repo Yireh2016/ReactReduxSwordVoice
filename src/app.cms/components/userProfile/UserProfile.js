@@ -7,6 +7,10 @@ import edit from "../../assets/createPost/edit.svg";
 
 //components
 import CountrySelect from "../countryInput/CountryInput";
+import validatePassword from "./validations/validatePassword";
+import validateNames from "./validations/validateNames";
+import validateEmail from "./validations/validateEmail";
+import searchEmail from "../../apiCalls/searchEmail";
 
 const UserProfileView = styled.div`
   display: flex;
@@ -66,16 +70,28 @@ const InputLayout = styled.div`
   align-items: center;
   width: ${props => props.width};
 
-  input,
   select {
     border-radius: 4px;
     border: 1px solid transparent;
     padding: 2px 4px;
-    background-color: rgba(128, 128, 128, 0.6);
-    color: rgb(195, 208, 213);
+    color: ${props =>
+      props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)"};
+    background-color: ${props =>
+      props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
     text-align: center;
     text-align-last: center;
   }
+`;
+
+const Input = styled.input`
+  border-radius: 4px;
+  border: 1px solid transparent;
+  padding: 2px 4px;
+  color: ${props => (props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)")};
+  background-color: ${props =>
+    props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
+  text-align: center;
+  text-align-last: center;
 `;
 
 const Row = styled.div`
@@ -98,6 +114,7 @@ const InputLabel = styled.label`
   margin-left: ${props => props.lMargin};
   width: ${props => props.width};
   margin-top: 15px;
+  position: relative;
 
   > span {
     color: #00baff;
@@ -113,19 +130,22 @@ const InterestChkBox = styled.span`
   margin: 0 0 0 6px;
 `;
 const FormatWarning = styled.div`
+  position: absolute;
+  top: 45px;
+  z-index: 2;
   text-align: center;
   color: #00171f;
-  background: #f95f0b;
-  border-radius: 15px;
+  background: coral;
+  border-radius: 4px;
   width: 100%;
+  -webkit-transition: all 0.4s;
   transition: all 0.4s;
-  height: 1.2rem;
-  line-height: 1.2rem;
-  font-size: 0.6rem;
+  font-size: 14px;
   opacity: 1;
-  width: auto;
-  padding: 0 10px;
-  display: none;
+  width: 350px;
+  padding: 5px 10px;
+  max-width: 100%;
+  display: ${props => props.display};
 `;
 
 const Avatar = styled.div`
@@ -170,7 +190,7 @@ const OtherInterest = styled.div`
   height: 22.8px;
   font-size: 13.3px;
   border-radius: 5px;
-  background-color: coral;
+  background-color: #9e9e9e;
   float: left;
   color: #1a2225;
   box-sizing: border-box;
@@ -207,27 +227,32 @@ const OtherInterestsLayout = styled.div`
   }
 `;
 
-const UserProfile = ({ userProfile }) => {
-  const [password, setpassword] = useState("");
+const UserProfile = ({ userProfile, setUserProfile }) => {
+  const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
-  const [passwdConf, setPasswdConf] = useState("");
-  const [isPasswdConf, setIsPasswdConf] = useState(false);
-  const [name, setName] = useState("Jainer");
-  const [isName, setIsName] = useState(false);
-  const [lastName, setLastName] = useState("Munoz");
-  const [isLastName, setIsLastName] = useState(false);
-  const [email, setEmail] = useState("j@j.com");
-  const [isEmail, setIsEmail] = useState(false);
-  const [gender, setGender] = useState(" ");
-  const [isGender, setIsGender] = useState(false);
-  const [birthdate, setBirthDate] = useState(" ");
-  const [isBirthDate, setIsBirthDate] = useState(false);
-  const [otherInterest, setOtherInterest] = useState(" ");
-  const [isOtherInterest, setIsOtherInterest] = useState(false);
+  const [isPasswordValid, setPasswordValid] = useState(" ");
 
-  useEffect(() => {
-    console.log("useEffect userProfile", userProfile);
-  }, []);
+  const [passwdConf, setPasswdConf] = useState("");
+  const [isPasswdConfValid, setPasswdConfValid] = useState(" ");
+
+  const [isName, setIsName] = useState(false);
+  const [isNameValid, setNameValid] = useState(" ");
+
+  const [isLastName, setIsLastName] = useState(false);
+  const [isLastNameValid, setLastNameValid] = useState(" ");
+
+  // const [email, setEmail] = useState("j@j.com");
+  const [isEmail, setIsEmail] = useState(false);
+  const [isEmailValid, setEmailValid] = useState(" ");
+  const [emailWarningMessage, setEmailWarningMessage] = useState(
+    "Please, insert a valid Email"
+  );
+  // const [gender, setGender] = useState(" ");
+  const [isGender, setIsGender] = useState(false);
+  // const [birthdate, setBirthDate] = useState(" ");
+  const [isBirthDate, setIsBirthDate] = useState(false);
+  const [otherInterest, setOtherInterest] = useState("");
+  const [isOtherInterest, setIsOtherInterest] = useState(false);
 
   const interestArray = [
     "Graphic Design",
@@ -265,7 +290,7 @@ const UserProfile = ({ userProfile }) => {
     return (
       <React.Fragment key={index}>
         <InputLayout width="33%" id={`InterestInputLayout${index}`}>
-          <input
+          <Input
             className=""
             checked={isChecked}
             type="checkbox"
@@ -281,13 +306,71 @@ const UserProfile = ({ userProfile }) => {
   const otherInterestsMap = userOtherInterests.map((value, index) => {
     return (
       <React.Fragment key={index}>
-        <OtherInterest className="otherInterests">
+        <OtherInterest>
           <div>{value}</div>
           <span>X</span>
         </OtherInterest>
       </React.Fragment>
     );
   });
+
+  const inputChangeHandler = async e => {
+    const { value, name } = e.target;
+    let newUserProfile = userProfile;
+
+    switch (name) {
+      case "password":
+        setPasswordValid(validatePassword(value));
+        setPassword(value);
+        break;
+
+      case "passwdConfirm":
+        setPasswdConf(value);
+        if (password === value) {
+          setPasswdConfValid(true);
+        } else if (isPasswdConfValid !== false) {
+          setPasswdConfValid(false);
+        }
+        break;
+
+      case "userFirstName":
+        newUserProfile.userFirstName = value;
+        setUserProfile(newUserProfile);
+        setNameValid(validateNames(value));
+        break;
+
+      case "userLastName":
+        newUserProfile.userLastName = value;
+        setUserProfile(newUserProfile);
+        setLastNameValid(validateNames(value));
+
+      case "userEmail":
+        console.log("cambio aemail");
+        newUserProfile.userEmail = value;
+        setUserProfile(newUserProfile);
+        setEmailValid(validateEmail(value));
+        const emailFormatValidation = validateEmail(value);
+
+        if (emailFormatValidation === true) {
+          const emailRes = await searchEmail(value);
+          console.log("searchEmail", searchEmail);
+          console.log("emailRes", emailRes);
+          if (!emailRes.valid && emailRes.user === userName) {
+            setEmailValid(" ");
+            return;
+          }
+          setEmailWarningMessage(emailRes.message);
+          setEmailValid(emailRes.valid);
+        } else {
+          setEmailValid(emailFormatValidation);
+          setEmailWarningMessage("Please, insert a valid Email");
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <UserProfileView>
@@ -308,48 +391,66 @@ const UserProfile = ({ userProfile }) => {
                   <InputLabel width="50%" id="PasswordInputLabel">
                     <span>New Password</span>
                     <InputLayout id="PasswordInputLayout">
-                      <input
+                      <Input
                         id="PasswordInput"
                         type="password"
                         name="password"
                         value={password}
                         disabled={!isPassword}
+                        active={isPassword}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       />
 
                       <EditBtn
                         id="PasswordEditBtn"
                         src={edit}
                         alt="Edit Password"
+                        onClick={() => {
+                          setIsPassword(!isPassword);
+                        }}
                       />
                     </InputLayout>
-                    <FormatWarning>
+                    <FormatWarning
+                      display={
+                        isPasswordValid === " " || isPasswordValid
+                          ? "none"
+                          : "block"
+                      }
+                    >
                       Password must be at least 10 characters long and must
                       contain uppercase and lowercase letters, numbers and
                       specials characters
                     </FormatWarning>
                   </InputLabel>
 
-                  <InputLabel width="50%" id="PasswdConfirmInputLabel">
-                    <span>Password Confirm</span>
-                    <InputLayout id="PasswdConfirmInputLayout">
-                      <input
-                        id="PasswdConfirmInput"
-                        type="password"
-                        name="passwdConfirm"
-                        value={passwdConf}
-                        disabled={!isPasswdConf}
-                      />
-
-                      <EditBtn
-                        id="PasswdConfirmEditBtn"
-                        src={edit}
-                        alt="Edit PasswdConfirm"
-                      />
-                    </InputLayout>
-                    <FormatWarning>
-                      Confirmation password do not match yet
-                    </FormatWarning>
-                  </InputLabel>
+                  {isPasswordValid === true && (
+                    <InputLabel width="50%" id="PasswdConfirmInputLabel">
+                      <span>Password Confirm</span>
+                      <InputLayout id="PasswdConfirmInputLayout">
+                        <Input
+                          id="PasswdConfirmInput"
+                          type="password"
+                          name="passwdConfirm"
+                          value={passwdConf}
+                          active={true}
+                          onChange={e => {
+                            inputChangeHandler(e);
+                          }}
+                        />
+                      </InputLayout>
+                      <FormatWarning
+                        display={
+                          isPasswdConfValid === " " || isPasswdConfValid
+                            ? "none"
+                            : "block"
+                        }
+                      >
+                        Confirmation password do not match yet
+                      </FormatWarning>
+                    </InputLabel>
+                  )}
                 </InputTextLayout>
               </Row>
               <Row id="personalRow">
@@ -358,17 +459,32 @@ const UserProfile = ({ userProfile }) => {
                   <InputLabel width="calc(100% / 2)" id="NameInputLabel">
                     <span>First Name</span>
                     <InputLayout id="NameInputLayout">
-                      <input
+                      <Input
                         id="NameInput"
                         type="text"
                         name="userFirstName"
                         value={userFirstName}
                         disabled={!isName}
+                        active={isName}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       />
 
-                      <EditBtn id="NameEditBtn" src={edit} alt="Edit Name" />
+                      <EditBtn
+                        id="NameEditBtn"
+                        src={edit}
+                        alt="Edit Name"
+                        onClick={() => {
+                          setIsName(!isName);
+                        }}
+                      />
                     </InputLayout>
-                    <FormatWarning>
+                    <FormatWarning
+                      display={
+                        isNameValid === " " || isNameValid ? "none" : "block"
+                      }
+                    >
                       Please, insert name without spaces or numbers
                     </FormatWarning>
                   </InputLabel>
@@ -376,21 +492,34 @@ const UserProfile = ({ userProfile }) => {
                   <InputLabel width="calc(100% / 2)" id="LastNameInputLabel">
                     <span>Last Name</span>
                     <InputLayout id="LastNameInputLayout">
-                      <input
+                      <Input
                         id="LastNameInput"
                         type="text"
                         name="userLastName"
                         value={userLastName}
+                        active={isLastName}
                         disabled={!isLastName}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       />
 
                       <EditBtn
                         id="LastNameEditBtn"
                         src={edit}
                         alt="Edit LastName"
+                        onClick={() => {
+                          setIsLastName(!isLastName);
+                        }}
                       />
                     </InputLayout>
-                    <FormatWarning>
+                    <FormatWarning
+                      display={
+                        isLastNameValid === " " || isLastNameValid
+                          ? "none"
+                          : "block"
+                      }
+                    >
                       Please, insert name without spaces or numbers
                     </FormatWarning>
                   </InputLabel>
@@ -398,18 +527,33 @@ const UserProfile = ({ userProfile }) => {
                   <InputLabel width="calc(100% / 2)" id="EmailInputLabel">
                     <span>Email</span>
                     <InputLayout id="EmailInputLayout">
-                      <input
+                      <Input
                         id="EmailInput"
                         type="email"
                         name="userEmail"
                         value={userEmail}
                         disabled={!isEmail}
+                        active={isEmail}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       />
 
-                      <EditBtn id="EmailEditBtn" src={edit} alt="Edit Email" />
+                      <EditBtn
+                        id="EmailEditBtn"
+                        onClick={() => {
+                          setIsEmail(!isEmail);
+                        }}
+                        src={edit}
+                        alt="Edit Email"
+                      />
                     </InputLayout>
-                    <FormatWarning>
-                      Please, insert a valid Email address
+                    <FormatWarning
+                      display={
+                        isEmailValid === " " || isEmailValid ? "none" : "block"
+                      }
+                    >
+                      {emailWarningMessage}
                     </FormatWarning>
                   </InputLabel>
 
@@ -432,13 +576,15 @@ const UserProfile = ({ userProfile }) => {
                       />
                     </InputLayout>
 
-                    <FormatWarning>This field is required</FormatWarning>
+                    <FormatWarning display={"none"}>
+                      This field is required
+                    </FormatWarning>
                   </InputLabel>
 
                   <InputLabel width="calc(100% / 2)">
                     <span>Birth Date</span>
                     <InputLayout id="GenderInputLayout">
-                      <input
+                      <Input
                         style={{ padding: "0 0 0 40px" }}
                         type="date"
                         value={userBirthDate}
@@ -452,14 +598,15 @@ const UserProfile = ({ userProfile }) => {
                       />
                     </InputLayout>
 
-                    <FormatWarning>This field is required</FormatWarning>
+                    <FormatWarning display={"none"}>
+                      This field is required
+                    </FormatWarning>
                   </InputLabel>
-
 
                   <InputLabel width="calc(100% / 2)">
                     <span>Birth Date</span>
                     <InputLayout id="GenderInputLayout">
-              <CountrySelect></CountrySelect>
+                      <CountrySelect />
                       <EditBtn
                         id="BirthDateEditBtn"
                         src={edit}
@@ -467,12 +614,13 @@ const UserProfile = ({ userProfile }) => {
                       />
                     </InputLayout>
 
-                    <FormatWarning>This field is required</FormatWarning>
+                    <FormatWarning display={"none"}>
+                      This field is required
+                    </FormatWarning>
                   </InputLabel>
 
-
                   {/* <CountryInput country={userCountry} width="calc(100% / 2)">
-                    <FormatWarning>This field is required</FormatWarning>
+                    <FormatWarning display={'none'}>This field is required</FormatWarning>
                   </CountryInput> */}
                 </InputTextLayout>
               </Row>
@@ -480,9 +628,9 @@ const UserProfile = ({ userProfile }) => {
                 <MainTitle id="InterestMainTitle">Interest</MainTitle>
                 <InputTextLayout>{interests}</InputTextLayout>
                 <InputLabel width="calc(100% / 2)" id="OtherInterestLabel">
-                  <span>Other Intersts</span>
+                  <span>Other Interests</span>
                   <InputLayout id="NameInputLayout">
-                    <input
+                    <Input
                       style={{ width: "100%" }}
                       id="OtherInterest"
                       type="text"
@@ -500,7 +648,9 @@ const UserProfile = ({ userProfile }) => {
                   <OtherInterestsLayout>
                     {otherInterestsMap}
                   </OtherInterestsLayout>
-                  <FormatWarning>Don't use special characters</FormatWarning>
+                  <FormatWarning display={"none"}>
+                    Don't use special characters
+                  </FormatWarning>
                 </InputLabel>
               </Row>
             </RowLayout>
@@ -517,9 +667,11 @@ const mapStateToProps = state => {
     userProfile: state.userProfile.userProfile
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
+    setUserProfile: profile =>
+      dispatch({ type: "SET_USER_PROFILE", payload: profile })
   };
 };
 

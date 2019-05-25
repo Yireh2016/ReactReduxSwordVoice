@@ -250,11 +250,13 @@ routerAPI.get("/users/:userId", authAPI, (req, res) => {
 // para verificar, en tiempo real, que el email del usuario no se encuentre duplicado
 routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
   const email = req.params.email;
-  usersModel.find({ userEmail: email }).exec((err, email) => {
+  usersModel.find({ userEmail: email }).exec((err, user) => {
     if (err) {
       res.status(501).json(`thre was an error: ${err}`);
     } else {
-      email[0] ? res.status(200).json(email) : res.status(404).json(email);
+      user[0]
+        ? res.status(200).json(user[0].userName)
+        : res.status(404).json("not found");
     }
   });
 });
