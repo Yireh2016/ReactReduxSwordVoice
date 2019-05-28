@@ -22,6 +22,8 @@ import {
   deleteCommentCtrl
 } from "../controllers/client/articleCtrl";
 
+import { updateUserCtrl } from "../controllers/cms/usersControllers";
+
 // import axios from "axios";
 
 let upload = multer({ dest: "dist/assets/uploads/" });
@@ -433,7 +435,8 @@ routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
 //////////////////////////////////////
 
 routerAPI.put("/updatePost/:projectName", authAPI, updatePostCtrl);
-export default routerAPI;
+
+routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -444,3 +447,5 @@ export default routerAPI;
 //////////////////////////////////////
 
 routerAPI.delete("/deletePost/:projectName", authAPI, deletePostCtrl);
+
+export default routerAPI;

@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+import Compressor from "compressorjs";
 
 //assets
 import edit from "../../assets/createPost/edit.svg";
+import { check } from "../../assets/SvgIcons";
 
 //components
 import CountrySelect from "../countryInput/CountryInput";
+
+//api calls
+import searchEmail from "../../apiCalls/searchEmail";
+import loginUser from "../../apiCalls/loginUser";
+
+//validations
+import validateInterest from "./validations/validateInterest";
 import validatePassword from "./validations/validatePassword";
 import validateNames from "./validations/validateNames";
 import validateEmail from "./validations/validateEmail";
-import searchEmail from "../../apiCalls/searchEmail";
+
+//services
+import isBrowser from "../../../services/isBrowser";
+import sendUserProfile from "../../apiCalls/sendUserProfile";
+import sendAvatar from "../../apiCalls/sendAvatar";
 
 const UserProfileView = styled.div`
   display: flex;
@@ -70,28 +83,26 @@ const InputLayout = styled.div`
   align-items: center;
   width: ${props => props.width};
 
-  select {
+  select,
+  input {
     border-radius: 4px;
     border: 1px solid transparent;
     padding: 2px 4px;
-    color: ${props =>
-      props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)"};
-    background-color: ${props =>
-      props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
     text-align: center;
     text-align-last: center;
   }
 `;
 
-const Input = styled.input`
-  border-radius: 4px;
-  border: 1px solid transparent;
-  padding: 2px 4px;
+const Select = styled.select`
   color: ${props => (props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)")};
   background-color: ${props =>
     props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
-  text-align: center;
-  text-align-last: center;
+`;
+
+const Input = styled.input`
+  color: ${props => (props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)")};
+  background-color: ${props =>
+    props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
 `;
 
 const Row = styled.div`
@@ -131,7 +142,7 @@ const InterestChkBox = styled.span`
 `;
 const FormatWarning = styled.div`
   position: absolute;
-  top: 45px;
+  top: 47px;
   z-index: 2;
   text-align: center;
   color: #00171f;
@@ -148,6 +159,43 @@ const FormatWarning = styled.div`
   display: ${props => props.display};
 `;
 
+const OldPasswordInputCont = styled.div`
+  height: 25px;
+  display: flex;
+`;
+
+const OldPasswordInputLabel = styled.label`
+  position: absolute;
+  right: 0;
+  padding: 10px;
+  top: -11px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  display: ${props => props.display};
+
+  > span {
+    color: #00baff;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 0 6px;
+  }
+`;
+
+const OldPasswordInput = styled.input`
+  color: rgb(26, 34, 37);
+  background-color: rgb(195, 208, 213);
+  animation: ${props => (props.isOldPasswordShaking ? shake : "")} 500ms ease
+    forwards;
+`;
+
+const shake = keyframes`
+0% {transform:translateX(0) rotate(0) }
+25% {transform:translateX(10%) rotate(5deg)}
+50% {transform:translateX(-10%) rotate(-3deg)}
+75% {transform:translateX(10%) rotate(1deg)}
+100%{transform:translateX(0) rotate(0)}`;
+
 const Avatar = styled.div`
   border-radius: 100%;
   height: 200px;
@@ -155,7 +203,13 @@ const Avatar = styled.div`
   margin: auto;
   background-color: gray;
   position: relative;
-  background: ${props => `url(data:image/jpeg;base64,${props.img})`};
+  background: ${props => {
+    if (props.img.match("data:image")) {
+      return `url(${props.img})`;
+    } else {
+      return `url(data:image/jpeg;base64,${props.img})`;
+    }
+  }};
   background-position: center;
   background-size: cover;
 `;
@@ -177,10 +231,48 @@ const UserName = styled.p`
   font-weight: bold;
 `;
 
-const SaveBtn = styled.button`
-  margin: auto;
+const Controls = styled.div`
+  display: flex;
+  justify-content: center;
+
+  button {
+    margin-left: 15px;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  button:first-child {
+    margin: 0;
+  }
+`;
+
+const ControlBtn = styled.button`
   font-size: 18px !important;
   padding: 8px 26px !important;
+`;
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const SvgBtn = styled.div`
+  > svg {
+    margin-left: 10px;
+    fill: #00baff;
+    width: 25px;
+    animation: ${props => (props.rotateOn ? "" : rotate)} 500ms ease infinite;
+  }
+  > svg:hover {
+    cursor: pointer;
+  }
 `;
 
 const OtherInterest = styled.div`
@@ -228,6 +320,13 @@ const OtherInterestsLayout = styled.div`
 `;
 
 const UserProfile = ({ userProfile, setUserProfile }) => {
+  const inputFile = React.createRef();
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [isOldPassword, setIsOldPassword] = useState(false);
+  const [isPasswordCheck, setIsPasswordCheck] = useState(true);
+  const [isOldPasswordShaking, setOldPasswordShaking] = useState(false);
+
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordValid, setPasswordValid] = useState(" ");
@@ -241,18 +340,29 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
   const [isLastName, setIsLastName] = useState(false);
   const [isLastNameValid, setLastNameValid] = useState(" ");
 
-  // const [email, setEmail] = useState("j@j.com");
   const [isEmail, setIsEmail] = useState(false);
   const [isEmailValid, setEmailValid] = useState(" ");
   const [emailWarningMessage, setEmailWarningMessage] = useState(
     "Please, insert a valid Email"
   );
-  // const [gender, setGender] = useState(" ");
+
   const [isGender, setIsGender] = useState(false);
-  // const [birthdate, setBirthDate] = useState(" ");
+  const [isGenderValid, setGenderValid] = useState(" ");
+
   const [isBirthDate, setIsBirthDate] = useState(false);
+  const [isBirthDateValid, setIsBirthDateValid] = useState(" ");
+
+  const [isCountry, setIsCountry] = useState(false);
+  const [isCountryValid, setIsCountryValid] = useState(" ");
+
   const [otherInterest, setOtherInterest] = useState("");
   const [isOtherInterest, setIsOtherInterest] = useState(false);
+  const [isInterestValid, setInterestValid] = useState(" ");
+
+  const [isProfileChanged, setProfileChanged] = useState(false);
+
+  const [userAvatarBin, setUserAvatarBin] = useState("");
+  const [newAvatar, setNewAvatar] = useState(false);
 
   const interestArray = [
     "Graphic Design",
@@ -266,6 +376,7 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
   ];
 
   let {
+    _id,
     userAvatar,
     userName,
     userFirstName,
@@ -277,8 +388,18 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
     userBirthDate,
     userGender
   } = userProfile;
+
   userBirthDate = userBirthDate.match(/\d{4}-\d{2}-\d{2}/);
   userBirthDate = userBirthDate[0];
+
+  const checkboxHandler = e => {
+    const { value } = e.target;
+    let newUserProfile = userProfile;
+
+    newUserProfile.userInterests = [...userProfile.userInterests, value];
+    setUserProfile(newUserProfile);
+    setProfileChanged(true);
+  };
 
   const interests = interestArray.map((value, index) => {
     let isChecked = false;
@@ -296,6 +417,7 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
             type="checkbox"
             value={value}
             name={value}
+            onChange={checkboxHandler}
           />
           <InterestChkBox>{value}</InterestChkBox>
         </InputLayout>
@@ -303,12 +425,28 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
     );
   });
 
+  const handleOnInterestClick = texto => {
+    let newUserProfile = userProfile;
+    let array = userOtherInterests;
+    setProfileChanged(true);
+    array = array.filter(item => item !== texto);
+    newUserProfile.userOtherInterests = array;
+
+    setUserProfile(newUserProfile);
+  };
+
   const otherInterestsMap = userOtherInterests.map((value, index) => {
     return (
       <React.Fragment key={index}>
         <OtherInterest>
           <div>{value}</div>
-          <span>X</span>
+          <span
+            onClick={() => {
+              handleOnInterestClick(value);
+            }}
+          >
+            X
+          </span>
         </OtherInterest>
       </React.Fragment>
     );
@@ -317,8 +455,85 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
   const inputChangeHandler = async e => {
     const { value, name } = e.target;
     let newUserProfile = userProfile;
-
     switch (name) {
+      case "userOtherInterest": {
+        setProfileChanged(true);
+        setOtherInterest(value);
+        const interestValidationRes = validateInterest(value);
+        setInterestValid(interestValidationRes);
+        if (interestValidationRes !== true) {
+          setProfileChanged(false);
+        }
+
+        if (value.match(/,/g)) {
+          let interest = value.slice(0, value.length - 1);
+
+          if (interest !== "") {
+            let arrayInterest = userProfile.userOtherInterests;
+            arrayInterest.push(`${interest.toLowerCase()}`);
+
+            setOtherInterest("");
+            newUserProfile.userOtherInterests = arrayInterest;
+            setUserProfile(newUserProfile);
+            return;
+          }
+
+          setOtherInterest("");
+          return;
+        }
+
+        break;
+      }
+
+      case "userCountry":
+        setProfileChanged(true);
+        newUserProfile.userCountry = value;
+        setUserProfile(newUserProfile);
+
+        if (value === " ") {
+          setIsCountryValid(false);
+
+          setProfileChanged(false);
+
+          return;
+        }
+
+        setIsCountryValid(true);
+
+        break;
+
+      case "userBirthDate":
+        if (value) {
+          setProfileChanged(true);
+          newUserProfile.userBirthDate = value;
+          setUserProfile(newUserProfile);
+        }
+
+        if (value === " ") {
+          setIsBirthDateValid(false);
+          setProfileChanged(false);
+          return;
+        }
+        setIsBirthDateValid(true);
+        break;
+
+      case "userGender":
+        setProfileChanged(true);
+
+        newUserProfile.userGender = value;
+        setUserProfile(newUserProfile);
+        if (value === " ") {
+          setGenderValid(false);
+          setProfileChanged(false);
+          return;
+        }
+        setGenderValid(true);
+        break;
+
+      case "oldPassword":
+        setOldPassword(value);
+        break;
+
       case "password":
         setPasswordValid(validatePassword(value));
         setPassword(value);
@@ -328,33 +543,48 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
         setPasswdConf(value);
         if (password === value) {
           setPasswdConfValid(true);
+          setProfileChanged(true);
+          newUserProfile.userPassword = value;
+          setUserProfile(newUserProfile);
         } else if (isPasswdConfValid !== false) {
           setPasswdConfValid(false);
+          setProfileChanged(false);
         }
         break;
 
       case "userFirstName":
+        setProfileChanged(true);
+        const nameValidation = validateNames(value);
         newUserProfile.userFirstName = value;
         setUserProfile(newUserProfile);
-        setNameValid(validateNames(value));
+        setNameValid(nameValidation);
+        if (nameValidation !== true) {
+          setProfileChanged(false);
+        }
         break;
 
       case "userLastName":
+        setProfileChanged(true);
+        const lastNameValidation = validateNames(value);
         newUserProfile.userLastName = value;
         setUserProfile(newUserProfile);
-        setLastNameValid(validateNames(value));
+        setLastNameValid(lastNameValidation);
+        if (lastNameValidation !== true) {
+          setProfileChanged(false);
+        }
+        break;
 
       case "userEmail":
-        console.log("cambio aemail");
+        setProfileChanged(true);
         newUserProfile.userEmail = value;
         setUserProfile(newUserProfile);
-        setEmailValid(validateEmail(value));
         const emailFormatValidation = validateEmail(value);
+
+        setEmailValid(emailFormatValidation);
 
         if (emailFormatValidation === true) {
           const emailRes = await searchEmail(value);
-          console.log("searchEmail", searchEmail);
-          console.log("emailRes", emailRes);
+
           if (!emailRes.valid && emailRes.user === userName) {
             setEmailValid(" ");
             return;
@@ -364,6 +594,7 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
         } else {
           setEmailValid(emailFormatValidation);
           setEmailWarningMessage("Please, insert a valid Email");
+          setProfileChanged(false);
         }
         break;
 
@@ -372,16 +603,117 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
     }
   };
 
+  const oldPasswordHandler = async () => {
+    setIsPasswordCheck(false);
+    const loginResponse = await loginUser(userProfile.userName, oldPassword);
+
+    if (loginResponse.status === "OK") {
+      setIsPassword(true);
+      setIsOldPassword(!isOldPassword);
+      setIsPasswordCheck(true);
+    } else {
+      setIsPasswordCheck(true);
+      setOldPasswordShaking(true);
+      setTimeout(() => {
+        setOldPasswordShaking(false);
+      }, 500);
+    }
+  };
+
+  const imageUpload = image => {
+    setUserAvatarBin(image);
+    let newUserProfile = userProfile;
+
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      newUserProfile.userAvatar = reader.result;
+      setUserProfile(newUserProfile);
+      setProfileChanged(true);
+      setNewAvatar(true);
+      alert("file Uploaded successfully");
+    };
+    reader.readAsDataURL(image);
+  };
+
+  const imageUploadErr = err => {
+    console.log(`error on upload ${err}`);
+  };
+
+  const avatarEditHandler = files => {
+    let Uploadfunction = imageUpload;
+    const browser = isBrowser();
+
+    const shouldCompress =
+      browser === "ie" || browser === "edge" ? false : true;
+
+    if (shouldCompress) {
+      new Compressor(files[0], {
+        quality: 0.6,
+        width: 200,
+        mimeType: "jpg",
+        convertSize: 200000,
+        success(result) {
+          Uploadfunction(result);
+        },
+        error(err) {
+          imageUploadErr(err);
+          return;
+        }
+      });
+    } else {
+      Uploadfunction(files[0]);
+    }
+  };
+
+  const saveHandler = async () => {
+    if (newAvatar) {
+      const sendAvatarRes = await sendAvatar(_id, userAvatarBin);
+    }
+    const sendUserRes = await sendUserProfile(userProfile);
+  };
   return (
     <UserProfileView>
       <FormLayout id="FormLayout">
         <Form id="Form">
           <Column id="FirstCol" width="calc( 100% * 1 / 4);">
+            <input
+              ref={inputFile}
+              style={{
+                display: "none"
+              }}
+              type="file"
+              name="avatar"
+              id="avatar"
+              accept="image/*"
+              onChange={e => {
+                avatarEditHandler(e.target.files);
+              }}
+            />
             <Avatar img={userAvatar} id="avatar">
-              <AvatarEditBtn id="avatarEditBtn" src={edit} alt="Edit avatar" />
+              <AvatarEditBtn
+                id="avatarEditBtn"
+                src={edit}
+                alt="Edit avatar"
+                onClick={() => {
+                  inputFile.current.click();
+                }}
+              />
             </Avatar>
             <UserName>{userName}</UserName>
-            <SaveBtn className="cmsBtn">Save</SaveBtn>
+            <Controls>
+              <ControlBtn
+                type="button"
+                disabled={!isProfileChanged}
+                className="cmsBtn"
+                onClick={saveHandler}
+              >
+                Save
+              </ControlBtn>
+
+              <ControlBtn type="button" className="cmsBtn">
+                Cancel
+              </ControlBtn>
+            </Controls>
           </Column>
           <Column id="SecondCol" width="calc( 100% * 3 / 4);">
             <RowLayout id="RowLayout">
@@ -408,10 +740,38 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
                         src={edit}
                         alt="Edit Password"
                         onClick={() => {
-                          setIsPassword(!isPassword);
+                          if (!isPassword) {
+                            setOldPassword("");
+                            setIsOldPassword(!isOldPassword);
+                          }
                         }}
                       />
                     </InputLayout>
+                    <OldPasswordInputLabel
+                      display={!isOldPassword ? "none" : "block"}
+                    >
+                      <span>Old Password to unlock</span>
+                      <OldPasswordInputCont>
+                        <OldPasswordInput
+                          isOldPasswordShaking={isOldPasswordShaking}
+                          id="oldPassword"
+                          type="password"
+                          name="oldPassword"
+                          value={oldPassword}
+                          onChange={e => {
+                            inputChangeHandler(e);
+                          }}
+                        />
+                        <SvgBtn
+                          rotateOn={isPasswordCheck}
+                          id="oldPasswrodSend"
+                          alt="old Password"
+                          onClick={oldPasswordHandler}
+                        >
+                          {check}
+                        </SvgBtn>
+                      </OldPasswordInputCont>
+                    </OldPasswordInputLabel>
                     <FormatWarning
                       display={
                         isPasswordValid === " " || isPasswordValid
@@ -560,23 +920,36 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
                   <InputLabel width="calc(100% / 2)">
                     <span>Gender</span>
                     <InputLayout id="GenderInputLayout">
-                      <select
+                      <Select
                         value={userGender}
                         name="userGender"
                         disabled={!isGender}
+                        active={isGender}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       >
                         <option value=" ">Please Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
-                      </select>
+                      </Select>
                       <EditBtn
                         id="GenderEditBtn"
                         src={edit}
                         alt="Edit Gender"
+                        onClick={() => {
+                          setIsGender(!isGender);
+                        }}
                       />
                     </InputLayout>
 
-                    <FormatWarning display={"none"}>
+                    <FormatWarning
+                      display={
+                        isGenderValid === " " || isGenderValid
+                          ? "none"
+                          : "block"
+                      }
+                    >
                       This field is required
                     </FormatWarning>
                   </InputLabel>
@@ -590,45 +963,71 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
                         value={userBirthDate}
                         name="userBirthDate"
                         disabled={!isBirthDate}
+                        active={isBirthDate}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
                       />
                       <EditBtn
                         id="BirthDateEditBtn"
                         src={edit}
                         alt="Edit BirthDate"
+                        onClick={() => {
+                          setIsBirthDate(!isBirthDate);
+                        }}
                       />
                     </InputLayout>
 
-                    <FormatWarning display={"none"}>
+                    <FormatWarning
+                      display={
+                        isBirthDateValid === " " || isBirthDateValid
+                          ? "none"
+                          : "block"
+                      }
+                    >
                       This field is required
                     </FormatWarning>
                   </InputLabel>
 
                   <InputLabel width="calc(100% / 2)">
-                    <span>Birth Date</span>
+                    <span>Country</span>
                     <InputLayout id="GenderInputLayout">
-                      <CountrySelect />
+                      <CountrySelect
+                        value={userCountry}
+                        name="userCountry"
+                        disabled={!isCountry}
+                        active={isCountry}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
+                      />
                       <EditBtn
-                        id="BirthDateEditBtn"
+                        id="CountryEditBtn"
                         src={edit}
-                        alt="Edit BirthDate"
+                        alt="Edit Country"
+                        onClick={() => {
+                          setIsCountry(!isCountry);
+                        }}
                       />
                     </InputLayout>
 
-                    <FormatWarning display={"none"}>
+                    <FormatWarning
+                      display={
+                        isCountryValid === " " || isCountryValid
+                          ? "none"
+                          : "block"
+                      }
+                    >
                       This field is required
                     </FormatWarning>
                   </InputLabel>
-
-                  {/* <CountryInput country={userCountry} width="calc(100% / 2)">
-                    <FormatWarning display={'none'}>This field is required</FormatWarning>
-                  </CountryInput> */}
                 </InputTextLayout>
               </Row>
               <Row id="InterestRow">
                 <MainTitle id="InterestMainTitle">Interest</MainTitle>
                 <InputTextLayout>{interests}</InputTextLayout>
                 <InputLabel width="calc(100% / 2)" id="OtherInterestLabel">
-                  <span>Other Interests</span>
+                  <span>Other Interests (separeted by commas)</span>
                   <InputLayout id="NameInputLayout">
                     <Input
                       style={{ width: "100%" }}
@@ -637,18 +1036,31 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
                       name="userOtherInterest"
                       value={otherInterest}
                       disabled={!isOtherInterest}
+                      active={isOtherInterest}
+                      onChange={e => {
+                        inputChangeHandler(e);
+                      }}
                     />
 
                     <EditBtn
                       id="OtherInterestEditBtn"
                       src={edit}
                       alt="Edit OtherInterest"
+                      onClick={() => {
+                        setIsOtherInterest(!isOtherInterest);
+                      }}
                     />
                   </InputLayout>
                   <OtherInterestsLayout>
                     {otherInterestsMap}
                   </OtherInterestsLayout>
-                  <FormatWarning display={"none"}>
+                  <FormatWarning
+                    display={
+                      isInterestValid === " " || isInterestValid
+                        ? "none"
+                        : "block"
+                    }
+                  >
                     Don't use special characters
                   </FormatWarning>
                 </InputLabel>
