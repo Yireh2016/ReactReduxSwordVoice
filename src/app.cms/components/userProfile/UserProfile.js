@@ -319,7 +319,7 @@ const OtherInterestsLayout = styled.div`
   }
 `;
 
-const UserProfile = ({ userProfile, setUserProfile }) => {
+const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
   const inputFile = React.createRef();
 
   const [oldPassword, setOldPassword] = useState("");
@@ -630,6 +630,7 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
       setUserProfile(newUserProfile);
       setProfileChanged(true);
       setNewAvatar(true);
+
       alert("file Uploaded successfully");
     };
     reader.readAsDataURL(image);
@@ -668,6 +669,11 @@ const UserProfile = ({ userProfile, setUserProfile }) => {
   const saveHandler = async () => {
     if (newAvatar) {
       const sendAvatarRes = await sendAvatar(_id, userAvatarBin);
+
+      if (sendAvatarRes.status === "OK") {
+        setUserAvatar(userProfile.userAvatar);
+        window.localStorage.setItem("userAvatar", userProfile.userAvatar);
+      }
     }
     const sendUserRes = await sendUserProfile(userProfile);
   };
@@ -1083,7 +1089,9 @@ const mapDispachToProps = dispatch => {
   return {
     //acciones
     setUserProfile: profile =>
-      dispatch({ type: "SET_USER_PROFILE", payload: profile })
+      dispatch({ type: "SET_USER_PROFILE", payload: profile }),
+    setUserAvatar: base64Avatar =>
+      dispatch({ type: "SET_AVATAR", payload: base64Avatar })
   };
 };
 

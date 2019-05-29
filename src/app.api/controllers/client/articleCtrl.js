@@ -102,15 +102,14 @@ export const setCommentCtrl = async (req, res) => {
 
   let comment = { userName, message, userAvatar };
   let comments = [];
-  console.log("title", title);
 
+  console.log("userAvatar", userAvatar);
   articleModel.find({ title }, (err, article) => {
     if (err) {
       console.log("err", err);
       res.status(404).json(err);
       return;
     }
-    console.log("article", article);
     comments = article[0].comments;
     if (comments) {
       article[0].comments = [comment, ...comments];

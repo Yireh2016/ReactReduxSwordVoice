@@ -436,12 +436,17 @@ class Dashboard extends Component {
                   <div
                     className="dashAvatarImg"
                     style={{
+                      backgroundPosition: "center center",
                       backgroundSize: "cover",
                       borderRadius: "100%",
 
-                      backgroundImage: `url('data:image/jpeg;base64,${
-                        this.props.loggedUserAvatar
-                      }`
+                      backgroundImage: this.props.loggedUserAvatar.match(
+                        "data:image"
+                      )
+                        ? `url('${this.props.loggedUserAvatar}`
+                        : `url('data:image/jpeg;base64,${
+                            this.props.loggedUserAvatar
+                          }`
                     }}
                   />
                 </div>

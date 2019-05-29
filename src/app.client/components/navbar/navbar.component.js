@@ -196,9 +196,9 @@ class NavBar extends Component {
                 backgroundPosition: "center",
                 height: "45px",
                 width: "45px",
-                backgroundImage: `url('data:image/jpeg;base64,${
-                  this.state.loggedUserAvatar
-                }`
+                backgroundImage: this.state.loggedUserAvatar.match("data:image")
+                  ? `url('${this.state.loggedUserAvatar}`
+                  : `url('data:image/jpeg;base64,${this.state.loggedUserAvatar}`
               }}
             />
           );

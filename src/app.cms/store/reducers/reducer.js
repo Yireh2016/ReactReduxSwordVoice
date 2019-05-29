@@ -9,6 +9,11 @@ const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
   switch (action.type) {
+    case "SET_AVATAR": {
+      newState.loggedUserAvatar = action.payload;
+      break;
+    }
+
     case "LOGGED_IN": {
       newState.isUserLoggedIn = true;
       newState.loggedUserAvatar = action.payload.userAvatar;

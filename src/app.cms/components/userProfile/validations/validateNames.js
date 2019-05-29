@@ -3,7 +3,6 @@ const validateNames = value => {
     return true;
   }
   if (value.match(/^$/)) {
-    setNameValid(" ");
     return " ";
   }
   return false;
