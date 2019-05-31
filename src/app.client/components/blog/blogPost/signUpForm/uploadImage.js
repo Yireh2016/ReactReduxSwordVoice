@@ -38,6 +38,7 @@ class UploadImage extends Component {
         mimeType: "jpg",
         convertSize: 200000,
         success(result) {
+          console.log("imageUpload", result);
           Uploadfunction(result);
         },
         error(err) {

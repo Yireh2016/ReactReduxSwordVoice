@@ -13,6 +13,7 @@ import isBrowser from "../../../../../services/isBrowser";
 //css
 import "./signUpForm.css";
 import UploadImage from "./uploadImage";
+import blobToBase64 from "../../../../../services/blobToBase64";
 //components
 
 class SignUpForm extends Component {
@@ -56,14 +57,18 @@ class SignUpForm extends Component {
   }
 
   imageUpload = image => {
-    this.setState(() => {
-      return {
-        userAvatar: image,
-        userAvatarPreview: `url(${URL.createObjectURL(image)})`,
-        uploadMessage: undefined
-      };
+    console.log("image uploaded on sigup", image);
+
+    blobToBase64(image, base64 => {
+      this.setState(() => {
+        return {
+          userAvatar: base64.url,
+          userAvatarPreview: `url(${URL.createObjectURL(image)})`,
+          uploadMessage: undefined
+        };
+      });
+      alert("file Uploaded successfully");
     });
-    alert("file Uploaded successfully");
   };
 
   imageUploadErr = err => {
@@ -463,8 +468,8 @@ class SignUpForm extends Component {
       };
 
       //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
-      const sessionID = uuid();
-      data = { ...data, userSessionId: sessionID };
+      // const sessionID = uuid();
+      // data = { ...data, userSessionId: sessionID };
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome
@@ -473,38 +478,24 @@ class SignUpForm extends Component {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
 
             const userData = res.data;
-            sessionCookie(
-              this.props,
-              userData.userName,
-              userData.id,
-              sessionID
-            );
+            // sessionCookie(
+            //   this.props,
+            //   userData.userName,
+            //   userData.id,
+            //   sessionID
+            // );
             if (userAvatar !== "") {
-              let form = new FormData();
-              form.append("avatar", userAvatar);
-              const browser = isBrowser();
-              axios
-                .post(`/api/upload/${userData.id}?browser=${browser}`, form) //se sube imagen como avatar del cliente
-                .then(this.handleErrors) //en caso de error
-                .then(res => {
-                  if (res.status === 200) {
-                    alert("data and image submited");
+              console.log("userAvatar on signupform", userAvatar);
 
-                    this.props.onLogIn({
-                      //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
-                      userAvatar: res.data.doc.userAvatar,
-                      userName: userData.userName,
-                      userID: userData.id,
-                      userType: userData.userType
-                    });
-                  }
-                })
-                .catch(err => {
-                  console.log("err", err);
-                  alert(
-                    `There was an error uploading foto status:  error:${err}`
-                  );
-                });
+              this.props.onLogIn({
+                //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
+
+                userName: userData.userName,
+                userID: userData.id,
+                userType: userData.userType,
+                userAvatar:userAvatar
+              });
+              alert("data submited ");
             } else {
               // console.log("no hay avatar solo se envia usuario");
               this.props.onLogIn({
@@ -518,7 +509,7 @@ class SignUpForm extends Component {
             }
           } else {
             //en caso de no poder salvar el usuario en DB se destruye la cookie de session
-            this.props.cookies.remove("sessionId");
+            //OJO mostrar error
           }
           this.props.onCancelClick(); //se cierra el modal de signup
         })
@@ -1360,8 +1351,7 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
   };
 };
 

@@ -19,6 +19,9 @@ import successOnFindingUserAndDistpach from "../services/actions/successOnFindin
 import paragraphService from "../../services/paragraphService";
 import keywordsToArr from "../../services/keywordsToArr";
 
+//services
+import { readToken } from "../../app.api/services/tokenHandler";
+
 const renderTemplate = (req, store) => {
   const context = {};
   const appString = renderToString(
@@ -195,35 +198,24 @@ const swordvoiceWeb = async (req, res) => {
 
   const userLoggedInPromise = () =>
     new Promise(resolve => {
-      console.log("EJECUTANDO userLoggedInPromise");
+      console.log("EJECUTANDO userLoggedInPromise ");
 
-      if (req.cookies.username) {
-        console.log(
-          "Checkiing if sessionid is updated ",
-          req.cookies.sessionId
+      if (req.cookies.sessionID) {
+        const tokenData = readToken(req.cookies.sessionID, {
+          encryptKey: `${process.env.ENCRYPTKEY}`,
+          encryptAlgorithm: "aes-256-cbc"
+        });
+
+        console.log("Checkiing token ", tokenData);
+
+        const username = tokenData.data.username;
+        const usernameID = tokenData.data.id;
+
+        successOnFindingUserAndDistpach(
+          { userName: username, _id: usernameID },
+          store
         );
-        const sessionId = req.cookies.sessionId;
-        let usersModel = mongoose.model("User");
-
-        usersModel
-          .find({ userSessionId: sessionId })
-          .select("userName _id userAvatar")
-          .exec()
-          .then(user => {
-            if (user[0]) {
-              successOnFindingUserAndDistpach(user[0], store);
-              resolve();
-            } else {
-              console.log("SessionID OUTDATED");
-              store.dispatch({ type: "DEFAULT" });
-              resolve("");
-            }
-          })
-          .catch(err => {
-            console.log(`Server Error: `, err);
-            store.dispatch({ type: "DEFAULT" });
-            resolve("");
-          });
+        resolve();
       } else {
         console.log("USER NOT LOGGUED IN ");
         console.log("ME ESTOY EJECUNTADO store.dispatch DEFAULT");
@@ -240,7 +232,6 @@ const swordvoiceWeb = async (req, res) => {
 
     renderWithPreloadedState(req, res, store);
     console.log("end renderWithPreloadedState");
-    console.log("");
   } catch (err) {
     console.log("errors on promises", err);
   }

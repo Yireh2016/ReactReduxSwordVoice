@@ -14,6 +14,9 @@ import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
 
+//api calls
+import apiLogout from "../../apiCalls/apiLogout";
+
 //services
 
 import {
@@ -45,6 +48,42 @@ class NavBar extends Component {
       window.document.createElement
     ) {
       guestCookie(props);
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      endOfAnimation: true
+    });
+
+    if (
+      window.localStorage.getItem("userAvatar") &&
+      this.props.isUserLoggedIn
+    ) {
+      this.setState({
+        loggedUserAvatar: window.localStorage.getItem("userAvatar")
+      });
+    }
+    window.addEventListener("scroll", () => {
+      this.handleScroll();
+    });
+
+    if (
+      window.pageYOffset > 0 &&
+      window.innerWidth > 1050 &&
+      !this.state.menuIsOpaque
+    ) {
+      this.setState({
+        menuIsOpaque: true
+      });
+    }
+  }
+  componentDidUpdate() {
+    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
+      window.localStorage.setItem("userAvatar", this.props.loggedUserAvatar);
+      if (this.state.loggedUserAvatar === "") {
+        this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
+      }
     }
   }
 
@@ -99,42 +138,6 @@ class NavBar extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      endOfAnimation: true
-    });
-
-    if (
-      window.localStorage.getItem("userAvatar") &&
-      this.props.isUserLoggedIn
-    ) {
-      this.setState({
-        loggedUserAvatar: window.localStorage.getItem("userAvatar")
-      });
-    }
-    window.addEventListener("scroll", () => {
-      this.handleScroll();
-    });
-
-    if (
-      window.pageYOffset > 0 &&
-      window.innerWidth > 1050 &&
-      !this.state.menuIsOpaque
-    ) {
-      this.setState({
-        menuIsOpaque: true
-      });
-    }
-  }
-  componentDidUpdate() {
-    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
-      window.localStorage.setItem("userAvatar", this.props.loggedUserAvatar);
-      if (this.state.loggedUserAvatar === "") {
-        this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
-      }
-    }
-  }
-
   onAvatarClick = () => {
     this.setState({ toggleAnim: !this.state.toggleAnim });
   };
@@ -158,18 +161,20 @@ class NavBar extends Component {
     });
   };
 
-  logOutClickHandler = () => {
-    this.props.onLogOut();
-    removeCookie(this.props, "sessionId");
-    removeCookie(this.props, "username");
-    removeCookie(this.props, "usernameID");
+  logOutClickHandler = async () => {
+    const logoutRes = await apiLogout();
+    if (logoutRes.status === "OK") {
+      this.props.onLogOut();
+      removeCookie(this.props, "username");
+      removeCookie(this.props, "usernameID");
 
-    window.localStorage.removeItem("userAvatar");
-    this.setState({
-      showDesplegable: false,
-      loggedUserAvatar: "",
-      toggleAnim: false
-    });
+      window.localStorage.removeItem("userAvatar");
+      this.setState({
+        showDesplegable: false,
+        loggedUserAvatar: "",
+        toggleAnim: false
+      });
+    }
   };
 
   avatarToRender = () => {

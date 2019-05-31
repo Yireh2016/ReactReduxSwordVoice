@@ -16,7 +16,6 @@ const userSchema = new Schema({
   userName: { type: String, unique: true, required: true },
   userPassword: { type: String, required: true }, //
   userSalt: { type: String, required: true }, //
-  userSessionId: { type: String, required: true },
   userType: { type: String, required: true, default: "user" },
   isUserActive: { type: Boolean, required: true, default: true },
   userCreationDate: { type: Date, required: true, default: Date.now() } //

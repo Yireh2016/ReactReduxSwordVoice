@@ -767,16 +767,7 @@ const mapStateToProps2 = state => {
     blog: state.blog
   };
 };
-const mapDispachToProps = dispach => {
-  return {
-    //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
-  };
-};
+
 const BlogArticle2 = Radium(BlogArticle);
-export default connect(
-  mapStateToProps2,
-  mapDispachToProps
-)(BlogArticle2);
+export default connect(mapStateToProps2)(BlogArticle2);
 // export default BlogArticle;

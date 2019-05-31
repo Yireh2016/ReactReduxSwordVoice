@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const apiSetComment = (userName, title, userAvatar, comment, callback) => {
-  console.log("apiSetComment avatar", userAvatar);
   return axios
     .put(
       `api/setComment`,

@@ -2,15 +2,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withCookies } from "react-cookie";
-import uuid from "uuid/v1";
 //css
 import "./logInForm.css";
 //components
 import Logo from "../../../general/logo.component";
 import { connect } from "react-redux";
-
-//services
-import { sessionCookie } from "../../../../services/cookieManager";
 
 class LogInForm extends Component {
   constructor(props) {
@@ -29,15 +25,7 @@ class LogInForm extends Component {
 
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
-    sessionCookie(this.props, userData.userName, userData._id, uuid());
-    axios
-      .put(`/api/sessionUpdate/${userData.userName}`)
-      .then(res => {
-        console.log("res", res);
-      })
-      .catch(err => {
-        console.log("err", err);
-      });
+
     if (userData.userAvatar === "") {
       //si no existe avatar
       this.props.onLogIn({
@@ -202,11 +190,10 @@ const mapStateToProps = state => {
     loggedUserAvatar: state.logInStatus.loggedUserAvatar
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    onLogIn: payload => dispatch({ type: "LOGGED_IN", payload: payload })
   };
 };
 

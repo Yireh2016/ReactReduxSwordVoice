@@ -2,8 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import multer from "multer";
 import fs from "fs";
-import passport from "passport";
+
 //controllers
+import { signUpCtrl, loginCtrl, logoutCtrl } from "../controllers/client/user";
+
 import {
   createPostCtrl,
   uploadTempFileCtrl,
@@ -68,11 +70,15 @@ routerAPI.post(
     const { file } = req;
     const userID = req.params.userID;
 
+    console.log("file", file);
+
     fs.readFile(`${file.path}`, (err, data) => {
       if (err) {
         console.log("error leyendo archivo", err);
         throw err;
       }
+
+      console.log("readfile data", data);
 
       usersModel.findOneAndUpdate(
         { _id: userID },
@@ -100,99 +106,11 @@ routerAPI.post(
 );
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
-routerAPI.post("/signup", guestAPI, (req, res) => {
-  let userData = req.body;
-  console.log("userData on server sign up", userData);
-
-  if (
-    //verfing required fields
-    !userData.userName ||
-    !userData.userEmail ||
-    !userData.userPassword ||
-    !userData.userFirstName ||
-    !userData.userLastName ||
-    !userData.userCountry ||
-    !userData.userBirthDate ||
-    !userData.userGender ||
-    !userData.userSessionId
-  ) {
-    res.status(400).json({
-      message: "All fields required"
-    });
-    return;
-  }
-  //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
-
-  console.log("all required fields are CORRECT");
-  if (userData.userAvatar === "") {
-    userData.userAvatar = new Buffer([]);
-  }
-  console.log("userdata with AVATAR");
-  userData = { ...userData, _id: mongoose.Types.ObjectId() };
-  let user = new usersModel(userData);
-
-  user.setPassword(userData.userPassword);
-  console.log("userData with crypto passwd and salt to save on SIGN UP", user);
-  user.save((err, data) => {
-    if (err) {
-      console.log(
-        `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-      );
-      res.status(400).json({
-        code: 400,
-        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-      });
-    } else {
-      const responseUserData = {
-        id: data._id,
-        userName: data.userName
-      };
-      res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
-    }
-  });
-});
+routerAPI.post("/signup", guestAPI, signUpCtrl);
 
 // hacer Login
 //se usa en: logInForm
-routerAPI.post("/login", guestAPI, (req, res) => {
-  const userData = req.body;
-
-  if (!userData.userName || !userData.userPassword) {
-    res.status(400).json({
-      message: "All fields required"
-    });
-    return;
-  }
-
-  passport.authenticate("local", function(err, user, info) {
-    if (err) {
-      res.status(404).json(err);
-      return;
-    }
-    if (user) {
-      // token = user.generateJwt();
-      res.status(200).json({
-        _id: user._id,
-        userAvatar: user.userAvatar,
-        userFirstName: user.userFirstName,
-        userLastName: user.userLastName,
-        userEmail: user.userEmail,
-        userCountry: user.userCountry,
-        userBirthDate: user.userBirthDate,
-        userGender: user.userGender,
-        userInterests: user.userInterests,
-        userOtherInterests: user.userOtherInterests,
-        userName: user.userName,
-        userSessionId: user.userSessionId,
-        userType: user.userType,
-        userCreationDate: user.userCreationDate
-      });
-    } else {
-      console.log("dio un 401", info);
-      res.status(401).json(info);
-    }
-  })(req, res);
-});
+routerAPI.post("/login", guestAPI, loginCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -201,6 +119,8 @@ routerAPI.post("/login", guestAPI, (req, res) => {
 //////////////////////////////////////
 //////////////////////////////////////
 //////////////////////////////////////
+
+routerAPI.get("/logout", guestAPI, logoutCtrl);
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
@@ -360,7 +280,7 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
     {
       userSessionId: sessionId
     },
-    function(err, doc) {
+    function(err) {
       if (err) {
         console.log(err);
       } else {
