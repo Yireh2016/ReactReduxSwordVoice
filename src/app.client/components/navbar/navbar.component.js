@@ -63,6 +63,8 @@ class NavBar extends Component {
       this.setState({
         loggedUserAvatar: window.localStorage.getItem("userAvatar")
       });
+
+      this.props.setAvatar(window.localStorage.getItem("userAvatar"));
     }
     window.addEventListener("scroll", () => {
       this.handleScroll();
@@ -689,7 +691,7 @@ const mapStateToProps = state => {
 const mapDispachToProps = dispach => {
   return {
     //acciones
-
+    setAvatar: avatar => dispach({ type: "SET_AVATAR", payload: avatar }),
     onLogOut: () => dispach({ type: "LOGGED_OUT" })
   };
 };

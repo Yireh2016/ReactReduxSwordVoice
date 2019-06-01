@@ -1,15 +1,8 @@
-import Cookies from "cookies";
-import uuid from "uuid/v1";
 import { createToken } from "./tokenHandler";
 
 export const sessionCookie = async (req, res, user) => {
-  let userSessionId = uuid();
+  let userSessionId = 1;
 
-  let keys = [process.env.COOKEYS];
-  let cookies = new Cookies(req, res, {
-    keys: keys,
-    maxAge: (1000 * 60 * 60 * 24 * 365) / 2
-  });
   console.log("creating token");
   const token = await createToken(
     {},
@@ -25,9 +18,10 @@ export const sessionCookie = async (req, res, user) => {
     { secret: `${process.env.JWTSECRET}`, expiresIn: `${24 * 365}h` }
   );
   console.log("created token and seting cookie", token);
-  cookies.set("sessionID", token, {
+  res.cookie("sessionID", token, {
     signed: true,
-    overwrite: true
+    httpOnly: true,
+    maxAge: (1000 * 60 * 60 * 24 * 365) / 2
   });
 
   console.log("cookie setted");
@@ -37,22 +31,17 @@ export const sessionCookie = async (req, res, user) => {
 export const guestCookie = (req, res) => {
   let guestID = uuid();
 
-  let keys = [process.env.COOKEYS];
-  let cookies = new Cookies(req, res, {
-    keys: keys,
+  res.cookie("guestID", guestID, {
+    signed: true,
+    httpOnly: true,
     maxAge: (1000 * 60 * 60 * 24 * 365) / 2
   });
-  cookies.set("guestID", guestID, {
-    signed: true,
-    overwrite: true
-  });
 
-  return userSessionId;
+  return;
 };
 
 export const deleteCookie = (req, res) => {
-  let cookies = new Cookies(req, res);
-  cookies.set("sessionID");
-  cookies.set("sessionID.sig");
+  res.clearCookie("sessionID");
+
   return;
 };

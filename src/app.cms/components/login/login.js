@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { withCookies } from "react-cookie";
-import {
-  guestCookie,
-  sessionCookie
-} from "../../../app.client/services/cookieManager";
+import { guestCookie } from "../../../app.client/services/cookieManager";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
 
 //assets
 import "./login.css";
+
+//apiCalls
+import loginUser from "../../apiCalls/loginUser";
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -20,32 +21,25 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    console.log(
-      "this.props.cookies.cookies.sessionId",
-      this.props.cookies.cookies.sessionId
-    );
-    if (this.props.cookies.cookies.sessionId) {
-      axios(`/api/searchSessionID/${this.props.cookies.cookies.sessionId}`)
-        .then(res => {
-          if (res.status === 200) {
-            const data = {
-              userAvatar: res.data.userAvatar,
-              userName: res.data.userName,
-              userID: res.data._id,
-              userType: res.data.userType
-            };
-            this.props.onLogIn(data);
-          }
-        })
-        .catch(err => {
-          if (err) {
-            console.log(`Error al buscar el usuario por Session ID`, err);
-            guestCookie(this.props);
-          }
-        });
-      return;
-    }
-    guestCookie(this.props);
+    axios(`/api/searchSessionID/`)
+      .then(res => {
+        if (res.status === 200) {
+          const data = {
+            userAvatar: res.data.userAvatar,
+            userName: res.data.userName,
+            userID: res.data._id,
+            userType: res.data.userType
+          };
+          this.props.onLogIn(data);
+        }
+      })
+      .catch(err => {
+        if (err) {
+          console.log(`Error al buscar el usuario por Session ID`, err);
+          guestCookie(this.props);
+        }
+      });
+    return;
   }
 
   handleFormInputChange = event => {
@@ -56,44 +50,25 @@ class Login extends Component {
     this.setState({ [name]: value });
   };
 
-  loginClickHandler = () => {
+  loginClickHandler = async () => {
     const { userName, userPassword } = this.state;
-    const data = {
-      userName,
-      userPassword
-    };
+
     if (userName && userPassword) {
-      axios
-        .post("/api/login", data)
-        .then(this.handleErrors)
-        .then(res => {
-          if (res.status === 200) {
-            alert("Login Successful");
-            sessionCookie(this.props);
+      const loginRes = await loginUser(userName, userPassword);
 
-            axios
-              .put(`/api/sessionUpdate/${res.data.userName}`)
-              .then(res => {
-                console.log("res on put api/sessionUpdate ", res);
-              })
-              .catch(err => {
-                console.log("err ", err);
-              });
+      if (loginRes.status === "OK") {
+        alert("Login Successful");
 
-            window.localStorage.setItem("userAvatar", res.data.userAvatar);
+        window.localStorage.setItem("userAvatar", loginRes.data.userAvatar);
 
-            const data = {
-              userAvatar: res.data.userAvatar,
-              userName: res.data.userName,
-              userID: res.data._id,
-              userType: res.data.userType
-            };
-            this.props.onLogIn(data);
-          }
-        })
-        .catch(err => {
-          alert(`There was an error status:  ${err}`);
-        });
+        const data = {
+          userAvatar: loginRes.data.userAvatar,
+          userName: loginRes.data.userName,
+          userID: loginRes.data._id,
+          userType: loginRes.data.userType
+        };
+        this.props.onLogIn(data);
+      }
 
       return;
     }

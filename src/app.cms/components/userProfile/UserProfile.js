@@ -254,12 +254,18 @@ const ControlBtn = styled.button`
 `;
 
 const rotate = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
+  0% {
+    transform: rotate(0deg) scale(1);
 
-  to {
-    transform: rotate(360deg);
+  }
+50%{
+
+  transform: rotate(180deg) scale(.5);
+
+
+}
+  100% {
+    transform: rotate(360deg) scale(1);
   }
 `;
 
@@ -268,7 +274,7 @@ const SvgBtn = styled.div`
     margin-left: 10px;
     fill: #00baff;
     width: 25px;
-    animation: ${props => (props.rotateOn ? "" : rotate)} 500ms ease infinite;
+    animation: ${props => (props.rotateOn ? "" : rotate)} 1s ease infinite;
   }
   > svg:hover {
     cursor: pointer;

@@ -200,8 +200,8 @@ const swordvoiceWeb = async (req, res) => {
     new Promise(resolve => {
       console.log("EJECUTANDO userLoggedInPromise ");
 
-      if (req.cookies.sessionID) {
-        const tokenData = readToken(req.cookies.sessionID, {
+      if (req.signedCookies.sessionID) {
+        const tokenData = readToken(req.signedCookies.sessionID, {
           encryptKey: `${process.env.ENCRYPTKEY}`,
           encryptAlgorithm: "aes-256-cbc"
         });

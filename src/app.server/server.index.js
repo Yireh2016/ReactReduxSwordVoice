@@ -22,7 +22,7 @@ const server = express();
 //middlewares
 server.use(morgan("dev"));
 server.use(express.json({ limit: "50mb", extended: true }));
-server.use(cookieParser());
+server.use(cookieParser(process.env.COOKEYS));
 
 //static files
 server.use(express.static("dist/assets"));

@@ -398,7 +398,10 @@ const Comment = ({
           <AvatarCont>
             <Avatar
               style={{
-                backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
+                backgroundImage:
+                  userAvatar && userAvatar.match("data:image")
+                    ? `url('${userAvatar}`
+                    : `url('data:image/jpeg;base64,${userAvatar}')`
               }}
             />
           </AvatarCont>

@@ -81,7 +81,8 @@ class UploadImage extends Component {
           className="avatarLoad"
           style={{
             backgroundImage: this.props.userAvatarPreview,
-            backgroundSize: "cover"
+            backgroundSize: "cover",
+            backgroundPosition: "center center"
           }}
         >
           <span>{this.props.uploadMessage}</span>

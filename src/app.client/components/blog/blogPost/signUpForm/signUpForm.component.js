@@ -1,14 +1,14 @@
 //modules
 import React, { Component } from "react";
-import uuid from "uuid/v1";
+// import uuid from "uuid/v1";
 import axios from "axios";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
 import { connect } from "react-redux";
 import { withCookies } from "react-cookie";
 //services
-import { sessionCookie } from "../../../../services/cookieManager";
-import isBrowser from "../../../../../services/isBrowser";
+// import { sessionCookie } from "../../../../services/cookieManager";
+// import isBrowser from "../../../../../services/isBrowser";
 
 //css
 import "./signUpForm.css";
@@ -493,7 +493,7 @@ class SignUpForm extends Component {
                 userName: userData.userName,
                 userID: userData.id,
                 userType: userData.userType,
-                userAvatar:userAvatar
+                userAvatar: userAvatar
               });
               alert("data submited ");
             } else {
@@ -1179,34 +1179,12 @@ class SignUpForm extends Component {
                 className={`fila signUpPage2 ${this.state.animControl3} `}
               >
                 <form id="userSignUpForm3" className="signUpForm3">
-                  <div className=" avatarContForm">
-                    <input
-                      ref={this.inputFile}
-                      style={{
-                        display: "none"
-                      }}
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/*"
-                      onChange={e => {
-                        this.handleImgUpload(e.target.files);
-                      }}
-                    />
-                    <div
-                      onClick={() => {
-                        this.inputFile.current.click();
-                      }}
-                      className="avatarLoad"
-                      style={{
-                        backgroundImage: this.state.userAvatarPreview,
-                        backgroundSize: "cover"
-                      }}
-                    >
-                      <span>{this.state.uploadMessage}</span>
-                    </div>
-                  </div>
-
+                  <UploadImage
+                    imageUpload={this.imageUpload}
+                    imageUploadErr={this.imageUploadErr}
+                    userAvatarPreview={this.state.userAvatarPreview}
+                    uploadMessage={this.state.uploadMessage}
+                  />
                   <label>
                     User Name <br />
                     <input

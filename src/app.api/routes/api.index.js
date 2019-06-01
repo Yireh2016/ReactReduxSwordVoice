@@ -4,7 +4,12 @@ import multer from "multer";
 import fs from "fs";
 
 //controllers
-import { signUpCtrl, loginCtrl, logoutCtrl } from "../controllers/client/user";
+import {
+  signUpCtrl,
+  loginCtrl,
+  logoutCtrl,
+  autoLogin
+} from "../controllers/client/user";
 
 import {
   createPostCtrl,
@@ -35,7 +40,7 @@ let usersModel = mongoose.model("User");
 // let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
-  if (req.cookies.sessionId) {
+  if (req.signedCookies.sessionID) {
     return next();
   }
 
@@ -215,20 +220,7 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
 //obtener  usuario especifico por SessionID AUTH
 //se usa en: login del CMS
 // obtiene datos de usuario para hacer login en CMS
-routerAPI.get("/searchSessionID/:sessionID", authAPI, (req, res) => {
-  const sessionID = req.params.sessionID;
-  usersModel.find({ userSessionId: sessionID }).exec(function(err, data) {
-    if (err) {
-      res.status(501).json(`thre was an error: ${err}`);
-    }
-    if (data.length > 0) {
-      const { userAvatar, userName, _id, userType } = data[0];
-      res.status(200).json({ userAvatar, userName, _id, userType });
-      return;
-    }
-    res.status(404).json("not found");
-  });
-});
+routerAPI.get("/searchSessionID/", authAPI, autoLogin);
 
 //////////////////////////////////////
 //////////////////////////////////////

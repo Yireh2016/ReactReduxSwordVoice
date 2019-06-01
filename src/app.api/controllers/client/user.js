@@ -6,6 +6,7 @@ import {
   sessionCookie,
   deleteCookie
 } from "../../services/serverCookieManager";
+import { readToken } from "../../services/tokenHandler";
 
 let usersModel = mongoose.model("User");
 
@@ -96,22 +97,6 @@ export const loginCtrl = (req, res) => {
         console.log("err on user catch on login", err);
       }
 
-      // usersModel.findOneAndUpdate(
-      //   { userName: user.userName },
-      //   {
-      //     userSessionId: sessionId
-      //   },
-      //   function(err) {
-      //     if (err) {
-      //       console.log(err);
-      //     } else {
-      //       console.log("NEW SESSION ID ", sessionId);
-
-      //       res.end("success");
-      //     }
-      //   }
-      // );
-
       res.status(200).json({
         _id: user._id,
         userAvatar: user.userAvatar,
@@ -128,4 +113,33 @@ export const loginCtrl = (req, res) => {
 export const logoutCtrl = (req, res) => {
   deleteCookie(req, res);
   res.status(200).json({ status: "OK" });
+};
+
+export const autoLogin = (req, res) => {
+  if (req.signedCookies.sessionID) {
+    const token = req.signedCookies.sessionID;
+
+    const tokenData = readToken(token, {
+      encryptKey: process.env.ENCRYPTKEY,
+      encryptAlgorithm: "aes-256-cbc"
+    });
+
+    const id = tokenData.data.id;
+    usersModel
+      .find({ _id: id })
+      .select("userAvatar userName _id userType")
+      .exec(function(err, data) {
+        if (err) {
+          res.status(501).json(`thre was an error: ${err}`);
+          return;
+        }
+
+        if (data.length > 0) {
+          res.status(200).send(data[0]);
+          return;
+        }
+      });
+  } else {
+    res.status(404).json("not found");
+  }
 };

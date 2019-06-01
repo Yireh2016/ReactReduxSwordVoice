@@ -23,6 +23,19 @@ class LogInForm extends Component {
     };
   }
 
+  componentDidMount() {
+    window.addEventListener("scroll", function(e) {
+      e.preventDefault();
+    });
+    setTimeout(() => {
+      this.setState(() => {
+        return {
+          animControl1: "flyIn"
+        };
+      });
+    }, 200);
+  }
+
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
 
@@ -94,18 +107,6 @@ class LogInForm extends Component {
     alert("Please, fill all required values");
   };
 
-  componentDidMount() {
-    window.addEventListener("scroll", function(e) {
-      e.preventDefault();
-    });
-    setTimeout(() => {
-      this.setState(() => {
-        return {
-          animControl1: "flyIn"
-        };
-      });
-    }, 200);
-  }
   onScrollformLayout = e => {
     e.preventDefault();
   };
