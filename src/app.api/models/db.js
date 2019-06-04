@@ -40,5 +40,8 @@ process.on("SIGINT", function() {
     process.exit(0);
   });
 });
-require("./userSchema");
+
+require("./commentSchema");
+require("./responseSchema");
 require("./articleSchema");
+require("./userSchema");

@@ -20,6 +20,7 @@ import Modal from "../modal/modal";
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
 
 import apiDeleteComment from "../../apiCalls/apiDeleteComment";
+import { stringify } from "querystring";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -399,7 +400,7 @@ const Comment = ({
             <Avatar
               style={{
                 backgroundImage:
-                  userAvatar && userAvatar.match("data:image")
+                  typeof userAvatar === 'string' && userAvatar.match("data:image")
                     ? `url('${userAvatar}`
                     : `url('data:image/jpeg;base64,${userAvatar}')`
               }}

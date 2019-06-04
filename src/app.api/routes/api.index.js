@@ -37,7 +37,7 @@ let upload = multer({ dest: "dist/assets/uploads/" });
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
-// let articleModel = mongoose.model("Article");
+let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
   if (req.signedCookies.sessionID) {
@@ -67,48 +67,27 @@ function guestAPI(req, res, next) {
 
 // cargar imagen de avatar AUTH
 //se usa en: signUpForm
-routerAPI.post(
-  "/upload/:userID",
-  authAPI,
-  upload.single("avatar"),
-  (req, res) => {
-    const { file } = req;
-    const userID = req.params.userID;
+routerAPI.post("/upload/:userID", authAPI, (req, res) => {
+  console.log("api/upload/ req.body", req.body);
+  const { userAvatar } = req.body;
+  const userID = req.params.userID;
 
-    console.log("file", file);
+  console.log("actualizando o subiendo FOTO de avatar", userAvatar);
+  usersModel.findByIdAndUpdate(
+    userID,
+    { userAvatar },
 
-    fs.readFile(`${file.path}`, (err, data) => {
+    (err, user) => {
       if (err) {
-        console.log("error leyendo archivo", err);
-        throw err;
+        console.log("Something wrong when updating data!", err);
+        res.status(404).json(err);
+        return err;
       }
-
-      console.log("readfile data", data);
-
-      usersModel.findOneAndUpdate(
-        { _id: userID },
-        { $set: { userAvatar: data } },
-        { new: true },
-        (err, doc) => {
-          if (err) {
-            console.log("Something wrong when updating data!", err);
-            return;
-          }
-          fs.unlink(`${file.path}`, err => {
-            if (err) {
-              res.status(404).json(err);
-              console.log(err);
-              return;
-            }
-            console.log(`successfully deleted ${file.path}`);
-          });
-
-          res.status(200).json({ doc });
-        }
-      );
-    });
-  }
-);
+      console.log("avatar actualizado", user[0]);
+      res.status(200).json("avatar uploaded");
+    }
+  );
+});
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
 routerAPI.post("/signup", guestAPI, signUpCtrl);

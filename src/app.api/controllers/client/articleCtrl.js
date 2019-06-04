@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const articleModel = mongoose.model("Article");
 // const commentModel = mongoose.model("Comment");
-// const usersModel = mongoose.model("User");
+// const commentModel = mongoose.model("Comment");
+const userModel = mongoose.model("User");
 
 export const socialCtrl = (req, res) => {
   const title = req.query.title;
@@ -29,11 +30,10 @@ export const socialCtrl = (req, res) => {
 };
 
 export const setReplyCtrl = async (req, res) => {
-  const { userName, title, message, index } = req.query;
+  const { userName, title, message, index, userID } = req.body;
   let intIndex = parseInt(index);
-  const userAvatar = req.body.userAvatar;
 
-  let reply = { userName, message, userAvatar };
+  let reply = { userName, message, userID };
   let responses;
   let comments = [];
 
@@ -97,37 +97,47 @@ export const updateCommentClaps = (req, res) => {
   });
 };
 
-export const setCommentCtrl = async (req, res) => {
-  const { userAvatar, userName, title, message } = req.body;
+export const setCommentCtrl = (req, res) => {
+  const { userID, userName, title, message } = req.body;
 
-  let comment = { userName, message, userAvatar };
-  let comments = [];
-
-  console.log("userAvatar", userAvatar);
-  articleModel.find({ title }, (err, article) => {
+  userModel.findById(userID, (err, user) => {
     if (err) {
       console.log("err", err);
       res.status(404).json(err);
-      return;
+      return err;
     }
-    comments = article[0].comments;
-    if (comments) {
-      article[0].comments = [comment, ...comments];
-    } else {
-      article[0].comments = [comment];
-    }
-    let socialCount = article[0].socialCount;
+    console.log("user avatar from db", user.userAvatar);
+    let comment = { userAvatar: user.userAvatar, userID, userName, message };
 
-    article[0].socialCount.comments = socialCount.comments + 1;
+    let comments = [];
 
-    article[0].save((err, article) => {
+    articleModel.find({ title }, (err, article) => {
       if (err) {
         console.log("err", err);
         res.status(404).json(err);
         return;
       }
+      comments = article[0].comments;
 
-      res.status(200).json({ message: "ok", id: article.comments[0]._id });
+      if (comments) {
+        article[0].comments = [comment, ...comments];
+      } else {
+        article[0].comments = [comment];
+      }
+
+      let socialCount = article[0].socialCount;
+
+      article[0].socialCount.comments = socialCount.comments + 1;
+
+      article[0].save((err, article) => {
+        if (err) {
+          console.log("err SAVING ARTICLE", err);
+          res.status(404).json(err);
+          return;
+        }
+
+        res.status(200).json({ message: "ok", id: article.comments[0]._id });
+      });
     });
   });
 };

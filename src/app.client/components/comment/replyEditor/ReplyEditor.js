@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
-//store
-import { store } from "../../../../app.redux.store/store/configStore";
+import { connect } from "react-redux";
 
 //assets
 import { check, equis } from "../../../assets/svgIcons/SvgIcons";
@@ -108,19 +106,17 @@ const Icon2 = styled.div`
   }
 `;
 
-const ReplyEditor = ({ setReplyEditor, index }) => {
+const ReplyEditor = ({
+  setReplyEditor,
+  index,
+  setGlobalComments,
+  userName,
+  userAvatar,
+  title,
+  comments,
+  userID
+}) => {
   const [responseText, setResponseText] = useState("");
-
-  const state = store.getState();
-  // actions
-  const setGlobalComments = comments => {
-    store.dispatch({ type: "SET_COMMENTS", payload: comments });
-  };
-  //reduxState
-  const userName = state.logInStatus.loggedUserName;
-  const userAvatar = state.logInStatus.loggedUserAvatar;
-  const title = state.article.title;
-  const comments = state.article.comments;
 
   const responseHandler = e => {
     setResponseText(e.target.value);
@@ -132,12 +128,12 @@ const ReplyEditor = ({ setReplyEditor, index }) => {
     }
     axios
       .put(
-        `api/setReply?message=${responseText}&userName=${userName}&title=${title}&index=${index}`,
+        `api/setReply`,
+        { message: responseText, userName, title, index, userID },
         {
           headers: {
             "Content-Type": "application/json"
-          },
-          userAvatar
+          }
         }
       )
       .then(res => {
@@ -181,7 +177,7 @@ const ReplyEditor = ({ setReplyEditor, index }) => {
       <AvatarCont>
         <Avatar
           style={{
-            backgroundImage: `url('data:image/jpeg;base64,${userAvatar}')`
+            backgroundImage: `url('${userAvatar}`
           }}
         />
       </AvatarCont>
@@ -208,11 +204,24 @@ const ReplyEditor = ({ setReplyEditor, index }) => {
   );
 };
 
-export default ReplyEditor;
+const mapStateToProps = state => {
+  return {
+    userName: state.logInStatus.loggedUserName,
+    userAvatar: state.logInStatus.loggedUserAvatar,
+    userID: state.logInStatus.loggedUserID,
+    title: state.article.title,
+    comments: state.article.comments
+  };
+};
+const mapDispachToProps = dispatch => {
+  return {
+    //acciones
+    setGlobalComments: comments =>
+      dispatch({ type: "SET_COMMENTS", payload: comments })
+  };
+};
 
-// userAvatar={replyData.userAvatar}
-//             userName={replyData.userName}
-//             reply={replyData.reply}
-//             date={replyData.date}
-//             likes={replyData.likes}
-//             replies={replyData.replies}
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(ReplyEditor);

@@ -137,6 +137,7 @@ const Footer = styled.div`
 
 const NewComment = ({
   userName,
+  userID,
   avatar,
   title,
   comments,
@@ -152,7 +153,7 @@ const NewComment = ({
 
   useEffect(() => {
     setAvatar(avatar);
-  }, []);
+  }, [avatar]);
 
   const sendCommentHandler = () => {
     if (comment === "") {
@@ -160,7 +161,9 @@ const NewComment = ({
     }
 
     setCommentDisabled(true);
-    apiSetComment(userName, title, avatar, comment, id => {
+
+    console.log("userID sendCommentHandler", userID);
+    apiSetComment(userID, userName, title, comment, id => {
       let commentsToSet = comments;
       let commentToPush = {
         _id: id,
@@ -197,8 +200,7 @@ const NewComment = ({
                 id="Avatar"
                 style={{
                   backgroundImage:
-                    typeof avatarState === "string" &&
-                    `url('data:image/jpeg;base64,${avatarState}`
+                    typeof avatarState === "string" && `url(${avatarState})`
                 }}
               />
               <Username id="Username">{userName}</Username>
@@ -227,6 +229,7 @@ const NewComment = ({
 const mapStateToProps2 = state => {
   return {
     userName: state.logInStatus.loggedUserName,
+    userID: state.logInStatus.loggedUserID,
     avatar: state.logInStatus.loggedUserAvatar,
     title: state.article.title,
     comments: state.article.comments

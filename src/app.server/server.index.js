@@ -5,14 +5,14 @@ import cookieParser from "cookie-parser";
 require("dotenv").config();
 import morgan from "morgan";
 
+//modelos para DB
+import "../app.api/models/db";
+import "../app.api/config/passport"; //modulo debe estar importado despues de los modelos
+
 //controllers
 import swordvoiceWeb from "../app.server/controllers/swordvoiceWeb";
 import notFoundCtrl from "../app.server/controllers/notFoundCtrl";
 import cms from "../app.server/controllers/cms";
-
-//modelos para DB
-import "../app.api/models/db";
-import "../app.api/config/passport"; //modulo debe estar importado despues de los modelos
 
 //routes
 import routerAPI from "../app.api/routes/api.index";

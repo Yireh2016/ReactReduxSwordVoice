@@ -551,15 +551,15 @@ class BlogArticle extends Component {
     //   "newPostData[0].articleProps.comments",
     //   newPostData[0].articleProps.comments
     // );
-    const comments = this.props.article.comments.map((commentsData, i) => {
+    const comments = this.props.article.comments.map((comment, i) => {
       return (
         <Comment
           key={i}
-          userAvatar={commentsData.userAvatar}
-          userName={commentsData.userName}
-          message={commentsData.message}
-          date={commentsData.date}
-          replies={commentsData.responses}
+          userAvatar={comment.userAvatar}
+          userName={comment.userName}
+          message={comment.message}
+          date={comment.date}
+          replies={comment.responses}
           index={i}
         />
       );
@@ -635,9 +635,7 @@ class BlogArticle extends Component {
                       style={{
                         width: "50px",
                         height: "50px",
-                        backgroundImage: `url('data:image/jpeg;base64,${
-                          this.state.authorAvatar
-                        }')`,
+                        backgroundImage: `url(${this.state.authorAvatar})`,
                         backgroundPosition: "center center",
                         backgroundSize: "cover",
                         borderRadius: "100%"

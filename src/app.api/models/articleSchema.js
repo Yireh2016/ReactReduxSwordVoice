@@ -1,23 +1,28 @@
 import mongoose from "mongoose";
 import { Schema } from "mongoose";
+
+// require("./commentSchema");
+import { commentSchema } from "./commentSchema";
 //schemas
 
-const responseSchema = new Schema({
-  userName: { type: String, required: true },
-  userAvatar: { type: { data: Buffer, contentType: String } },
-  message: { type: String },
-  date: { type: Date, default: Date.now },
-  claps: { type: Number, default: 0 }
-});
+// const responseSchema = new Schema({
+//   userID: { type: Schema.Types.ObjectId, ref: "User" },
+//   userName: { type: String, required: true },
+//   userAvatar: { type: { data: Buffer, contentType: String } },
+//   message: { type: String },
+//   date: { type: Date, default: Date.now },
+//   claps: { type: Number, default: 0 }
+// });
 
-const commentSchema = new Schema({
-  userName: { type: String, required: true },
-  userAvatar: { type: { data: Buffer, contentType: String } },
-  message: { type: String },
-  date: { type: Date, default: new Date() },
-  responses: [responseSchema],
-  claps: { type: Number, default: 0 }
-});
+// const commentSchema = new Schema({
+//   userID: { type: Schema.Types.ObjectId, ref: "User" },
+//   userName: { type: String, required: true },
+//   userAvatar: { type: { data: Buffer, contentType: String } },
+//   message: { type: String },
+//   date: { type: Date, default: new Date() },
+//   responses: [responseSchema],
+//   claps: { type: Number, default: 0 }
+// });
 
 const articleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -40,5 +45,5 @@ const articleSchema = new Schema({
     views: { type: Number, default: 0 }
   }
 });
-mongoose.model("Comment", commentSchema);
+
 mongoose.model("Article", articleSchema);

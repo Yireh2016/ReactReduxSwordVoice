@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const apiSetComment = (userName, title, userAvatar, comment, callback) => {
+const apiSetComment = (userID, userName, title, comment, callback) => {
   return axios
     .put(
       `api/setComment`,
-      { userAvatar, message: comment, userName, title },
+      { userID, message: comment, userName, title },
       {
         headers: {
           "Content-Type": "application/json"

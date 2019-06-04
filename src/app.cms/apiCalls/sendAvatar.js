@@ -1,13 +1,13 @@
 import axios from "axios";
 
-import isBrowser from "../../services/isBrowser";
-
 const sendAvatar = (id, userAvatar) => {
-  let form = new FormData();
-  form.append("avatar", userAvatar);
-  const browser = isBrowser();
+  console.log(
+    "salvar este avatar en este id",
+    JSON.stringify({ id, userAvatar })
+  );
+
   return axios
-    .post(`/api/upload/${id}?browser=${browser}`, form) //se sube imagen como avatar del cliente
+    .post(`/api/upload/${id}`, { userAvatar }) //se sube imagen como avatar del cliente
     .then(res => {
       if (res.status === 200) {
         alert("image submited");

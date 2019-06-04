@@ -21,6 +21,7 @@ import validateNames from "./validations/validateNames";
 import validateEmail from "./validations/validateEmail";
 
 //services
+import blobToBase64 from "../../../services/blobToBase64";
 import isBrowser from "../../../services/isBrowser";
 import sendUserProfile from "../../apiCalls/sendUserProfile";
 import sendAvatar from "../../apiCalls/sendAvatar";
@@ -204,7 +205,7 @@ const Avatar = styled.div`
   background-color: gray;
   position: relative;
   background: ${props => {
-    if (props.img.match("data:image")) {
+    if (props.img && props.img.match("data:image")) {
       return `url(${props.img})`;
     } else {
       return `url(data:image/jpeg;base64,${props.img})`;
@@ -325,7 +326,12 @@ const OtherInterestsLayout = styled.div`
   }
 `;
 
-const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
+const UserProfile = ({
+  userProfile,
+  setUserProfile,
+  setUserAvatar,
+  loggedUserName
+}) => {
   const inputFile = React.createRef();
 
   const [oldPassword, setOldPassword] = useState("");
@@ -367,7 +373,6 @@ const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
 
   const [isProfileChanged, setProfileChanged] = useState(false);
 
-  const [userAvatarBin, setUserAvatarBin] = useState("");
   const [newAvatar, setNewAvatar] = useState(false);
 
   const interestArray = [
@@ -627,19 +632,16 @@ const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
   };
 
   const imageUpload = image => {
-    setUserAvatarBin(image);
     let newUserProfile = userProfile;
+    blobToBase64(image, base64Obj => {
+      newUserProfile.userAvatar = base64Obj.url;
 
-    var reader = new FileReader();
-    reader.onloadend = function() {
-      newUserProfile.userAvatar = reader.result;
       setUserProfile(newUserProfile);
       setProfileChanged(true);
       setNewAvatar(true);
 
       alert("file Uploaded successfully");
-    };
-    reader.readAsDataURL(image);
+    });
   };
 
   const imageUploadErr = err => {
@@ -674,9 +676,19 @@ const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
 
   const saveHandler = async () => {
     if (newAvatar) {
-      const sendAvatarRes = await sendAvatar(_id, userAvatarBin);
+      console.log(
+        "salvar este avatar en este id",
+        JSON.stringify({ id: userProfile._id, avatar: userProfile.userAvatar })
+      );
+      const sendAvatarRes = await sendAvatar(
+        userProfile._id,
+        userProfile.userAvatar
+      );
 
-      if (sendAvatarRes.status === "OK") {
+      if (
+        sendAvatarRes.status === "OK" &&
+        userProfile.userName === loggedUserName
+      ) {
         setUserAvatar(userProfile.userAvatar);
         window.localStorage.setItem("userAvatar", userProfile.userAvatar);
       }
@@ -1088,7 +1100,8 @@ const UserProfile = ({ userProfile, setUserProfile, setUserAvatar }) => {
 // export default UserProfile;
 const mapStateToProps = state => {
   return {
-    userProfile: state.userProfile.userProfile
+    userProfile: state.userProfile.userProfile,
+    loggedUserName: state.login.loggedUserName
   };
 };
 const mapDispachToProps = dispatch => {

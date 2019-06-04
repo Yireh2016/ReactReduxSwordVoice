@@ -440,13 +440,13 @@ class Dashboard extends Component {
                       backgroundSize: "cover",
                       borderRadius: "100%",
 
-                      backgroundImage: this.props.loggedUserAvatar.match(
-                        "data:image"
-                      )
-                        ? `url('${this.props.loggedUserAvatar}`
-                        : `url('data:image/jpeg;base64,${
-                            this.props.loggedUserAvatar
-                          }`
+                      backgroundImage:
+                        this.props.loggedUserAvatar &&
+                        this.props.loggedUserAvatar.match("data:image")
+                          ? `url('${this.props.loggedUserAvatar}`
+                          : `url('data:image/jpeg;base64,${
+                              this.props.loggedUserAvatar
+                            }`
                     }}
                   />
                 </div>

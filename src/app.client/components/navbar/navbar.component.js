@@ -19,10 +19,7 @@ import apiLogout from "../../apiCalls/apiLogout";
 
 //services
 
-import {
-  guestCookie,
-  removeCookie
-} from "../../../app.client/services/cookieManager";
+import { guestCookie } from "../../../app.client/services/cookieManager";
 
 class NavBar extends Component {
   constructor(props) {
@@ -110,23 +107,20 @@ class NavBar extends Component {
 
   handleScroll() {
     //evita que hayan llamadas innecesarioas al setstate, ya que el scroll es un evento que puede llenar la cola de tareas facilmente
-    if (
-      (window.pageYOffset === 0 && this.state.navBarMarginTop === "20") ||
-      (window.pageYOffset !== 0 && this.state.navBarMarginTop === 0)
-    ) {
-      return;
-    }
-    //if is PC
 
+    //if is PC
     if (window.innerWidth > 1050) {
-      if (window.pageYOffset > 20) {
+      if (window.pageYOffset > 20 && !this.state.menuIsOpaque) {
+        console.log("handleScroll");
+
         this.setState({
           menuIsOpaque: true
         });
-      } else {
+      } else if (window.pageYOffset <= 20 && this.state.menuIsOpaque === true) {
         /*
           antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
         */
+        console.log("handleScroll");
 
         this.setState(prevState => {
           const menuState =
@@ -167,8 +161,6 @@ class NavBar extends Component {
     const logoutRes = await apiLogout();
     if (logoutRes.status === "OK") {
       this.props.onLogOut();
-      removeCookie(this.props, "username");
-      removeCookie(this.props, "usernameID");
 
       window.localStorage.removeItem("userAvatar");
       this.setState({
@@ -379,8 +371,6 @@ class NavBar extends Component {
             id="menu-pc"
             className="fila"
             style={{
-              // marginTop: this.state.navBarMarginTop + "px",
-
               position: "relative"
             }}
           >
