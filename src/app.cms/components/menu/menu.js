@@ -39,17 +39,19 @@ class Menu extends Component {
   render() {
     const items = this.props.children.length ? (
       this.props.children.map((items, i) => {
-        return (
-          <MenuItem
-            itemToggle={this.state.itemToggle[i]}
-            key={i}
-            id={i}
-            adminClickHandler={this.adminClickHandler}
-            menuTitle={this.props.itemsTitle[i]}
-          >
-            {items}
-          </MenuItem>
-        );
+        if (items) {
+          return (
+            <MenuItem
+              itemToggle={this.state.itemToggle[i]}
+              key={i}
+              id={i}
+              adminClickHandler={this.adminClickHandler}
+              menuTitle={this.props.itemsTitle[i]}
+            >
+              {items}
+            </MenuItem>
+          );
+        }
       })
     ) : (
       <MenuItem

@@ -48,22 +48,21 @@ const article = (state = initialState, action) => {
     }
 
     case "ADD_VIEWS_COUNT": {
-      newState.socialCount.views = newState.socialCount.views + action.payload;
+      newState.socialCount.views = action.payload;
       break;
     }
 
     case "ADD_CLAPS_COUNT": {
-      newState.socialCount.claps = newState.socialCount.claps + action.payload;
+      newState.socialCount.claps = action.payload;
       break;
     }
 
     case "SET_SHARE_COUNT": {
-      newState.socialCount.share = newState.socialCount.share + action.payload;
+      newState.socialCount.share = action.payload;
       break;
     }
     case "SET_COMMENTS_COUNT": {
-      newState.socialCount.comments =
-        newState.socialCount.comments + action.payload;
+      newState.socialCount.comments = action.payload;
       break;
     }
     case "SET_COMMENTS": {

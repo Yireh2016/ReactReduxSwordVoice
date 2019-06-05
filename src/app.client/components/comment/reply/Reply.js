@@ -118,10 +118,7 @@ const Reply = ({ userAvatar, userName, message, date, likes }) => {
       <AvatarCont>
         <Avatar
           style={{
-            backgroundImage:
-              userAvatar && userAvatar.match("data:image")
-                ? `url('${userAvatar}`
-                : `url('data:image/jpeg;base64,${userAvatar}')`
+            backgroundImage: userAvatar && `url('${userAvatar}`
           }}
         />
       </AvatarCont>

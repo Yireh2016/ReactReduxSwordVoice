@@ -24,7 +24,7 @@
   .call2Action {
     font-size: 2.3vh;
     border-radius: 2vmin;
-    width: 16vh;
+    min-width: 130px;
     height: 6vh;
   }
 }
@@ -32,7 +32,6 @@
   .call2Action {
     font-size: 1rem;
     border-radius: 15px;
-    width: 130px;
     height: 45px;
   }
 }

@@ -1,32 +1,52 @@
 import mongoose from "mongoose";
 
 const articleModel = mongoose.model("Article");
-// const commentModel = mongoose.model("Comment");
-// const commentModel = mongoose.model("Comment");
 const userModel = mongoose.model("User");
 
 export const socialCtrl = (req, res) => {
-  const title = req.query.title;
-  const socialCount = req.body;
+  const { title, prop } = req.query;
+  const { socialCount } = req.body;
 
-  console.log("title", title);
-  console.log("socialCount", socialCount);
+  articleModel.find({ title }).exec((err, article) => {
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } else {
+      switch (prop) {
+        case "claps":
+          article[0].socialCount.claps =
+            article[0].socialCount.claps + socialCount;
+          break;
 
-  articleModel.findOneAndUpdate(
-    { title },
-    {
-      socialCount
-    },
-    function(err) {
-      if (err) {
-        console.log(err);
-        res.send(err);
-      } else {
-        res.sendStatus(200);
-        res.end("success");
+        case "share":
+          article[0].socialCount.share =
+            article[0].socialCount.share + socialCount;
+          break;
+
+        case "comments":
+          article[0].socialCount.comments =
+            article[0].socialCount.comments + socialCount;
+          break;
+
+        case "views":
+          article[0].socialCount.views =
+            article[0].socialCount.views + socialCount;
+          break;
+
+        default:
+          break;
       }
+
+      article[0].save((err, article) => {
+        if (err) {
+          console.log(err);
+          res.send(err);
+        } else {
+          res.status(200).send(article.socialCount);
+        }
+      });
     }
-  );
+  });
 };
 
 export const setReplyCtrl = async (req, res) => {
@@ -77,23 +97,23 @@ export const updateCommentClaps = (req, res) => {
   articleModel.find({ title }, (err, article) => {
     if (err) {
       console.log("err", err);
-      res.status(404).json(err);
+      res.status(404).json({ status: "ERR", message: err.message });
       return;
     }
-
+    err;
     let comments = article[0].comments;
 
-    comments[index].claps = claps;
+    comments[index].claps = comments[index].claps + claps;
 
-    articleModel.findOneAndUpdate({ title }, { comments }, err => {
+    articleModel.findOneAndUpdate({ title }, { comments }, (err, commnets) => {
       if (err) {
         console.log("err", err);
-        res.status(404).json(err);
+        res.status(404).json({ status: "ERR", message: err.message });
         return;
       }
     });
 
-    res.status(200).json({ message: "ok" });
+    res.status(200).json({ status: "OK", result: comments[index].claps });
   });
 };
 

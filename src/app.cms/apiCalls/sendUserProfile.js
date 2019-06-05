@@ -6,19 +6,13 @@ const sendUserProfile = userProfile => {
     .put(`/api/updateUserProfile/${userName}`, userProfile)
     .then(res => {
       if (res.status === 200) {
-        return res.data;
+        return { status: "OK", message: res.data };
       }
     })
     .catch(err => {
-      if (err) {
-        if (JSON.stringify(err).match(/404/g)) {
-          return { valid: true };
-        }
-
-        return {
-          valid: false,
-          message: `there was an error ${err}`
-        };
+      console.log("sendUserProfile err", JSON.stringify(err));
+      if (err.message) {
+        return { status: "error", message: err.message };
       }
     });
 };

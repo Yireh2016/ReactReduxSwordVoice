@@ -72,7 +72,6 @@ routerAPI.post("/upload/:userID", authAPI, (req, res) => {
   const { userAvatar } = req.body;
   const userID = req.params.userID;
 
-  console.log("actualizando o subiendo FOTO de avatar", userAvatar);
   usersModel.findByIdAndUpdate(
     userID,
     { userAvatar },
@@ -145,7 +144,6 @@ routerAPI.get("/users/:userId", authAPI, (req, res) => {
       if (err) {
         res.status(501).json(`thre was an error: ${err}`);
       } else {
-        console.log("specific user", user);
         res.status(200).json(user);
       }
     });

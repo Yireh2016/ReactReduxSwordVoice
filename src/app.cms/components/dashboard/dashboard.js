@@ -13,6 +13,7 @@ import AdminPost from "../adminPost/adminPost";
 import Menu from "../menu/menu";
 import ClassesInput from "../classesInput/classesInput";
 import UserProfile from "../userProfile/UserProfile";
+import Dialog from "../dialog/Dialog";
 
 //css
 import "./dashboard.css";
@@ -417,6 +418,14 @@ class Dashboard extends Component {
             </Modal>
           )}
 
+          {this.props.dialog && this.props.dialog.show && (
+            <Dialog
+              title={this.props.dialog.title}
+              body={this.props.dialog.body}
+              status={this.props.dialog.status}
+            />
+          )}
+
           <div className={`dashboardLayout ${expand}`}>
             <Helmet>
               <link
@@ -441,22 +450,24 @@ class Dashboard extends Component {
                       borderRadius: "100%",
 
                       backgroundImage:
-                        this.props.loggedUserAvatar &&
-                        this.props.loggedUserAvatar.match("data:image")
-                          ? `url('${this.props.loggedUserAvatar}`
-                          : `url('data:image/jpeg;base64,${
-                              this.props.loggedUserAvatar
-                            }`
+                        this.props.loggedUserAvatar && `url('${this.props.loggedUserAvatar}`
+                         
                     }}
                   />
                 </div>
               </div>
               <div className="dashCreatePost">
-                <CreatePostBtn />
+                {this.props.userType === "admin" && <CreatePostBtn />}
               </div>
               <div>
                 {this.props.menu.main && (
-                  <Menu itemsTitle={["Administration", "Stats"]}>
+                  <Menu
+                    itemsTitle={
+                      this.props.userType === "admin"
+                        ? ["Administration", "Stats"]
+                        : ["Administration"]
+                    }
+                  >
                     <ul className="dashMenuAdminList">
                       {this.props.userType === "admin" ? (
                         <ProfilesTableBtn />
@@ -464,17 +475,19 @@ class Dashboard extends Component {
                         <ProfilePostBtn />
                       )}
 
-                      <AdminPostBtn />
+                      {this.props.userType === "admin" && <AdminPostBtn />}
 
-                      <li>Users</li>
+                      {this.props.userType === "admin" && <li>Users</li>}
                     </ul>
-                    <ul className="dashMenuAdminList">
-                      <li>Search Data</li>
+                    {this.props.userType === "admin" && (
+                      <ul className="dashMenuAdminList">
+                        <li>Search Data</li>
 
-                      <li>Interest Data</li>
+                        <li>Interest Data</li>
 
-                      <li>Users Data</li>
-                    </ul>
+                        <li>Users Data</li>
+                      </ul>
+                    )}
                   </Menu>
                 )}
 
@@ -560,9 +573,11 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
+    dialog: state.dialog,
     loggedUserName: state.login.loggedUserName,
     isUserLoggedIn: state.login.isUserLoggedIn,
     loggedUserAvatar: state.login.loggedUserAvatar,
+    userType: state.login.userType,
     userId: state.login.loggedUserID,
     userType: state.login.userType,
     project: state.postCreation.project,

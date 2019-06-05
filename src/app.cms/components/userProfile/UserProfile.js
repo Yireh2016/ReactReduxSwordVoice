@@ -9,6 +9,7 @@ import { check } from "../../assets/SvgIcons";
 
 //components
 import CountrySelect from "../countryInput/CountryInput";
+import LoadingBtn from "../loading/loadingBtn";
 
 //api calls
 import searchEmail from "../../apiCalls/searchEmail";
@@ -25,6 +26,7 @@ import blobToBase64 from "../../../services/blobToBase64";
 import isBrowser from "../../../services/isBrowser";
 import sendUserProfile from "../../apiCalls/sendUserProfile";
 import sendAvatar from "../../apiCalls/sendAvatar";
+import triggerDialog from "../../controllers/triggerDialog";
 
 const UserProfileView = styled.div`
   display: flex;
@@ -35,6 +37,7 @@ const UserProfileView = styled.div`
 const FormLayout = styled.div`
   padding: 20px;
   display: flex;
+  height: calc(100% - 40px);
 `;
 
 const Form = styled.form`
@@ -167,12 +170,11 @@ const OldPasswordInputCont = styled.div`
 
 const OldPasswordInputLabel = styled.label`
   position: absolute;
-  right: 0;
+  right: -80px;
   padding: 10px;
   top: -11px;
   display: flex;
   flex-direction: column;
-  width: 50%;
   display: ${props => props.display};
 
   > span {
@@ -205,11 +207,7 @@ const Avatar = styled.div`
   background-color: gray;
   position: relative;
   background: ${props => {
-    if (props.img && props.img.match("data:image")) {
-      return `url(${props.img})`;
-    } else {
-      return `url(data:image/jpeg;base64,${props.img})`;
-    }
+    return `url(${props.img})`;
   }};
   background-position: center;
   background-size: cover;
@@ -375,6 +373,8 @@ const UserProfile = ({
 
   const [newAvatar, setNewAvatar] = useState(false);
 
+  const [isLoading, setLoading] = useState(false);
+
   const interestArray = [
     "Graphic Design",
     "UX/UI",
@@ -403,11 +403,21 @@ const UserProfile = ({
   userBirthDate = userBirthDate.match(/\d{4}-\d{2}-\d{2}/);
   userBirthDate = userBirthDate[0];
 
-  const checkboxHandler = e => {
+  const checkboxHandler = (e, isChecked) => {
     const { value } = e.target;
+
     let newUserProfile = userProfile;
 
-    newUserProfile.userInterests = [...userProfile.userInterests, value];
+    if (isChecked) {
+      newUserProfile.userInterests = userProfile.userInterests.filter(
+        interest => {
+          return interest !== value;
+        }
+      );
+    } else {
+      newUserProfile.userInterests = [...userProfile.userInterests, value];
+    }
+
     setUserProfile(newUserProfile);
     setProfileChanged(true);
   };
@@ -428,7 +438,9 @@ const UserProfile = ({
             type="checkbox"
             value={value}
             name={value}
-            onChange={checkboxHandler}
+            onChange={e => {
+              checkboxHandler(e, isChecked);
+            }}
           />
           <InterestChkBox>{value}</InterestChkBox>
         </InputLayout>
@@ -675,11 +687,17 @@ const UserProfile = ({
   };
 
   const saveHandler = async () => {
+    setLoading(true);
+    if (otherInterest !== "") {
+      let newUserProfile = userProfile;
+      newUserProfile.userOtherInterests = [
+        ...newUserProfile.userOtherInterests,
+        otherInterest
+      ];
+      setUserProfile(newUserProfile);
+      setOtherInterest("");
+    }
     if (newAvatar) {
-      console.log(
-        "salvar este avatar en este id",
-        JSON.stringify({ id: userProfile._id, avatar: userProfile.userAvatar })
-      );
       const sendAvatarRes = await sendAvatar(
         userProfile._id,
         userProfile.userAvatar
@@ -694,6 +712,62 @@ const UserProfile = ({
       }
     }
     const sendUserRes = await sendUserProfile(userProfile);
+    if (sendUserRes.status === "OK") {
+      triggerDialog({
+        title: "Success",
+        body: "Your profile has been saved",
+        status: "OK"
+      }); //'Success','Your profile has been saved','OK'
+    } else {
+      triggerDialog({
+        title: "Error",
+        body: sendUserRes.message,
+        status: "ERR"
+      });
+    }
+    resetUserProfileUI();
+    setLoading(false);
+  };
+
+  const resetUserProfileUI = () => {
+    setOldPassword("");
+    setIsOldPassword(false);
+    setIsPasswordCheck(true);
+    setOldPasswordShaking(false);
+
+    setPassword("");
+    setIsPassword(false);
+    setPasswordValid(" ");
+
+    setPasswdConf("");
+    setPasswdConfValid(" ");
+
+    setIsName(false);
+    setNameValid(" ");
+
+    setIsLastName(false);
+    setLastNameValid(" ");
+
+    setIsEmail(false);
+    setEmailValid(" ");
+    setEmailWarningMessage("Please, insert a valid Email");
+
+    setIsGender(false);
+    setGenderValid(" ");
+
+    setIsBirthDate(false);
+    setIsBirthDateValid(" ");
+
+    setIsCountry(false);
+    setIsCountryValid(" ");
+
+    setOtherInterest("");
+    setIsOtherInterest(false);
+    setInterestValid(" ");
+
+    setProfileChanged(false);
+
+    setNewAvatar(false);
   };
   return (
     <UserProfileView>
@@ -725,14 +799,16 @@ const UserProfile = ({
             </Avatar>
             <UserName>{userName}</UserName>
             <Controls>
-              <ControlBtn
-                type="button"
-                disabled={!isProfileChanged}
-                className="cmsBtn"
-                onClick={saveHandler}
-              >
-                Save
-              </ControlBtn>
+              {isProfileChanged && (
+                <ControlBtn
+                  type="button"
+                  disabled={!isProfileChanged}
+                  className="cmsBtn"
+                  onClick={saveHandler}
+                >
+                  {isLoading ? <LoadingBtn /> : "Save"}
+                </ControlBtn>
+              )}
 
               <ControlBtn type="button" className="cmsBtn">
                 Cancel

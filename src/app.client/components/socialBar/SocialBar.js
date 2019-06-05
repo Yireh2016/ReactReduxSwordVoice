@@ -15,17 +15,6 @@ import {
 
 import updateSocialCount from "../../assets/apiCalls/updateSocialCount";
 
-// {
-//   // article
-//   // likeCount = 0,
-//   // dislikeCount = 0,
-//   // commentCount = 0,
-//   // shareCount = 0,
-//   // addClapsCount,
-//   // ,
-//   // setCommentsCount,
-//   // setShareCount
-// }
 const SocialBar = ({
   socialCount,
   addClapsCount,
@@ -36,10 +25,12 @@ const SocialBar = ({
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   useEffect(() => {
-    console.log("ejecutando useeffect", socialCount.views);
-    setTimeout(() => {
-      setViewsCount(1);
-      updateSocialCount(title, socialCount);
+    setTimeout(async () => {
+      const updatedSocialCountRes = await updateSocialCount(title, "views", 1);
+
+      if (updatedSocialCountRes.status === "OK") {
+        setViewsCount(updatedSocialCountRes.result.views);
+      }
     }, 60000);
   }, []);
   const BarContainer = styled.div`
@@ -91,14 +82,20 @@ const SocialBar = ({
       clearTimeout(clapsTimer);
     }
     setClapsAdder(clapsAdder + 1);
-    addClapsCount();
-    const timer = setTimeout(() => {
+
+    const timer = setTimeout(async () => {
       setClapsAdder(0);
 
       //api call
-      updateSocialCount(title, socialCount);
+      const updateSocialCountRes = await updateSocialCount(
+        title,
+        "claps",
+        clapsAdder + 1
+      );
 
-      return;
+      if (updateSocialCountRes.status === "OK") {
+        addClapsCount(updateSocialCountRes.result.claps);
+      }
     }, 1000);
     setClapsTimer(timer);
   };
@@ -199,12 +196,12 @@ const mapStateToProps = state => {
 };
 const mapDispachToProps = dispatch => {
   return {
-    addClapsCount: (count = 1) =>
+    addClapsCount: count =>
       dispatch({ type: "ADD_CLAPS_COUNT", payload: count }),
 
-    setShareCount: (count = 1) =>
+    setShareCount: count =>
       dispatch({ type: "SET_SHARE_COUNT", payload: count }),
-    setViewsCount: (count = 1) =>
+    setViewsCount: count =>
       dispatch({ type: "ADD_VIEWS_COUNT", payload: count })
   };
 };

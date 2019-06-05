@@ -20,7 +20,6 @@ import Modal from "../modal/modal";
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
 
 import apiDeleteComment from "../../apiCalls/apiDeleteComment";
-import { stringify } from "querystring";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -321,14 +320,13 @@ const Comment = ({
     }
     setClapsAdder(clapsAdder + 1);
 
-    let clapsToSet;
-    if (article.comments[index].claps) {
-      clapsToSet = article.comments[index].claps;
-    } else {
-      clapsToSet = 0;
-    }
-    setCommentClaps(index, clapsToSet + 1);
-    const timer = setTimeout(() => {
+    // let clapsToSet;
+    // if (article.comments[index].claps) {
+    //   clapsToSet = article.comments[index].claps;
+    // } else {
+    //   clapsToSet = 0;
+    // }
+    const timer = setTimeout(async () => {
       setClapsAdder(0);
 
       console.log(
@@ -336,7 +334,17 @@ const Comment = ({
         article.comments[index].claps
       );
       //api call
-      updateCommentClaps(article.title, index, article.comments[index].claps);
+      const updatedCommentClaps = await updateCommentClaps(
+        article.title,
+        index,
+        clapsAdder + 1
+      );
+
+      console.log("clapsAdderHandler updatedCommentClaps", updatedCommentClaps);
+
+      if (updatedCommentClaps.status === "OK") {
+        setCommentClaps(index, updatedCommentClaps.result);
+      }
 
       return;
     }, 1000);
@@ -399,10 +407,7 @@ const Comment = ({
           <AvatarCont>
             <Avatar
               style={{
-                backgroundImage:
-                  typeof userAvatar === 'string' && userAvatar.match("data:image")
-                    ? `url('${userAvatar}`
-                    : `url('data:image/jpeg;base64,${userAvatar}')`
+                backgroundImage: userAvatar && `url('${userAvatar}`
               }}
             />
           </AvatarCont>

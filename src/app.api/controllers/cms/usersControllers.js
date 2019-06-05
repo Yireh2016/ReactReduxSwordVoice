@@ -60,9 +60,8 @@ export const updateUserCtrl = (req, res) => {
       user[0].userPassword = data.userPassword
         ? data.userPassword
         : user[0].userPassword;
-      console.log("data.userPassword", data.userPassword);
+
       data.userPassword && user[0].setPassword(user[0].userPassword);
-      // user[0].setPassword(user[0].userPassword);
 
       user[0].save((err, user) => {
         if (err) {
@@ -71,8 +70,7 @@ export const updateUserCtrl = (req, res) => {
 
           return;
         }
-        console.log("updated user", user);
-        res.status(200).send(user);
+        res.status(200).send("User Profile Updated");
       });
     }
   });

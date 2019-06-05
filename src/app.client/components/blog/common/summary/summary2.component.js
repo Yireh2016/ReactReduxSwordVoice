@@ -217,7 +217,7 @@ class Summary2 extends React.Component {
     //props avatar
     //props author
     const avatarStyle = {
-      backgroundImage: `url(data:image/jpeg;base64,${this.props.avatar})`
+      backgroundImage: `url(${this.props.avatar})`
     };
     const avatarCSS = "summary2-avatar";
     const autorCSS = "summary2-author";

@@ -68,6 +68,7 @@
 }
 
 .cmsBtn {
+  min-width: 80px;
   display: flex;
   align-items: center;
   padding: 10px;
@@ -76,9 +77,10 @@
   font-size: 0.8rem;
   box-sizing: border-box;
   background: #00171f;
-  border: 1px solid var(--orange);
+  border: 1px solid coral;
   color: #fff;
   transition: all ease 300ms;
+  justify-content: center;
 }
 .cmsBtn:hover {
   color: #00171f;

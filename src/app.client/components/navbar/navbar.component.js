@@ -195,9 +195,7 @@ class NavBar extends Component {
                 backgroundPosition: "center",
                 height: "45px",
                 width: "45px",
-                backgroundImage: this.state.loggedUserAvatar.match("data:image")
-                  ? `url('${this.state.loggedUserAvatar}`
-                  : `url('data:image/jpeg;base64,${this.state.loggedUserAvatar}`
+                backgroundImage: `url('${this.state.loggedUserAvatar}`
               }}
             />
           );
@@ -614,9 +612,7 @@ class NavBar extends Component {
                         className="avatarMenu"
                         onClick={this.onAvatarClick}
                         style={{
-                          backgroundImage: `url('data:image/jpeg;base64,${
-                            this.state.loggedUserAvatar
-                          }`
+                          backgroundImage: `url('${this.state.loggedUserAvatar}`
                         }}
                       />
                       <div className="desplegable-login">

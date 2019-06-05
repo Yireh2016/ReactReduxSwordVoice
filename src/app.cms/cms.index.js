@@ -16,6 +16,7 @@ import reducer from "./store/reducers/reducer";
 import postEditCtlreducer from "./store/reducers/postEditionControlReducer";
 import menuHandleReducer from "./store/reducers/menuHandleReducer";
 import userProfileReducer from "./store/reducers/userProfileReducer";
+import dialogReducer from "./store/reducers/dialogReducer";
 
 //components
 import App from "./app.cms";
@@ -27,9 +28,10 @@ const rootReducer = combineReducers({
   login: reducer,
   postCreation: postEditCtlreducer,
   menu: menuHandleReducer,
-  userProfile: userProfileReducer
+  userProfile: userProfileReducer,
+  dialog: dialogReducer
 });
-const store = createStore(
+export const store = createStore(
   rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

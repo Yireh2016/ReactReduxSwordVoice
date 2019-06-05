@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const getCommentAvatar = (memoryArray, id) => {
+const getAvatar = (memoryArray, id) => {
   for (let index = 0; index < memoryArray.length; index++) {
     const memo = memoryArray[index];
 
@@ -32,7 +32,7 @@ const updateReplyAvatars = (responses, memoryArray) => {
   return new Promise(async resolve => {
     for (let index = 0; index < responses.length; index++) {
       const reply = responses[index];
-      let avatar = getCommentAvatar(memoryArray, reply.userID);
+      let avatar = getAvatar(memoryArray, reply.userID);
 
       if (avatar) {
         reply.userAvatar = avatar;
@@ -67,7 +67,7 @@ const updateArticleAvatars = comments => {
           comment.responses = repliesRes.responses;
         }
 
-        let avatar = getCommentAvatar(memoryArray, comment.userID);
+        let avatar = getAvatar(memoryArray, comment.userID);
 
         if (avatar) {
           comment.userAvatar = avatar;
