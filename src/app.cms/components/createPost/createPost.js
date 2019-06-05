@@ -33,16 +33,6 @@ import insertIntoArr from "../../../services/insertIntoArr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
 import uploadFileService from "../../../services/uploadFileService";
 
-//props list
-//showExitModalHandler tells component dashbord to set exit modal
-//react map
-/*
-
-DashBoard
-  CreatePost
-
-*/
-
 class CreatePost extends Component {
   constructor(props) {
     super(props);

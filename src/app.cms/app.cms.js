@@ -12,11 +12,12 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/cms" render={() => <Login />} />
-        <Route path="/cms/dashboard" render={() => <Dashboard />} />
         <Route
+          exact
           path="/cms/preview"
           render={props => <Preview props={props} />}
         />
+        <Route path="/cms/*" render={() => <Dashboard />} />
       </Switch>
     );
   }

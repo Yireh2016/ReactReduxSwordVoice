@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import Compressor from "compressorjs";
+import { withRouter } from "react-router-dom";
 
 //assets
 import edit from "../../assets/createPost/edit.svg";
@@ -139,6 +140,23 @@ const InputLabel = styled.label`
   }
 `;
 
+const InputLabelUserProfile = styled.label`
+  display: flex;
+  flex-direction: column;
+  margin-left: ${props => props.lMargin};
+  width: ${props => props.width};
+  margin-top: 15px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  > span {
+    color: #00baff;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 0 6px;
+  }
+`;
+
 const InterestChkBox = styled.span`
   color: white;
   font-size: 18px;
@@ -223,11 +241,20 @@ const AvatarEditBtn = styled.img`
   }
 `;
 const UserName = styled.p`
-  flex-grow: 1;
   color: coral;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+`;
+
+const UserControl = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  div {
+    margin-top: 8px;
+  }
 `;
 
 const Controls = styled.div`
@@ -328,7 +355,9 @@ const UserProfile = ({
   userProfile,
   setUserProfile,
   setUserAvatar,
-  loggedUserName
+  loggedUserName,
+  login,
+  history
 }) => {
   const inputFile = React.createRef();
 
@@ -404,18 +433,22 @@ const UserProfile = ({
   userBirthDate = userBirthDate[0];
 
   const checkboxHandler = (e, isChecked) => {
-    const { value } = e.target;
+    const { value, name } = e.target;
 
     let newUserProfile = userProfile;
 
-    if (isChecked) {
-      newUserProfile.userInterests = userProfile.userInterests.filter(
-        interest => {
-          return interest !== value;
-        }
-      );
+    if (name === "userActive") {
+      newUserProfile.isUserActive = !newUserProfile.isUserActive;
     } else {
-      newUserProfile.userInterests = [...userProfile.userInterests, value];
+      if (isChecked) {
+        newUserProfile.userInterests = userProfile.userInterests.filter(
+          interest => {
+            return interest !== value;
+          }
+        );
+      } else {
+        newUserProfile.userInterests = [...userProfile.userInterests, value];
+      }
     }
 
     setUserProfile(newUserProfile);
@@ -433,7 +466,6 @@ const UserProfile = ({
       <React.Fragment key={index}>
         <InputLayout width="33%" id={`InterestInputLayout${index}`}>
           <Input
-            className=""
             checked={isChecked}
             type="checkbox"
             value={value}
@@ -479,6 +511,13 @@ const UserProfile = ({
     const { value, name } = e.target;
     let newUserProfile = userProfile;
     switch (name) {
+      case "userType":
+        setProfileChanged(true);
+        newUserProfile.userType = value;
+        setUserProfile(newUserProfile);
+
+        break;
+
       case "userOtherInterest": {
         setProfileChanged(true);
         setOtherInterest(value);
@@ -797,7 +836,45 @@ const UserProfile = ({
                 }}
               />
             </Avatar>
-            <UserName>{userName}</UserName>
+            <UserControl>
+              <UserName>{userName}</UserName>
+
+              {login.userType === "admin" && (
+                <React.Fragment>
+                  <InputLabelUserProfile width="calc(100% / 2)">
+                    <span>User Type</span>
+                    <InputLayout id="userTypeInputLayout">
+                      <Select
+                        value={userProfile.userType}
+                        name="userType"
+                        active={true}
+                        onChange={e => {
+                          inputChangeHandler(e);
+                        }}
+                      >
+                        <option value="user" defaultValue>
+                          User
+                        </option>
+                        <option value="editor">Editor</option>
+                        <option value="admin">Admin</option>
+                      </Select>
+                    </InputLayout>
+                  </InputLabelUserProfile>
+                  <div>
+                    <Input
+                      checked={userProfile.isUserActive}
+                      type="checkbox"
+                      value={userProfile.isUserActive}
+                      name="userActive"
+                      onChange={e => {
+                        checkboxHandler(e);
+                      }}
+                    />
+                    <InterestChkBox>is User Active?</InterestChkBox>
+                  </div>
+                </React.Fragment>
+              )}
+            </UserControl>
             <Controls>
               {isProfileChanged && (
                 <ControlBtn
@@ -810,7 +887,17 @@ const UserProfile = ({
                 </ControlBtn>
               )}
 
-              <ControlBtn type="button" className="cmsBtn">
+              <ControlBtn
+                onClick={() => {
+                  if (login.userType === "admin") {
+                    history.push("/cms/usersList");
+                    return;
+                  }
+                  history.push("/cms/dashboard");
+                }}
+                type="button"
+                className="cmsBtn"
+              >
                 Cancel
               </ControlBtn>
             </Controls>
@@ -1177,7 +1264,8 @@ const UserProfile = ({
 const mapStateToProps = state => {
   return {
     userProfile: state.userProfile.userProfile,
-    loggedUserName: state.login.loggedUserName
+    loggedUserName: state.login.loggedUserName,
+    login: state.login
   };
 };
 const mapDispachToProps = dispatch => {
@@ -1190,7 +1278,9 @@ const mapDispachToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(UserProfile);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispachToProps
+  )(UserProfile)
+);

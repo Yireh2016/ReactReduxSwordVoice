@@ -16,7 +16,8 @@ class SearchBar extends React.Component {
           border: this.props.searchBorder,
           borderRadius: " 10px",
           paddingBottom: " 0px 5px",
-          overflow: " hidden "
+          overflow: " hidden ",
+          margin: "30px"
         }}
       >
         <div

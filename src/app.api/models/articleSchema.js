@@ -28,6 +28,7 @@ const articleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comments: { type: [commentSchema] },
   date: { type: Date, default: Date.now },
+  lastEditionDate: { type: Date },
   elements: [{}],
   files: { type: [String] },
   html: { type: String },
@@ -38,6 +39,7 @@ const articleSchema = new Schema({
   title: { type: String, unique: true },
   url: { type: String },
   thumbnail: {},
+  isPublished: { type: Boolean, default: false },
   socialCount: {
     claps: { type: Number, default: 0 },
     share: { type: Number, default: 0 },

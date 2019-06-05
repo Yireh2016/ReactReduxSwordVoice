@@ -49,7 +49,7 @@ const postEditCtlreducer = (state = initialState, action) => {
         }
       ];
       newState.elements = newElement;
-      newState.project.hasChanged = true;
+      // newState.project.hasChanged = true;
       break;
     }
     case "ADD_ELEMENT": {

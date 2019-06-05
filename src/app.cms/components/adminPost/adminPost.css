@@ -1,6 +1,7 @@
 .reactTableLay {
-  overflow-y: scroll;
   height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .tableColumnElement {

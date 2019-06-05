@@ -61,7 +61,7 @@ class AdminPost extends Component {
     };
 
     this.props.onPostFetch(reduxStateFromDB);
-    this.props.history.push("/cms/dashboard/createPost");
+    this.props.history.push("/cms/createPost");
   };
   projectNameClickHandler = (e, props) => {
     const updateReduxState = this.updateReduxState;

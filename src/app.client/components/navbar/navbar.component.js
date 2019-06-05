@@ -244,12 +244,12 @@ class NavBar extends Component {
       {
         nombre: "About"
       },
-      {
-        nombre: "Portfolio"
-      },
-      {
-        nombre: "Courses"
-      },
+      // {
+      //   nombre: "Portfolio"
+      // },
+      // {
+      //   nombre: "Courses"
+      // },
       {
         nombre: "Blog"
       },
@@ -411,7 +411,6 @@ class NavBar extends Component {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  flexGrow: "1",
                   flexDirection: "row-reverse"
                 }}
                 // onMouseLeave={this.onMouseLeaveHandler}

@@ -49,15 +49,15 @@ class About extends React.Component {
     const HTMLdata = [
       {
         HTML:
-          "<h2>Who are we?</h2><p><b>SwordVoice: </b>A freelance team of professional graphic designers and web developers.</p>"
+          "<h2>Who are we?</h2><p><b>SwordVoice: </b>A team of professional graphic designers and web developers (a bunch of geeks).</p>"
       },
       {
         HTML:
-          "<h2>What We Do?</h2><p>Custom Web Design and Development, Web Apps, Platforms, eCommerce, UI/UX, Creative Direction and much more, <a href='/contact'>just ask.</a></p>"
+          "<h2>What We Do?</h2><p>Custom Web Design and Development, Web Apps, Platforms, eCommerce, UI/UX, Creative Direction, Courses, Tutorials and much more, <a href='/contact'>just ask.</a></p>"
       },
       {
         HTML:
-          "<h2>What We Love?</h2><p>Graphic Design, Technology and Good Coding Practices. Go check <a href='/portfolio'>our concepts.</a></p>"
+          "<h2>What We Love?</h2><p>Graphic Design, Technology and Good Coding Practices. Go check <a href='/blog'>our Blog.</a></p>"
       }
     ];
 

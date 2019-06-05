@@ -9,11 +9,7 @@ import { withRouter } from "react-router-dom";
 import getUsers from "../../apiCalls/getUsers";
 import SearchBar from "../../../app.client/components/blog/searchBar/searchBar.component";
 
-const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-`;
+const Layout = styled.div``;
 
 const ProfilesTable = ({ setUserProfile, history }) => {
   const [users, setUsers] = useState([]);
@@ -36,7 +32,7 @@ const ProfilesTable = ({ setUserProfile, history }) => {
     console.log("setUserProfile", setUserProfile);
     console.log("selected user from state", users[tableIndex]);
     setUserProfile(users[tableIndex]);
-    history.push("/cms/dashboard/userProfile");
+    history.push("/cms/userProfile");
   };
 
   const columns = [

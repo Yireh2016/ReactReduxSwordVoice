@@ -212,16 +212,16 @@ class Dashboard extends Component {
     this.setState({
       isMenu: false
     });
-    if (window.location.pathname === `/cms/dashboard/${link}`) {
+    if (window.location.pathname === `/cms/${link}`) {
       return;
     }
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
-      history.push(`/cms/dashboard/${link}`);
+      history.push(`/cms/${link}`);
     } else {
       this.setState({
-        showExitModal: { show: true, url: `/cms/dashboard/${link}` }
+        showExitModal: { show: true, url: `/cms/${link}` }
       });
     }
   };
@@ -301,7 +301,7 @@ class Dashboard extends Component {
           <button
             className="cmsBtn"
             onClick={() => {
-              if (window.location.pathname === "/cms/dashboard/createPost") {
+              if (window.location.pathname === "/cms/createPost") {
                 return;
               }
               this.props.onReset();
@@ -309,7 +309,7 @@ class Dashboard extends Component {
                 main: false,
                 create: true
               });
-              history.push("/cms/dashboard/createPost");
+              history.push("/cms/createPost");
             }}
           >
             <span>Create Post</span> <img src={plus} alt="Plus" />
@@ -450,14 +450,16 @@ class Dashboard extends Component {
                       borderRadius: "100%",
 
                       backgroundImage:
-                        this.props.loggedUserAvatar && `url('${this.props.loggedUserAvatar}`
-                         
+                        this.props.loggedUserAvatar &&
+                        `url('${this.props.loggedUserAvatar}`
                     }}
                   />
                 </div>
               </div>
               <div className="dashCreatePost">
-                {this.props.userType === "admin" && <CreatePostBtn />}
+                {this.props.userType === "admin" &&
+                  this.props.history.location.pathname !==
+                    "/cms/createPost" && <CreatePostBtn />}
               </div>
               <div>
                 {this.props.menu.main && (
@@ -500,16 +502,18 @@ class Dashboard extends Component {
                 )}
               </div>
 
-              <div className="dashLogOut">
-                <div>
-                  <a href="/home">
-                    <button className="cmsBtn">
-                      <span>Home</span>
-                      <img src={exit} alt="Exit" />
-                    </button>
-                  </a>
+              {this.props.history.location.pathname.match("/cms/") && (
+                <div className="dashLogOut">
+                  <div>
+                    <a href="/blog">
+                      <button className="cmsBtn">
+                        <span>Exit</span>
+                        <img src={exit} alt="Exit" />
+                      </button>
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
             </aside>
             <section
               className="dashMain"
@@ -537,7 +541,7 @@ class Dashboard extends Component {
                   />
                   <Route
                     exact
-                    path="/cms/dashboard/createPost"
+                    path="/cms/createPost/"
                     render={() => (
                       <CreatePost
                         showExitModalHandler={this.showExitModalHandler}
@@ -546,17 +550,17 @@ class Dashboard extends Component {
                   />
                   <Route
                     exact
-                    path="/cms/dashboard/adminPost"
+                    path="/cms/adminPost/"
                     render={() => <AdminPost />}
                   />
                   <Route
                     exact
-                    path="/cms/dashboard/userProfile"
+                    path="/cms/userProfile/"
                     render={() => <UserProfile />}
                   />
                   <Route
                     exact
-                    path="/cms/dashboard/usersList"
+                    path="/cms/usersList/"
                     render={() => <ProfilesTable />}
                   />
                 </Switch>
@@ -614,4 +618,4 @@ const Dashboard2 = connect(
   mapDispachToProps
 )(Dashboard);
 
-export default withCookies(Dashboard2);
+export default withRouter(withCookies(Dashboard2));
