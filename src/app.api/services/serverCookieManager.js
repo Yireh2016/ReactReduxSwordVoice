@@ -1,15 +1,14 @@
 import { createToken } from "./tokenHandler";
 
 export const sessionCookie = async (req, res, user) => {
-  let userSessionId = 1;
-
   console.log("creating token");
   const token = await createToken(
     {},
     {
-      username: user.username,
+      userName: user.userName,
       id: user.id,
-      sessionID: userSessionId
+      userFullName: user.userFullName,
+      userType: user.userType
     },
     {
       encryptKey: `${process.env.ENCRYPTKEY}`,

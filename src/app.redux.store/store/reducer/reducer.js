@@ -1,5 +1,6 @@
 const initialState = {
   isUserLoggedIn: false,
+  loggedUserFullName: undefined,
   loggedUserAvatar: undefined,
   loggedUserName: undefined,
   loggedUserID: undefined,
@@ -11,6 +12,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOGGED_IN": {
       newState.isUserLoggedIn = true;
+      newState.loggedFullName = action.payload.userFullName;
       newState.loggedUserAvatar = action.payload.userAvatar;
       newState.loggedUserName = action.payload.userName;
       newState.loggedUserID = action.payload.userID;

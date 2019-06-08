@@ -44,7 +44,10 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
-  console.log("RENDERING preloadedState to send to templeta preloadedState");
+  console.log(
+    "RENDERING preloadedState to send to templeta preloadedState",
+    preloadedState
+  );
   res.send(
     template({
       body: renderTemplate(req, store),
@@ -158,7 +161,7 @@ const swordvoiceWeb = async (req, res) => {
       } else if (req.url.match("/blog")) {
         console.log("entrando a /BLOG");
         articleModel
-          .find()
+          .find({ isPublished: true })
           .select()
           .limit(7)
           .populate("author")
@@ -212,17 +215,18 @@ const swordvoiceWeb = async (req, res) => {
 
         console.log("Checkiing token ", tokenData);
 
-        const username = tokenData.data.username;
+        const userName = tokenData.data.userName;
         const usernameID = tokenData.data.id;
+        const userFullName = tokenData.data.userFullName;
+        const userType = tokenData.data.userType;
 
         successOnFindingUserAndDistpach(
-          { userName: username, _id: usernameID },
+          { userName, _id: usernameID, userFullName, userType },
           store
         );
         resolve();
       } else {
         console.log("USER NOT LOGGUED IN ");
-        console.log("ME ESTOY EJECUNTADO store.dispatch DEFAULT");
         store.dispatch({ type: "DEFAULT" });
         resolve("");
       }
@@ -231,12 +235,12 @@ const swordvoiceWeb = async (req, res) => {
   try {
     // await dbRegular();
     await routerPromise();
-    console.log("end routerPromise");
+    console.log("end routerPromise", store);
     await userLoggedInPromise();
-    console.log("end userLoggedInPromise");
+    console.log("end userLoggedInPromise", store);
 
     renderWithPreloadedState(req, res, store);
-    console.log("end renderWithPreloadedState");
+    console.log("end renderWithPreloadedState", store);
   } catch (err) {
     console.log("errors on promises", err);
   }
@@ -251,96 +255,96 @@ function safeStringify(obj) {
     .replace(/\u2029/g, "\\u2029"); // Ditto
 }
 
-const dbRegular = () => {
-  new Promise((resolve, reject) => {
-    let articleModel = mongoose.model("Article");
+// const dbRegular = () => {
+//   new Promise((resolve, reject) => {
+//     let articleModel = mongoose.model("Article");
 
-    articleModel
-      .find({ "comments.message": { $exists: true } })
-      .select("comments userAvatar ")
-      .exec((err, articles) => {
-        if (err) {
-          reject(err);
-        }
+//     articleModel
+//       .find({ "comments.message": { $exists: true } })
+//       .select("comments userAvatar ")
+//       .exec((err, articles) => {
+//         if (err) {
+//           reject(err);
+//         }
 
-        console.log("articles length", articles.length);
-        console.log("articles", articles);
-        articles.forEach(async (article, i) => {
-          const editArticle = new Promise(resolve => {
-            // let commentsArr = article.comments;..
+//         console.log("articles length", articles.length);
+//         console.log("articles", articles);
+//         articles.forEach(async (article, i) => {
+//           const editArticle = new Promise(resolve => {
+//             // let commentsArr = article.comments;..
 
-            article.comments
-              ? console.log(
-                  "article.comments len dentro del foreach",
-                  article.comments.length
-                )
-              : console.log(
-                  "article.comments dentro del foreach",
-                  article.comments
-                );
+//             article.comments
+//               ? console.log(
+//                   "article.comments len dentro del foreach",
+//                   article.comments.length
+//                 )
+//               : console.log(
+//                   "article.comments dentro del foreach",
+//                   article.comments
+//                 );
 
-            for (let index = 0; index < article.comments.length; index++) {
-              if (typeof article.comments[index].userAvatar === "string") {
-                const avatarExists = article.comments[index].userAvatar.match(
-                  "data"
-                );
-                console.log("dentro del FOR", index);
-                avatarExists
-                  ? console.log("avatarExists length", avatarExists.length)
-                  : console.log("avatarExists ", avatarExists);
+//             for (let index = 0; index < article.comments.length; index++) {
+//               if (typeof article.comments[index].userAvatar === "string") {
+//                 const avatarExists = article.comments[index].userAvatar.match(
+//                   "data"
+//                 );
+//                 console.log("dentro del FOR", index);
+//                 avatarExists
+//                   ? console.log("avatarExists length", avatarExists.length)
+//                   : console.log("avatarExists ", avatarExists);
 
-                // const article = article.comments[index];
+//                 // const article = article.comments[index];
 
-                if (!avatarExists) {
-                  article.comments[
-                    index
-                  ].userAvatar = `data:image/jpeg;base64,${
-                    article.comments[index].userAvatar
-                  }`;
-                }
+//                 if (!avatarExists) {
+//                   article.comments[
+//                     index
+//                   ].userAvatar = `data:image/jpeg;base64,${
+//                     article.comments[index].userAvatar
+//                   }`;
+//                 }
 
-                console.log(
-                  "new user avatart ",
-                  article.comments[index].userAvatar.match("data").length
-                );
-              } else {
-                article.comments[index].userAvatar = "";
-                console.log("avatar was binary ");
-              }
+//                 console.log(
+//                   "new user avatart ",
+//                   article.comments[index].userAvatar.match("data").length
+//                 );
+//               } else {
+//                 article.comments[index].userAvatar = "";
+//                 console.log("avatar was binary ");
+//               }
 
-              // userModel
-              //   .find({ userName: article.comments[index].userName })
-              //   .select("_id")
-              //   .exec((err, user) => {
-              //     let newComment = article.comments[index];
-              //     if (!newComment.userID) {
-              //       newComment.userID = user[0]._id;
-              //       article.comments[index] = newComment;
-              //       console.log(
-              //         "comment userid",
-              //         article.comments[index].userID
-              //       );
-              //       console.log("saving", index);
-              //       resolve();
-              //     } else {
-              //       resolve();
-              //     }
-              //   });
-            }
+//               // userModel
+//               //   .find({ userName: article.comments[index].userName })
+//               //   .select("_id")
+//               //   .exec((err, user) => {
+//               //     let newComment = article.comments[index];
+//               //     if (!newComment.userID) {
+//               //       newComment.userID = user[0]._id;
+//               //       article.comments[index] = newComment;
+//               //       console.log(
+//               //         "comment userid",
+//               //         article.comments[index].userID
+//               //       );
+//               //       console.log("saving", index);
+//               //       resolve();
+//               //     } else {
+//               //       resolve();
+//               //     }
+//               //   });
+//             }
 
-            article.save(() => {
-              console.log("finished saving", i);
-              resolve();
-            });
-          });
+//             article.save(() => {
+//               console.log("finished saving", i);
+//               resolve();
+//             });
+//           });
 
-          await editArticle;
-          console.log("finish editing one article");
-        });
+//           await editArticle;
+//           console.log("finish editing one article");
+//         });
 
-        resolve();
-      });
-  });
-};
+//         resolve();
+//       });
+//   });
+// };
 
 export default swordvoiceWeb;

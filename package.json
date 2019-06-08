@@ -5,7 +5,7 @@
   "scripts": {
     "dev:build-server": " webpack --config webpack.config.js --mode=development -w     ",
     "dev:start": "cross-env ENCRYPTKEY='reguergueguergue' JWTSECRET='reguergueguergue' CLIENT=true COOKEYS='reguergueguergue'  nodemon server/server.js",
-    "dev": "concurrently \"npm:dev:build-server\" \"npm:dev:start\" \"npm:dev-mongo\"",
+    "dev": "concurrently \"npm:dev:build-server\" \"npm:dev:start\" ",
     "dev-mongo": "cd /Program Files/MongoDB/Server/4.0/bin/ && start mongod",
     "build": " webpack --config webpack.config.js --mode=production",
     "start": "node server/server.js",

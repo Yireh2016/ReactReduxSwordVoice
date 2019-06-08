@@ -63,14 +63,6 @@ class BlogArticle extends Component {
     // this.setState({ device: device });
 
     const similDataArray = this.fetchData();
-    //esto cabio porque ya no tengo token
-    // if (getToken() && isLoggedIn()) {
-    //   // this.props.onLogIn();
-    //   const token = getToken();
-    //   const tokenData = getTokenData(token);
-    //   console.log("tokenData", tokenData);
-    //   // this.setUserFromId(userId);
-    // }
 
     const win = window.outerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
@@ -491,30 +483,6 @@ class BlogArticle extends Component {
     });
   };
 
-  setUserFromId = userId => {
-    axios
-      .get(`/api/users/${userId}`)
-      .then(res => {
-        let imgBlob = b64toBlob(res.data.userAvatar, "image/jpeg");
-        //REDUX: despachar acciones redux que modifiquen el estado loggedUserAvatar,loggedUserName, isUserLoggedIn
-
-        this.props.onLogIn({
-          userAvatar: imgBlob,
-          userName: res.data.userName,
-          userID: userId,
-          userType: res.data.userType
-        });
-
-        this.setState({
-          loggedUserAvatar: imgBlob,
-          loggedUserName: res.data.userName,
-          isUserLoggedIn: true
-        });
-      })
-      .catch(err => {
-        console.log("there was an error on login auth get", err);
-      });
-  };
   similPostScroll = e => {
     let newData = this.state.similPostsArray;
     newData = this.nodeScrollControl(e, newData);

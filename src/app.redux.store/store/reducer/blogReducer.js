@@ -1,5 +1,17 @@
 const initialState = {
-  articlesArr: []
+  articlesArr: [
+    {
+      title: "",
+      postImg: "",
+      postGradient: "",
+      keywords: [],
+      author: "",
+      date: "",
+      url: "",
+      avatar: "",
+      summaryTextHtml: ""
+    }
+  ]
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const blogReducer = (state = initialState, action) => {

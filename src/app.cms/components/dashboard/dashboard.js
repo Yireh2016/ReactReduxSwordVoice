@@ -457,7 +457,7 @@ class Dashboard extends Component {
                 </div>
               </div>
               <div className="dashCreatePost">
-                {this.props.userType === "admin" &&
+                {this.props.userType !== "user" &&
                   this.props.history.location.pathname !==
                     "/cms/createPost" && <CreatePostBtn />}
               </div>
@@ -471,15 +471,13 @@ class Dashboard extends Component {
                     }
                   >
                     <ul className="dashMenuAdminList">
+                      {this.props.userType !== "user" && <AdminPostBtn />}
+
                       {this.props.userType === "admin" ? (
                         <ProfilesTableBtn />
                       ) : (
                         <ProfilePostBtn />
                       )}
-
-                      {this.props.userType === "admin" && <AdminPostBtn />}
-
-                      {this.props.userType === "admin" && <li>Users</li>}
                     </ul>
                     {this.props.userType === "admin" && (
                       <ul className="dashMenuAdminList">

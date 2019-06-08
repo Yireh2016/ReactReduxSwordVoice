@@ -15,6 +15,7 @@ const reducer = (state = initialState, action) => {
     }
 
     case "LOGGED_IN": {
+      newState.loggedFullName = action.payload.userFullName;
       newState.isUserLoggedIn = true;
       newState.loggedUserAvatar = action.payload.userAvatar;
       newState.loggedUserName = action.payload.userName;

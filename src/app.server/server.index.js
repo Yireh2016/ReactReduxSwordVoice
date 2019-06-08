@@ -13,6 +13,7 @@ import "../app.api/config/passport"; //modulo debe estar importado despues de lo
 import swordvoiceWeb from "../app.server/controllers/swordvoiceWeb";
 import notFoundCtrl from "../app.server/controllers/notFoundCtrl";
 import cms from "../app.server/controllers/cms";
+import checkProgramPost from "./controllers/checkProgramPost";
 
 //routes
 import routerAPI from "../app.api/routes/api.index";
@@ -42,6 +43,8 @@ server.get("/newBlog", swordvoiceWeb);
 server.get("/blog", swordvoiceWeb);
 server.get("/blog/post*", swordvoiceWeb);
 server.get("*", notFoundCtrl);
+
+checkProgramPost(1); //every minute
 
 //starting server
 server.listen(8080);

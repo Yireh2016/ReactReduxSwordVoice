@@ -351,11 +351,28 @@ class BlogPage extends React.Component {
       searchBorder,
       searchTranslateX
     } = this.state;
-    const { articlesArr } = this.props.blog;
+    let { articlesArr } = this.props.blog;
+    if (articlesArr.length === 0) {
+      articlesArr = [
+        {
+          title: "",
+          postImg: "",
+          postGradient: "",
+          keywords: [],
+          author: "",
+          date: "",
+          url: "",
+          avatar: "",
+          summaryTextHtml: ""
+        }
+      ];
+    }
 
     const recentPostsArray = articlesArr.slice(1);
     const popPostsArray = articlesArr.slice(1);
     const newPostArray = articlesArr.slice(0, 1);
+
+    console.log("blogpage render newPostArray[0].title", newPostArray[0].title);
 
     if (process.env.SERVER) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side

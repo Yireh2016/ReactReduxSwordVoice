@@ -15,6 +15,7 @@ import del from "../../assets/createPost/delete.svg";
 //services
 import keywordsToArr from "../../../services/keywordsToArr";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
+import dbDateToDatetime from "../../../services/dbDateToDatetime";
 
 class AdminPost extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class AdminPost extends Component {
   updateReduxState = data => {
     let arr = keywordsToArr(data.keywords);
     const reduxStateFromDB = {
+      author: data.author,
       elements: data.elements,
       seo: {
         keywords: data.keywords,
@@ -57,7 +59,8 @@ class AdminPost extends Component {
         url: data.url
       },
       files: data.files,
-      thumbnail: data.thumbnail
+      thumbnail: data.thumbnail,
+      isPublished: data.isPublished
     };
 
     this.props.onPostFetch(reduxStateFromDB);
@@ -131,33 +134,35 @@ class AdminPost extends Component {
     };
     const columns = [
       {
-        Header: "Project Name",
-        accessor: "projectName",
-        maxWidth: 300,
-        Cell: props => {
-          return (
-            <div
-              className="tableColumnElement tableNameElement"
-              onClick={e => {
-                this.projectNameClickHandler(e, props);
-              }}
-            >
-              {props.value}
-            </div>
-          );
-        } // Custom cell components!
-      },
-      {
         Header: "Title",
         accessor: "title",
         maxWidth: 300,
         Cell: props => {
           return (
-            <div className="talbeColumnElement" title={props.value}>
+            <div
+              onClick={e => {
+                this.projectNameClickHandler(e, props);
+              }}
+              className="talbeColumnElement tableNameElement"
+              title={props.value}
+            >
               {props.value}
             </div>
           );
         } // Custom cell components
+      },
+      {
+        Header: "Is Published?",
+        accessor: "isPublished",
+        maxWidth: 400,
+        Cell: props => {
+          console.log("isPublished", props.value);
+          return (
+            <div className="tableColumnElement">
+              {props.value && `${props.value}`}
+            </div>
+          );
+        } // Custom cell components!
       },
       {
         Header: "Summary",
@@ -184,12 +189,69 @@ class AdminPost extends Component {
         }
       },
       {
+        Header: "Last Edition By",
+        accessor: "editionHistory",
+        maxWidth: 300,
+        Cell: props => {
+          const len = props.value.length;
+          return (
+            <div
+              className="talbeColumnElement"
+              title={props.value[len - 1] && props.value[len - 1].editor}
+            >
+              {props.value[len - 1] && props.value[len - 1].editor}
+            </div>
+          );
+        }
+      },
+      {
         Header: "Date",
         accessor: "date",
-        maxWidth: 600,
+        maxWidth: 1000,
         Cell: props => {
-          const date = dbDateToNormalDate(props.value);
+          const date = props.value
+            ? `${dbDateToNormalDate(props.value)} ${dbDateToDatetime(
+                props.value
+              )}`
+            : "";
 
+          return (
+            <div className="talbeColumnElement" title={date}>
+              {date}
+            </div>
+          );
+        } // Custom cell components
+      },
+      {
+        Header: "Last Edition on",
+        accessor: "editionHistory",
+        maxWidth: 1000,
+        Cell: props => {
+          const len = props.value.length;
+          const date = props.value[len - 1]
+            ? `${dbDateToNormalDate(
+                props.value[len - 1].date
+              )} ${dbDateToDatetime(props.value[len - 1].date)}`
+            : "";
+
+          return (
+            <div className="talbeColumnElement" title={date}>
+              {date}
+            </div>
+          );
+        } // Custom cell components
+      },
+      {
+        Header: "Program Date",
+        accessor: "programDate",
+        maxWidth: 1000,
+        Cell: props => {
+          const date = props.value
+            ? `${dbDateToNormalDate(props.value)} ${dbDateToDatetime(
+                props.value
+              )}`
+            : ""; //datetime OJO
+          console.log("datetime", date);
           return (
             <div className="talbeColumnElement" title={date}>
               {date}

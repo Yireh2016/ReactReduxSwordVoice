@@ -28,7 +28,8 @@ class Login extends Component {
             userAvatar: res.data.userAvatar,
             userName: res.data.userName,
             userID: res.data._id,
-            userType: res.data.userType
+            userType: res.data.userType,
+            userFullName: `${res.data.userFirstName} ${res.data.userLastName}`
           };
           this.props.onLogIn(data);
         }
@@ -65,7 +66,8 @@ class Login extends Component {
           userAvatar: loginRes.data.userAvatar,
           userName: loginRes.data.userName,
           userID: loginRes.data._id,
-          userType: loginRes.data.userType
+          userType: loginRes.data.userType,
+          userFullName: loginRes.data.userFullName
         };
         this.props.onLogIn(data);
       }

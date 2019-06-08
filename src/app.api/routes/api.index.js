@@ -37,7 +37,7 @@ let upload = multer({ dest: "dist/assets/uploads/" });
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
-let articleModel = mongoose.model("Article");
+// let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
   if (req.signedCookies.sessionID) {
@@ -324,7 +324,6 @@ routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
 //////////////////////////////////////
 
 routerAPI.put("/updatePost/:projectName", authAPI, updatePostCtrl);
-
 routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
 
 //////////////////////////////////////

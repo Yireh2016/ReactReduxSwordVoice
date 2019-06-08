@@ -22,11 +22,11 @@ import PostElement from "../postElement/postElement";
 import PostElementPreview from "../postElement/postElementPreview";
 import ProjectTitle from "../projectTitle/projectTitle";
 import ThumbNailEditor from "../thumbnailEditor/thumbnailEditor";
+import ProgramEditor from "./programEditor/ProgramEditor";
 
 //services
 import paragraph from "../../../services/paragraphService";
 import SeoEditor from "../seoEditor/seoEditor";
-import keywordsToArr from "../../../services/keywordsToArr";
 import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
 import parseHTML2Object from "../../../services/parseHTML2Object";
 import insertIntoArr from "../../../services/insertIntoArr";
@@ -45,7 +45,6 @@ class CreatePost extends Component {
       isEditionMode: false,
       editionPage: 1,
       summaryElValue: this.props.summary,
-      dateProgram: this.props.date,
       finalHTMLElement: "",
       copiedElement: "",
       dom: "",
@@ -238,7 +237,7 @@ class CreatePost extends Component {
   };
   nextBtnHandler = val => {
     this.setState(prevState => {
-      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 5) {
+      if (prevState.editionPage + val > 0 && prevState.editionPage + val < 6) {
         return { editionPage: prevState.editionPage + val };
       }
     });
@@ -305,14 +304,24 @@ class CreatePost extends Component {
     this.setState({ [name]: value });
   };
 
-  programHandler = () => {
+  programPostHandler = () => {
+    //nueva pagina de slide
+  };
+
+  editPostHandler = (editionType, dialogObj, programDateTime) => {
+    if (this.props.project.hasChanged && editionType !== "save") {
+      dialogObj = {
+        title: "Save First",
+        body: `Please save your changes first`,
+        status: "WARN",
+        show: true
+      };
+      this.props.setDialog(dialogObj);
+      return;
+    }
     this.scrollTopSaveHandler(0, 0);
     //hacer validaciones antes de programar post
-    let date =
-      this.state.dateProgram === "" || this.state.dateProgram === undefined
-        ? new Date()
-        : this.state.dateProgram;
-    this.props.onDateEdition(date);
+    let date;
     let finalHTMl = htmlArrCosolidation(this.props.elements);
     let rawBody = "";
 
@@ -323,76 +332,125 @@ class CreatePost extends Component {
       }
     }
 
-    let arr = keywordsToArr(this.props.seo.keywords);
-    const finalPost = {
-      article: {
-        html: finalHTMl, //str
-        author: this.props.login.loggedUserName, //str
-        date: date, //date
-        categories: arr, //arr
-        comments: [],
-        files: this.props.fileNames, //arr
-        seo: {
-          title: this.props.elements[0].HTMLElementContent, //str
-          description: this.props.summary, //str
-          keywords: arr, //arr
-          structuredData: {
-            //json
-            "@context": "http://schema.org",
-            "@type": "Article",
-            headline: this.props.elements[0].HTMLElementContent, //str
-            alternativeHeadline: this.props.elements[0].HTMLElementContent, //str
-            image: {
-              //json
-              //OJO
-              url:
-                "http://imagenes.canalrcn.com/ImgNTN24/juan_guaido_ntn24_2.jpg?null",
-              "@type": "ImageObject",
-              height: "174",
-              width: "310"
-            },
-            author: this.props.login.loggedUserName, //str
-            url: `/blog/${this.props.project.url}`, //str
-            datePublished: date, //date
-            dateCreated: date, //date
-            dateModified: date, //date
-            description: this.props.summary, //str
-            articleBody: rawBody, //str
-            publisher: {
-              //json
-              "@type": "Organization",
-              name: "SwordVoice.com",
-              logo: {
-                url: "https://www.swordvoice.com/LOGO.svg",
-                type: "ImageObject"
-              }
-            },
-            mainEntityOfPage: "https://www.SwordVoice.com"
-          }
-        }
-      }
-    };
     const elementsArrNoPreviewData = erasePreviewDataFromElements(
       this.props.elements
     );
-    let dataToUpdate = {
-      elements: elementsArrNoPreviewData,
-      files: this.props.fileNames,
-      keywords: this.props.seo.keywords,
-      author: this.props.login.loggedUserID,
-      date: date,
-      html: finalHTMl,
-      projectName: this.props.project.name,
-      description: this.props.summary,
-      title: this.props.elements[0].HTMLElementContent,
-      url: this.props.project.url,
-      thumbnail: this.props.thumbnail
-    };
+
+    let dataToUpdate;
+    let editionOption;
+
+    switch (editionType) {
+      case "save":
+        editionOption = "save";
+
+        date = new Date(); //edition date
+        this.props.onDateEdition(date);
+
+        dataToUpdate = {
+          elements: elementsArrNoPreviewData,
+          files: this.props.fileNames,
+          keywords: this.props.seo.keywords,
+          html: finalHTMl,
+          projectName: this.props.project.name,
+          description: this.props.summary,
+          title: this.props.elements[0].HTMLElementContent,
+          url: this.props.project.url,
+          thumbnail: this.props.thumbnail,
+
+          editionHistory: {
+            editor: this.props.login.loggedFullName,
+            date,
+            wasPublished: this.props.postCreation.isPublished
+          }
+        };
+
+        dialogObj = {
+          title: "Success",
+          body: `Your post has been saved`,
+          status: "OK",
+          show: true
+        };
+        break;
+
+      case "unpublish":
+        dataToUpdate = {
+          isPublished: false
+        };
+        dialogObj = {
+          title: "Success",
+          body: `Your post has been unpublished`,
+          status: "OK",
+          show: true
+        };
+        break;
+
+      case "program":
+        editionOption = "program";
+        date = programDateTime; //program date
+        this.props.onDateProgram(date);
+        dataToUpdate = {
+          elements: elementsArrNoPreviewData,
+          files: this.props.fileNames,
+          keywords: this.props.seo.keywords,
+          html: finalHTMl,
+          projectName: this.props.project.name,
+          description: this.props.summary,
+          title: this.props.elements[0].HTMLElementContent,
+          url: this.props.project.url,
+          thumbnail: this.props.thumbnail,
+
+          programDate: date,
+          date: null,
+          isPublished: false
+        };
+        break;
+
+      case "publish":
+        editionOption = "publish";
+        date = new Date(); //edition date
+        this.props.onDatePublish(date);
+        dataToUpdate = {
+          elements: elementsArrNoPreviewData,
+          files: this.props.fileNames,
+          keywords: this.props.seo.keywords,
+          html: finalHTMl,
+          projectName: this.props.project.name,
+          description: this.props.summary,
+          title: this.props.elements[0].HTMLElementContent,
+          url: this.props.project.url,
+          thumbnail: this.props.thumbnail,
+
+          date: date,
+          isPublished: true
+        };
+
+        dialogObj = {
+          title: "Congratulations!!!",
+          body: `Your post has been published`,
+          status: "OK",
+          show: true
+        };
+        break;
+
+      default:
+        break;
+    }
+
     //debo almacenar el id del autor
     axios
-      .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
-      .then(res => {
-        console.log("res", res);
+      .put(
+        `/api/updatePost/${
+          this.props.project.name
+        }?editionOption=${editionOption}`,
+        dataToUpdate
+      )
+      .then(() => {
+        this.props.setDialog(dialogObj);
+
+        if (editionType !== "save") {
+          this.props.history.push("/cms/adminPost");
+          this.props.onMenuChange({ main: true, create: false });
+        }
         this.props.onSave();
       })
       .catch(err => {
@@ -416,14 +474,14 @@ class CreatePost extends Component {
     window.localStorage.setItem("postElTop", top);
     window.localStorage.setItem("postActiveElID", id);
   };
-  exitBtnHandler = history => {
+  exitBtnHandler = () => {
     this.props.onMenuChange({ main: true, create: false });
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
-      history.push("/cms/dashboard");
+      this.props.history.push("/cms/adminPost");
     } else {
-      this.props.showExitModalHandler({ show: true, url: "/cms/dashboard" });
+      this.props.showExitModalHandler({ show: true, url: "/cms/adminPost" });
     }
   };
 
@@ -692,9 +750,11 @@ class CreatePost extends Component {
             </div>
             <div
               className="createBarItem"
-              onClick={this.programHandler}
+              onClick={() => {
+                this.nextBtnHandler(1);
+              }}
               style={
-                this.state.editionPage > 2
+                this.state.editionPage > 3
                   ? { visibility: "visible" }
                   : { visibility: "hidden" }
               }
@@ -702,17 +762,38 @@ class CreatePost extends Component {
               <h4>Program</h4>
               <img src={time} alt="program botton  " />
             </div>
-            <div
-              className="createBarItem"
-              style={
-                this.state.editionPage > 2
-                  ? { visibility: "visible" }
-                  : { visibility: "hidden" }
-              }
-            >
-              <h4>Publish</h4>
-              <img src={check} alt="publish botton  " />
-            </div>
+            {!this.props.postCreation.isPublished && (
+              <div
+                className="createBarItem"
+                onClick={() => {
+                  this.editPostHandler("publish");
+                }}
+                style={
+                  this.state.editionPage === 4
+                    ? { visibility: "visible" }
+                    : { visibility: "hidden" }
+                }
+              >
+                <h4>Publish</h4>
+                <img src={check} alt="publish botton  " />
+              </div>
+            )}
+            {this.props.postCreation.isPublished && (
+              <div
+                className="createBarItem"
+                onClick={() => {
+                  this.editPostHandler("unpublish");
+                }}
+                style={
+                  this.state.editionPage === 4
+                    ? { visibility: "visible" }
+                    : { visibility: "hidden" }
+                }
+              >
+                <h4>Unpublish</h4>
+                <img src={exit} alt="publish botton  " />
+              </div>
+            )}
 
             <div
               style={
@@ -722,7 +803,7 @@ class CreatePost extends Component {
               }
               className="createBarItem"
               onClick={() => {
-                this.programHandler();
+                this.editPostHandler("save");
               }}
             >
               <h4>Save</h4>
@@ -732,7 +813,7 @@ class CreatePost extends Component {
 
             <div
               style={
-                this.state.editionPage !== 4 && !this.state.isEditionMode
+                this.state.editionPage < 4 && !this.state.isEditionMode
                   ? { visibility: "visible" }
                   : { visibility: "hidden" }
               }
@@ -844,6 +925,22 @@ class CreatePost extends Component {
                   <ThumbNailEditor />
                 </div>
               )}
+              {this.state.editionPage === 5 && (
+                <div
+                  className=" seoArea"
+                  style={
+                    this.state.editionPage === 5
+                      ? { animation: "editionIn 500ms ease normal forwards" }
+                      : {
+                          animation: "editionOut 500ms ease  normal forwards"
+                        }
+                  }
+                >
+                  <h2>Program Article Post </h2>
+
+                  <ProgramEditor editPostHandler={this.editPostHandler} />
+                </div>
+              )}
             </div>
 
             <div>
@@ -876,29 +973,39 @@ const mapStateToProps = state => {
     thumbnail: state.postCreation.thumbnail
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
-    onCreateElement: id => dispach({ type: "CREATE_ELEMENT", id: id }),
-    onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
+    onCreateElement: id => dispatch({ type: "CREATE_ELEMENT", id: id }),
+    onAddElement: payload =>
+      dispatch({ type: "ADD_ELEMENT", payload: payload }),
     onEditElement: payload =>
-      dispach({ type: "EDIT_ELEMENT", payload: payload }),
-    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
+      dispatch({ type: "EDIT_ELEMENT", payload: payload }),
+    onDelElement: payload =>
+      dispatch({ type: "DEL_ELEMENT", payload: payload }),
     onSummaryEdition: payload =>
-      dispach({ type: "SUMMARY_EDITION", payload: payload }),
+      dispatch({ type: "SUMMARY_EDITION", payload: payload }),
     onAddDeleteFile: payload =>
-      dispach({ type: "ADD_DELETE_FILE", payload: payload }),
-    onDateEdition: payload =>
-      dispach({ type: "DATE_EDITION", payload: payload }),
-    onSave: () => dispach({ type: "SAVE_POST" }),
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
-    onMenuChange: payload => dispach({ type: "CHANGE_MENU", payload: payload })
+      dispatch({ type: "ADD_DELETE_FILE", payload: payload }),
+    onDateEdition: date => dispatch({ type: "DATE_EDITION", payload: date }),
+    onDateProgram: date =>
+      dispatch({ type: "SET_PROGRAM_DATE", payload: date }),
+    onDatePublish: date =>
+      dispatch({ type: "PUBLISH_POST_DATE", payload: date }),
+    onSave: () => dispatch({ type: "SAVE_POST" }),
+    onProjectChange: () => dispatch({ type: "CHANGE_PROJECT" }),
+    onMenuChange: payload =>
+      dispatch({ type: "CHANGE_MENU", payload: payload }),
+
+    setDialog: dialog => dispatch({ type: "SET_DIALOG", payload: dialog })
   };
 };
 
 // const CreatePost2 = withRouter(CreatePost);
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(CreatePost);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispachToProps
+  )(CreatePost)
+);

@@ -147,6 +147,7 @@ export const getPostCtrl = (req, res) => {
               posts[i].thumbnail.color
             } 73.79%)`,
           projectName: posts[i].projectName,
+          isPublished: posts[i].isPublished,
           title: posts[i].title,
           description: posts[i].description,
           author:
@@ -154,6 +155,8 @@ export const getPostCtrl = (req, res) => {
             `${posts[i].author.userLastName}`,
           authorAvatar: posts[i].author.userAvatar,
           date: posts[i].date,
+          programDate: posts[i].programDate,
+          editionHistory: posts[i].editionHistory,
           keywords: posts[i].keywords[0]
         };
       }
@@ -189,51 +192,113 @@ export const getArticleCtrl = (req, res) => {
 };
 export const updatePostCtrl = (req, res) => {
   const projectName = req.params.projectName;
-  let data = req.body;
-  articleModel.findOneAndUpdate(
-    { projectName: projectName },
-    {
-      elements: data.elements,
-      files: data.files,
-      keywords: data.keywords,
-      author: data.author,
-      date: data.date,
-      html: data.html,
-      description: data.description,
-      title: data.title,
-      url: data.url,
-      thumbnail: data.thumbnail
-    },
-    { new: true },
-    function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
-        fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
-          if (err) {
-            console.log(err);
-            return;
+  const data = req.body;
+  console.log("updatePostCtrl programDate", data.programDate);
+
+  articleModel.find({ projectName: projectName }).exec(function(err, article) {
+    if (err) {
+      console.log(err);
+    } else {
+      // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
+      fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        console.log("files", files);
+        files.forEach(file => {
+          let found = false;
+          for (let i = 0; i < data.files.length; i++) {
+            if (file === data.files[i]) {
+              found = true;
+            }
           }
-          console.log("files", files);
-          files.forEach(file => {
-            let found = false;
-            for (let i = 0; i < data.files.length; i++) {
-              if (file === data.files[i]) {
-                found = true;
-              }
-            }
-            if (!found) {
-              fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
-                err && console.log("error eliminando archivo", err);
-              });
-            }
-          });
+          if (!found) {
+            fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
+              err && console.log("error eliminando archivo", err);
+            });
+          }
         });
-        res.json(200);
+      });
+      let editionHistoryArr;
+      if (data.editionHistory) {
+        editionHistoryArr = [...article[0].editionHistory, data.editionHistory];
       }
+      data.editionHistory = editionHistoryArr;
+
+      const {
+        elements,
+        files,
+        keywords,
+        html,
+        projectName,
+        description,
+        title,
+        url,
+        thumbnail,
+        programDate,
+        date,
+        isPublished
+      } = data;
+
+      article[0].elements = elements ? elements : article[0].elements;
+      article[0].files = files ? files : article[0].files;
+      article[0].keywords = keywords ? keywords : article[0].keywords;
+      article[0].html = html ? html : article[0].html;
+      article[0].projectName = projectName
+        ? projectName
+        : article[0].projectName;
+      article[0].description = description
+        ? description
+        : article[0].description;
+      article[0].title = title ? title : article[0].title;
+      article[0].url = url ? url : article[0].url;
+      article[0].thumbnail = thumbnail ? thumbnail : article[0].thumbnail;
+
+      article[0].programDate = programDate
+        ? programDate
+        : article[0].programDate;
+      article[0].date = date ? date : article[0].date;
+      article[0].isPublished =
+        isPublished === undefined ? article[0].isPublished : isPublished;
+
+      article[0].save();
+      res.json(200);
     }
-  );
+  });
+
+  // articleModel.findOneAndUpdate(
+  //   { projectName: projectName },//   data,
+  //   { new: true },
+  //   function(err) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
+  //       fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
+  //         if (err) {
+  //           console.log(err);
+  //           return;
+  //         }
+  //         console.log("files", files);
+  //         files.forEach(file => {
+  //           let found = false;
+  //           for (let i = 0; i < data.files.length; i++) {
+  //             if (file === data.files[i]) {
+  //               found = true;
+  //             }
+  //           }
+  //           if (!found) {
+  //             fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
+  //               err && console.log("error eliminando archivo", err);
+  //             });
+  //           }
+  //         });
+  //       });
+  //       res.json(200);
+  //     }
+  //   }
+  // );
 };
 
 export const deletePostCtrl = (req, res) => {

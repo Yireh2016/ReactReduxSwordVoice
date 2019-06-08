@@ -27,8 +27,15 @@ import { commentSchema } from "./commentSchema";
 const articleSchema = new Schema({
   author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comments: { type: [commentSchema] },
-  date: { type: Date, default: Date.now },
-  lastEditionDate: { type: Date },
+  date: { type: Date },
+  editionHistory: [
+    {
+      editor: { type: String },
+      date: { type: Date },
+      wasPublished: { type: Boolean }
+    }
+  ],
+  programDate: { type: Date },
   elements: [{}],
   files: { type: [String] },
   html: { type: String },

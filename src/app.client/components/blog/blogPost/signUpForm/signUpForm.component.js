@@ -493,7 +493,8 @@ class SignUpForm extends Component {
                 userName: userData.userName,
                 userID: userData.id,
                 userType: userData.userType,
-                userAvatar: userAvatar
+                userAvatar: userAvatar,
+                userFullName: `${userFirstName} ${userLastName}`
               });
               alert("data submited ");
             } else {
@@ -503,7 +504,8 @@ class SignUpForm extends Component {
 
                 userName: userData.userName,
                 userID: userData.id,
-                userType: userData.userType
+                userType: userData.userType,
+                userFullName: `${userFirstName} ${userLastName}`
               });
               alert("data submited without avatar");
             }

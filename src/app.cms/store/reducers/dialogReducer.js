@@ -24,6 +24,10 @@ const dialogReducer = (state = initialState, action) => {
       break;
     }
 
+    case "SET_DIALOG":
+      newState = action.payload;
+      break;
+
     case "SET_DIALOG_BODY": {
       newState.body = action.payload;
       break;

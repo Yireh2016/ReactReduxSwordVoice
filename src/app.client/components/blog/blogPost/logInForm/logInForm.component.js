@@ -45,7 +45,8 @@ class LogInForm extends Component {
         userAvatar: undefined,
         userName: userData.userName,
         userID: userData._id,
-        userType: userData.userType
+        userType: userData.userType,
+        userFullName: userData.userFullName
       });
       return;
     }
@@ -59,7 +60,8 @@ class LogInForm extends Component {
       userAvatar: userData.userAvatar,
       userName: userData.userName,
       userID: userData._id,
-      userType: userData.userType
+      userType: userData.userType,
+      userFullName: userData.userFullName
     });
     console.log("Login Successful");
   };

@@ -54,12 +54,16 @@ export const signUpCtrl = (req, res) => {
       console.log("savedUser", savedUser);
       try {
         await sessionCookie(req, res, {
-          username: savedUser.userName,
-          id: savedUser._id
+          userName: savedUser.userName,
+          id: savedUser._id,
+          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+          userType: savedUser.userType
         });
         const responseUserData = {
           id: savedUser._id,
-          userName: savedUser.userName
+          userName: savedUser.userName,
+          userType: savedUser.userType,
+          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`
         };
         console.log("sending responseUserData signup[] ", responseUserData);
         res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
@@ -90,8 +94,10 @@ export const loginCtrl = (req, res) => {
       // token = user.generateJwt();
       try {
         await sessionCookie(req, res, {
-          username: user.userName,
-          id: user._id
+          userName: user.userName,
+          id: user._id,
+          userFullName: `${user.userFirstName} ${user.userLastName}`,
+          userType: user.userType
         });
       } catch (err) {
         console.log("err on user catch on login", err);
@@ -101,7 +107,8 @@ export const loginCtrl = (req, res) => {
         _id: user._id,
         userAvatar: user.userAvatar,
         userName: user.userName,
-        userType: user.userType
+        userType: user.userType,
+        userFullName: `${user.userFirstName} ${user.userLastName}`
       });
     } else {
       console.log("dio un 401", info);
@@ -127,7 +134,7 @@ export const autoLogin = (req, res) => {
     const id = tokenData.data.id;
     usersModel
       .find({ _id: id })
-      .select("userAvatar userName _id userType")
+      .select("userAvatar userName _id userType userFirstName userLastName")
       .exec(function(err, data) {
         if (err) {
           res.status(501).json(`thre was an error: ${err}`);

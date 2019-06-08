@@ -1,5 +1,10 @@
 const initialState = {
+  author: "",
   elements: [],
+  date: null,
+  editionHistory: [],
+  programDate: null,
+  isPublished: false,
   seo: {
     keywords: "",
     keywordsList: [],
@@ -113,7 +118,21 @@ const postEditCtlreducer = (state = initialState, action) => {
       break;
     }
     case "DATE_EDITION": {
+      newState.editionHistory = action.payload;
+      newState.project.hasChanged = true;
+      break;
+    }
+
+    case "SET_PROGRAM_DATE": {
+      newState.programDate = action.payload;
+      newState.project.hasChanged = true;
+      break;
+    }
+
+    case "PUBLISH_POST_DATE": {
+      newState.editionHistory = action.payload;
       newState.date = action.payload;
+      newState.isPublished = true;
       newState.project.hasChanged = true;
       break;
     }
@@ -125,7 +144,13 @@ const postEditCtlreducer = (state = initialState, action) => {
 
     case "RESET_EDIT": {
       newState = {
+        author: "",
+        authorUserName: "",
         elements: [],
+        date: null,
+        editionHistory: [],
+        programDate: null,
+        isPublished: false,
         seo: {
           keywords: "",
           keywordsList: [],
@@ -133,8 +158,14 @@ const postEditCtlreducer = (state = initialState, action) => {
           title: ""
         },
         summary: "",
-        project: { name: "", url: "", hasChanged: false },
+        project: {
+          name: "",
+          url: "",
+          hasChanged: false,
+          imageHasChanged: false
+        },
         files: [],
+        classes: [],
         thumbnail: ""
       };
       break;
