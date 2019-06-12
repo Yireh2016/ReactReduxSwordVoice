@@ -1,4 +1,4 @@
-import checkPostStatus from "../../app.api/controllers/server/checkPostsStatus";
+import checkPostStatus from "../../app.api/controllers/serverCtrl/checkPostsStatus";
 
 const checkProgramPost = minutes => {
   setInterval(() => {
