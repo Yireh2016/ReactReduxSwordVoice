@@ -226,6 +226,8 @@ export const updatePostCtrl = (req, res) => {
       }
       data.editionHistory = editionHistoryArr;
 
+      console.log("postcontroller data.editionHistory", data.editionHistory);
+
       const {
         elements,
         files,
@@ -255,6 +257,9 @@ export const updatePostCtrl = (req, res) => {
       article[0].url = url ? url : article[0].url;
       article[0].thumbnail = thumbnail ? thumbnail : article[0].thumbnail;
 
+      article[0].editionHistory = data.editionHistory
+        ? data.editionHistory
+        : article[0].edtionHistory;
       article[0].programDate = programDate
         ? programDate
         : article[0].programDate;

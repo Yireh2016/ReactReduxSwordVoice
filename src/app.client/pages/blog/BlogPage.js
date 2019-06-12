@@ -226,6 +226,52 @@ class BlogPage extends React.Component {
     const isDeviceResult = isDevice();
     let postH;
 
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // console.log("windowWidth", windowWidth);
+    // console.log("windowHeight", windowHeight);
+
+    // if (windowWidth > windowHeight) {
+    //   //landscape
+    //   if (windowWidth < 1050) {
+    //     this.setState({ showResolutionWarning: true });
+    //   } else {
+    //     this.setState({ showResolutionWarning: false });
+    //   }
+    // } else {
+    //   this.setState({ showResolutionWarning: false });
+    // }
+
+    switch (isDeviceResult) {
+      case "pc":
+        postH =
+          (windowWidth * 0.4) / 1.028 >= 520
+            ? 520
+            : (windowWidth * 0.4) / 1.028;
+        break;
+      case "tablet":
+        postH = (windowWidth * 0.8) / 1.028;
+        break;
+
+      case "phone":
+        postH = (windowWidth * 0.95) / 1.028;
+        break;
+
+      default:
+        break;
+    }
+
+    this.setState({ mainPostH: postH });
+  };
+
+  componentDidMount() {
+    console.log("blog page componentDidMount");
+    this.setPostDimensions();
+    window.addEventListener("resize", this.setPostDimensions);
+    const isDeviceResult = isDevice();
+    let postH;
+
     switch (isDeviceResult) {
       case "pc":
         postH =
@@ -238,36 +284,28 @@ class BlogPage extends React.Component {
         break;
 
       case "phone":
-        postH = window.outerWidth / 1.028 - 24;
+        postH = (window.outerWidth * 0.95) / 1.028 - 24;
         break;
 
       default:
         break;
     }
 
-    this.setState({ mainPostH: postH });
-  };
+    // switch (isDeviceResult) {
+    //   case "pc":
+    //     postH = 520;
+    //     break;
+    //   case "tablet":
+    //     postH = (window.outerWidth * 0.8) / 1.028;
+    //     break;
 
-  componentDidMount() {
-    window.addEventListener("resize", this.setPostDimensions);
-    const isDeviceResult = isDevice();
-    let postH;
+    //   case "phone":
+    //     postH = window.outerWidth / 1.028 - 24;
+    //     break;
 
-    switch (isDeviceResult) {
-      case "pc":
-        postH = 520;
-        break;
-      case "tablet":
-        postH = (window.outerWidth * 0.8) / 1.028;
-        break;
-
-      case "phone":
-        postH = window.outerWidth / 1.028 - 24;
-        break;
-
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
 
     this.setState({
       isDeviceResult: isDeviceResult,
@@ -279,54 +317,6 @@ class BlogPage extends React.Component {
           : "1px transparent solid",
       searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
     });
-
-    // this.setPostDimensions();
-    // let data;
-    // axios("/api/getPosts/")
-    //   .then(res => {
-    //     if (res.status === 200) {
-    //       data = res.data;
-    //       let newDataArr = [];
-
-    //       for (let i = 0; i < data.length; i++) {
-    //         newDataArr[i] = {
-    //           postImg: data[i].postImg,
-    //           postGradient: data[i].postGradient,
-    //           title: data[i].title,
-    //           url: data[i].url,
-    //           summaryTextHtml: paragraphService(data[i].description),
-    //           author: data[i].author,
-    //           date: data[i].date,
-    //           avatar: data[i].authorAvatar,
-    //           keywords: keywordsToArr(data[i].keywords)
-    //         };
-    //       }
-
-    //       const recentDataArray = newDataArr.slice(1);
-    //       const popDataArray = newDataArr.slice(1);
-    //       const newPostArr = newDataArr.slice(0, 1);
-    //       console.log("newDataArr", newDataArr);
-    //       console.log("recentDataArray", recentDataArray);
-    //       console.log("popDataArray", popDataArray);
-
-    //       this.setState({
-    //         recentPostsArray: recentDataArray,
-    //         popPostsArray: popDataArray,
-    //         newPostArray: newPostArr,
-    //         isDeviceResult: isDeviceResult,
-    //         isLoading: false,
-    //         mainPostH: postH,
-    //         searchBorder:
-    //           isDeviceResult === "phone"
-    //             ? "1px #0387b7 solid"
-    //             : "1px transparent solid",
-    //         searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
-    //       });
-    //     }
-    //   })
-    //   .catch(err => {
-    //     console.log("error ", err);
-    //   });
   }
 
   handleSearchBarFocus = () => {
@@ -372,8 +362,6 @@ class BlogPage extends React.Component {
     const popPostsArray = articlesArr.slice(1);
     const newPostArray = articlesArr.slice(0, 1);
 
-    console.log("blogpage render newPostArray[0].title", newPostArray[0].title);
-
     if (process.env.SERVER) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
     }
@@ -412,12 +400,8 @@ class BlogPage extends React.Component {
       } = post;
 
       let avatar;
-      if (typeof post.avatar === "object") {
-        avatar = JSON.stringify(post.avatar);
-      } else if (typeof post.avatar === "string") {
-        avatar = post.avatar;
-      }
 
+      avatar = post.avatar;
       const isDeviceResult = isDevice();
       let asidePostH;
       if (isDeviceResult === "phone") {
@@ -445,10 +429,6 @@ class BlogPage extends React.Component {
     });
     const aside = (
       <React.Fragment>
-        <div className="nolandscape">
-          <span>This site is not landscape friendly</span>
-          <span>Please, turn your device to portrait position. Thanks </span>
-        </div>
         <section id="popularPost">{footerBlog}</section>
 
         <div id="asideContainer" style={{ position: "sticky", top: "5vmin" }}>

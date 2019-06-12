@@ -6,6 +6,10 @@ const Select = styled.select`
   color: ${props => (props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)")};
   background-color: ${props =>
     props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 const CountryInput = ({ name, value, disabled, active, onChange }) => {

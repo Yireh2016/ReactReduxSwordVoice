@@ -12,65 +12,69 @@ import BlogArticle from "./components/blog/blogPost/blogPost.component";
 import NotFound from "./components/notFound/notFound2";
 import BlogPage from "./pages/blog/BlogPage";
 import Courses from "./pages/courses/Courses";
+// components
+import NoLandscape from "./layouts/NoLandscape";
 
 class App extends Component {
   render() {
     // const { isMobile } = this.props;
 
     return (
-      <Switch>
-        <Route
-          exact
-          path="/home"
-          render={() => <Home cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/"
-          render={() => <Home cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/about"
-          render={() => <About cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/blog"
-          render={() => <BlogPage cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/portfolio"
-          render={() => <Portolio cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/contact"
-          render={() => <Contact cookies={this.props.cookies} />}
-        />
-        <Route
-          exact
-          path="/courses"
-          render={() => <Courses cookies={this.props.cookies} />}
-        />
-        {/* <Route
+      <NoLandscape>
+        <Switch>
+          <Route
+            exact
+            path="/home"
+            render={() => <Home cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/"
+            render={() => <Home cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/about"
+            render={() => <About cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/blog"
+            render={() => <BlogPage cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/portfolio"
+            render={() => <Portolio cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/contact"
+            render={() => <Contact cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/courses"
+            render={() => <Courses cookies={this.props.cookies} />}
+          />
+          {/* <Route
           exact
           path="/newBlog"
           render={() => <BlogPage cookies={this.props.cookies} />}
         /> */}
-        <Route
-          strict
-          path="/blog/post/"
-          render={() => <BlogArticle cookies={this.props.cookies} />}
-        />
-        <Route
-          strict
-          path="/"
-          render={() => <NotFound cookies={this.props.cookies} />}
-        />
-        }/>
-      </Switch>
+          <Route
+            strict
+            path="/blog/post/"
+            render={() => <BlogArticle cookies={this.props.cookies} />}
+          />
+          <Route
+            strict
+            path="/"
+            render={() => <NotFound cookies={this.props.cookies} />}
+          />
+          }/>
+        </Switch>
+      </NoLandscape>
     );
   }
 }

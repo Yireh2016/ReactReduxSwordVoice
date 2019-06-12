@@ -576,10 +576,7 @@ class BlogArticle extends Component {
     });
     return (
       <React.Fragment>
-        <div className="nolandscape">
-          <span>This site is not landscape friendly</span>
-          <span>Please, turn your device to portrait position. Thanks </span>
-        </div>
+        
         <div id="blogPostPage">
           <Navbar hasBackground="true" />
 

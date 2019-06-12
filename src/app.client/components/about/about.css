@@ -1,22 +1,16 @@
+/* @media (orientation: landscape) and (pointer: coarse) { */
 .nolandscape {
-  display: none;
-}
-
-@media (orientation: landscape) and (pointer: coarse) {
-  .nolandscape {
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 200;
-    width: 100vw;
-    height: 100vh;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .fondo-about {
@@ -40,7 +34,7 @@
 }
 
 .contenedorTexto {
-  padding-left: 14vw;
+  padding-left: 8vw;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

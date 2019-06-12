@@ -5,11 +5,13 @@ import { connectRouter } from "connected-react-router";
 import reducer from "./reducer";
 import article from "./article";
 import blog from "./blogReducer";
+import dialog from "./dialogReducer";
 
 export default history =>
   combineReducers({
     router: connectRouter(history),
     logInStatus: reducer,
     article: article,
-    blog: blog
+    blog: blog,
+    dialog: dialog
   });

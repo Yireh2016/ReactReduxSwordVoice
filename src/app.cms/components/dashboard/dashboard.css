@@ -196,6 +196,6 @@
     transform: translateX(-80%);
   }
   .dashMainOpaque {
-    opacity: 0;
+    display: none;
   }
 }

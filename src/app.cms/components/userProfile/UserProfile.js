@@ -33,12 +33,22 @@ const UserProfileView = styled.div`
   display: flex;
   align-items: center;
   height: 100vh;
+
+  @media (max-width: 700px) {
+    display: block;
+    height: auto;
+  }
 `;
 
 const FormLayout = styled.div`
   padding: 20px;
   display: flex;
   height: calc(100% - 40px);
+
+  @media (max-width: 700px) {
+    height: auto;
+    padding: 0;
+  }
 `;
 
 const Form = styled.form`
@@ -49,11 +59,29 @@ const Form = styled.form`
   background-color: #1a2225;
   border-radius: 8px;
   width: 100%;
+
+  @media (max-width: 1050px) {
+    #FirstCol {
+      width: calc(100% * 4 / 12);
+    }
+
+    #SecondCol {
+      width: calc(100% * 8 / 12);
+    }
+  }
+
+  @media (max-width: 700px) {
+    padding: 25px 10px;
+    border-radius: 0px;
+  }
 `;
 const Column = styled.div`
   width: ${props => props.width};
   display: flex;
   flex-direction: column;
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 const RowLayout = styled.div`
   display: flex;
@@ -73,6 +101,13 @@ const InputTextLayout = styled.div`
   align-items: center;
   margin: 0 0 0 25px;
   flex-wrap: wrap;
+  @media (max-width: 1050px) {
+    margin: 0;
+
+    #CountryLabel {
+      margin-left: 1px;
+    }
+  }
 `;
 const MainTitle = styled.h2`
   margin: 0px 0 8px 0;
@@ -87,6 +122,22 @@ const InputLayout = styled.div`
   display: flex;
   align-items: center;
   width: ${props => props.width};
+
+  @media (max-width: 1050px) {
+    width: 50%;
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
+
+    visibility: ${props => {
+      if (props.mobileDisplay === true) {
+        return "hidden";
+      } else if (props.mobileDisplay === false) {
+        return "visible";
+      }
+    }};
+  }
 
   select,
   input {
@@ -114,6 +165,12 @@ const Row = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: ;
+
+  @media (max-width: 1050px) {
+    #OtherInterestLabel {
+      width: 80%;
+    }
+  }
 `;
 
 const EditBtn = styled.img`
@@ -132,6 +189,26 @@ const InputLabel = styled.label`
   margin-top: 15px;
   position: relative;
 
+  @media (max-width: 1050px) {
+    #NameInputLayout {
+      width: 80%;
+    }
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
+
+    > span {
+      visibility: ${props => {
+        if (props.mobileDisplay === true) {
+          return "hidden";
+        } else if (props.mobileDisplay === false) {
+          return "visible";
+        }
+      }};
+    }
+  }
+
   > span {
     color: #00baff;
     font-size: 18px;
@@ -149,6 +226,11 @@ const InputLabelUserProfile = styled.label`
   position: relative;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
+
   > span {
     color: #00baff;
     font-size: 18px;
@@ -170,7 +252,6 @@ const FormatWarning = styled.div`
   color: #00171f;
   background: coral;
   border-radius: 4px;
-  width: 100%;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
   font-size: 14px;
@@ -179,6 +260,9 @@ const FormatWarning = styled.div`
   padding: 5px 10px;
   max-width: 100%;
   display: ${props => props.display};
+  @media (max-width: 700px) {
+    width: 85%;
+  }
 `;
 
 const OldPasswordInputCont = styled.div`
@@ -194,6 +278,11 @@ const OldPasswordInputLabel = styled.label`
   display: flex;
   flex-direction: column;
   display: ${props => props.display};
+
+  @media (max-width: 700px) {
+    top: -13px;
+    left: -7px;
+  }
 
   > span {
     color: #00baff;
@@ -263,6 +352,9 @@ const Controls = styled.div`
 
   button {
     margin-left: 15px;
+    @media (max-width: 1050px) {
+      margin-left: 8px;
+    }
   }
 
   button:disabled {
@@ -271,6 +363,30 @@ const Controls = styled.div`
 
   button:first-child {
     margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;
+
+const ControlsMobile = styled.div`
+  display: none;
+  @media (max-width: 700px) {
+    display: flex;
+    justify-content: center;
+
+    button {
+      margin-left: 15px;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+    }
+
+    button:first-child {
+      margin: 0;
+    }
   }
 `;
 
@@ -907,9 +1023,16 @@ const UserProfile = ({
               <Row id="securityRow">
                 <MainTitle id="SecMainTitle">Security Info</MainTitle>
                 <InputTextLayout id="SecurityTextLayout">
-                  <InputLabel width="50%" id="PasswordInputLabel">
-                    <span>New Password</span>
-                    <InputLayout id="PasswordInputLayout">
+                  <InputLabel
+                    mobileDisplay={isOldPassword}
+                    width="50%"
+                    id="PasswordInputLabel"
+                  >
+                    <span> New Password</span>
+                    <InputLayout
+                      mobileDisplay={isOldPassword}
+                      id="PasswordInputLayout"
+                    >
                       <Input
                         id="PasswordInput"
                         type="password"
@@ -937,7 +1060,7 @@ const UserProfile = ({
                     <OldPasswordInputLabel
                       display={!isOldPassword ? "none" : "block"}
                     >
-                      <span>Old Password to unlock</span>
+                      <span>Old Password please</span>
                       <OldPasswordInputCont>
                         <OldPasswordInput
                           isOldPasswordShaking={isOldPasswordShaking}
@@ -1176,9 +1299,9 @@ const UserProfile = ({
                     </FormatWarning>
                   </InputLabel>
 
-                  <InputLabel width="calc(100% / 2)">
+                  <InputLabel id="CountryLabel" width="calc(100% / 2)">
                     <span>Country</span>
-                    <InputLayout id="GenderInputLayout">
+                    <InputLayout id="CountryInputLayout">
                       <CountrySelect
                         value={userCountry}
                         name="userCountry"
@@ -1251,6 +1374,35 @@ const UserProfile = ({
                     Don't use special characters
                   </FormatWarning>
                 </InputLabel>
+              </Row>
+
+              <Row>
+                <ControlsMobile>
+                  {isProfileChanged && (
+                    <ControlBtn
+                      type="button"
+                      disabled={!isProfileChanged}
+                      className="cmsBtn"
+                      onClick={saveHandler}
+                    >
+                      {isLoading ? <LoadingBtn /> : "Save"}
+                    </ControlBtn>
+                  )}
+
+                  <ControlBtn
+                    onClick={() => {
+                      if (login.userType === "admin") {
+                        history.push("/cms/usersList");
+                        return;
+                      }
+                      history.push("/cms/dashboard");
+                    }}
+                    type="button"
+                    className="cmsBtn"
+                  >
+                    Cancel
+                  </ControlBtn>
+                </ControlsMobile>
               </Row>
             </RowLayout>
           </Column>

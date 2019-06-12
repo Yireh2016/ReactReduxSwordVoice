@@ -76,7 +76,6 @@ export const signUpCtrl = (req, res) => {
 
 export const loginCtrl = (req, res) => {
   const userData = req.body;
-  // let usersModel = mongoose.model("User");
 
   if (!userData.userName || !userData.userPassword) {
     res.status(400).json({
@@ -88,6 +87,11 @@ export const loginCtrl = (req, res) => {
   passport.authenticate("local", async (err, user, info) => {
     if (err) {
       res.status(404).json(err);
+      return;
+    }
+
+    if (!user.isUserActive) {
+      res.status(401).json("user is not active");
       return;
     }
     if (user) {

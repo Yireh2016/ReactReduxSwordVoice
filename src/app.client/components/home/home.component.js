@@ -24,10 +24,6 @@ class Home extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="nolandscape">
-          <span>This site is not landscape friendly</span>
-          <span>Please, turn your device to portrait position. Thanks </span>
-        </div>
         <div>
           <header>
             <NavBar />

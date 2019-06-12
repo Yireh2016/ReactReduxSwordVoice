@@ -85,7 +85,6 @@ const NotFound = () => {
             window.location.href = "/home";
           }}
         />
-        />
       </div>
     </div>
   );
