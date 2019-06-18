@@ -76,6 +76,7 @@ export const signUpCtrl = (req, res) => {
 
 export const loginCtrl = (req, res) => {
   const userData = req.body;
+  console.log("userData", userData);
 
   if (!userData.userName || !userData.userPassword) {
     res.status(400).json({

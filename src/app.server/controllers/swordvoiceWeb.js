@@ -44,10 +44,7 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
-  console.log(
-    "RENDERING preloadedState to send to templeta preloadedState",
-    preloadedState
-  );
+  console.log("RENDERING preloadedState to send to templeta preloadedState");
   res.send(
     template({
       body: renderTemplate(req, store),
@@ -125,12 +122,14 @@ const swordvoiceWeb = async (req, res) => {
                       url: posts[i].url,
                       postImg:
                         posts[i].thumbnail &&
-                        `url(/uploads/${posts[i].url}/${
+                        `url(http://localhost:3000/articles/${posts[i].url}/${
                           posts[i].thumbnail.name
                         })`,
-                      postGradient: `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                        posts[i].thumbnail.color
-                      } 73.79%)`,
+                      postGradient:
+                        posts[i].thumbnail &&
+                        `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                          posts[i].thumbnail.color
+                        } 73.79%)`,
                       title: posts[i].title,
                       summaryTextHtml: paragraphService(posts[i].description),
                       author:
@@ -174,7 +173,9 @@ const swordvoiceWeb = async (req, res) => {
                 url: posts[i].url,
                 postImg:
                   posts[i].thumbnail &&
-                  `url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
+                  `url(http://localhost:3000/articles//${posts[i].url}/${
+                    posts[i].thumbnail.name
+                  })`,
                 postGradient:
                   posts[i].thumbnail &&
                   `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
@@ -235,12 +236,12 @@ const swordvoiceWeb = async (req, res) => {
   try {
     // await dbRegular();
     await routerPromise();
-    console.log("end routerPromise", store);
+    console.log("end routerPromise");
     await userLoggedInPromise();
-    console.log("end userLoggedInPromise", store);
+    console.log("end userLoggedInPromise");
 
     renderWithPreloadedState(req, res, store);
-    console.log("end renderWithPreloadedState", store);
+    console.log("end renderWithPreloadedState");
   } catch (err) {
     console.log("errors on promises", err);
   }

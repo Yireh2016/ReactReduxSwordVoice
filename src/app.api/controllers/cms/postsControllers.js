@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-import fs, { readFile } from "fs";
+import fs from "fs";
+import axios from "axios";
+import formidable from "formidable";
 
 // var fs = require('fs');
 // var dir = './tmp';
@@ -14,95 +16,101 @@ export const createPostCtrl = (req, res) => {
   const projectData = req.body;
   let article = new articleModel(projectData.article);
 
-  article.save((err, data) => {
-    if (err) {
-      console.log(`hubo error creando articulo ${err}`);
-      res.json(400, { code: 400, message: `there was an error: ${err}` });
-    } else {
-      //creando carpeta con nuevo proyecto
-      if (!fs.existsSync(`./dist/assets/uploads/${projectData.article.url}`)) {
-        fs.mkdirSync(`./dist/assets/uploads/${projectData.article.url}`);
-      }
+  axios
+    .post(`http://localhost:3000/cdn/createPost/${projectData.article.url}`)
+    .then(result => {
+      console.log("respuesta correcta del post", result);
 
-      res.json(200, data);
-    }
-  });
+      article.save(err => {
+        if (err) {
+          console.log(`hubo error creando articulo ${err}`);
+          res.json(400, { code: 400, message: `there was an error: ${err}` });
+        } else {
+          //creando carpeta con nuevo proyecto
+
+          res.status(200).send();
+        }
+      });
+    })
+    .catch(err => {
+      console.log("err en create post", err.message);
+      res.status(401).send(err.message);
+    });
 };
 
 export const addClassToPostCtrl = (req, res) => {
   const { url, filename, classes } = req.body;
 
-  fs.writeFile(
-    `./dist/assets/uploads/${url}/${filename}.css`,
-    classes,
-    "utf-8",
-    function(err) {
-      if (err) {
-        throw err;
-      } else {
-        res.json(200, "Classes Added");
+  axios
+    .post(
+      `http://localhost:3000/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
+    )
+    .then(apiRes => {
+      if (apiRes.status === 200) {
+        res.status(200).send("Classes Added");
       }
-    }
-  );
+    })
+    .catch(err => {
+      console.log("error on addClass", err);
+    });
 };
 export const getClassFromPostCtrl = (req, res) => {
   const { filename } = req.params;
   const url = filename;
-  const path = `./dist/assets/uploads/${url}/${filename}.css`;
-  const readFile = () => {
-    fs.readFile(
-      `./dist/assets/uploads/${url}/${filename}.css`,
-      "utf-8",
-      (err, data) => {
-        if (err) {
-          console.log("there was an error reading file", err);
-          res.json(404);
-        } else {
-          res.json(200, data);
-        }
+  // const readFile = () => {
+  //   fs.readFile(
+  //     "utf-8",
+  //     (err, data) => {
+  //       if (err) {
+  //         console.log("there was an error reading file", err);
+  //         res.status(404);
+  //       } else {
+  //         res.status(200).send(data);
+  //       }
+  //     }
+  //   );
+  // };
+
+  axios
+    .get(`http://localhost:3000/cdn/getClasses/${url}`)
+    .then(apiRes => {
+      if (apiRes.status === 404) {
+        return;
       }
-    );
-  };
+      if (apiRes.status === 200) {
+        res.status(200).send(apiRes.data);
+        // res.status(200).send(data);
 
-  fs.access(path, fs.F_OK, err => {
-    if (err) {
-      console.log("file do not exist", err);
-      res.json(404);
-      return;
-    }
+        fs.access(path, fs.F_OK, err => {
+          if (err) {
+            console.log("file do not exist", err);
+            res.status(404).send();
+            return;
+          }
 
-    readFile();
-  });
+          // readFile();
+        });
+      }
+    })
+    .catch(err => {
+      console.log(`error getting classes ${err}`);
+    });
 };
 
 export const uploadTempFileCtrl = (req, res) => {
-  let fileObj = req.file;
   const fileURL = req.body.fileURL;
+  const file = req.file;
 
-  fs.rename(
-    `./dist/assets/uploads/${fileObj.filename}`,
-    `./dist/assets/uploads/${fileURL}/${fileObj.originalname}`,
-    err => {
-      if (err) {
-        res.json(`error copiando archivo ${err}`);
-      } else {
-        res.json(200, "file was uploaded");
-      }
-    }
-  );
+  // fs.rename(
+  //   err => {
+  //     if (err) {
+  //       res.json(`error copiando archivo ${err}`);
+  //     } else {
+  //       res.json(200, "file was uploaded");
+  //     }
+  //   }
+  // );
 };
-
-// export const deleteTempFileCtrl = (req, res) => {
-//   const filename = req.body.filename;
-//   const url = req.body.url;
-//   fs.unlink(`./dist/assets/uploads/${url}/${filename}`, err => {
-//     if (err) {
-//       res.json(400);
-//     } else {
-//       res.json(200, `file ${filename} erased`);
-//     }
-//   });
-// };
 
 export const getPostCtrl = (req, res) => {
   let { skip } = req.query;
@@ -140,7 +148,9 @@ export const getPostCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(/uploads/${posts[i].url}/${posts[i].thumbnail.name})`,
+            `url(http:/localhost:3000/articles/${posts[i].url}/${
+              posts[i].thumbnail.name
+            })`,
           postGradient:
             posts[i].thumbnail &&
             `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
@@ -193,33 +203,22 @@ export const getArticleCtrl = (req, res) => {
 export const updatePostCtrl = (req, res) => {
   const projectName = req.params.projectName;
   const data = req.body;
-  console.log("updatePostCtrl programDate", data.programDate);
 
   articleModel.find({ projectName: projectName }).exec(function(err, article) {
     if (err) {
       console.log(err);
     } else {
-      // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
-      fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
-        console.log("files", files);
-        files.forEach(file => {
-          let found = false;
-          for (let i = 0; i < data.files.length; i++) {
-            if (file === data.files[i]) {
-              found = true;
-            }
-          }
-          if (!found) {
-            fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
-              err && console.log("error eliminando archivo", err);
-            });
-          }
+      console.log(article);
+
+      axios
+        .delete(`http://localhost:3000/cdn/deleteFiles/${data.url}`, data)
+        .then(() => {
+          console.log("files erased");
+        })
+        .catch(err => {
+          console.log("error erasing files", err);
         });
-      });
+
       let editionHistoryArr;
       if (data.editionHistory) {
         editionHistoryArr = [...article[0].editionHistory, data.editionHistory];
@@ -271,39 +270,6 @@ export const updatePostCtrl = (req, res) => {
       res.json(200);
     }
   });
-
-  // articleModel.findOneAndUpdate(
-  //   { projectName: projectName },//   data,
-  //   { new: true },
-  //   function(err) {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       // let stats = fs.lstatSync(`./dist/assets/uploads/${data.url}`);
-  //       fs.readdir(`./dist/assets/uploads/${data.url}`, (err, files) => {
-  //         if (err) {
-  //           console.log(err);
-  //           return;
-  //         }
-  //         console.log("files", files);
-  //         files.forEach(file => {
-  //           let found = false;
-  //           for (let i = 0; i < data.files.length; i++) {
-  //             if (file === data.files[i]) {
-  //               found = true;
-  //             }
-  //           }
-  //           if (!found) {
-  //             fs.unlink(`./dist/assets/uploads/${data.url}/${file}`, err => {
-  //               err && console.log("error eliminando archivo", err);
-  //             });
-  //           }
-  //         });
-  //       });
-  //       res.json(200);
-  //     }
-  //   }
-  // );
 };
 
 export const deletePostCtrl = (req, res) => {

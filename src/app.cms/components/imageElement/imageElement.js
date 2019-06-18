@@ -69,7 +69,7 @@ class ImageElement extends Component {
     // this.props.onProjectChange();
     this.props.imgFileSet(
       `${URL.createObjectURL(image)}`,
-      `/uploads/${this.props.project.url}/${image.name}`
+      `http://localhost:3000/articles/${this.props.project.url}/${image.name}`
     );
     this.setState(() => {
       return {
@@ -127,10 +127,6 @@ class ImageElement extends Component {
       } else {
         this.props.uploadFileHandler(e); //add to la lista de files disponibles y subo file al server
       }
-      // this.props.imgFileSet(
-      //   `/uploads/${this.props.project.url}/${file[0].name}`,
-      //   `/uploads/${this.props.project.url}/${file[0].name}`
-      // );
     }
 
     this.props.editionBtnHandler();

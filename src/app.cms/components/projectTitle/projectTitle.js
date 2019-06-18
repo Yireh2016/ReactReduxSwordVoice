@@ -62,9 +62,19 @@ class ProjectTitle extends Component {
       }
     };
 
+    // .then(result => {
+    //   console.log("respuesta correcta del post", result);
+
+    // })
+    // .catch(err => {
+    //   console.log("err en create post", err.message);
+    //   res.status(401).send(err.message);
+    // });
+
     axios
       .post("/api/createPost", finalPost)
       .then(res => {
+        console.log("res.status", res.status);
         if (res.status === 200) {
           onSavePostProjectName(savedURLText, savedTitleText);
           alert(`Project ${savedTitleText} saved`);

@@ -44,7 +44,6 @@ const NoLandscape = ({
 };
 
 const stateToProps = state => {
-  console.log("stateToProps state", state);
   return {
     showResolutionWarning: state.dialog.showResolutionWarning
   };

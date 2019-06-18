@@ -15,12 +15,11 @@ const renderTemplate = req => {
 };
 
 const notFoundCtrl = (req, res) => {
-  res.send(
+  res.status(404).send(
     template({
       body: renderTemplate(req),
       title: "Not Found"
-    }),
-    404
+    })
   );
 };
 

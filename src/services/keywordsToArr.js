@@ -1,4 +1,8 @@
 let keywordsToArr = keywords => {
+  if (!keywords) {
+    return;
+  }
+
   if (
     keywords.slice(keywords.length - 1, keywords.length) !== "," &&
     keywords !== ""

@@ -1,7 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import multer from "multer";
-import fs from "fs";
+// import fs from "fs";
 
 //controllers
 import {
@@ -32,8 +31,6 @@ import {
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
 
 // import axios from "axios";
-
-let upload = multer({ dest: "dist/assets/uploads/" });
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
@@ -288,12 +285,7 @@ routerAPI.put("/socialCounter", authAPI, socialCtrl);
 
 //Crear un nuevo proyecto para crear un articulo
 routerAPI.post("/createPost", authAPI, createPostCtrl);
-routerAPI.post(
-  "/uploadTempFile",
-  authAPI,
-  upload.single("file"),
-  uploadTempFileCtrl
-);
+routerAPI.post("/uploadTempFile", authAPI, uploadTempFileCtrl);
 routerAPI.post("/addClass", authAPI, addClassToPostCtrl);
 // routerAPI.post("/deleteTempFile", authAPI, deleteTempFileCtrl);
 

@@ -438,12 +438,7 @@ class CreatePost extends Component {
 
     //debo almacenar el id del autor
     axios
-      .put(
-        `/api/updatePost/${
-          this.props.project.name
-        }?editionOption=${editionOption}`,
-        dataToUpdate
-      )
+      .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
       .then(() => {
         this.props.setDialog(dialogObj);
 

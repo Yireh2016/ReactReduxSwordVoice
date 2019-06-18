@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "b64-to-blob": "^1.2.19",
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-file-loader": "^1.1.1",
@@ -25,6 +25,7 @@
     "connected-react-router": "^6.0.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.4",
+    "express-formidable": "^1.2.0",
     "htmlparser": "^1.7.7",
     "htmlparser-to-html": "0.0.6",
     "jwt-token-encrypt": "^1.0.4",

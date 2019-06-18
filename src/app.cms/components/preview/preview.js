@@ -10,7 +10,10 @@ const Preview = props => {
     <div className="previewhtml blogArticleContainer">
       <Helmet>
         <title>Preview Post</title>
-        <link rel="stylesheet" href={`./uploads/${cssURL}/${cssURL}.css`} />
+        <link
+          rel="stylesheet"
+          href={`http://localhost:3000/articles/${cssURL}/${cssURL}.css`}
+        />
       </Helmet>
       <div className="blogArticle grid col-8 col-12-md helmetClass">
         {ReactHtmlParser(window.localStorage.getItem("finalHTMLElement"))}

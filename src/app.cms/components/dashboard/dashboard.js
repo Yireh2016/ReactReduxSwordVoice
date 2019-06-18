@@ -245,18 +245,14 @@ class Dashboard extends Component {
     };
 
     axios
-      .get(`/api/getClasses/${this.props.project.url}`)
+      .get(`http://localhost:3000/cdn/getClasses/${this.props.project.url}`)
       .then(res => {
-        if (res.data === 404) {
-          viewClasses();
-          return;
-        }
         if (res.status === 200) {
           viewClasses(res.data);
         }
       })
-      .catch(err => {
-        console.log(`error getting classes ${err}`);
+      .catch(() => {
+        viewClasses();
       });
   };
   addClassesHandler = () => {
@@ -430,9 +426,9 @@ class Dashboard extends Component {
             <Helmet>
               <link
                 rel="stylesheet"
-                href={`./uploads/${this.props.project.url}/${
+                href={`http://localhost:3000/articles/${
                   this.props.project.url
-                }.css`}
+                }/${this.props.project.url}.css`}
               />
             </Helmet>
 

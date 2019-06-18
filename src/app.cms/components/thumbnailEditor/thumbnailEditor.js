@@ -14,7 +14,9 @@ class ThumbNailEditor extends Component {
     this.state = {
       isImageUploaded: false,
       imagePreview: this.props.thumbnail
-        ? `url(/uploads/${this.props.project.url}/${this.props.thumbnail.name})`
+        ? `url(http://localhost:3000/articles/${this.props.project.url}/${
+            this.props.thumbnail.name
+          })`
         : null,
       uploadMessage: "Upload Thunbnail",
       imgW: 200,
@@ -157,9 +159,12 @@ class ThumbNailEditor extends Component {
           title={this.props.seo.title}
           postH={300}
           postImg={this.state.imagePreview}
-          postGradient={`linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-            this.props.thumbnail.color
-          } 73.79%)`}
+          postGradient={
+            this.props.thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              this.props.thumbnail.color
+            } 73.79%)`
+          }
         />
       </div>
     );
