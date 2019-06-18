@@ -28,9 +28,6 @@ const ProfilesTable = ({ setUserProfile, history }) => {
   }, []);
 
   const userNameHandler = tableIndex => {
-    console.log("tableIndex", tableIndex);
-    console.log("setUserProfile", setUserProfile);
-    console.log("selected user from state", users[tableIndex]);
     setUserProfile(users[tableIndex]);
     history.push("/cms/userProfile");
   };

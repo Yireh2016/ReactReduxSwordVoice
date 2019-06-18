@@ -19,6 +19,8 @@ const uploadFileService = (fileData, successFn, errFn) => {
   //     }
   //   });
 
+  console.log("uploadFileService sending file");
+
   axios
     .post("http://localhost:3000/cdn/uploadTempFile", data)
     .then(res => {

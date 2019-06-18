@@ -28,12 +28,7 @@ const compressImage = (
       error(err) {
         console.log("error", err);
         imageUploadErr(err);
-        // this.setState(() => {
-        //   return {
-        //     userAvatarPreview: undefined,
-        //     uploadMessage: `${err}`
-        //   };
-        // });
+
         return;
       }
     });

@@ -155,7 +155,7 @@ const swordvoiceWeb = async (req, res) => {
             }
           })
           .catch(err => {
-            console.log("error on finding article", err);
+            console.log("error on finding article");
           });
       } else if (req.url.match("/blog")) {
         console.log("entrando a /BLOG");
@@ -255,97 +255,5 @@ function safeStringify(obj) {
     .replace(/\u2028/g, "\\u2028") // Only necessary if interpreting as JS, which we do
     .replace(/\u2029/g, "\\u2029"); // Ditto
 }
-
-// const dbRegular = () => {
-//   new Promise((resolve, reject) => {
-//     let articleModel = mongoose.model("Article");
-
-//     articleModel
-//       .find({ "comments.message": { $exists: true } })
-//       .select("comments userAvatar ")
-//       .exec((err, articles) => {
-//         if (err) {
-//           reject(err);
-//         }
-
-//         console.log("articles length", articles.length);
-//         console.log("articles", articles);
-//         articles.forEach(async (article, i) => {
-//           const editArticle = new Promise(resolve => {
-//             // let commentsArr = article.comments;..
-
-//             article.comments
-//               ? console.log(
-//                   "article.comments len dentro del foreach",
-//                   article.comments.length
-//                 )
-//               : console.log(
-//                   "article.comments dentro del foreach",
-//                   article.comments
-//                 );
-
-//             for (let index = 0; index < article.comments.length; index++) {
-//               if (typeof article.comments[index].userAvatar === "string") {
-//                 const avatarExists = article.comments[index].userAvatar.match(
-//                   "data"
-//                 );
-//                 console.log("dentro del FOR", index);
-//                 avatarExists
-//                   ? console.log("avatarExists length", avatarExists.length)
-//                   : console.log("avatarExists ", avatarExists);
-
-//                 // const article = article.comments[index];
-
-//                 if (!avatarExists) {
-//                   article.comments[
-//                     index
-//                   ].userAvatar = `data:image/jpeg;base64,${
-//                     article.comments[index].userAvatar
-//                   }`;
-//                 }
-
-//                 console.log(
-//                   "new user avatart ",
-//                   article.comments[index].userAvatar.match("data").length
-//                 );
-//               } else {
-//                 article.comments[index].userAvatar = "";
-//                 console.log("avatar was binary ");
-//               }
-
-//               // userModel
-//               //   .find({ userName: article.comments[index].userName })
-//               //   .select("_id")
-//               //   .exec((err, user) => {
-//               //     let newComment = article.comments[index];
-//               //     if (!newComment.userID) {
-//               //       newComment.userID = user[0]._id;
-//               //       article.comments[index] = newComment;
-//               //       console.log(
-//               //         "comment userid",
-//               //         article.comments[index].userID
-//               //       );
-//               //       console.log("saving", index);
-//               //       resolve();
-//               //     } else {
-//               //       resolve();
-//               //     }
-//               //   });
-//             }
-
-//             article.save(() => {
-//               console.log("finished saving", i);
-//               resolve();
-//             });
-//           });
-
-//           await editArticle;
-//           console.log("finish editing one article");
-//         });
-
-//         resolve();
-//       });
-//   });
-// };
 
 export default swordvoiceWeb;

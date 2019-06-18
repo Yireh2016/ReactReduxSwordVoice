@@ -118,55 +118,55 @@ class Dashboard extends Component {
       }
     }
 
-    let arr = keywordsToArr(this.props.seo.keywords);
-    const finalPost = {
-      article: {
-        html: finalHTMl, //str
-        author: this.props.login.loggedUserName, //str
-        date: date, //date
-        categories: arr, //arr
-        comments: [],
-        files: this.props.fileNames, //arr
-        seo: {
-          title: this.props.elements[0].HTMLElementContent, //str
-          description: this.props.summary, //str
-          keywords: arr, //arr
-          structuredData: {
-            //json
-            "@context": "http://schema.org",
-            "@type": "Article",
-            headline: this.props.elements[0].HTMLElementContent, //str
-            alternativeHeadline: this.props.elements[0].HTMLElementContent, //str
-            image: {
-              //json
-              //OJO
-              url:
-                "http://imagenes.canalrcn.com/ImgNTN24/juan_guaido_ntn24_2.jpg?null",
-              "@type": "ImageObject",
-              height: "174",
-              width: "310"
-            },
-            author: this.props.login.loggedUserName, //str
-            url: `/blog/${this.props.project.url}`, //str
-            datePublished: date, //date
-            dateCreated: date, //date
-            dateModified: date, //date
-            description: this.props.summary, //str
-            articleBody: rawBody, //str
-            publisher: {
-              //json
-              "@type": "Organization",
-              name: "SwordVoice.com",
-              logo: {
-                url: "https://www.swordvoice.com/LOGO.svg",
-                type: "ImageObject"
-              }
-            },
-            mainEntityOfPage: "https://www.SwordVoice.com"
-          }
-        }
-      }
-    };
+    // let arr = keywordsToArr(this.props.seo.keywords);
+    // const finalPost = {
+    //   article: {
+    //     html: finalHTMl, //str
+    //     author: this.props.login.loggedUserName, //str
+    //     date: date, //date
+    //     categories: arr, //arr
+    //     comments: [],
+    //     files: this.props.fileNames, //arr
+    //     seo: {
+    //       title: this.props.elements[0].HTMLElementContent, //str
+    //       description: this.props.summary, //str
+    //       keywords: arr, //arr
+    //       structuredData: {
+    //         //json
+    //         "@context": "http://schema.org",
+    //         "@type": "Article",
+    //         headline: this.props.elements[0].HTMLElementContent, //str
+    //         alternativeHeadline: this.props.elements[0].HTMLElementContent, //str
+    //         image: {
+    //           //json
+    //           //OJO
+    //           url:
+    //             "http://imagenes.canalrcn.com/ImgNTN24/juan_guaido_ntn24_2.jpg?null",
+    //           "@type": "ImageObject",
+    //           height: "174",
+    //           width: "310"
+    //         },
+    //         author: this.props.login.loggedUserName, //str
+    //         url: `/blog/${this.props.project.url}`, //str
+    //         datePublished: date, //date
+    //         dateCreated: date, //date
+    //         dateModified: date, //date
+    //         description: this.props.summary, //str
+    //         articleBody: rawBody, //str
+    //         publisher: {
+    //           //json
+    //           "@type": "Organization",
+    //           name: "SwordVoice.com",
+    //           logo: {
+    //             url: "https://www.swordvoice.com/LOGO.svg",
+    //             type: "ImageObject"
+    //           }
+    //         },
+    //         mainEntityOfPage: "https://www.SwordVoice.com"
+    //       }
+    //     }
+    //   }
+    // };
     const elementsArrNoPreviewData = erasePreviewDataFromElements(
       this.props.elements
     );
@@ -197,6 +197,7 @@ class Dashboard extends Component {
       });
   };
   saveAndExitHandler = (save, url, history) => {
+    //save and exit modal
     if (save) {
       this.programHandler(history, url);
     } else {

@@ -337,12 +337,9 @@ class CreatePost extends Component {
     );
 
     let dataToUpdate;
-    let editionOption;
 
     switch (editionType) {
       case "save":
-        editionOption = "save";
-
         date = new Date(); //edition date
         this.props.onDateEdition(date);
 
@@ -385,7 +382,6 @@ class CreatePost extends Component {
         break;
 
       case "program":
-        editionOption = "program";
         date = programDateTime; //program date
         this.props.onDateProgram(date);
         dataToUpdate = {
@@ -406,7 +402,6 @@ class CreatePost extends Component {
         break;
 
       case "publish":
-        editionOption = "publish";
         date = new Date(); //edition date
         this.props.onDatePublish(date);
         dataToUpdate = {
@@ -440,6 +435,26 @@ class CreatePost extends Component {
     axios
       .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
       .then(() => {
+        console.log(
+          `
+        {
+          url: dataToUpdate.url,
+          files: dataToUpdate.files
+        }\n
+        `,
+          {
+            url: dataToUpdate.url,
+            files: dataToUpdate.files
+          }
+        );
+        axios
+          .post("http://localhost:3000/cdn/deleteFiles/", {
+            url: dataToUpdate.url,
+            files: dataToUpdate.files
+          })
+          .then(() => {
+            console.log("files erased");
+          });
         this.props.setDialog(dialogObj);
 
         if (editionType !== "save") {

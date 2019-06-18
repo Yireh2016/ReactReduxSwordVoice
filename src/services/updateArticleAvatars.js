@@ -22,7 +22,6 @@ const getAvatarFromDb = id => {
         if (err) {
           reject({ status: "err", result: err });
         }
-        console.log("se consulto a la DB");
         resolve({ status: "OK", result: avatar[0].userAvatar });
       });
   });

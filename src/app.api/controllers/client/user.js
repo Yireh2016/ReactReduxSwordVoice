@@ -51,7 +51,6 @@ export const signUpCtrl = (req, res) => {
         message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
       });
     } else {
-      console.log("savedUser", savedUser);
       try {
         await sessionCookie(req, res, {
           userName: savedUser.userName,

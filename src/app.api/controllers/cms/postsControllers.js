@@ -208,24 +208,11 @@ export const updatePostCtrl = (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      console.log(article);
-
-      axios
-        .delete(`http://localhost:3000/cdn/deleteFiles/${data.url}`, data)
-        .then(() => {
-          console.log("files erased");
-        })
-        .catch(err => {
-          console.log("error erasing files", err);
-        });
-
       let editionHistoryArr;
       if (data.editionHistory) {
         editionHistoryArr = [...article[0].editionHistory, data.editionHistory];
       }
       data.editionHistory = editionHistoryArr;
-
-      console.log("postcontroller data.editionHistory", data.editionHistory);
 
       const {
         elements,
