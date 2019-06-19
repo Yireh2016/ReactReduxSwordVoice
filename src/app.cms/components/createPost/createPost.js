@@ -459,7 +459,11 @@ class CreatePost extends Component {
 
         if (editionType !== "save") {
           this.props.history.push("/cms/adminPost");
-          this.props.onMenuChange({ main: true, create: false });
+          this.props.onMenuChange({
+            main: true,
+            create: false,
+            exitBtn: ["Blog", "Home", "Log Out"]
+          });
         }
         this.props.onSave();
       })
@@ -485,7 +489,11 @@ class CreatePost extends Component {
     window.localStorage.setItem("postActiveElID", id);
   };
   exitBtnHandler = () => {
-    this.props.onMenuChange({ main: true, create: false });
+    this.props.onMenuChange({
+      main: true,
+      create: false,
+      exitBtn: ["Blog", "Home", "Log Out"]
+    });
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost

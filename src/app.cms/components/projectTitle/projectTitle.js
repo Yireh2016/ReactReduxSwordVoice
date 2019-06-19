@@ -80,7 +80,11 @@ class ProjectTitle extends Component {
   };
 
   cancelProjectTitleHandler = () => {
-    this.props.onMenuChange({ main: true, create: false });
+    this.props.onMenuChange({
+      main: true,
+      create: false,
+      exitBtn: ["Blog", "Home", "Log Out"]
+    });
     this.props.exitBtnHandler(this.props.history);
   };
 

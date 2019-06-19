@@ -15,7 +15,7 @@ import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
 
 //api calls
-import apiLogout from "../../apiCalls/apiLogout";
+import apiLogout from "../../../apiCalls/apiLogout";
 
 //services
 

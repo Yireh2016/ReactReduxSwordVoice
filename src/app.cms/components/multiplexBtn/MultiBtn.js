@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -22,7 +22,7 @@ const Container = styled.div`
     color: #00171f;
   }
 
-  :hover span {
+  :hover #arrow {
     border-top: 10px solid #00171f;
   }
 
@@ -68,32 +68,38 @@ const Button = styled.div`
   text-align: center;
   flex-grow: 90;
 `;
-const Arrow = styled.span`
+const Arrow = styled.div`
   transition: all ease 300ms;
   border-top: 10px solid white;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
 `;
 
-const MultiBtn = ({ optionsArr, clickHandler }) => {
+const MultiBtn = ({ options, clickHandler }) => {
   //state declaration
-  const [option, setOption] = useState(optionsArr[0]);
+  console.log("render MultiBtn");
+  const [option, setOption] = useState(options[0]);
   const [showDropDown, setShowDropDown] = useState(false);
+
+  useEffect(() => {
+    setShowDropDown(false);
+    setOption(options[0]);
+  }, [options]);
 
   //handlers
 
-  const dropHandler = value => {
+  const dropOtionHandler = value => {
     setOption(value);
     setShowDropDown(false);
   };
 
   //maps
-  const mapOptions = optionsArr.map(optionEl => {
+  const mapOptions = options.map(optionEl => {
     return (
       <span
         key={optionEl}
         onClick={() => {
-          dropHandler(optionEl);
+          dropOtionHandler(optionEl);
         }}
       >
         {optionEl}
@@ -106,7 +112,12 @@ const MultiBtn = ({ optionsArr, clickHandler }) => {
     <Wrapper>
       <Container id="Container">
         <Layout id="Layout" className="btn">
-          <Button id="Button" onClick={clickHandler}>
+          <Button
+            id="Button"
+            onClick={() => {
+              clickHandler(option);
+            }}
+          >
             {option}
           </Button>
           <Selector id="Selector">

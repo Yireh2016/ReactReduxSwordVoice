@@ -14,6 +14,7 @@ import Menu from "../menu/menu";
 import ClassesInput from "../classesInput/classesInput";
 import UserProfile from "../userProfile/UserProfile";
 import Dialog from "../dialog/Dialog";
+import MultiBtn from "../multiplexBtn/MultiBtn";
 
 //css
 import "./dashboard.css";
@@ -32,6 +33,7 @@ import erasePreviewDataFromElements from "../../../services/erasePreviewDataFrom
 
 //api calls
 import getUserFromId from "../../apiCalls/getUserFromId";
+import apiLogout from "../../../apiCalls/apiLogout";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -44,6 +46,7 @@ class Dashboard extends Component {
       isPostSaved: true, //eliminar ojo
       showExitModal: { show: false, url: "" },
       showClassesModal: false,
+      exitBtn: ["Blog", "Home", "Log Out"],
 
       dateProgram: this.props.date
     };
@@ -59,6 +62,10 @@ class Dashboard extends Component {
         });
       }
     });
+  }
+
+  componentDidUpdate() {
+    console.log("this.props.menu.exitBtn", this.props.menu.exitBtn);
   }
 
   toogleClickHandler = () => {
@@ -291,6 +298,44 @@ class Dashboard extends Component {
       });
     }
   };
+
+  exitBtnClickHandler = async option => {
+    console.log("option", option);
+    switch (option) {
+      case "Exit": {
+        this.linkBtnHandler(this.props.history, "adminPost");
+        this.props.onMenuChange({
+          main: true,
+          create: false,
+          exitBtn: ["Blog", "Home", "Log Out"]
+        });
+        break;
+      }
+      case "Blog": {
+        window.location.href = "/blog";
+        // this.props.history.push("/blog");
+
+        break;
+      }
+      case "Log Out": {
+        const logoutRes = await apiLogout();
+        if (logoutRes.status === "OK") {
+          console.log("logued out");
+          window.location.href = "/cms";
+        }
+        break;
+      }
+      case "Home": {
+        window.location.href = "/home";
+
+        break;
+      }
+
+      default:
+        break;
+    }
+  };
+
   render() {
     if (this.props.isUserLoggedIn) {
       const CreatePostBtn = withRouter(({ history }) => {
@@ -304,8 +349,10 @@ class Dashboard extends Component {
               this.props.onReset();
               this.props.onMenuChange({
                 main: false,
-                create: true
+                create: true,
+                exitBtn: ["Exit", "Blog", "Home", "Log Out"]
               });
+
               history.push("/cms/createPost");
             }}
           >
@@ -391,6 +438,7 @@ class Dashboard extends Component {
       const classesInput = <ClassesInput />;
 
       const expand = this.state.isMenu ? "" : "dashboardLayoutExpand";
+
       return (
         <div>
           {this.state.showClassesModal && (
@@ -500,12 +548,16 @@ class Dashboard extends Component {
               {this.props.history.location.pathname.match("/cms/") && (
                 <div className="dashLogOut">
                   <div>
-                    <a href="/blog">
-                      <button className="cmsBtn">
+                    {/* <a href="/blog"> */}
+                    <MultiBtn
+                      options={this.props.menu.exitBtn}
+                      clickHandler={this.exitBtnClickHandler}
+                    />
+                    {/* <button className="cmsBtn">
                         <span>Exit</span>
                         <img src={exit} alt="Exit" />
-                      </button>
-                    </a>
+                      </button> */}
+                    {/* </a> */}
                   </div>
                 </div>
               )}
@@ -611,6 +663,6 @@ const mapDispachToProps = dispatch => {
 const Dashboard2 = connect(
   mapStateToProps,
   mapDispachToProps
-)(Dashboard);
+)(withRouter(Dashboard));
 
-export default withRouter(withCookies(Dashboard2));
+export default withCookies(Dashboard2);

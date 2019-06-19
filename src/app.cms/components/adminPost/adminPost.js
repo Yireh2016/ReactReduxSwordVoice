@@ -77,7 +77,8 @@ class AdminPost extends Component {
           updateReduxState(res.data);
           changeMenu({
             main: false,
-            create: true
+            create: true,
+            exitBtn: ["Exit", "Blog", "Home", "Log Out"]
           });
         }
       })

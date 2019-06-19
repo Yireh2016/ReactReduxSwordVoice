@@ -1,6 +1,7 @@
 const initialState = {
   main: true,
-  create: false
+  create: false,
+  exitBtn: ["Blog", "Home", "Log Out"]
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const menuHandleReducer = (state = initialState, action) => {
