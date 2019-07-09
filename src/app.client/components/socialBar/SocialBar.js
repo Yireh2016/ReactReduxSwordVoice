@@ -20,13 +20,17 @@ const SocialBar = ({
   addClapsCount,
   setShareCount,
   setViewsCount,
-  title
+  article
 }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   useEffect(() => {
     setTimeout(async () => {
-      const updatedSocialCountRes = await updateSocialCount(title, "views", 1);
+      const updatedSocialCountRes = await updateSocialCount(
+        article.id,
+        "views",
+        1
+      );
 
       if (updatedSocialCountRes.status === "OK") {
         setViewsCount(updatedSocialCountRes.result.views);
@@ -88,7 +92,7 @@ const SocialBar = ({
 
       //api call
       const updateSocialCountRes = await updateSocialCount(
-        title,
+        article.id,
         "claps",
         clapsAdder + 1
       );
@@ -190,7 +194,6 @@ const SocialBar = ({
 const mapStateToProps = state => {
   return {
     socialCount: state.article.socialCount,
-    title: state.article.title,
     article: state.article
   };
 };

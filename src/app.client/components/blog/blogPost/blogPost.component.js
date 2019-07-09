@@ -1,9 +1,6 @@
 //modulos
 import React, { Component } from "react";
-// import JsxParser from "react-jsx-parser";
 import ReactHtmlParser from "react-html-parser";
-import axios from "axios";
-import b64toBlob from "b64-to-blob";
 import { connect } from "react-redux";
 import Radium from "radium";
 //css
@@ -576,7 +573,6 @@ class BlogArticle extends Component {
     });
     return (
       <React.Fragment>
-        
         <div id="blogPostPage">
           <Navbar hasBackground="true" />
 

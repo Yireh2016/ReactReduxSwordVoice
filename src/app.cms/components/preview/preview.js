@@ -12,7 +12,7 @@ const Preview = props => {
         <title>Preview Post</title>
         <link
           rel="stylesheet"
-          href={`http://localhost:3000/articles/${cssURL}/${cssURL}.css`}
+          href={`https://cdn.swordvoice.com/articles/${cssURL}/${cssURL}.css`}
         />
       </Helmet>
       <div className="blogArticle grid col-8 col-12-md helmetClass">

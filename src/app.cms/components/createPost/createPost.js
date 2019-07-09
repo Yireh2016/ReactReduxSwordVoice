@@ -448,7 +448,7 @@ class CreatePost extends Component {
           }
         );
         axios
-          .post("http://localhost:3000/cdn/deleteFiles/", {
+          .post("https://cdn.swordvoice.com/cdn/deleteFiles/", {
             url: dataToUpdate.url,
             files: dataToUpdate.files
           })

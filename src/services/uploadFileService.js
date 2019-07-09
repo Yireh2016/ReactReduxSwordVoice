@@ -22,7 +22,7 @@ const uploadFileService = (fileData, successFn, errFn) => {
   console.log("uploadFileService sending file");
 
   axios
-    .post("http://localhost:3000/cdn/uploadTempFile", data)
+    .post("https://cdn.swordvoice.com/cdn/uploadTempFile", data)
     .then(res => {
       alert("file uploaded");
       if (successFn) successFn(res);

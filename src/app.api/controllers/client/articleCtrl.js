@@ -4,10 +4,10 @@ const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
 
 export const socialCtrl = (req, res) => {
-  const { title, prop } = req.query;
+  const { id, prop } = req.query;
   const { socialCount } = req.body;
 
-  articleModel.find({ title }).exec((err, article) => {
+  articleModel.find({ _id: id }).exec((err, article) => {
     if (err) {
       console.log(err);
       res.send(err);

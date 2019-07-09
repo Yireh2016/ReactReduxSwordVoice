@@ -2,16 +2,18 @@ import React from "react";
 import NavBar from "../../components/navbar/navbar.component";
 import Radium from "radium";
 import { connect } from "react-redux";
+import styled from "styled-components";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
-// import axios from "axios";
+
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
 import "./blog.css";
 
 //layouts
+import FlexItem from "../../layouts/FlexItem";
 
 //components
-// import Summary from "../../components/blog/common/summary/summary2.component";
+
 import SummaryCard from "./postCard/summaryCard/SummaryCard";
 import TwoColumnAside from "../../layouts/TwoColumnAside";
 import Logo from "../../components/general/logo.component";
@@ -20,11 +22,13 @@ import FooterApp from "../../components/footer/footer.component";
 import SearchBar from "../../components/blog/searchBar/searchBar.component";
 import ScrollMouse from "../../components/scrollMouse/ScrollMouse";
 import Loading from "../../components/loading/loading";
+import PostCard from "./postCard/PostCard";
+import Post from "./post/Post";
 
 //services
 import isDevice from "../../../services/isDevice";
+import NewPostLayout from "./newPostLayout/NewPostLayout";
 // import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
-import PostCard from "./postCard/PostCard";
 // import paragraphService from "../../../services/paragraphService";
 // import keywordsToArr from "../../../services/keywordsToArr";
 
@@ -72,7 +76,8 @@ const styles = {
         marginTop: "14vw",
         height: `calc(100vh - 14vw)`,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        display: "block"
       },
       "@media (max-width: 700px)": {
         marginTop: "21.4vw",
@@ -118,14 +123,16 @@ const styles = {
       borderRadius: "8px",
       height: "calc(100vh - 15vmin - 112px)",
       "@media (max-width: 1050px)": {
-        height: "auto"
+        height: "auto",
+        margin: "0",
+        borderRadius: "0"
       }
     }
   },
   headerPostLayout: {
     "@media (max-width: 1050px)": {
       width: "auto",
-      flexDirection: "column"
+      display: "block"
     }
   },
   headerSummaryLayout: {
@@ -167,12 +174,41 @@ const styles = {
     }
   },
   popularPostLayout: {
+    overflow: "hidden",
     height: "calc(100vh - 10vmin)",
     "@media (max-width: 1050px)": {
       height: "auto"
     }
   }
 };
+
+const AsidePostsCont = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  white-space: normal;
+  overflow-x: hidden;
+  height: calc(100% - 100px);
+  > div {
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 1050px) {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0 0 15px 0;
+
+    height: calc(100% - 100px);
+    flex-direction: row;
+    > div {
+      margin-right: 20px;
+    }
+    > div:nth-child(1) {
+      margin: 0 20px 40px 20px;
+    }
+  }
+`;
 
 class BlogPage extends React.Component {
   constructor(props) {
@@ -225,6 +261,7 @@ class BlogPage extends React.Component {
   setPostDimensions = () => {
     const isDeviceResult = isDevice();
     let postH;
+    let asidePostW = 9;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -245,12 +282,14 @@ class BlogPage extends React.Component {
 
     switch (isDeviceResult) {
       case "pc":
+        asidePostW = 10;
         postH =
           (windowWidth * 0.4) / 1.028 >= 520
             ? 520
             : (windowWidth * 0.4) / 1.028;
         break;
       case "tablet":
+        asidePostW = 6;
         postH = (windowWidth * 0.8) / 1.028;
         break;
 
@@ -262,7 +301,7 @@ class BlogPage extends React.Component {
         break;
     }
 
-    this.setState({ mainPostH: postH });
+    this.setState({ mainPostH: postH, asidePostW });
   };
 
   componentDidMount() {
@@ -411,20 +450,34 @@ class BlogPage extends React.Component {
       }
 
       return (
-        <PostCard
-          key={i}
-          postH={asidePostH}
-          hasSummary={true}
-          title={title}
-          postImg={postImg}
-          postGradient={postGradient}
-          keywords={keywords}
-          author={author}
-          date={date}
-          url={`/blog/post/${url}`}
-          avatar={avatar}
-          summaryTextHtml={summaryTextHtml}
-        />
+        // <PostCard
+        //   key={i}
+        //   postH={asidePostH}
+        //   hasSummary={true}
+        //   title={title}
+        //   postImg={postImg}
+        //   postGradient={postGradient}
+        //   keywords={keywords}
+        //   author={author}
+        //   date={date}
+        //   url={`/blog/post/${url}`}
+        //   avatar={avatar}
+        //   summaryTextHtml={summaryTextHtml}
+        // />
+        <FlexItem key={i} size={this.state.asidePostW}>
+          <Post
+            size="md"
+            title={title}
+            backgroundURL={postImg}
+            postGradient={postGradient}
+            keywords={keywords}
+            author={author}
+            date={date}
+            link={`/blog/post/${url}`}
+            avatar={avatar}
+            summaryTextHtml={summaryTextHtml}
+          />
+        </FlexItem>
       );
     });
     const aside = (
@@ -450,13 +503,13 @@ class BlogPage extends React.Component {
               </div>
 
               <div
-                data-simplebar
+                // data-simplebar
                 style={[styles.aside.layout, styles.layout.flexColumn]}
               >
                 <h3 style={styles.aside.title}>Popular Posts</h3>
-                <div id="postsContainer" style={styles.aside.postsContainer}>
+                <AsidePostsCont data-simplebar id="postsContainer">
                   {asidePosts}
-                </div>
+                </AsidePostsCont>
               </div>
             </section>
           </div>
@@ -464,7 +517,7 @@ class BlogPage extends React.Component {
       </React.Fragment>
     );
 
-    const postCards = recentPostsArray.map((post, i) => {
+    const recentPostCards = recentPostsArray.map((post, i) => {
       const {
         title,
         postImg,
@@ -576,6 +629,23 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
+              <NewPostLayout
+                size={this.state.isDeviceResult === "tablet" ? 10 : 12}
+              >
+                <Post
+                  title={newPostArray[0].title}
+                  backgroundURL={newPostArray[0].postImg}
+                  postGradient={newPostArray[0].postGradient}
+                  keywords={newPostArray[0].keywords}
+                  author={newPostArray[0].author}
+                  date={newPostArray[0].date}
+                  link={`/blog/post/${newPostArray[0].url}`}
+                  avatar={newPostArray[0].avatar}
+                  summaryTextHtml={newPostArray[0].summaryTextHtml}
+                />
+              </NewPostLayout>
+
+              {/* 
               <PostCard
                 title={newPostArray[0].title}
                 postH={mainPostH}
@@ -592,12 +662,20 @@ class BlogPage extends React.Component {
                     : JSON.stringify(newPostArray[0].avatar)
                 }
                 summaryTextHtml={newPostArray[0].summaryTextHtml}
-              />
+              /> */}
             </div>
 
             <div
               style={[
-                { display: "none", position: "absolute" },
+                {
+                  display: "none",
+                  position: "absolute",
+                  bottom: "10vh",
+                  display: "none",
+                  position: "absolute",
+                  left: "50%",
+                  transform: "translateX( -50% )"
+                },
                 {
                   "@media (max-width: 1050px)": {
                     display: "block"
@@ -685,7 +763,7 @@ class BlogPage extends React.Component {
             }}
           >
             <div id="recentPostLayout" style={styles.recentPostLayout}>
-              {postCards}
+              {recentPostCards}
             </div>
           </section>
         </TwoColumnAside>

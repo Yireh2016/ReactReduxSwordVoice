@@ -69,7 +69,7 @@ class ImageElement extends Component {
     // this.props.onProjectChange();
     this.props.imgFileSet(
       `${URL.createObjectURL(image)}`,
-      `http://localhost:3000/articles/${this.props.project.url}/${image.name}`
+      `https://cdn.swordvoice.com/articles/${this.props.project.url}/${image.name}`
     );
     this.setState(() => {
       return {

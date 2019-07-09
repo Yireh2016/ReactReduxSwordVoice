@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const updateSocialCount = (title, prop, socialCount) => {
+const updateSocialCount = (id, prop, socialCount) => {
   return new Promise((resolve, reject) => {
     axios
-      .put(`api/socialCounter?title=${title}&prop=${prop}`, { socialCount })
+      .put(`api/socialCounter?id=${id}&prop=${prop}`, { socialCount })
       .then(res => {
         resolve({ status: "OK", result: res.data });
       })

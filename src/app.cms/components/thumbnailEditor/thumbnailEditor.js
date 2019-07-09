@@ -14,7 +14,7 @@ class ThumbNailEditor extends Component {
     this.state = {
       isImageUploaded: false,
       imagePreview: this.props.thumbnail
-        ? `url(http://localhost:3000/articles/${this.props.project.url}/${
+        ? `url(https://cdn.swordvoice.com/articles/${this.props.project.url}/${
             this.props.thumbnail.name
           })`
         : null,

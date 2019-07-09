@@ -253,7 +253,7 @@ class Dashboard extends Component {
     };
 
     axios
-      .get(`http://localhost:3000/cdn/getClasses/${this.props.project.url}`)
+      .get(`https://cdn.swordvoice.com/cdn/getClasses/${this.props.project.url}`)
       .then(res => {
         if (res.status === 200) {
           viewClasses(res.data);
@@ -475,7 +475,7 @@ class Dashboard extends Component {
             <Helmet>
               <link
                 rel="stylesheet"
-                href={`http://localhost:3000/articles/${
+                href={`https://cdn.swordvoice.com/articles/${
                   this.props.project.url
                 }/${this.props.project.url}.css`}
               />

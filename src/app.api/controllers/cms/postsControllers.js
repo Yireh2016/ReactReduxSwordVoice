@@ -17,7 +17,7 @@ export const createPostCtrl = (req, res) => {
   let article = new articleModel(projectData.article);
 
   axios
-    .post(`http://localhost:3000/cdn/createPost/${projectData.article.url}`)
+    .post(`https://cdn.swordvoice.com/cdn/createPost/${projectData.article.url}`)
     .then(result => {
       console.log("respuesta correcta del post", result);
 
@@ -43,7 +43,7 @@ export const addClassToPostCtrl = (req, res) => {
 
   axios
     .post(
-      `http://localhost:3000/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
+      `https://cdn.swordvoice.com/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
     )
     .then(apiRes => {
       if (apiRes.status === 200) {
@@ -72,7 +72,7 @@ export const getClassFromPostCtrl = (req, res) => {
   // };
 
   axios
-    .get(`http://localhost:3000/cdn/getClasses/${url}`)
+    .get(`https://cdn.swordvoice.com/cdn/getClasses/${url}`)
     .then(apiRes => {
       if (apiRes.status === 404) {
         return;
@@ -148,7 +148,7 @@ export const getPostCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(http:/localhost:3000/articles/${posts[i].url}/${
+            `url(http:/cdn.swordvoice.com/articles/${posts[i].url}/${
               posts[i].thumbnail.name
             })`,
           postGradient:

@@ -122,7 +122,7 @@ const swordvoiceWeb = async (req, res) => {
                       url: posts[i].url,
                       postImg:
                         posts[i].thumbnail &&
-                        `url(http://localhost:3000/articles/${posts[i].url}/${
+                        `url(https://cdn.swordvoice.com/articles/${posts[i].url}/${
                           posts[i].thumbnail.name
                         })`,
                       postGradient:
@@ -173,7 +173,7 @@ const swordvoiceWeb = async (req, res) => {
                 url: posts[i].url,
                 postImg:
                   posts[i].thumbnail &&
-                  `url(http://localhost:3000/articles//${posts[i].url}/${
+                  `url(https://cdn.swordvoice.com/articles//${posts[i].url}/${
                     posts[i].thumbnail.name
                   })`,
                 postGradient:

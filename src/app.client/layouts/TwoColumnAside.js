@@ -22,9 +22,9 @@ const styles = {
     }
   }
 };
-const TwoColumnAside = ({ children, aside, style }) => {
+const TwoColumnAside = ({ children, aside }) => {
   return (
-    <Style style={style}>
+    <Style>
       <div style={styles.main}>{children}</div>
       <div style={styles.aside}>{aside}</div>
     </Style>
