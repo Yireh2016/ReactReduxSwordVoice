@@ -7,7 +7,7 @@ const Form = styled.div`
   flex-direction: column;
   z-index: 2;
   padding: 30px 20px;
-  background: #00171f70;
+  background: rgba(0, 23, 31, 0.7);
   border-radius: 5px;
 
   label:first-child {

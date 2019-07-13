@@ -6,6 +6,11 @@ const SVG = styled.svg`
   top: -30px;
   height: 800px;
   position: absolute;
+
+  @media (max-width: 1050px) {
+    width: 150vw;
+    height: auto;
+  }
 `;
 const Background = () => {
   return (

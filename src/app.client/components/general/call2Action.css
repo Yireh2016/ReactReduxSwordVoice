@@ -1,4 +1,5 @@
 .call2Action {
+  min-width: 90px;
   background: #00171f;
   background: var(--blueDark);
   border: 2px solid #f95f0b;
