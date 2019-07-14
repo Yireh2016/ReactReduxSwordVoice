@@ -12,6 +12,7 @@ import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 import ReplyEditor from "./replyEditor/ReplyEditor";
 import Reply from "./reply/Reply";
 import Modal from "../modal/modal";
+import NewComment from "../blog/blogPost/newComment/NewComment";
 
 //store
 // import { store } from "../../../app.redux.store/store/configStore";
@@ -20,6 +21,7 @@ import Modal from "../modal/modal";
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
 
 import apiDeleteComment from "../../apiCalls/apiDeleteComment";
+import apiSetComment from "../../apiCalls/apiSetComment";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -256,6 +258,15 @@ const DeleteBtn = styled.button`
   }
 `;
 
+const EditBtn = styled.button`
+  color: white !important;
+  background: var(--blueDark) !important;
+  :hover {
+    color: red !important;
+    background: transparent !important;
+  }
+`;
+
 const Comment = ({
   index,
   userAvatar,
@@ -272,21 +283,9 @@ const Comment = ({
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   const [isModal, setModal] = useState(false);
-  const [isDeleteConfirm, setDeleteConfirm] = useState(false);
-
-  // const state = store.getState();
-
-  // let article = state.article;
-  // const logInStatus = state.logInStatus;
-  // const setCommentClaps = (index, count) => {
-  //   store.dispatch({
-  //     type: "SET_COMMENT_CLAPS",
-  //     payload: { index, count }
-  //   });
-  // };
-
-  //reduxState
-  // const isUserLoggedIn = state.logInStatus.isUserLoggedIn;
+  const [isDeleteClicked, setDeleteisClicked] = useState(false);
+  const [isEditClicked, setEditClicked] = useState(false);
+  const [editCommentMessage, setEditCommentMessage] = useState("");
 
   const isUserLoggedIn = logInStatus.isUserLoggedIn;
 
@@ -358,31 +357,92 @@ const Comment = ({
       });
 
       setComments(commentsAfterDeletion);
-      setDeleteConfirm(false);
+      setDeleteisClicked(false);
     });
   };
 
   const deleteCommentHandler = async () => {
-    setDeleteConfirm(true); //show modal
+    setDeleteisClicked(true); //show modal
   };
 
-  const editCommentHandler = () => {};
+  const editCommentHandler = () => {
+    setEditClicked(true); //show modal
+  };
+
+  const editComment = value => {
+    setEditCommentMessage(value);
+  };
+  const confirmEditionHandler = () => {
+    apiSetComment(
+      logInStatus.loggedUserID,
+      logInStatus.loggedUserName,
+      article.title,
+      editCommentMessage,
+      index,
+      id => {
+        setEditClicked(false);
+        let comments = article.comments;
+        comments[index].message = editCommentMessage;
+        setComments(comments);
+        console.log("edited comment id", id);
+      }
+    );
+  };
 
   return (
     <React.Fragment>
-      {isDeleteConfirm && (
+      {isDeleteClicked && (
         <Modal
           title="Warning"
           body="Are You Sure?"
           modalTitleClass="modalTitle"
           modalHandler={() => {
-            setDeleteConfirm(false);
+            setDeleteisClicked(false);
           }}
         >
-          <CancelBtn>Cancel</CancelBtn>
+          <CancelBtn
+            onClick={() => {
+              setDeleteisClicked(false);
+            }}
+          >
+            Cancel
+          </CancelBtn>
           <DeleteBtn onClick={confirmDeletionHandler}>Delete</DeleteBtn>
         </Modal>
       )}
+
+      {isEditClicked && (
+        <Modal
+          size="big"
+          body={
+            <NewComment
+              preComment={article.comments[index].message}
+              note={false}
+              editComment={editComment}
+            />
+          }
+          modalHandler={() => {
+            setEditClicked(false);
+          }}
+        >
+          <CancelBtn
+            onClick={() => {
+              setEditClicked(false);
+            }}
+          >
+            Cancel
+          </CancelBtn>
+          <EditBtn
+            onClick={() => {
+              confirmEditionHandler();
+              console.log("Edit it");
+            }}
+          >
+            Edit
+          </EditBtn>
+        </Modal>
+      )}
+
       <CommentCardLayout
         onMouseLeave={() => {
           isModal && setModal(false);

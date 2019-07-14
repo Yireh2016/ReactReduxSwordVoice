@@ -15,6 +15,9 @@ import {
 
 import updateSocialCount from "../../assets/apiCalls/updateSocialCount";
 
+//services
+import countingHTMLwords from "../../services/countingHTMLwords";
+
 const SocialBar = ({
   socialCount,
   addClapsCount,
@@ -25,6 +28,10 @@ const SocialBar = ({
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
   useEffect(() => {
+    const timerExpires = (countingHTMLwords(article.html) * 60 * 1000 * 2) / 3;
+
+    console.log("timerExpires", timerExpires);
+
     setTimeout(async () => {
       const updatedSocialCountRes = await updateSocialCount(
         article.id,
@@ -35,7 +42,7 @@ const SocialBar = ({
       if (updatedSocialCountRes.status === "OK") {
         setViewsCount(updatedSocialCountRes.result.views);
       }
-    }, 60000);
+    }, timerExpires);
   }, []);
   const BarContainer = styled.div`
     display: inline-block;

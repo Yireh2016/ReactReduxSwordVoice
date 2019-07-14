@@ -118,7 +118,7 @@ export const updateCommentClaps = (req, res) => {
 };
 
 export const setCommentCtrl = (req, res) => {
-  const { userID, userName, title, message } = req.body;
+  const { userID, userName, title, message, commentIndex } = req.body;
 
   userModel.findById(userID, (err, user) => {
     if (err) {
@@ -126,7 +126,6 @@ export const setCommentCtrl = (req, res) => {
       res.status(404).json(err);
       return err;
     }
-    console.log("user avatar from db", user.userAvatar);
     let comment = { userAvatar: user.userAvatar, userID, userName, message };
 
     let comments = [];
@@ -137,6 +136,28 @@ export const setCommentCtrl = (req, res) => {
         res.status(404).json(err);
         return;
       }
+
+      if (commentIndex !== null) {
+        //edit comment
+        let comment;
+        comment = article[0].comments[commentIndex];
+        comment.message = message;
+        article[0].comments[commentIndex] = comment;
+
+        article[0].save((err, article) => {
+          if (err) {
+            console.log("err SAVING ARTICLE", err);
+            res.status(404).json(err);
+            return;
+          }
+
+          res.status(200).json({ message: "ok", id: article.comments[0]._id });
+        });
+
+        return;
+      }
+
+      //create Comment
       comments = article[0].comments;
 
       if (comments) {

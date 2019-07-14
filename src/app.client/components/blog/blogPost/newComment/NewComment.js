@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 import { connect } from "react-redux";
-// import { store } from "../../../../../app.redux.store/store/configStore";
 
 //assets
 import { esquinaChat, check } from "../../../../assets/svgIcons/SvgIcons";
@@ -102,6 +100,13 @@ const Avatar = styled.div`
   background-position: center center;
 `;
 
+const UserNameCont = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Username = styled.span`
   font-size: 20px;
   margin-left: 10px;
@@ -111,27 +116,43 @@ const Username = styled.span`
 
 const Footer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
   margin: 20px auto;
   width: 80%;
-  div {
-    display: flex;
-    align-items: center;
-    margin: 0 5%;
+`;
 
-    :hover {
-      cursor: pointer;
-    }
-    span {
-      font-size: 20px;
-      font-weight: 500;
-    }
-    svg {
-      fill: rgb(249, 95, 11);
-      margin-left: 10px;
-      width: 30px;
-      height: 30px;
-    }
+const PostItCont = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0 5%;
+
+  :hover {
+    cursor: pointer;
+  }
+  span {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  svg {
+    fill: rgb(249, 95, 11);
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  div {
+    display: inline-block;
+  }
+`;
+
+const Note = styled.p`
+  font-size: 16px !important;
+  color: var(--blueDark);
+  span {
+    color: coral;
+    font-weight: bold;
   }
 `;
 
@@ -142,7 +163,10 @@ const NewComment = ({
   title,
   comments,
   setGlobalComments,
-  setCommentsCount
+  setCommentsCount,
+  note = true,
+  preComment = "",
+  editComment = null
 }) => {
   const [avatarState, setAvatar] = useState("");
   const [comment, setComment] = useState("");
@@ -155,6 +179,10 @@ const NewComment = ({
     setAvatar(avatar);
   }, [avatar]);
 
+  useEffect(() => {
+    setComment(preComment);
+  }, [preComment]);
+
   const sendCommentHandler = () => {
     if (comment === "") {
       return;
@@ -162,7 +190,6 @@ const NewComment = ({
 
     setCommentDisabled(true);
 
-    console.log("userID sendCommentHandler", userID);
     apiSetComment(userID, userName, title, comment, id => {
       let commentsToSet = comments;
       let commentToPush = {
@@ -183,6 +210,8 @@ const NewComment = ({
 
   const commentHandler = e => {
     setComment(e.target.value);
+
+    editComment && editComment(e.target.value);
   };
 
   return (
@@ -203,7 +232,9 @@ const NewComment = ({
                     typeof avatarState === "string" && `url(${avatarState})`
                 }}
               />
-              <Username id="Username">{userName}</Username>
+              <UserNameCont>
+                <Username id="Username">{userName}</Username>
+              </UserNameCont>
             </UserLayout>
             <TextLayout id="TextLayout">
               <Text
@@ -217,10 +248,25 @@ const NewComment = ({
         </Outer>
       </CommentLayout>
       <Footer id="Footer">
-        <div onClick={sendCommentHandler}>
-          <span>Post It !!!</span>
-          {check}
-        </div>
+        {note && (
+          <React.Fragment>
+            <PostItCont onClick={sendCommentHandler}>
+              <div>
+                <span>Post It !!!</span>
+                {check}
+              </div>
+            </PostItCont>
+            <Note>
+              <span>NOTE: </span> You may write comments in{" "}
+              <a href="https://commonmark.org/help/" target="_blank">
+                Markdown
+              </a>
+              . This is the best way to post any code, inline like
+              `&lt;div&gt;this&lt;/div&gt;` or multiline blocks within triple
+              backtick fences (```) with double new lines before and after.
+            </Note>
+          </React.Fragment>
+        )}
       </Footer>
     </Container>
   );

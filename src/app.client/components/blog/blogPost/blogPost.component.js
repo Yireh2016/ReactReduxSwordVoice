@@ -27,6 +27,7 @@ import avatarImg from "../../../assets/img/general/avatar.jpg";
 //services
 import keywordsToArr from "../../../../services/keywordsToArr";
 import isDevice from "../../../../services/isDevice";
+import countingHTMLwords from "../../../services/countingHTMLwords";
 
 class BlogArticle extends Component {
   constructor(props) {
@@ -620,6 +621,15 @@ class BlogArticle extends Component {
                         {this.props.article.author}
                       </span>
                       <span>{this.props.article.date}</span>
+                      <span
+                        style={{
+                          color: "coral",
+                          fontWeight: "bold"
+                        }}
+                      >
+                        {countingHTMLwords(this.props.article.html)} minutes
+                        read
+                      </span>
                     </div>
                   </div>
                 </div>

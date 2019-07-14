@@ -88,9 +88,11 @@
 aside h2 {
   font-size: 1.8rem;
 }
-.blogArticle figure img {
+.blogArticle figure img,
+.blogArticle img {
   width: 100%;
 }
+
 .blogArticle figure figcaption {
   text-align: center;
   font-size: 0.7rem;
@@ -105,6 +107,32 @@ aside h2 {
   /*	font-size: 1rem;
 	line-height: 1.6rem;*/
 }
+
+.blogArticle a {
+  color: #2e9ac2;
+}
+
+.blogArticle blockquote {
+  border-left: 8px solid rgba(255, 127, 80, 0.580392);
+}
+.blogArticle blockquote p {
+  margin-left: 15px;
+}
+.blogArticle > code,
+.blogArticle p > code,
+.blogArticle pre {
+  border: 1px solid coral;
+  background: #ff7f507a;
+  padding: 5px 10px;
+  font-family: monospace;
+  border-radius: 4px;
+}
+
+.blogArticle hr {
+  border-top: 3px solid rgba(255, 127, 80, 0.5);
+  margin-top: 1rem;
+}
+
 .googleAdBanner {
   margin-top: 2vh;
   display: flex;
