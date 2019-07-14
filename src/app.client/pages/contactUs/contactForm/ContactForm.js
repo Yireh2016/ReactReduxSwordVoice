@@ -9,12 +9,19 @@ const Form = styled.div`
   padding: 30px 20px;
   background: rgba(0, 23, 31, 0.7);
   border-radius: 5px;
+  border: 1px solid coral;
 
   label:first-child {
     margin-top: 0;
   }
   label {
     margin-top: 20px;
+  }
+
+  @media (max-width: 700px) {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 18px 10px;
   }
 `;
 

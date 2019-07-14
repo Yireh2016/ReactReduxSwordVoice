@@ -43,7 +43,8 @@ const SocialBar = ({
     border: 0.5px solid rgba(0, 0, 0, 0.12);
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.09);
     border-radius: 5px;
-    margin: 15px 15px 0 15px;
+    padding: 15px 15px 0 15px;
+    box-sizing: border-box;
   `;
   const BarLayout = styled.div`
     display: flex;
@@ -53,6 +54,9 @@ const SocialBar = ({
     margin: 0 8px;
     display: inline-flex;
     align-items: center;
+    @media (max-width: 700px) {
+      margin: 0;
+    }
   `;
   const Icon = styled.span`
     display: flex;

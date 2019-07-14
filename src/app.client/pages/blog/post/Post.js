@@ -148,7 +148,7 @@ const Post = ({
     <Layout size={size} backgroundURL={backgroundURL}>
       <Container>
         <ForeGround postGradient={postGradient} ref={postRef} size={size}>
-          <a href={link} target="_blank">
+          <a href={link}>
             <Title postW={postW} size={size}>
               {title}
             </Title>

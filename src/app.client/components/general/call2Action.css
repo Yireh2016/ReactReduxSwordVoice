@@ -2,8 +2,8 @@
   min-width: 90px;
   background: #00171f;
   background: var(--blueDark);
-  border: 2px solid #f95f0b;
-  border: 2px solid var(--orange);
+  border: 1px solid #f95f0b;
+  border: 1px solid var(--orange);
   box-sizing: border-box;
   font-style: normal;
   font-weight: bold;
@@ -11,8 +11,8 @@
   text-decoration: none;
   color: white;
   font-size: 0.6rem;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 10px 30px;
+  border-radius: 8px;
 }
 
 .call2Action:hover {
@@ -24,7 +24,6 @@
 @media (max-width: 1050px) /*and (orientation: portrait) */ {
   .call2Action {
     font-size: 2.3vh;
-    border-radius: 2vmin;
     min-width: 130px;
     height: 6vh;
   }
@@ -32,7 +31,6 @@
 @media (max-width: 700px) {
   .call2Action {
     font-size: 1rem;
-    border-radius: 15px;
     height: 45px;
   }
 }

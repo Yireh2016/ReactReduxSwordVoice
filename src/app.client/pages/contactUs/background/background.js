@@ -11,6 +11,12 @@ const SVG = styled.svg`
     width: 150vw;
     height: auto;
   }
+
+  @media (max-width: 700px) {
+    width: 160vw;
+    left: -70px;
+    top: 0px;
+  }
 `;
 const Background = () => {
   return (

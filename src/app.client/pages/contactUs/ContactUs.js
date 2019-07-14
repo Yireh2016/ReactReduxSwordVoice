@@ -30,6 +30,15 @@ const LeftAside = styled.div`
     overflow: hidden;
     height: calc(100vh - 148px);
   }
+
+  @media (max-width: 700px) {
+    overflow: hidden;
+    height: calc(100vh);
+  }
+
+  @media (max-width: 330px) and (max-height: 490px) {
+    height: calc(120vh);
+  }
 `;
 
 const NoPCTitleLay = styled.div`
@@ -61,12 +70,18 @@ const RightAside = styled.div`
     position: fixed;
     height: auto;
     bottom: 15px;
+    transform: translateY(-3vh);
+  }
+
+  @media (max-width: 700px) {
+    position: static;
+    justify-content: center;
   }
 `;
 
 const Button = styled.button`
   z-index: 2;
-  margin-top: 15px;
+  margin-top: 30px;
 
   @media (max-width: 1050px) {
     margin-top: 40px;
@@ -89,6 +104,10 @@ const SocialNetCont = styled.div`
 
   @media (max-width: 1050px) {
     heigth: auto;
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
   }
 `;
 

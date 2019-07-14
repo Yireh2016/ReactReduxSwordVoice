@@ -634,6 +634,7 @@ class BlogArticle extends Component {
                 <div
                   style={{
                     display: "flex",
+                    flexWrap: "wrap",
                     alignItems: "center",
                     color: "#004059"
                   }}

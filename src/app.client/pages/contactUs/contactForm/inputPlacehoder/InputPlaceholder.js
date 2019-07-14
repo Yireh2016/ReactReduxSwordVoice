@@ -96,6 +96,7 @@ const InputPlaceholder = ({
       </Placeholder>
       {type === "textarea" ? (
         <Textarea
+          className="style-7"
           ref={inputRef}
           name={name}
           onChange={onInputChange}

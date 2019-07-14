@@ -20,6 +20,10 @@ const SocialNetLayout = styled.div`
   @media (max-width: 1050px) {
     padding: 0;
   }
+
+  @media (max-width: 700px) {
+    border-radius: 0px;
+  }
 `;
 
 const SocialNetSvg = styled.svg`
@@ -28,6 +32,9 @@ const SocialNetSvg = styled.svg`
 
   :hover {
     fill: coral;
+  }
+  @media (max-width: 700px) {
+    width: 10vw;
   }
 `;
 
