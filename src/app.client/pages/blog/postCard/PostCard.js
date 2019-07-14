@@ -1,6 +1,7 @@
 import React from "react";
 import Radium from "radium";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 //assets
 import threeDotsButton from "../../../assets/img/general/threeDots.svg";
 import SummaryCard from "./summaryCard/SummaryCard";
@@ -20,12 +21,13 @@ const styles = {
   postLayout: {
     position: "relative"
   }
-  // gradientBackground: {
-  //   ":hover": {
-  //     cursor: "pointer"
-  //   }
-  // }
 };
+
+const ThreeDots = styled.div`
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 class PostCard extends React.Component {
   constructor(props) {
@@ -86,18 +88,18 @@ class PostCard extends React.Component {
             }
           ]}
         >
-          <div
-            id="gradientBackground"
-            style={[
-              // styles.gradientBackground,
-              {
-                backgroundImage: postGradient,
-                width: "100%",
-                height: "100%"
-              }
-            ]}
-          >
-            <a href={url}>
+          <a href={url}>
+            <div
+              id="gradientBackground"
+              style={[
+                // styles.gradientBackground,
+                {
+                  backgroundImage: postGradient,
+                  width: "100%",
+                  height: "100%"
+                }
+              ]}
+            >
               <h3
                 id="postTitle"
                 style={[
@@ -115,8 +117,9 @@ class PostCard extends React.Component {
               >
                 {title}
               </h3>
-            </a>
-          </div>
+            </div>
+          </a>
+
           <div
             id="summaryCont"
             style={{
@@ -144,7 +147,7 @@ class PostCard extends React.Component {
           </div>
         </div>
         {hasSummary && (
-          <div
+          <ThreeDots
             ref={this.threedotsRef}
             id="threeDots"
             style={{
@@ -166,7 +169,7 @@ class PostCard extends React.Component {
               src={threeDotsButton}
               alt="three Dots Button"
             />
-          </div>
+          </ThreeDots>
         )}
       </div>
     );

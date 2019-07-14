@@ -56,14 +56,28 @@
   box-sizing: border-box;
   background: #00171f;
   border: none;
-  color: #fff;
+}
+
+.controlButtonLogin button:hover {
+  cursor: pointer;
 }
 
 .cancelBtn {
   background: #f95f0b00 !important;
   border: 1px solid #ebeff1 !important;
-  color: #ebeff1 !important;
+  color: #ebeff1;
 }
+.cancelBtn:hover {
+  color: var(--blueDark) !important;
+}
+.logSignBtn {
+  color: coral;
+}
+
+.logSignBtn:hover {
+  color: white;
+}
+
 .formCardLogin {
   position: relative;
   border: 3px solid #f95f0b;

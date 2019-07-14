@@ -122,7 +122,7 @@ class LogInForm extends Component {
         >
           Cancel
         </button>
-        <button onClick={this.tryLogIn} type="button">
+        <button className="logSignBtn" onClick={this.tryLogIn} type="button">
           {/* {this.tryLogInClick} */}
           Log In
         </button>
@@ -139,8 +139,14 @@ class LogInForm extends Component {
         onScroll={e => {
           this.onScrollformLayout(e);
         }}
+        onClick={this.props.onCancelClick}
       >
-        <div className="formCardLogin">
+        <div
+          className="formCardLogin"
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
           <div className="signUpPageCont">
             <section
               id="logInPage"

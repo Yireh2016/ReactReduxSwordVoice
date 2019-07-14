@@ -552,7 +552,11 @@ class SignUpForm extends Component {
             >
               Cancel
             </button>
-            <button onClick={this.onNextClick} type="button">
+            <button
+              className="logSignBtn"
+              onClick={this.onNextClick}
+              type="button"
+            >
               Next
             </button>
           </React.Fragment>
@@ -662,8 +666,14 @@ class SignUpForm extends Component {
         onScroll={e => {
           this.onScrollformLayout(e);
         }}
+        onClick={this.props.onCancelClick}
       >
-        <div className="formCard ">
+        <div
+          className="formCard "
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
           <div className="signUpPageCont">
             {this.state.formPage === 1 && (
               <section

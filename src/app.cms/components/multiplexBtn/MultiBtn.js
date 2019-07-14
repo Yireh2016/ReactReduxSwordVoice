@@ -33,12 +33,10 @@ const DropDown = styled.div`
   top: 37px;
   left: 0;
 
-  background: #00171f;
   border-radius: 8px;
 
   box-sizing: border-box;
-  padding: 10px;
-  width: 90px;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -48,6 +46,9 @@ const DropDown = styled.div`
 
   span {
     margin-top: 5px;
+  }
+  span:hover {
+    color: coral;
   }
 `;
 
@@ -75,6 +76,20 @@ const Arrow = styled.div`
   border-right: 6px solid transparent;
 `;
 
+const MapOption = styled.span`
+  border: 1px solid coral;
+  border-radius: 8px;
+  padding: 10px 15px;
+  box-sizing: border-box;
+  font-size: 0.8rem;
+  font-weight: bold;
+  width: 100%;
+
+  :hover {
+    cursor: pointer;
+  }
+`;
+
 const MultiBtn = ({ options, clickHandler }) => {
   //state declaration
   console.log("render MultiBtn");
@@ -96,14 +111,14 @@ const MultiBtn = ({ options, clickHandler }) => {
   //maps
   const mapOptions = options.map(optionEl => {
     return (
-      <span
+      <MapOption
         key={optionEl}
         onClick={() => {
           dropOtionHandler(optionEl);
         }}
       >
         {optionEl}
-      </span>
+      </MapOption>
     );
   });
 
@@ -131,7 +146,7 @@ const MultiBtn = ({ options, clickHandler }) => {
         </Layout>
       </Container>
 
-      {showDropDown && <DropDown>{mapOptions}</DropDown>}
+      {showDropDown && <DropDown id="dropDown">{mapOptions}</DropDown>}
     </Wrapper>
   );
 };

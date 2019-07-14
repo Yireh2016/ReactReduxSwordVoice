@@ -265,7 +265,7 @@ routerAPI.put("/updateCommentClaps", authAPI, updateCommentClaps);
 routerAPI.put("/setReply", authAPI, setReplyCtrl);
 
 //update post Social ej claps,share,comments
-routerAPI.put("/socialCounter", authAPI, socialCtrl);
+routerAPI.put("/socialCounter", guestAPI, socialCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
