@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 //layout
 import NavBarLayout from "../../layouts/NavBarLayout";
@@ -12,6 +12,9 @@ const MainLayout = styled.div`
   display: flex;
   flex-flow: wrap;
   margin-top: 100px;
+
+  transform: ${props => props.animation && "rotate(0deg) !important"};
+  transition: transform ease 1000ms;
 `;
 
 const LeftAside = styled.div`
@@ -112,9 +115,24 @@ const SocialNetCont = styled.div`
 `;
 
 const ContactUs = () => {
+  const [animation, setAnimation] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAnimation(true);
+    }, 2000);
+  }, []);
+
   return (
     <NavBarLayout id="navbar">
-      <MainLayout id="mainLayout">
+      <MainLayout
+        style={{
+          transformOrigin: "top left",
+          transform: "rotate(180deg)"
+        }}
+        animation={animation}
+        id="mainLayout"
+      >
         <NoPCTitleLay>
           <NoPCContactTitle id="NoPCcontactTitle">Contact Us</NoPCContactTitle>
         </NoPCTitleLay>

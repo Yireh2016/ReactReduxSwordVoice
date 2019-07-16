@@ -21,16 +21,13 @@ import Call2Action from "../../components/general/call2action.component";
 import FooterApp from "../../components/footer/footer.component";
 import SearchBar from "../../components/blog/searchBar/searchBar.component";
 import ScrollMouse from "../../components/scrollMouse/ScrollMouse";
-import Loading from "../../components/loading/loading";
+import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
 import PostCard from "./postCard/PostCard";
 import Post from "./post/Post";
 
 //services
 import isDevice from "../../../services/isDevice";
 import NewPostLayout from "./newPostLayout/NewPostLayout";
-// import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
-// import paragraphService from "../../../services/paragraphService";
-// import keywordsToArr from "../../../services/keywordsToArr";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
@@ -264,21 +261,6 @@ class BlogPage extends React.Component {
     let asidePostW = 9;
 
     const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-
-    // console.log("windowWidth", windowWidth);
-    // console.log("windowHeight", windowHeight);
-
-    // if (windowWidth > windowHeight) {
-    //   //landscape
-    //   if (windowWidth < 1050) {
-    //     this.setState({ showResolutionWarning: true });
-    //   } else {
-    //     this.setState({ showResolutionWarning: false });
-    //   }
-    // } else {
-    //   this.setState({ showResolutionWarning: false });
-    // }
 
     switch (isDeviceResult) {
       case "pc":
@@ -330,32 +312,18 @@ class BlogPage extends React.Component {
         break;
     }
 
-    // switch (isDeviceResult) {
-    //   case "pc":
-    //     postH = 520;
-    //     break;
-    //   case "tablet":
-    //     postH = (window.outerWidth * 0.8) / 1.028;
-    //     break;
-
-    //   case "phone":
-    //     postH = window.outerWidth / 1.028 - 24;
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
-    this.setState({
-      isDeviceResult: isDeviceResult,
-      isLoading: false,
-      mainPostH: postH,
-      searchBorder:
-        isDeviceResult === "phone"
-          ? "1px #0387b7 solid"
-          : "1px transparent solid",
-      searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
-    });
+    setTimeout(() => {
+      this.setState({
+        isDeviceResult: isDeviceResult,
+        isLoading: false,
+        mainPostH: postH,
+        searchBorder:
+          isDeviceResult === "phone"
+            ? "1px #0387b7 solid"
+            : "1px transparent solid",
+        searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
+      });
+    }, 3 * 1000);
   }
 
   handleSearchBarFocus = () => {
@@ -372,14 +340,7 @@ class BlogPage extends React.Component {
     }
   };
   render() {
-    const {
-      mainPostH,
-      // popPostsArray,
-      // recentPostsArray,
-      // newPostArray,
-      searchBorder,
-      searchTranslateX
-    } = this.state;
+    const { mainPostH, searchBorder, searchTranslateX } = this.state;
     let { articlesArr } = this.props.blog;
     if (articlesArr.length === 0) {
       articlesArr = [
@@ -441,29 +402,8 @@ class BlogPage extends React.Component {
       let avatar;
 
       avatar = post.avatar;
-      const isDeviceResult = isDevice();
-      let asidePostH;
-      if (isDeviceResult === "phone") {
-        asidePostH = parseInt(mainPostH) * 0.8;
-      } else {
-        asidePostH = parseInt(mainPostH) * 0.55;
-      }
 
       return (
-        // <PostCard
-        //   key={i}
-        //   postH={asidePostH}
-        //   hasSummary={true}
-        //   title={title}
-        //   postImg={postImg}
-        //   postGradient={postGradient}
-        //   keywords={keywords}
-        //   author={author}
-        //   date={date}
-        //   url={`/blog/post/${url}`}
-        //   avatar={avatar}
-        //   summaryTextHtml={summaryTextHtml}
-        // />
         <FlexItem key={i} size={this.state.asidePostW}>
           <Post
             size="md"
@@ -571,10 +511,13 @@ class BlogPage extends React.Component {
               width: "100vw",
               height: "100vh",
               zIndex: "100",
-              backgroundColor: "white"
+              backgroundColor: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            <Loading />
+            <LoadingLogo />
           </div>
         )}
         <NavBar hasBackground={true} />
