@@ -1,7 +1,13 @@
 import mongoose from "mongoose";
 //services
-import limitingComments from "../../../app.client/services/limitingComments";
-import updateArticleAvatars from "../../../services/updateArticleAvatars";
+import {
+  limitingComments,
+  limitingResponses
+} from "../../../app.client/services/limitingCommentsAndResponses";
+import {
+  updateArticleAvatars,
+  updateReplyAvatars
+} from "../../../services/updateArticleAvatars";
 
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
@@ -68,6 +74,27 @@ export const getMoreCommentsCtrl = (req, res) => {
     commentsArr = await updateArticleAvatars(commentsArr);
 
     res.status(200).send({ statusText: "OK", comments: commentsArr });
+  });
+};
+
+export const getMoreResponsesCtrl = (req, res) => {
+  const { id, responsesCount, index } = req.query;
+
+  articleModel.findById(id, async (err, article) => {
+    if (err) {
+      res.status(404).json({ status: "not Found" });
+      return;
+    }
+
+    let responses = article.comments[index].responses;
+
+    responses = limitingResponses(responses, responsesCount);
+
+    const updateReplyAvatarsRes = await updateReplyAvatars(responses, []);
+
+    res
+      .status(200)
+      .send({ statusText: "OK", responses: updateReplyAvatarsRes.replyArr });
   });
 };
 

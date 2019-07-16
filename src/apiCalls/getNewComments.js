@@ -8,7 +8,7 @@ const getNewComments = (id, commentsCount) => {
       return { status: res.statusText, comments: res.data.comments };
     })
     .catch(err => {
-      console.log("err on logout", err);
+      console.log("err on getNewComments", err);
 
       return { status: err };
     });

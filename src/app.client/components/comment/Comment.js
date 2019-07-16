@@ -14,14 +14,11 @@ import Reply from "./reply/Reply";
 import Modal from "../modal/modal";
 import NewComment from "../blog/blogPost/newComment/NewComment";
 
-//store
-// import { store } from "../../../app.redux.store/store/configStore";
-
 //api calls
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
-
 import apiDeleteComment from "../../apiCalls/apiDeleteComment";
 import apiSetComment from "../../apiCalls/apiSetComment";
+import getMoreResponses from "../../../apiCalls/getMoreResponses";
 
 const CommentCardLayout = styled.div`
   display: flex;
@@ -323,12 +320,6 @@ const Comment = ({
     }
     setClapsAdder(clapsAdder + 1);
 
-    // let clapsToSet;
-    // if (article.comments[index].claps) {
-    //   clapsToSet = article.comments[index].claps;
-    // } else {
-    //   clapsToSet = 0;
-    // }
     const timer = setTimeout(async () => {
       setClapsAdder(0);
 
@@ -390,6 +381,27 @@ const Comment = ({
         setComments(comments);
       }
     );
+  };
+
+  const moreResponsesHandler = async () => {
+    const responsesCount = article.comments[index].responses.length;
+    let comments = article.comments;
+
+    console.log(
+      "moreResponsesHandler responsesCount  esperada 3",
+      responsesCount
+    );
+
+    const getMoreResponsesRes = await getMoreResponses(
+      article.id,
+      index,
+      responsesCount
+    );
+
+    if (getMoreResponsesRes.status === "OK") {
+      comments[index].responses = getMoreResponsesRes.responses;
+      setComments(comments);
+    }
   };
 
   return (
@@ -538,7 +550,9 @@ const Comment = ({
         )}
         {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
         {article.comments[index].responses.length <
-          article.comments[index].responsesCount && <MoreBtn>More...</MoreBtn>}
+          article.comments[index].responsesCount && (
+          <MoreBtn onClick={moreResponsesHandler}>More...</MoreBtn>
+        )}
       </CommentCardLayout>
     </React.Fragment>
   );

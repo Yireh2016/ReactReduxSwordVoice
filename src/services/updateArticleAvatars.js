@@ -24,7 +24,7 @@ const getAvatarFromDb = id => {
   });
 };
 
-const updateReplyAvatars = (responses, memoryArray) => {
+export const updateReplyAvatars = (responses, memoryArray) => {
   return new Promise(async resolve => {
     let replyArr = [];
     for (let index = 0; index < responses.length; index++) {
@@ -54,7 +54,7 @@ const updateReplyAvatars = (responses, memoryArray) => {
   });
 };
 
-const updateArticleAvatars = comments => {
+export const updateArticleAvatars = comments => {
   return new Promise(async resolve => {
     let memoryArray = [];
     let commentsHelpArr = [];
@@ -108,5 +108,3 @@ const updateArticleAvatars = comments => {
     resolve(commentsHelpArr);
   });
 };
-
-export default updateArticleAvatars;

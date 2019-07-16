@@ -23,6 +23,7 @@ import {
 import {
   socialCtrl,
   getMoreCommentsCtrl,
+  getMoreResponsesCtrl,
   setCommentCtrl,
   setReplyCtrl,
   updateCommentClaps,
@@ -183,6 +184,7 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
 routerAPI.get("/searchSessionID/", authAPI, autoLogin);
 
 routerAPI.get("/getMoreComments/", guestAPI, getMoreCommentsCtrl);
+routerAPI.get("/getMoreResponses/", guestAPI, getMoreResponsesCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

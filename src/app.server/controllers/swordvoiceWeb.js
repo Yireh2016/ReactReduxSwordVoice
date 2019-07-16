@@ -21,7 +21,7 @@ import keywordsToArr from "../../services/keywordsToArr";
 
 //services
 import { readToken } from "../../app.api/services/tokenHandler";
-import updateArticleAvatars from "../../services/updateArticleAvatars";
+import { updateArticleAvatars } from "../../services/updateArticleAvatars";
 
 const renderTemplate = (req, store) => {
   const context = {};

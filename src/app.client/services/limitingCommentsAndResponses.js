@@ -1,5 +1,18 @@
-const limitingComments = (commentsArr, commentsCount) => {
+export const limitingResponses = (responses, responsesCount) => {
   const RESPONSES_LIMIT = 3;
+  let resultResponsesArr = [];
+  responsesCount = parseInt(responsesCount, 10);
+
+  if (RESPONSES_LIMIT + responsesCount < responses.length) {
+    resultResponsesArr = responses.slice(0, RESPONSES_LIMIT + responsesCount);
+  } else {
+    resultResponsesArr = responses;
+  }
+
+  return resultResponsesArr;
+};
+
+export const limitingComments = (commentsArr, commentsCount) => {
   const COMMENT_LIMIT = 5;
   commentsCount = parseInt(commentsCount, 10);
 
@@ -18,10 +31,7 @@ const limitingComments = (commentsArr, commentsCount) => {
 
     //limiting responses
 
-    commentsArr[i].responses = commentsArr[i].responses.slice(
-      0,
-      RESPONSES_LIMIT
-    );
+    commentsArr[i].responses = limitingResponses(comment.responses, 0);
 
     commentsArr[i] = {
       _id: commentsArr[i]._id,
@@ -52,5 +62,3 @@ const limitingComments = (commentsArr, commentsCount) => {
 
   return { totalCommentsCount, commentsArr: resultArr };
 };
-
-export default limitingComments;
