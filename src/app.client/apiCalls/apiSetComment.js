@@ -5,7 +5,7 @@ const apiSetComment = (
   userName,
   title,
   comment,
-  commentIndex = null,
+  commentIndex,
   callback
 ) => {
   return axios

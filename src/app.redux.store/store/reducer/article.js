@@ -6,6 +6,7 @@ const initialState = {
   title: "",
   description: "",
   keywords: "",
+  commentsCount: 0,
   comments: [
     {
       _id: "",
@@ -15,6 +16,7 @@ const initialState = {
       responses: [
         { _id: "", userName: "", message: "", date: new Date(), claps: 0 }
       ],
+      responsesCount: 0,
       claps: 0
     }
   ],

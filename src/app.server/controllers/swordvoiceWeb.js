@@ -63,6 +63,9 @@ const swordvoiceWeb = async (req, res) => {
       console.log(" routerPromise EJECUTANDOSE");
 
       if (req.url.match("/blog/post/")) {
+        const RESPONSES_LIMIT = 3;
+        const COMMENT_LIMIT = 5;
+
         const url = req.url.replace("/blog/post/", "");
         articleModel
           .findOne({ url: `${url}` })
@@ -77,6 +80,39 @@ const swordvoiceWeb = async (req, res) => {
           .then(async completeArticle => {
             if (completeArticle) {
               let commentsArr = [...completeArticle.comments];
+              const commentsCount = commentsArr.length;
+
+              for (
+                let i = 0;
+                i < COMMENT_LIMIT && i < commentsArr.length;
+                i++
+              ) {
+                const comment = commentsArr[i];
+                //counting responses
+                const responsesCount = comment.responses.length;
+
+                //limiting responses
+
+                commentsArr[i].responses = commentsArr[i].responses.slice(
+                  0,
+                  RESPONSES_LIMIT
+                );
+
+                commentsArr[i] = {
+                  _id: commentsArr[i]._id,
+                  userID: commentsArr[i].userID,
+                  userName: commentsArr[i].userName,
+                  message: commentsArr[i].message,
+                  date: commentsArr[i].date,
+                  responses: commentsArr[i].responses,
+                  claps: commentsArr[i].claps,
+                  responsesCount
+                };
+              }
+              //limiting Comments
+              if (COMMENT_LIMIT <= commentsArr.length) {
+                commentsArr = commentsArr.slice(0, COMMENT_LIMIT);
+              }
 
               commentsArr = await updateArticleAvatars(commentsArr);
 
@@ -97,6 +133,7 @@ const swordvoiceWeb = async (req, res) => {
                 html,
                 socialCount,
                 comments: commentsArr,
+                commentsCount,
                 author: author.userFirstName + " " + author.userLastName,
                 summary: description,
                 date: dbDateToNormalDate(date),
@@ -122,9 +159,9 @@ const swordvoiceWeb = async (req, res) => {
                       url: posts[i].url,
                       postImg:
                         posts[i].thumbnail &&
-                        `url(https://cdn.swordvoice.com/articles/${posts[i].url}/${
-                          posts[i].thumbnail.name
-                        })`,
+                        `url(https://cdn.swordvoice.com/articles/${
+                          posts[i].url
+                        }/${posts[i].thumbnail.name})`,
                       postGradient:
                         posts[i].thumbnail &&
                         `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
@@ -155,7 +192,7 @@ const swordvoiceWeb = async (req, res) => {
             }
           })
           .catch(err => {
-            console.log("error on finding article");
+            console.log("error on finding article", err);
           });
       } else if (req.url.match("/blog")) {
         console.log("entrando a /BLOG");

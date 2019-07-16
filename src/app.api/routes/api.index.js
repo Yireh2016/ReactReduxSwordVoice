@@ -22,6 +22,7 @@ import {
 } from "../controllers/cms/postsControllers";
 import {
   socialCtrl,
+  getMoreCommentsCtrl,
   setCommentCtrl,
   setReplyCtrl,
   updateCommentClaps,
@@ -29,8 +30,6 @@ import {
 } from "../controllers/client/articleCtrl";
 
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
-
-// import axios from "axios";
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
@@ -162,19 +161,6 @@ routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
   });
 });
 
-// Obtener username
-// routerAPI.get("/searchUser/:username", guestAPI, (req, res) => {
-//   const username = req.params.username;
-//   usersModel.find({ username }).exec((err, username) => {
-//     if (err) {
-//       res.status().json(501, `thre was an error: ${err}`);
-//     } else {
-//       console.log("specific user", username[0]);
-//       username[0] ? res.status().json(200, username) : res.status().json(404, username);
-//     }
-//   });
-// });
-
 //obtener  usuario especifico por username AUTH
 //se usa en: signUpForm
 // para verificar, en tiempo real, que el username del usuario no se encuentre duplicado
@@ -195,6 +181,8 @@ routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
 //se usa en: login del CMS
 // obtiene datos de usuario para hacer login en CMS
 routerAPI.get("/searchSessionID/", authAPI, autoLogin);
+
+routerAPI.get("/getMoreComments/", guestAPI, getMoreCommentsCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

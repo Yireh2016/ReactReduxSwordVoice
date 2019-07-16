@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+//services
+import limitingComments from "../../../app.client/services/limitingComments";
+import updateArticleAvatars from "../../../services/updateArticleAvatars";
 
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
@@ -46,6 +49,25 @@ export const socialCtrl = (req, res) => {
         }
       });
     }
+  });
+};
+
+export const getMoreCommentsCtrl = (req, res) => {
+  const { id, commentsCount } = req.query;
+
+  articleModel.findById(id, async (err, article) => {
+    if (err) {
+      res.status(404).json({ status: "not Found" });
+      return;
+    }
+
+    let articleComments = article.comments;
+
+    let { commentsArr } = limitingComments(articleComments, commentsCount);
+
+    commentsArr = await updateArticleAvatars(commentsArr);
+
+    res.status(200).send({ statusText: "OK", comments: commentsArr });
   });
 };
 
@@ -137,7 +159,8 @@ export const setCommentCtrl = (req, res) => {
         return;
       }
 
-      if (commentIndex !== null) {
+      if (typeof commentIndex === "number") {
+        console.log("Edit comment commentIndex", commentIndex);
         //edit comment
         let comment;
         comment = article[0].comments[commentIndex];
@@ -158,6 +181,9 @@ export const setCommentCtrl = (req, res) => {
       }
 
       //create Comment
+
+      console.log("create comment commentIndex", commentIndex);
+
       comments = article[0].comments;
 
       if (comments) {

@@ -11,9 +11,6 @@ const NoLandscape = ({
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      console.log("windowWidth", windowWidth);
-      console.log("windowHeight", windowHeight);
-
       if (windowWidth > windowHeight) {
         //landscape
         if (windowWidth < 1050) {

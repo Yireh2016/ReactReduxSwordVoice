@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
 
 const getAvatar = (memoryArray, id) => {
-  for (let index = 0; index < memoryArray.length; index++) {
-    const memo = memoryArray[index];
-
-    if (JSON.stringify(memo.id) === JSON.stringify(id)) {
-      return memo.avatar;
-    }
+  if (memoryArray[`${id}`]) {
+    return memoryArray[`${id}`];
   }
+
   return false;
 };
 
@@ -18,40 +15,49 @@ const getAvatarFromDb = id => {
     userModel
       .find({ _id: id })
       .select("userAvatar")
-      .exec((err, avatar) => {
+      .exec((err, user) => {
         if (err) {
           reject({ status: "err", result: err });
         }
-        resolve({ status: "OK", result: avatar[0].userAvatar });
+        resolve({ status: "OK", result: user[0].userAvatar });
       });
   });
 };
 
 const updateReplyAvatars = (responses, memoryArray) => {
   return new Promise(async resolve => {
+    let replyArr = [];
     for (let index = 0; index < responses.length; index++) {
       const reply = responses[index];
       let avatar = getAvatar(memoryArray, reply.userID);
 
-      if (avatar) {
-        reply.userAvatar = avatar;
-      } else {
+      if (!avatar) {
         const avatarRes = await getAvatarFromDb(reply.userID);
         if (avatarRes.status === "OK") {
           avatar = avatarRes.result;
-          reply.userAvatar = avatar;
-          memoryArray.push({ id: reply.userID, avatar });
+          memoryArray[`${reply.userID}`] = avatar;
         }
       }
-    }
 
-    resolve({ responses, memoryArray });
+      const { date, _id, userName, message, userID, claps } = responses[index];
+      replyArr[index] = {
+        date,
+        _id,
+        userName,
+        message,
+        userID,
+        claps,
+        userAvatar: avatar
+      };
+    }
+    resolve({ replyArr, memoryArray });
   });
 };
 
 const updateArticleAvatars = comments => {
   return new Promise(async resolve => {
     let memoryArray = [];
+    let commentsHelpArr = [];
 
     if (comments && comments.length > 0) {
       for (let index = 0; index < comments.length; index++) {
@@ -63,25 +69,43 @@ const updateArticleAvatars = comments => {
             memoryArray
           );
           memoryArray = repliesRes.memoryArray;
-          comment.responses = repliesRes.responses;
+          comments[index].responses = repliesRes.replyArr;
         }
 
         let avatar = getAvatar(memoryArray, comment.userID);
 
-        if (avatar) {
-          comment.userAvatar = avatar;
-        } else {
+        if (!avatar) {
           const avatarRes = await getAvatarFromDb(comment.userID);
           if (avatarRes.status === "OK") {
             avatar = avatarRes.result;
-            comment.userAvatar = avatar;
-            memoryArray.push({ id: comment.userID, avatar });
+            memoryArray[`${comment.userID}`] = avatar;
           }
         }
+        const {
+          date,
+          claps,
+          responses,
+          _id,
+          userName,
+          message,
+          userID,
+          responsesCount
+        } = comments[index];
+        commentsHelpArr[index] = {
+          date,
+          claps,
+          responses,
+          _id,
+          userName,
+          message,
+          userID,
+          responsesCount,
+          userAvatar: avatar
+        };
       }
     }
 
-    resolve(comments);
+    resolve(commentsHelpArr);
   });
 };
 

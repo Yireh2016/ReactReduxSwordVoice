@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
 import Radium from "radium";
+import styled from "styled-components";
 //css
 import "./blogPost.css";
 
@@ -28,6 +29,25 @@ import avatarImg from "../../../assets/img/general/avatar.jpg";
 import keywordsToArr from "../../../../services/keywordsToArr";
 import isDevice from "../../../../services/isDevice";
 import countingHTMLwords from "../../../services/countingHTMLwords";
+//apiCalls
+import getNewComments from "../../../../apiCalls/getNewComments";
+
+const MoreComments = styled.div`
+  box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  margin-top: 40px;
+  padding: 15px 30px 20px 15px;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  background: #00171f;
+  color: #00171f;
+  color: coral;
+  font-weight: bold;
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 class BlogArticle extends Component {
   constructor(props) {
@@ -494,6 +514,19 @@ class BlogArticle extends Component {
       };
     });
   };
+
+  moreCommentsHandler = async () => {
+    const getNewCommentsRes = await getNewComments(
+      this.props.article.id,
+      this.props.article.comments.length
+    );
+
+    console.log("getNewCommentsRes", getNewCommentsRes);
+    if (getNewCommentsRes.status === "OK") {
+      this.props.setComments(getNewCommentsRes.comments);
+    }
+  };
+
   render() {
     let keywordsMap = keywordsToArr(this.props.article.categories);
     keywordsMap = keywordsMap.map(word => {
@@ -517,7 +550,7 @@ class BlogArticle extends Component {
     //   "newPostData[0].articleProps.comments",
     //   newPostData[0].articleProps.comments
     // );
-    const comments = this.props.article.comments.map((comment, i) => {
+    const commentsMap = this.props.article.comments.map((comment, i) => {
       return (
         <Comment
           key={i}
@@ -699,8 +732,17 @@ class BlogArticle extends Component {
                 )}
               </section>
               <section>
-                {/*oldComments*/}
-                {comments}
+                {commentsMap}
+
+                {this.props.article.commentsCount >
+                  this.props.article.comments.length && (
+                  <MoreComments
+                    onClick={this.moreCommentsHandler}
+                    id="MoreComments"
+                  >
+                    More Comments...
+                  </MoreComments>
+                )}
               </section>
             </div>
             {footerBlog}
@@ -738,6 +780,16 @@ const mapStateToProps2 = state => {
   };
 };
 
+const mapActionsToProps = dispatch => {
+  return {
+    setComments: commentsArr =>
+      dispatch({ type: "SET_COMMENTS", payload: commentsArr })
+  };
+};
+
 const BlogArticle2 = Radium(BlogArticle);
-export default connect(mapStateToProps2)(BlogArticle2);
+export default connect(
+  mapStateToProps2,
+  mapActionsToProps
+)(BlogArticle2);
 // export default BlogArticle;

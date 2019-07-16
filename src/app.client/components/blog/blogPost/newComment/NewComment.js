@@ -23,29 +23,32 @@ const CommentLayout = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 80%;
+  margin: auto;
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 const ChatIcon = styled.div`
+  position: absolute;
+  width: 46px;
+  top: 0;
+
+  left: ${props => -props.iconWidth + 5 + "px"};
+
   svg {
-    position: absolute;
-    width: 46px;
-    top: 0;
     fill: black;
-    left: calc(10% - 50px);
   }
 
   @media (max-width: 700px) {
-    svg {
-      width: 20px;
-    }
+    width: 20px;
   }
 `;
 
 const Outer = styled.div`
-  width: 80%;
-  @media (max-width: 700px) {
-    width: 100%;
-  }
+  width: 100%;
+
   height: 300px;
   padding: 10px;
   border-radius: 8px;
@@ -171,9 +174,10 @@ const NewComment = ({
   const [avatarState, setAvatar] = useState("");
   const [comment, setComment] = useState("");
   const [commentDisabled, setCommentDisabled] = useState(false);
-  // const state = store.getState();
-  // const avatar = state.logInStatus.avatar;
-  // const userName = state.logInStatus.loggedUserName;
+  const [iconWidth, setIconWidth] = useState(0);
+  const [windowWidth, setWindowWidth] = useState();
+
+  let chatIconRef = React.createRef();
 
   useEffect(() => {
     setAvatar(avatar);
@@ -183,6 +187,21 @@ const NewComment = ({
     setComment(preComment);
   }, [preComment]);
 
+  useEffect(() => {
+    chatIconRef.current &&
+      chatIconRef.current.clientWidth !== iconWidth &&
+      setIconWidth(chatIconRef.current.clientWidth);
+  }, [windowWidth]);
+
+  const resizeHandler = () => {
+    console.log("setting setWindowWidth", window.innerWidth);
+    setWindowWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeHandler);
+  }, []);
+
   const sendCommentHandler = () => {
     if (comment === "") {
       return;
@@ -190,7 +209,7 @@ const NewComment = ({
 
     setCommentDisabled(true);
 
-    apiSetComment(userID, userName, title, comment, id => {
+    apiSetComment(userID, userName, title, comment, "", id => {
       let commentsToSet = comments;
       let commentToPush = {
         _id: id,
@@ -198,7 +217,10 @@ const NewComment = ({
         userAvatar: avatar, //ojo
         message: comment,
         date: new Date(),
-        likes: 0
+        likes: 0,
+        responses: [],
+        userID,
+        responsesCount: 0
       };
       commentsToSet = [commentToPush, ...commentsToSet];
       setGlobalComments(commentsToSet);
@@ -221,7 +243,9 @@ const NewComment = ({
         <br /> Comment
       </Header>
       <CommentLayout id="CommentLayout">
-        <ChatIcon id="ChatIcon">{esquinaChat}</ChatIcon>
+        <ChatIcon ref={chatIconRef} id="ChatIcon" iconWidth={iconWidth}>
+          {esquinaChat}
+        </ChatIcon>
         <Outer id="Outer">
           <Inner id="Inner">
             <UserLayout id="UserLayout">

@@ -27,6 +27,10 @@ const CommentCardLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 40px;
+  :first-child {
+    margin-top: 0px;
+  }
 `;
 const CommentCard = styled.div`
   position: relative;
@@ -379,12 +383,11 @@ const Comment = ({
       article.title,
       editCommentMessage,
       index,
-      id => {
+      () => {
         setEditClicked(false);
         let comments = article.comments;
         comments[index].message = editCommentMessage;
         setComments(comments);
-        console.log("edited comment id", id);
       }
     );
   };
@@ -444,6 +447,7 @@ const Comment = ({
       )}
 
       <CommentCardLayout
+        id="CommentCardLayout"
         onMouseLeave={() => {
           isModal && setModal(false);
         }}
@@ -454,34 +458,39 @@ const Comment = ({
           isModal && setModal(false);
         }}
       >
-        <CommentCard>
-          {logInStatus.loggedUserName === userName && (
-            <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
-          )}
+        <CommentCard id="CommentCard">
+          {logInStatus.loggedUserName === userName &&
+            article.comments[index].responses.length === 0 && (
+              <Ellipsis onClick={showModalHandler}>{ellipsis}</Ellipsis>
+            )}
           {isModal && (
-            <MiniModal>
+            <MiniModal id="MiniModal">
               <li onClick={deleteCommentHandler}>Delete</li>
               <li onClick={editCommentHandler}>Edit</li>
             </MiniModal>
           )}
-          <AvatarCont>
+          <AvatarCont id="AvatarCont">
             <Avatar
+              id=""
               style={{
                 backgroundImage: userAvatar && `url('${userAvatar}`
               }}
             />
           </AvatarCont>
-          <CommentCont>
-            <UserInfo>
-              <UserName>{userName}</UserName>
-              <CommentDate>{dbDateToNormalDate(date)}</CommentDate>
+          <CommentCont id="CommentCont">
+            <UserInfo id="UserInfo">
+              <UserName id="UserName">{userName}</UserName>
+              <CommentDate id="CommentDate">
+                {dbDateToNormalDate(date)}
+              </CommentDate>
             </UserInfo>
             <Text>
               <ReactMarkdown source={message} />
             </Text>
-            <CommentFooter>
-              <SocialInteractions>
+            <CommentFooter id="CommentFooter">
+              <SocialInteractions id="SocialInteractions">
                 <Icon
+                  id="Icon"
                   style={{ position: "relative" }}
                   onClick={() => {
                     clapsAdderHandler();
@@ -489,6 +498,7 @@ const Comment = ({
                 >
                   {clapsAdder !== 0 && (
                     <Counter
+                      id="clapsAdderCounter"
                       style={{
                         position: "absolute",
                         backgroundColor: "#004059",
@@ -503,22 +513,23 @@ const Comment = ({
                   )}
                   {clapsIcon}
                 </Icon>
-                <Counter>
+                <Counter id="Counter">
                   {article.comments[index].claps > 0 &&
                     article.comments[index].claps}
                 </Counter>
               </SocialInteractions>
               {isUserLoggedIn && (
-                <ReplyBtn>
+                <ReplyBtn id="ReplyBtn">
                   <button onClick={replyHandler}>Reply</button>
                 </ReplyBtn>
               )}
             </CommentFooter>
           </CommentCont>
         </CommentCard>
-        <MoreBtn>More...</MoreBtn>
+
         {isReplyEditor && (
           <ReplyEditor
+            id="ReplyEditor"
             setReplyEditor={isReply => {
               setReplyEditor(isReply);
             }}
@@ -526,6 +537,8 @@ const Comment = ({
           />
         )}
         {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
+        {article.comments[index].responses.length <
+          article.comments[index].responsesCount && <MoreBtn>More...</MoreBtn>}
       </CommentCardLayout>
     </React.Fragment>
   );

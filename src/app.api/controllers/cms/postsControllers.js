@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import axios from "axios";
-import formidable from "formidable";
 
 // var fs = require('fs');
 // var dir = './tmp';
@@ -17,7 +16,9 @@ export const createPostCtrl = (req, res) => {
   let article = new articleModel(projectData.article);
 
   axios
-    .post(`https://cdn.swordvoice.com/cdn/createPost/${projectData.article.url}`)
+    .post(
+      `https://cdn.swordvoice.com/cdn/createPost/${projectData.article.url}`
+    )
     .then(result => {
       console.log("respuesta correcta del post", result);
 
