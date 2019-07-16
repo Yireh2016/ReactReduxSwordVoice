@@ -13,6 +13,7 @@ import ReplyEditor from "./replyEditor/ReplyEditor";
 import Reply from "./reply/Reply";
 import Modal from "../modal/modal";
 import NewComment from "../blog/blogPost/newComment/NewComment";
+import Loading from "../loading/loading";
 
 //api calls
 import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
@@ -287,7 +288,7 @@ const Comment = ({
   const [isDeleteClicked, setDeleteisClicked] = useState(false);
   const [isEditClicked, setEditClicked] = useState(false);
   const [editCommentMessage, setEditCommentMessage] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const isUserLoggedIn = logInStatus.isUserLoggedIn;
 
   let repliesMap;
@@ -384,6 +385,7 @@ const Comment = ({
   };
 
   const moreResponsesHandler = async () => {
+    setIsLoading(true);
     const responsesCount = article.comments[index].responses.length;
     let comments = article.comments;
 
@@ -402,6 +404,7 @@ const Comment = ({
       comments[index].responses = getMoreResponsesRes.responses;
       setComments(comments);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -551,7 +554,9 @@ const Comment = ({
         {replies && <ReplyCardLayout>{repliesMap}</ReplyCardLayout>}
         {article.comments[index].responses.length <
           article.comments[index].responsesCount && (
-          <MoreBtn onClick={moreResponsesHandler}>More...</MoreBtn>
+          <MoreBtn onClick={moreResponsesHandler}>
+            {isLoading ? <Loading /> : "More..."}
+          </MoreBtn>
         )}
       </CommentCardLayout>
     </React.Fragment>

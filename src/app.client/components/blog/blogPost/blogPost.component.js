@@ -20,6 +20,7 @@ import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
 import SocialBar from "../../socialBar/SocialBar";
 import PostCard from "../../../pages/blog/postCard/PostCard";
+import Loading from "../../loading/loading";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";
 import fondoImg from "../../../assets/img/blog/fondoBlog.jpg";
@@ -36,7 +37,7 @@ const MoreComments = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   margin-top: 40px;
-  padding: 15px 30px 20px 15px;
+  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
   text-align: center;
   box-sizing: border-box;
   width: 100%;
@@ -65,7 +66,8 @@ class BlogArticle extends Component {
       loggedUserAvatar: "",
       loggedUserName: "",
       authorAvatar: "",
-      similarPostsWidth: 341
+      similarPostsWidth: 341,
+      isLoading: false
     };
   }
   componentDidMount() {
@@ -516,6 +518,7 @@ class BlogArticle extends Component {
   };
 
   moreCommentsHandler = async () => {
+    this.setState({ isLoading: true });
     const getNewCommentsRes = await getNewComments(
       this.props.article.id,
       this.props.article.comments.length
@@ -525,6 +528,7 @@ class BlogArticle extends Component {
     if (getNewCommentsRes.status === "OK") {
       this.props.setComments(getNewCommentsRes.comments);
     }
+    this.setState({ isLoading: false });
   };
 
   render() {
@@ -739,8 +743,9 @@ class BlogArticle extends Component {
                   <MoreComments
                     onClick={this.moreCommentsHandler}
                     id="MoreComments"
+                    noPadding={this.state.isLoading}
                   >
-                    More Comments...
+                    {this.state.isLoading ? <Loading /> : "More Comments..."}
                   </MoreComments>
                 )}
               </section>

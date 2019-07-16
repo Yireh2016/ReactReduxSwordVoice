@@ -90,7 +90,7 @@ class ProjectTitle extends Component {
 
   render() {
     if (this.state.isLoading) {
-      return <Loading />;
+      return <Loading fullscreen={true} />;
     }
     return (
       <div className="projectTitleLayout">

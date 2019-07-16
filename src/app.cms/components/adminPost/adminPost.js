@@ -310,7 +310,7 @@ class AdminPost extends Component {
         </div>
       );
 
-    return <Loading />;
+    return <Loading fullscreen={true} />;
   }
 }
 
