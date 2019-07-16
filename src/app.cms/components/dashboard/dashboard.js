@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, lazy, Suspense } from "react";
 import { withRouter, Redirect, Route, Switch } from "react-router-dom";
 import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
@@ -6,27 +6,28 @@ import axios from "axios";
 import Helmet from "react-helmet";
 
 //components
-import ProfilesTable from "../profilesTable/ProfilesTable";
-import Welcome from "../welcome/welcome";
+
 import CreatePost from "../createPost/createPost";
-import AdminPost from "../adminPost/adminPost";
 import Menu from "../menu/menu";
 import ClassesInput from "../classesInput/classesInput";
-import UserProfile from "../userProfile/UserProfile";
+import Loading from "../loading/loading";
 import Dialog from "../dialog/Dialog";
 import MultiBtn from "../multiplexBtn/MultiBtn";
+//lazyLoad components
+const ProfilesTable = lazy(() => import("../profilesTable/ProfilesTable"));
+const Welcome = lazy(() => import("../welcome/welcome"));
+const AdminPost = lazy(() => import("../adminPost/adminPost"));
+const UserProfile = lazy(() => import("../userProfile/UserProfile"));
 
 //css
 import "./dashboard.css";
 //assets
 import plus from "../../assets/dashboard/plus.svg";
-import exit from "../../assets/dashboard/exit.svg";
 import hamburger from "../../assets/dashboard/hamburger.svg";
 import Modal from "../../common/components/modal/modal";
 //services
 import htmlArrCosolidation from "../../../services/htmlArrConsolidation";
 import parseHTML2Object from "../../../services/parseHTML2Object";
-import keywordsToArr from "../../../services/keywordsToArr";
 import removeSuffixClasses from "../../../services/suffixClasses";
 import classesArrObjToStr from "../../../services/classesArrObjToStr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
@@ -125,55 +126,6 @@ class Dashboard extends Component {
       }
     }
 
-    // let arr = keywordsToArr(this.props.seo.keywords);
-    // const finalPost = {
-    //   article: {
-    //     html: finalHTMl, //str
-    //     author: this.props.login.loggedUserName, //str
-    //     date: date, //date
-    //     categories: arr, //arr
-    //     comments: [],
-    //     files: this.props.fileNames, //arr
-    //     seo: {
-    //       title: this.props.elements[0].HTMLElementContent, //str
-    //       description: this.props.summary, //str
-    //       keywords: arr, //arr
-    //       structuredData: {
-    //         //json
-    //         "@context": "http://schema.org",
-    //         "@type": "Article",
-    //         headline: this.props.elements[0].HTMLElementContent, //str
-    //         alternativeHeadline: this.props.elements[0].HTMLElementContent, //str
-    //         image: {
-    //           //json
-    //           //OJO
-    //           url:
-    //             "http://imagenes.canalrcn.com/ImgNTN24/juan_guaido_ntn24_2.jpg?null",
-    //           "@type": "ImageObject",
-    //           height: "174",
-    //           width: "310"
-    //         },
-    //         author: this.props.login.loggedUserName, //str
-    //         url: `/blog/${this.props.project.url}`, //str
-    //         datePublished: date, //date
-    //         dateCreated: date, //date
-    //         dateModified: date, //date
-    //         description: this.props.summary, //str
-    //         articleBody: rawBody, //str
-    //         publisher: {
-    //           //json
-    //           "@type": "Organization",
-    //           name: "SwordVoice.com",
-    //           logo: {
-    //             url: "https://www.swordvoice.com/LOGO.svg",
-    //             type: "ImageObject"
-    //           }
-    //         },
-    //         mainEntityOfPage: "https://www.SwordVoice.com"
-    //       }
-    //     }
-    //   }
-    // };
     const elementsArrNoPreviewData = erasePreviewDataFromElements(
       this.props.elements
     );
@@ -253,7 +205,9 @@ class Dashboard extends Component {
     };
 
     axios
-      .get(`https://cdn.swordvoice.com/cdn/getClasses/${this.props.project.url}`)
+      .get(
+        `https://cdn.swordvoice.com/cdn/getClasses/${this.props.project.url}`
+      )
       .then(res => {
         if (res.status === 200) {
           viewClasses(res.data);
@@ -313,7 +267,6 @@ class Dashboard extends Component {
       }
       case "Blog": {
         window.location.href = "/blog";
-        // this.props.history.push("/blog");
 
         break;
       }
@@ -553,11 +506,6 @@ class Dashboard extends Component {
                       options={this.props.menu.exitBtn}
                       clickHandler={this.exitBtnClickHandler}
                     />
-                    {/* <button className="cmsBtn">
-                        <span>Exit</span>
-                        <img src={exit} alt="Exit" />
-                      </button> */}
-                    {/* </a> */}
                   </div>
                 </div>
               )}
@@ -584,31 +532,49 @@ class Dashboard extends Component {
                   <Route
                     exact
                     path="/cms/dashboard/"
-                    render={() => <Welcome />}
+                    render={() => (
+                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                        <Welcome />
+                      </Suspense>
+                    )}
                   />
                   <Route
                     exact
                     path="/cms/createPost/"
                     render={() => (
-                      <CreatePost
-                        showExitModalHandler={this.showExitModalHandler}
-                      />
+                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                        <CreatePost
+                          showExitModalHandler={this.showExitModalHandler}
+                        />
+                      </Suspense>
                     )}
                   />
                   <Route
                     exact
                     path="/cms/adminPost/"
-                    render={() => <AdminPost />}
+                    render={() => (
+                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                        <AdminPost />
+                      </Suspense>
+                    )}
                   />
                   <Route
                     exact
                     path="/cms/userProfile/"
-                    render={() => <UserProfile />}
+                    render={() => (
+                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                        <UserProfile />
+                      </Suspense>
+                    )}
                   />
                   <Route
                     exact
                     path="/cms/usersList/"
-                    render={() => <ProfilesTable />}
+                    render={() => (
+                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                        <ProfilesTable />
+                      </Suspense>
+                    )}
                   />
                 </Switch>
               </div>

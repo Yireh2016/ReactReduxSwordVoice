@@ -128,7 +128,7 @@ module.exports = [
     output: {
       path: path.join(__dirname, "dist/assets/"),
       publicPath: "/",
-      filename: "bundleCMS.js"
+      chunkFilename: "[name].bundleCMS.js"
     },
     devtool: "eval",
     plugins: clientLoaders.concat([

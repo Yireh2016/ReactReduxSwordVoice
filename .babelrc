@@ -1,5 +1,8 @@
 {
-  "plugins": ["@babel/plugin-proposal-class-properties"],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "syntax-dynamic-import"
+  ],
 
   "presets": [
     [
