@@ -1,7 +1,10 @@
 var webpack = require("webpack");
 const path = require("path");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+//plugins
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const LoadablePlugin = require("@loadable/webpack-plugin");
+
 var nodeExternals = require("webpack-node-externals");
 
 // const dotenv = require('dotenv');
@@ -47,8 +50,11 @@ module.exports = [
     },
     externals: nodeExternals(),
     plugins: clientLoaders.concat([
-      new ExtractTextPlugin("index.css", {
-        allChunks: true
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: !isProduction ? "[name].css" : "[name].[hash].css",
+        chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css"
       })
     ]),
     module: {
@@ -59,10 +65,15 @@ module.exports = [
         },
         {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: "css-loader"
-          })
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: process.env.NODE_ENV === "development"
+              }
+            },
+            "css-loader"
+          ]
         },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,
@@ -89,8 +100,12 @@ module.exports = [
     },
     devtool: "eval",
     plugins: clientLoaders.concat([
-      new ExtractTextPlugin("index.css", {
-        allChunks: true
+      new LoadablePlugin(),
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: !isProduction ? "[name].css" : "[name].[hash].css",
+        chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css"
       })
     ]),
     // externals: nodeExternals(),
@@ -103,10 +118,15 @@ module.exports = [
         },
         {
           test: /\.css$/,
-          use: ExtractTextPlugin.extract({
-            fallback: "isomorphic-style-loader",
-            use: "css-loader"
-          })
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                hmr: process.env.NODE_ENV === "development"
+              }
+            },
+            "css-loader"
+          ]
         },
         {
           test: /\.(jpe?g|png|gif|svg|ico)$/i,

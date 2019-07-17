@@ -8,6 +8,7 @@ import "raf/polyfill";
 import { CookiesProvider } from "react-cookie";
 import { ConnectedRouter } from "connected-react-router";
 import { StyleRoot } from "radium";
+import { loadableReady } from "@loadable/component";
 //components
 import App from "./app";
 import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTop.component";
@@ -16,20 +17,24 @@ import { store, history } from "../app.redux.store/store/configStore";
 
 //layouts
 
-hydrate(
-  <CookiesProvider>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        {/* <Router history={history}> */}
-        <Router>
-          <ScrollToTop>
-            <StyleRoot>
-              <App />
-            </StyleRoot>
-          </ScrollToTop>
-        </Router>
-      </ConnectedRouter>
-    </Provider>
-  </CookiesProvider>,
-  document.getElementById("root")
-);
+loadableReady(() => {
+  const root = document.getElementById("main");
+  hydrate(
+    <CookiesProvider>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          {/* <Router history={history}> */}
+          <Router>
+            <ScrollToTop>
+              <StyleRoot>
+                <App />
+              </StyleRoot>
+            </ScrollToTop>
+          </Router>
+        </ConnectedRouter>
+      </Provider>
+    </CookiesProvider>,
+    document.getElementById("root"),
+    root
+  );
+});

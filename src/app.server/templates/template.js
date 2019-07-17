@@ -1,4 +1,11 @@
-export default ({ body, title, initialState }) => {
+export default ({
+  body,
+  scriptTags,
+  linkTags,
+  styleTags,
+  title,
+  initialState
+}) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
     <!DOCTYPE html>
@@ -10,7 +17,8 @@ export default ({ body, title, initialState }) => {
         <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
         <title>${title}</title>
         <base href="/">
-        <link href="index.css" rel="stylesheet">
+        ${linkTags}
+        ${styleTags}
       </head>
       
       <body>
@@ -24,7 +32,7 @@ export default ({ body, title, initialState }) => {
 
 
 
-      <script src="bundle.js"></script>
+      ${scriptTags}
     </html>
   `;
 };
