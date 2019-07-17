@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 //components
 import Login from "./components/login/login";
 import Preview from "./components/preview/preview";
+// import Dashboard from "./components/dashboard/dashboard";
 import Loading from "./components/loading/loading";
 //lazy components SPA
 const Dashboard = lazy(() => import("./components/dashboard/dashboard"));

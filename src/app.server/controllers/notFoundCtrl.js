@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import NotFound from "../../app.client/components/notFound/notFound2";
 import { StyleRoot } from "radium";
 
-import template from "../templates/template";
+import notFoundtemplate from "../templates/notFoundtemplate";
 
 const renderTemplate = req => {
   const appString = renderToString(
@@ -16,7 +16,7 @@ const renderTemplate = req => {
 
 const notFoundCtrl = (req, res) => {
   res.status(404).send(
-    template({
+    notFoundtemplate({
       body: renderTemplate(req),
       title: "Not Found"
     })

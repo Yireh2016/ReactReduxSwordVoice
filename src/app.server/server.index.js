@@ -32,7 +32,7 @@ server.use(passport.initialize());
 
 //routes
 server.use("/api", routerAPI);
-server.use("/cms", cms);
+server.get("/cms*", cms);
 server.get("/", swordvoiceWeb);
 server.get("/home", swordvoiceWeb);
 server.get("/about", swordvoiceWeb);
