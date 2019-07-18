@@ -4,6 +4,7 @@ import passport from "passport"; //modulo debe estar declarado antes que los mod
 import cookieParser from "cookie-parser";
 require("dotenv").config();
 import morgan from "morgan";
+import compression from "compression";
 
 //modelos para DB
 import "../app.api/models/db";
@@ -21,6 +22,7 @@ import routerAPI from "../app.api/routes/api.index";
 const server = express();
 
 //middlewares
+server.use(compression());
 server.use(morgan("dev"));
 server.use(express.json({ limit: "50mb", extended: true }));
 server.use(cookieParser(process.env.COOKEYS));
