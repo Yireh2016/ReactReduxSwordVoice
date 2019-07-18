@@ -9,8 +9,8 @@ export default ({ title }) => {
         <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
         <title>${title}</title>
         <base href="/">
-        <link href="/main.css" rel="stylesheet" />
-        <script defer src="/main.bundleCMS.js"></script>
+        <link href="cms/main.css" rel="stylesheet" />
+        <script defer src="/cms/main.bundleCMS.js"></script>
 
       </head>
       

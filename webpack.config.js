@@ -4,6 +4,8 @@ const path = require("path");
 //plugins
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
+const TerserJSPlugin = require("terser-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 var nodeExternals = require("webpack-node-externals");
 
@@ -19,11 +21,7 @@ var productionPluginDefine = isProduction
 
 var clientLoaders = isProduction
   ? productionPluginDefine.concat([
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false },
-        sourceMap: false
-      })
+      new webpack.optimize.OccurrenceOrderPlugin()
     ])
   : [];
 
@@ -49,6 +47,9 @@ module.exports = [
       __dirname: false
     },
     externals: nodeExternals(),
+    optimization: {
+      minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+    },
     plugins: clientLoaders.concat([
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
@@ -94,11 +95,14 @@ module.exports = [
   {
     entry: "./src/app.client/client.index.js",
     output: {
-      path: path.join(__dirname, "dist/assets/"),
+      path: path.join(__dirname, "dist/assets"),
       publicPath: "/",
       filename: "bundle.js"
     },
     devtool: "eval",
+    optimization: {
+      minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+    },
     plugins: clientLoaders.concat([
       new LoadablePlugin(),
       new MiniCssExtractPlugin({
@@ -148,18 +152,21 @@ module.exports = [
   {
     entry: "./src/app.cms/cms.index.js",
     output: {
-      path: path.join(__dirname, "dist/assets/"),
-      publicPath: "/",
+      path: path.join(__dirname, "dist/assets/cms"),
+      publicPath: "/cms/",
       filename: "[name].bundleCMS.js",
       chunkFilename: "[name].bundleCMS.js"
     },
     devtool: "eval",
+    optimization: {
+      minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+    },
     plugins: clientLoaders.concat([
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
-        filename: !isProduction ? "[name].css" : "[name].[hash].css",
-        chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css"
+        filename: "[name].css",
+        chunkFilename: "[id].css"
       })
     ]),
     // externals: nodeExternals(),

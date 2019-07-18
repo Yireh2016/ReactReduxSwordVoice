@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 let dbURI = "mongodb://localhost/swordvoiceBlog"; //"mongodb://biza:J16032309.@ds157946.mlab.com:57946/swordvoice"; //"mongodb://localhost/swordvoiceBlog"; //mongodb://username:password@localhost:27027/database
 
 if (process.env.NODE_ENV === "production") {
-  //dbURI = 'mongodb://<user>:<password>.@ds147044.mlab.com:47044/loc8r';process.env.MONGOLAB_URI;
-  dbURI = process.env.MONGOLAB_URI; //MONGOLAB_URI es una variable de ENV creada en la nube
+  dbURI = "mongodb://biza:J16032309.@ds157946.mlab.com:57946/swordvoice"; //process.env.MONGOLAB_URI;
+  // dbURI = process.env.MONGOLAB_URI; //MONGOLAB_URI es una variable de ENV creada en la nube
 } //si esta en produccion se conecta a la db de la nube MLAB AWS
 
 console.log("dbURI", dbURI);
