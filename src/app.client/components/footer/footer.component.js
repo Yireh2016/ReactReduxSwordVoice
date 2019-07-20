@@ -1,4 +1,5 @@
 import "./footer.css";
+import "../blog/blog.css";
 
 import React from "react";
 import Radium from "radium";
@@ -7,11 +8,13 @@ const FooterApp = props => {
   return (
     <footer className={props.estilos}>
       <a
+        aria-label="follow us on our youtube channel"
         href="https://www.youtube.com/channel/UCle-HTb2TPvcVk0AaljQyOQ"
+        rel="noopener"
         target="_blank"
       >
         <svg
-          id="youtube"
+          id={"youtubeLink" + props.id}
           className={"redesSociales " + props.size}
           style={props.iconsStyles}
           viewBox="0 0 45.505981 32.264583"
@@ -24,9 +27,14 @@ const FooterApp = props => {
           </g>
         </svg>
       </a>
-      <a href="https://www.facebook.com/SwordVoice/" target="_blank">
+      <a
+        aria-label="follow us on facebook"
+        href="https://www.facebook.com/SwordVoice/"
+        rel="noopener"
+        target="_blank"
+      >
         <svg
-          id="facebook"
+          id={"facebookLink" + props.id}
           className={"redesSociales " + props.size}
           style={props.iconsStyles}
           viewBox="0 0 39.840301 32.264583"
@@ -39,9 +47,14 @@ const FooterApp = props => {
           </g>
         </svg>
       </a>
-      <a href="https://twitter.com/SwordVoice_1" target="_blank">
+      <a
+        aria-label="follow us on twitter"
+        href="https://twitter.com/SwordVoice_1"
+        rel="noopener"
+        target="_blank"
+      >
         <svg
-          id="twitter"
+          id={"twitterLink" + props.id}
           className={"redesSociales " + props.size}
           style={props.iconsStyles}
           viewBox="0 0 39.840301 32.264583"
@@ -60,9 +73,14 @@ const FooterApp = props => {
           </g>
         </svg>
       </a>
-      <a href="https://www.instagram.com/swordvoice_official/" target="_blank">
+      <a
+        aria-label="follow on instagram"
+        href="https://www.instagram.com/swordvoice_official/"
+        rel="noopener"
+        target="_blank"
+      >
         <svg
-          id="instagram"
+          id={"instagramLink" + props.id}
           className={"redesSociales " + props.size}
           style={{ ...props.iconsStyles, marginRight: "0" }}
           viewBox="0 0 32.272556 32.26543"

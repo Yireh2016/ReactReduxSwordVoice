@@ -140,6 +140,7 @@ class Summary2 extends React.Component {
       return (
         <p>
           <a
+          aria-label="go and read more about this article"
             href={`/blog/post/${this.props.url}`}
             style={fontStyle}
             className={readMoreCSS}

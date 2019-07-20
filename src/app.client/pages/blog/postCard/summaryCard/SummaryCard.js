@@ -34,6 +34,7 @@ class SummaryCard extends React.Component {
   }
 
   render() {
+    console.log;
     const {
       cardW,
       cardH,
@@ -46,25 +47,30 @@ class SummaryCard extends React.Component {
       style,
       summaryTextHtml
     } = this.props;
-    const keywordsMap = keywords.map(word => {
-      return (
-        <span
-          key={word}
-          style={{
-            fontSize: fontSize * 0.4 < 12 ? "10px" : fontSize * 0.4,
-            backgroundColor: "hsla(196, 97%, 72%, 1)",
-            padding: `${cardW * 0.0187165775401069518716577540107}px`,
-            margin: `0 ${cardW * 0.01336898395721925133689839572193}px 0 0`,
-            borderRadius: "10px"
-          }}
-        >
-          {word}
-        </span>
-      );
-    });
+
+    console.log("summaryTextHtml  summary card", this.props.summaryTextHtml);
+    console.log("keywords summary card", this.props.keywords);
+    const keywordsMap =
+      keywords &&
+      keywords.map(word => {
+        return (
+          <span
+            key={word}
+            style={{
+              fontSize: fontSize * 0.4 < 12 ? "10px" : fontSize * 0.4,
+              backgroundColor: "hsla(196, 97%, 72%, 1)",
+              padding: `${cardW * 0.0187165775401069518716577540107}px`,
+              margin: `0 ${cardW * 0.01336898395721925133689839572193}px 0 0`,
+              borderRadius: "10px"
+            }}
+          >
+            {word}
+          </span>
+        );
+      });
     return (
       <div
-        id="summaryCard"
+        id={`${this.props.id}` + "summaryCard"}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -79,19 +85,21 @@ class SummaryCard extends React.Component {
         }}
       >
         <h2
-          id="summaryTitle"
+          id={`${this.props.id}` + "summaryTitle"}
           style={{
             color: "#024259",
             fontSize: `${fontSize}px`,
             flexGrow: "5",
-            fontWeight: "normal"
+            fontWeight: "normal",
+            fontWeight: "bold",
+            fontFamily: "Work Sans"
           }}
         >
           Summary
         </h2>
         <section
           data-simplebar
-          id="summaryContent"
+          id={`${this.props.id}` + "summaryContent"}
           style={
             {
               margin: "10px 0 0 0",
@@ -107,7 +115,7 @@ class SummaryCard extends React.Component {
           <Article>{ReactHtmlParser(summaryTextHtml)}</Article>
         </section>
         <section
-          id="cardFooter"
+          id={`${this.props.id}` + "cardFooter"}
           style={{
             flexGrow: "40",
             display: "flex",
@@ -116,6 +124,7 @@ class SummaryCard extends React.Component {
           }}
         >
           <a
+            aria-label="go and read more about this article"
             href={url}
             style={{
               fontSize: `${fontSize * 0.6}px`,
@@ -127,9 +136,9 @@ class SummaryCard extends React.Component {
           >
             Read More...
           </a>
-          <div id="keywordsArea">{keywordsMap}</div>
+          <div id={`${this.props.id}` + "keywordsAreaCard"}>{keywordsMap}</div>
           <div
-            id="date"
+            id={`${this.props.id}` + "date"}
             style={{
               fontSize: `12px`,
               textAlign: "right",
@@ -139,14 +148,14 @@ class SummaryCard extends React.Component {
             {date}
           </div>
           <div
-            id="authorCont"
+            id={`${this.props.id}` + "authorCont"}
             style={{
               display: "flex",
               alignItems: "center"
             }}
           >
             <div
-              id="authorImg"
+              id={`${this.props.id}` + "authorImgCard"}
               style={{
                 width: "50px",
                 height: "50px",
@@ -157,7 +166,7 @@ class SummaryCard extends React.Component {
               }}
             />
             <span
-              id="author"
+              id={`${this.props.id}` + "author"}
               style={{
                 marginLeft: "10px",
                 fontSize: `${fontSize * 0.6}px`,

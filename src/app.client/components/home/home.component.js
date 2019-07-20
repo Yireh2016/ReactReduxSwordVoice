@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import NavBar from "../navbar/navbar.component";
 import is from "is_js";
+import Helmet from "react-helmet";
 //imagenes
 import imgFondo from "../../assets/img/home/creative1280.jpg";
 import imgFondoMed from "../../assets/img/home/creative760.jpg";
@@ -24,6 +25,12 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <meta
+            name="Description"
+            content="From custom web development and UI/UX to courses and tutorials come and discover by yourself what we offer, come and discover SwordVoice"
+          />
+        </Helmet>
         <header>
           <NavBar />
         </header>
@@ -129,7 +136,11 @@ class Home extends Component {
         </section>
         {/*Boton de accion y footer*/}
         <Call2Action className="call2Action-home appear" />
-        <FooterApp estilos="appear footer" size="redesSociales-home" />
+        <FooterApp
+          id="homePage"
+          estilos="appear footer"
+          size="redesSociales-home"
+        />
       </div>
     );
   }

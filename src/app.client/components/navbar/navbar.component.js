@@ -274,14 +274,8 @@ class NavBar extends Component {
           : "";
       return (
         <li key={i}>
-          {/* <NavLink
-              to={"/" + smallMenuContent.nombre.toLowerCase()}
-              activeClassName="activeLink"
-              className="flyingLink"
-            >
-              {smallMenuContent.nombre}
-            </NavLink> */}
           <a
+            aria-label={`go to ${smallMenuContent.nombre} page`}
             key={i}
             href={"/" + smallMenuContent.nombre.toLowerCase()}
             className={"flyingLink " + activeClass}
@@ -296,7 +290,11 @@ class NavBar extends Component {
         <React.Fragment key={i}>
           <li>
             {desplegableMenu.nombre === "Profile" ? (
-              <a href="cms" className="flyingLink">
+              <a
+                aria-label="go to your dashboard"
+                href="cms"
+                className="flyingLink"
+              >
                 {desplegableMenu.nombre}
               </a>
             ) : (
@@ -335,7 +333,11 @@ class NavBar extends Component {
 
       return (
         <React.Fragment key={i}>
-          <a href={"/" + menuContent.nombre.toLowerCase()} className="enlace">
+          <a
+            aria-label={`go to ${menuContent.nombre} page`}
+            href={"/" + menuContent.nombre.toLowerCase()}
+            className="enlace"
+          >
             {menuContent.nombre} <br />
             {activeBarFragment}
           </a>
@@ -373,6 +375,7 @@ class NavBar extends Component {
             }}
           >
             <Logo
+              id="1"
               className="fixedPcLogo"
               style={{
                 top: "20px",
@@ -390,8 +393,9 @@ class NavBar extends Component {
               </div>
             </div>
             <div className="grid " style={{ width: "40%" }}>
-              <a href="/home">
+              <a aria-label="go to home page" href="/home">
                 <Logo
+                  id="2"
                   className="logoTransition"
                   style={{ visibility: "hidden" }}
                   logoWidth={this.state.logoWidth}
@@ -434,7 +438,9 @@ class NavBar extends Component {
                         <ul>
                           {this.props.isUserLoggedIn ? (
                             <li>
-                              <a href="cms">Profile</a>
+                              <a aria-label="go to your dashboard" href="cms">
+                                Profile
+                              </a>
                             </li>
                           ) : (
                             <li onClick={this.signClickHandler}>Sign Up</li>
@@ -475,8 +481,9 @@ class NavBar extends Component {
             <span className="enlace">
               Menu <br />
             </span>
-            <a href="/home">
+            <a aria-label="go to home page" href="/home">
               <Logo
+                id="3"
                 className="verticalCenter horizontalCenter"
                 logoWidth="15vw"
               />
@@ -521,8 +528,9 @@ class NavBar extends Component {
                 strokeLinecap="round"
               />
             </svg>
-            <a href="/home">
+            <a aria-label="go to home page" href="/home">
               <Logo
+                id="4"
                 className="verticalCenter horizontalCenter"
                 logoWidth="24vw"
               />
@@ -635,8 +643,11 @@ class NavBar extends Component {
                       </div>
                     </div>
                   )}
-                  <a href="/home">
-                    <Logo className="col-6-md col-12-sm grid desplegable-logo" />
+                  <a aria-label="go to home page" href="/home">
+                    <Logo
+                      id="5"
+                      className="col-6-md col-12-sm grid desplegable-logo"
+                    />
                   </a>
                 </div>
               </div>
@@ -654,6 +665,7 @@ class NavBar extends Component {
                 }}
               >
                 <Footer
+                  id="navBarfooter"
                   estilos="   desplegable-footer center-flex"
                   size="desplegable-footer-size"
                 />

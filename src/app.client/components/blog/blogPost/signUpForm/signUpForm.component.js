@@ -478,12 +478,7 @@ class SignUpForm extends Component {
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
 
             const userData = res.data;
-            // sessionCookie(
-            //   this.props,
-            //   userData.userName,
-            //   userData.id,
-            //   sessionID
-            // );
+
             if (userAvatar !== "") {
               console.log("userAvatar on signupform", userAvatar);
 
@@ -542,45 +537,6 @@ class SignUpForm extends Component {
   render() {
     let controlButtons;
     switch (this.state.formPage) {
-      case 1: {
-        controlButtons = (
-          <React.Fragment>
-            <button
-              onClick={this.props.onCancelClick}
-              className="cancelBtn"
-              type="button"
-            >
-              Cancel
-            </button>
-            <button
-              className="logSignBtn"
-              onClick={this.onNextClick}
-              type="button"
-            >
-              Next
-            </button>
-          </React.Fragment>
-        );
-
-        break;
-      }
-      case 2: {
-        controlButtons = (
-          <React.Fragment>
-            <button
-              onClick={this.onBackClick}
-              className="cancelBtn"
-              type="button"
-            >
-              Back
-            </button>
-            <button onClick={this.onNextClick} type="button">
-              Next
-            </button>
-          </React.Fragment>
-        );
-        break;
-      }
       case 3: {
         controlButtons = (
           <React.Fragment>
@@ -591,7 +547,11 @@ class SignUpForm extends Component {
             >
               Back
             </button>
-            <button onClick={this.onSubmitClick} type="button">
+            <button
+              className="logSignBtn"
+              onClick={this.onSubmitClick}
+              type="button"
+            >
               Submit
             </button>
           </React.Fragment>
@@ -609,7 +569,11 @@ class SignUpForm extends Component {
             >
               Cancel
             </button>
-            <button onClick={this.onNextClick} type="button">
+            <button
+              className="logSignBtn"
+              onClick={this.onNextClick}
+              type="button"
+            >
               Next
             </button>
           </React.Fragment>
@@ -687,40 +651,15 @@ class SignUpForm extends Component {
                     userAvatarPreview={this.state.userAvatarPreview}
                     uploadMessage={this.state.uploadMessage}
                   />
-                  {/* <div className=" avatarContForm">
-                    <input
-                      ref={this.inputFile}
-                      style={{
-                        display: "none"
-                      }}
-                      type="file"
-                      name="avatar"
-                      id="avatar"
-                      accept="image/*"
-                      onChange={e => {
-                        this.handleImgUpload(e.target.files);
-                      }}
-                    />
 
-                    <div
-                      onClick={() => {
-                        this.inputFile.current.click();
-                      }}
-                      className="avatarLoad"
-                      style={{
-                        backgroundImage: this.state.userAvatarPreview,
-                        backgroundSize: "cover"
-                      }}
-                    >
-                      <span>{this.state.uploadMessage}</span>
-                    </div>
-                  </div>
-                */}
                   <label>
-                    Name <br />
+                    <span id="signUpUserFirstName">Name</span> <br />
                     <input
                       type="text"
                       name="userFirstName"
+                      htmlFor="userFirstName"
+                      aria-label="userFirstName"
+                      aria-labelledby="userSignUpForm signUpUserFirstName"
                       value={this.state.userFirstName}
                       onBlur={this.handleOnBlur}
                       onChange={this.handleFormInputChange}
@@ -744,10 +683,14 @@ class SignUpForm extends Component {
                   </label>
 
                   <label>
-                    Last Name <br />
+                    <span id="signUpuserLastName">Last Name</span>
+                    <br />
                     <input
                       type="text"
                       name="userLastName"
+                      htmlFor="userLastName"
+                      aria-label="userLastName"
+                      aria-labelledby="userSignUpForm signUpuserLastName"
                       value={this.state.userLastName}
                       onBlur={this.handleOnBlur}
                       onChange={this.handleFormInputChange}
@@ -771,10 +714,13 @@ class SignUpForm extends Component {
                   </label>
 
                   <label>
-                    Email <br />
+                    <span id="signUpuseruserEmail">Email</span> <br />
                     <input
                       type="email"
                       name="userEmail"
+                      htmlFor="userEmail"
+                      aria-label="userEmail"
+                      aria-labelledby="userSignUpForm signUpuseruserEmail"
                       value={this.state.userEmail}
                       onBlur={this.handleOnBlur}
                       onChange={this.handleFormInputChange}
@@ -801,10 +747,13 @@ class SignUpForm extends Component {
                     </div>
                   </label>
                   <label>
-                    Country <br />
+                    <span id="signUpuseruserEmail">Country</span> <br />
                     <select
                       value={this.state.userCountry}
                       name="userCountry"
+                      htmlFor="userCountry"
+                      aria-label="userCountry"
+                      aria-labelledby="userSignUpForm signUpuseruserEmail"
                       onChange={this.handleFormInputChange}
                     >
                       <option value=" ">Please Select Country</option>
@@ -1110,7 +1059,10 @@ class SignUpForm extends Component {
                       }}
                     >
                       <label>
-                        Other Interests <br />
+                        <span id="signUpuserOtherInterestsText">
+                          Other Interests
+                        </span>
+                        <br />
                         <div className="smallSpan">
                           (Optional and separeted by commas)
                         </div>
@@ -1118,6 +1070,9 @@ class SignUpForm extends Component {
                           <input
                             type="text"
                             name="userOtherInterestsText"
+                            htmlFor="userOtherInterestsText"
+                            aria-label="userOtherInterestsText"
+                            aria-labelledby="userSignUpForm2 signUpuserOtherInterestsText"
                             value={this.state.userOtherInterestsText}
                             onChange={this.handleFormInputChange}
                           />
@@ -1157,10 +1112,14 @@ class SignUpForm extends Component {
 
                     <div className="personalData">
                       <label>
-                        Birth Date <br />
+                        <span id="signUpuseruserBirthDate">Birth Date</span>{" "}
+                        <br />
                         <input
                           type="date"
                           name="userBirthDate"
+                          htmlFor="userBirthDate"
+                          aria-label="userBirthDate"
+                          aria-labelledby="userSignUpForm2 signUpuseruserBirthDate"
                           value={this.state.userBirthDate}
                           onChange={this.handleFormInputChange}
                           onBlur={this.handleOnBlur}
@@ -1168,10 +1127,13 @@ class SignUpForm extends Component {
                       </label>
 
                       <label>
-                        Gender <br />
+                        <span id="signUpuseruserGender">Gender</span> <br />
                         <select
                           value={this.state.userGender}
                           name="userGender"
+                          htmlFor="userGender"
+                          aria-label="userGender"
+                          aria-labelledby="userSignUpForm2 signUpuseruserGender"
                           onChange={this.handleFormInputChange}
                           onBlur={this.handleOnBlur}
                         >
@@ -1198,10 +1160,13 @@ class SignUpForm extends Component {
                     uploadMessage={this.state.uploadMessage}
                   />
                   <label>
-                    User Name <br />
+                    <span id="signUpuseruserName">User Name</span> <br />
                     <input
                       type="text"
                       name="userName"
+                      htmlFor="userName"
+                      aria-label="userName"
+                      aria-labelledby="userSignUpForm3 signUpuseruserName"
                       value={this.state.userName}
                       onChange={this.handleFormInputChange}
                       onBlur={this.handleOnBlur}
@@ -1229,10 +1194,13 @@ class SignUpForm extends Component {
                   </label>
 
                   <label>
-                    Password <br />
+                    <span id="signUpuseruserPassword">Password</span> <br />
                     <input
                       type="password"
                       name="userPassword"
+                      htmlFor="userPassword"
+                      aria-label="userPassword"
+                      aria-labelledby="userSignUpForm3 signUpuseruserPassword"
                       value={this.state.userPassword}
                       onChange={this.handleFormInputChange}
                     />
@@ -1259,10 +1227,14 @@ class SignUpForm extends Component {
                   </label>
 
                   <label>
-                    Confirm Password <br />
+                    <span id="signUppasswordConfirm">Confirm Password</span>{" "}
+                    <br />
                     <input
                       type="password"
                       name="passwordConfirm"
+                      htmlFor="passwordConfirm"
+                      aria-label="passwordConfirm"
+                      aria-labelledby="userSignUpForm3 signUppasswordConfirm"
                       value={this.state.passwordConfirm}
                       onChange={this.handleFormInputChange}
                     />
@@ -1302,6 +1274,7 @@ class SignUpForm extends Component {
                     >
                       I accept the
                       <a
+                        aria-label="go and check the term of service"
                         href="#"
                         style={{
                           color: "white",

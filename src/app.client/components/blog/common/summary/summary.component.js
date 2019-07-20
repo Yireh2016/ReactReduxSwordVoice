@@ -59,7 +59,7 @@ class Summary extends React.Component {
     });
 
     const readMore = this.props.hasReadMore ? (
-      <a
+      <a aria-label="go and read more about this article"
         style={{
           fontWeight: "bold",
           paddingLeft: "20px",

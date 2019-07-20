@@ -76,9 +76,12 @@ class PostCard extends React.Component {
       conditionStyle = {};
     }
     return (
-      <div id="postLayout" style={[styles.postLayout, conditionStyle]}>
+      <div
+        id={`${this.props.id}` + "postLayout"}
+        style={[styles.postLayout, conditionStyle]}
+      >
         <div
-          id="postCont"
+          id={`${this.props.id}` + "postCont"}
           style={[
             styles.post,
             {
@@ -88,9 +91,9 @@ class PostCard extends React.Component {
             }
           ]}
         >
-          <a href={url}>
+          <a aria-label="go and read this article" href={url}>
             <div
-              id="gradientBackground"
+              id={`${this.props.id}` + "gradientBackground"}
               style={[
                 // styles.gradientBackground,
                 {
@@ -101,7 +104,7 @@ class PostCard extends React.Component {
               ]}
             >
               <h3
-                id="postTitle"
+                id={`${this.props.id}` + "postTitle"}
                 style={[
                   {
                     bottom: "0",
@@ -121,7 +124,7 @@ class PostCard extends React.Component {
           </a>
 
           <div
-            id="summaryCont"
+            id={`${this.props.id}` + "summaryCont"}
             style={{
               position: "absolute",
               zIndex: "1",
@@ -132,6 +135,7 @@ class PostCard extends React.Component {
           >
             {hasSummary && (
               <SummaryCard
+                id={this.props.id}
                 cardW={postH * 1.028}
                 cardH={postH}
                 keywords={keywords}
@@ -149,7 +153,7 @@ class PostCard extends React.Component {
         {hasSummary && (
           <ThreeDots
             ref={this.threedotsRef}
-            id="threeDots"
+            id={`${this.props.id}` + "threeDots"}
             style={{
               top: isDetail
                 ? `${this.threedotsRef.current.clientWidth / 2 - 5}px`
@@ -186,7 +190,8 @@ PostCard.propTypes = {
   url: PropTypes.string,
   avatar: PropTypes.string,
   summaryTextHtml: PropTypes.string,
-  style: PropTypes.object
+  style: PropTypes.object,
+  id: PropTypes.number
 };
 
 PostCard.defaultProps = {

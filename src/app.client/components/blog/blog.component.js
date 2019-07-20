@@ -360,7 +360,11 @@ class BlogComponent extends Component {
           </div>
           {/* </LightShadow> */}
           <Call2Action className="call2ActionBlog" />
-          <FooterApp estilos="appear footer-blog " size="redesSociales-blog" />
+          <FooterApp
+            id="blogPage"
+            estilos="appear footer-blog "
+            size="redesSociales-blog"
+          />
         </div>
       </footer>
     );

@@ -13,6 +13,10 @@
   justify-content: center;
   grid-template-columns: 100%;
 }
+.logInForm label span {
+  font-weight: bold;
+  color: white;
+}
 .logInForm input {
   background-color: #00b7fb;
   border: 1px solid transparent;

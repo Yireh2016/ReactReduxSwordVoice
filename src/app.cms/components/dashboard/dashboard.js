@@ -501,7 +501,6 @@ class Dashboard extends Component {
               {this.props.history.location.pathname.match("/cms/") && (
                 <div className="dashLogOut">
                   <div>
-                    {/* <a href="/blog"> */}
                     <MultiBtn
                       options={this.props.menu.exitBtn}
                       clickHandler={this.exitBtnClickHandler}

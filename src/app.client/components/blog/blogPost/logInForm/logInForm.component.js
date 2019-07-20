@@ -123,7 +123,6 @@ class LogInForm extends Component {
           Cancel
         </button>
         <button className="logSignBtn" onClick={this.tryLogIn} type="button">
-          {/* {this.tryLogInClick} */}
           Log In
         </button>
       </React.Fragment>
@@ -153,11 +152,14 @@ class LogInForm extends Component {
               className={`fila signUpPage1 col-12 ${this.state.animControl1} `}
             >
               <div className="grid col-12">
-                <form className="logInForm">
+                <form id="logInForm" className="logInForm">
                   <Logo className="col-8 logInLogo col-5-sm" />
                   <label>
-                    Username <br />
+                    <span id="loginUsername">Username</span> <br />
                     <input
+                      for="username"
+                      aria-label="username"
+                      aria-labelledby="logInForm loginUsername"
                       type="text"
                       name="userName"
                       value={this.state.userName}
@@ -167,10 +169,13 @@ class LogInForm extends Component {
                   </label>
 
                   <label>
-                    Password <br />
+                    <span id="loginuserPassword">Password</span> <br />
                     <input
                       type="password"
                       name="userPassword"
+                      for="userPassword"
+                      aria-label="userPassword"
+                      aria-labelledby="logInForm loginuserPassword"
                       value={this.state.userPassword}
                       onBlur={this.handleOnBlur}
                       onChange={this.handleFormInputChange}
@@ -178,7 +183,11 @@ class LogInForm extends Component {
                   </label>
                   <div>
                     <span>
-                      Forgot <a href="#"> Password?</a>
+                      Forgot{" "}
+                      <a aria-label="go to password recovery" href="#">
+                        {" "}
+                        Password?
+                      </a>
                     </span>
                   </div>
                 </form>

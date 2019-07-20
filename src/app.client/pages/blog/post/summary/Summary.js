@@ -174,7 +174,8 @@ const Summary = ({
   date,
   avatar,
   summaryTextHtml,
-  postW
+  postW,
+  id
 }) => {
   //maps
   const keywordsMap = keywords.map(word => {
@@ -202,10 +203,10 @@ const Summary = ({
             <SummaryLink postW={postW} href={link}>
               Read More...
             </SummaryLink>
-            <div id="keywordsArea">{keywordsMap}</div>
+            <div id={`${id}` + "keywordsArea"}>{keywordsMap}</div>
             <SummaryDate postW={postW}>{date}</SummaryDate>
             <AuthorInfo>
-              <Avatar postW={postW} url={avatar} id="authorImg" />
+              <Avatar postW={postW} url={avatar} id={`${id}` + "authorImg"} />
               <Author postW={postW}>By {author}</Author>
             </AuthorInfo>
           </SummaryFooter>

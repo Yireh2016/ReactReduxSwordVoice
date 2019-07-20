@@ -4,6 +4,7 @@ import Radium from "radium";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+import Helmet from "react-helmet";
 
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
@@ -379,6 +380,7 @@ class BlogPage extends React.Component {
             <React.Fragment>
               <Call2Action className="call2ActionBlog" />
               <FooterApp
+                id="blogPage2"
                 estilos="appear footer-blog "
                 size="redesSociales-blog"
               />
@@ -406,6 +408,7 @@ class BlogPage extends React.Component {
       return (
         <FlexItem key={i} size={this.state.asidePostW}>
           <Post
+            id={i}
             size="md"
             title={title}
             backgroundURL={postImg}
@@ -483,6 +486,7 @@ class BlogPage extends React.Component {
           }}
         >
           <PostCard
+            id={i}
             postH={parseInt(mainPostH) * 0.8}
             hasSummary={true}
             title={title}
@@ -502,6 +506,12 @@ class BlogPage extends React.Component {
     const { isLoading } = this.state;
     return (
       <React.Fragment>
+        <Helmet>
+          <meta
+            name="Description"
+            content="SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to tutorials nad more. Come and check it out!"
+          />
+        </Helmet>
         {isLoading && (
           <div
             style={{
@@ -554,6 +564,7 @@ class BlogPage extends React.Component {
               ]}
             >
               <PostCard
+                id="latest"
                 title={newPostArray[0].title}
                 postH={mainPostH}
                 postImg={newPostArray[0].postImg}
@@ -576,6 +587,7 @@ class BlogPage extends React.Component {
                 size={this.state.isDeviceResult === "tablet" ? 10 : 12}
               >
                 <Post
+                  id="latest"
                   title={newPostArray[0].title}
                   backgroundURL={newPostArray[0].postImg}
                   postGradient={newPostArray[0].postGradient}
@@ -587,25 +599,6 @@ class BlogPage extends React.Component {
                   summaryTextHtml={newPostArray[0].summaryTextHtml}
                 />
               </NewPostLayout>
-
-              {/* 
-              <PostCard
-                title={newPostArray[0].title}
-                postH={mainPostH}
-                postImg={newPostArray[0].postImg}
-                postGradient={newPostArray[0].postGradient}
-                hasSummary={true}
-                keywords={newPostArray[0].keywords}
-                author={newPostArray[0].author}
-                date={newPostArray[0].date}
-                url={`/blog/post/${newPostArray[0].url}`}
-                avatar={
-                  typeof newPostArray[0].avatar === "string"
-                    ? newPostArray[0].avatar
-                    : JSON.stringify(newPostArray[0].avatar)
-                }
-                summaryTextHtml={newPostArray[0].summaryTextHtml}
-              /> */}
             </div>
 
             <div

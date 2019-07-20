@@ -4,6 +4,7 @@ import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
 import Radium from "radium";
 import styled from "styled-components";
+import Helmet from "react-helmet";
 //css
 import "./blogPost.css";
 
@@ -577,7 +578,11 @@ class BlogArticle extends Component {
             logoWidth="20vw"
           />
           <Call2Action className="call2ActionBlog" />
-          <FooterApp estilos="appear footer-blog " size="redesSociales-blog" />
+          <FooterApp
+            id="blogpostPage"
+            estilos="appear footer-blog "
+            size="redesSociales-blog"
+          />
         </div>
       </footer>
     );
@@ -594,6 +599,7 @@ class BlogArticle extends Component {
       return (
         <div key={i} className="grid popularPost-article">
           <PostCard
+            id={i}
             title={post.title}
             postH={this.state.similarPostsWidth / 1.08}
             postImg={post.postImg}
@@ -611,6 +617,9 @@ class BlogArticle extends Component {
     });
     return (
       <React.Fragment>
+        <Helmet>
+          <meta name="Description" content={`${this.props.article.summary}`} />
+        </Helmet>
         <div id="blogPostPage">
           <Navbar hasBackground="true" />
 
@@ -642,6 +651,7 @@ class BlogArticle extends Component {
                     />
                     <div
                       style={{
+                        background: "white",
                         display: "flex",
                         flexDirection: "column",
                         fontSize: ".7rem",
@@ -683,7 +693,8 @@ class BlogArticle extends Component {
                     display: "flex",
                     flexWrap: "wrap",
                     alignItems: "center",
-                    color: "#004059"
+                    color: "#004059",
+                    background: "white"
                   }}
                 >
                   <span

@@ -261,12 +261,20 @@ const NewComment = ({
               </UserNameCont>
             </UserLayout>
             <TextLayout id="TextLayout">
-              <Text
-                id="Text"
-                onChange={commentHandler}
-                value={comment}
-                disabled={commentDisabled}
-              />
+              <label>
+                <span id="commentText" style={{ visibility: "hidden" }}>
+                  coment
+                </span>
+                <Text
+                  htmlFor="commentTextInput"
+                  aria-label="write comment"
+                  aria-labelledby="commentText"
+                  id="Text"
+                  onChange={commentHandler}
+                  value={comment}
+                  disabled={commentDisabled}
+                />
+              </label>
             </TextLayout>
           </Inner>
         </Outer>
@@ -282,7 +290,12 @@ const NewComment = ({
             </PostItCont>
             <Note>
               <span>NOTE: </span> You may write comments in{" "}
-              <a href="https://commonmark.org/help/" target="_blank">
+              <a
+                aria-label="go and check how to use markdown"
+                href="https://commonmark.org/help/"
+                rel="noopener"
+                target="_blank"
+              >
                 Markdown
               </a>
               . This is the best way to post any code, inline like

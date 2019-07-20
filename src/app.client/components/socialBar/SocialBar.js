@@ -154,6 +154,7 @@ const SocialBar = ({
   const views = <Icon id="views">{view2}</Icon>;
   const comments = (
     <Link
+      aria-label="go to comments section"
       scroll={el => el.scrollIntoView({ behavior: "smooth", block: "start" })}
       to="#commentsSection"
     >

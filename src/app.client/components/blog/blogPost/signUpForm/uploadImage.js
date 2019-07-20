@@ -5,25 +5,9 @@ import isBrowser from "../../../../../services/isBrowser";
 class UploadImage extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   uploadMessage: "Upload foto",
-    //   userAvatar: "",
-    //   userAvatarPreview: undefined
-    // };
+
     this.inputFile = React.createRef();
   }
-
-  // imageUpload = image => {
-  //   console.log("imgupload ", image);
-  //   this.setState(() => {
-  //     return {
-  //       userAvatar: image,
-  //       userAvatarPreview: `url(${URL.createObjectURL(image)})`,
-  //       uploadMessage: undefined
-  //     };
-  //   });
-  //   alert("file Uploaded successfully");
-  // };
 
   handleImgUpload = files => {
     let Uploadfunction = this.props.imageUpload;
@@ -44,12 +28,7 @@ class UploadImage extends Component {
         error(err) {
           console.log("error", err);
           this.props.imageUploadErr(err);
-          // this.setState(() => {
-          //   return {
-          //     userAvatarPreview: undefined,
-          //     uploadMessage: `${err}`
-          //   };
-          // });
+
           return;
         }
       });

@@ -716,7 +716,7 @@ class CreatePost extends Component {
             <div className="createBarItem">
               <Link
                 onClick={this.previewBtnHandler}
-                target="_blank"
+                rel="noopener"  target="_blank"
                 to={{
                   pathname: "/cms/preview",
                   search: `${cssURL}`

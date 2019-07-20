@@ -1,6 +1,7 @@
 //modules
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
+import Helmet from "react-helmet";
 //components
 import Navbar from "../navbar/navbar.component";
 import FooterApp from "../footer/footer.component";
@@ -53,11 +54,11 @@ class About extends React.Component {
       },
       {
         HTML:
-          "<h2>What We Do?</h2><p>Custom Web Design and Development, Web Apps, Platforms, eCommerce, UI/UX, Creative Direction, Courses, Tutorials and much more, <a href='/contact'>just ask.</a></p>"
+          "<h2>What We Do?</h2><p>Custom Web Design and Development, Web Apps, Platforms, eCommerce, UI/UX, Creative Direction, Courses, Tutorials and much more, <a aria-label='go to contact page' href='/contact'>just ask.</a></p>"
       },
       {
         HTML:
-          "<h2>What We Love?</h2><p>Graphic Design, Technology and Good Coding Practices. Go check <a href='/blog'>our Blog.</a></p>"
+          "<h2>What We Love?</h2><p>Graphic Design, Technology and Good Coding Practices. Go check <a aria-label='go to our blog' href='/blog'>our Blog.</a></p>"
       }
     ];
 
@@ -73,6 +74,12 @@ class About extends React.Component {
 
     return (
       <div>
+        <Helmet>
+          <meta
+            name="Description"
+            content="SwordVoice | What we do? Who are we? and what we love? come to know the answers for these questions to know more about us"
+          />
+        </Helmet>
         <div>
           {/*Navigation Bar*/}
           <Navbar />
@@ -175,6 +182,7 @@ class About extends React.Component {
                 </defs>
               </svg>
               <FooterApp
+                id="aboutPage"
                 estilos=" appear footer-about-mid"
                 size="footer-about-midSize"
                 pathStyle="footer-about-path"

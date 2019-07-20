@@ -132,7 +132,8 @@ const Post = ({
   size,
   link,
   summaryTextHtml,
-  postGradient
+  postGradient,
+  id
 }) => {
   const [isDetail, setIsDetail] = useState(false);
   const [postW, setPostW] = useState(false);
@@ -148,7 +149,7 @@ const Post = ({
     <Layout size={size} backgroundURL={backgroundURL}>
       <Container>
         <ForeGround postGradient={postGradient} ref={postRef} size={size}>
-          <a href={link}>
+          <a aria-label="go and read this article" href={link}>
             <Title postW={postW} size={size}>
               {title}
             </Title>
@@ -156,6 +157,7 @@ const Post = ({
         </ForeGround>
         <SlideCont isDetail={isDetail}>
           <Summary
+            id={id}
             size={size}
             postW={postW}
             keywords={keywords}

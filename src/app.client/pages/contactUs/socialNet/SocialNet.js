@@ -98,12 +98,14 @@ const SocialNet = () => {
       <LinkLay id="LinkLay">
         <LinkCont id="LinkContyoutube">
           <SVGLink
+            aria-label="go and subscribe to our youtube channel"
             id="SVGLinkyoutube"
             href="https://www.youtube.com/channel/UCle-HTb2TPvcVk0AaljQyOQ"
+            rel="noopener"
             target="_blank"
           >
             <SocialNetSvg
-              id="youtube"
+              id="youtubeSocial"
               className="redesSociales "
               viewBox="0 0 45.505981 32.264583"
             >
@@ -122,6 +124,7 @@ const SocialNet = () => {
           <SocialNetTitle
             id="SocialNetTitleyoutube"
             href="https://www.youtube.com/channel/UCle-HTb2TPvcVk0AaljQyOQ"
+            rel="noopener"
             target="_blank"
           >
             <h3>@SwordVoice</h3>
@@ -131,10 +134,12 @@ const SocialNet = () => {
           <SVGLink
             id="SVGLinkfacebook"
             href="https://www.facebook.com/SwordVoice/"
+            rel="noopener"
             target="_blank"
           >
             <SocialNetSvg
-              id="facebook"
+              aria-label="go and follow us on facebook"
+              id="facebookSocial"
               className="redesSociales "
               viewBox="0 0 39.840301 32.264583"
             >
@@ -154,6 +159,7 @@ const SocialNet = () => {
           <SocialNetTitle
             id="SocialNetTitlefacebook"
             href="https://www.facebook.com/SwordVoice/"
+            rel="noopener"
             target="_blank"
           >
             <h3>@SwordVoice</h3>
@@ -161,12 +167,14 @@ const SocialNet = () => {
         </LinkCont>
         <LinkCont id="LinkConttwitter">
           <SVGLink
+            aria-label="go and follow us on twitter"
             id="SVGLinktwitter"
             href="https://twitter.com/SwordVoice_1"
+            rel="noopener"
             target="_blank"
           >
             <SocialNetSvg
-              id="twitter"
+              id="twitterSocial"
               className="redesSociales "
               viewBox="0 0 39.840301 32.264583"
             >
@@ -190,6 +198,7 @@ const SocialNet = () => {
           <SocialNetTitle
             id="SocialNetTitletwitter"
             href="https://twitter.com/SwordVoice_1"
+            rel="noopener"
             target="_blank"
           >
             <h3>@SwordVoice_1</h3>
@@ -197,12 +206,14 @@ const SocialNet = () => {
         </LinkCont>
         <LinkCont id="LinkContinstagram">
           <SVGLink
+            aria-label="go and follow us on instagram"
             id="SVGLinkinstagram"
             href="https://www.instagram.com/swordvoice_official/"
+            rel="noopener"
             target="_blank"
           >
             <SocialNetSvg
-              id="instagram"
+              id="instagramSocial"
               className="redesSociales "
               style={{ marginRight: "0" }}
               viewBox="0 0 32.272556 32.26543"
@@ -227,6 +238,7 @@ const SocialNet = () => {
           <SocialNetTitle
             id="SocialNetTitleinstagram"
             href="https://www.instagram.com/swordvoice_official/"
+            rel="noopener"
             target="_blank"
           >
             <h3>@SwordVoice_Official</h3>

@@ -70,7 +70,7 @@ const NotFound = () => {
         </h2>
       </div>
       <div>
-        <FooterApp iconsStyles={styles.iconsFooter} />
+        <FooterApp id="notFoundPage" iconsStyles={styles.iconsFooter} />
       </div>
       <div
         style={{

@@ -5,12 +5,9 @@ import axios from "axios";
 import "./contact.css";
 //components
 import SwordVoice from "../general/swordVoice/swordVoice.component.js";
-import Summary2 from "../blog/common/summary/summary2.component";
 //services
 
 //assets
-import avatarImg from "../../assets/img/general/avatar.jpg";
-import newPostImg from "../../assets/img/blog/newPost.jpg";
 
 export default class ContactComponent extends React.Component {
   constructor(props) {
@@ -31,36 +28,6 @@ export default class ContactComponent extends React.Component {
   };
 
   render() {
-    const mockData = [
-      {
-        articleProps: {
-          image: newPostImg,
-          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      }
-    ];
-
     return (
       <div>
         <NavBar />

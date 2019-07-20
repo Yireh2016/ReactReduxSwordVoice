@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import Helmet from "react-helmet";
+
 //layout
 import NavBarLayout from "../../layouts/NavBarLayout";
 
@@ -7,6 +9,9 @@ import NavBarLayout from "../../layouts/NavBarLayout";
 import Background from "./background/background";
 import ContactForm from "./contactForm/ContactForm";
 import SocialNet from "./socialNet/SocialNet";
+
+//assets
+import image from "../../assets/img/contact/message-in-a-bottle-3437294_960_720.jpg";
 
 const MainLayout = styled.div`
   display: flex;
@@ -125,6 +130,12 @@ const ContactUs = () => {
 
   return (
     <NavBarLayout id="navbar">
+      <Helmet>
+          <meta
+            name="Description"
+            content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
+          />
+        </Helmet>
       <MainLayout
         style={{
           transformOrigin: "top left",
@@ -137,7 +148,7 @@ const ContactUs = () => {
           <NoPCContactTitle id="NoPCcontactTitle">Contact Us</NoPCContactTitle>
         </NoPCTitleLay>
         <LeftAside id="leftAside">
-          <Background id="background" />
+          <Background image={image} id="background" />
           <ContactForm id="ContactForm" />
           <Button className="call2Action">Send</Button>
         </LeftAside>
