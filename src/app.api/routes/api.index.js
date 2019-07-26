@@ -7,7 +7,8 @@ import {
   signUpCtrl,
   loginCtrl,
   logoutCtrl,
-  autoLogin
+  autoLogin,
+  sendUserTempImageCtrl
 } from "../controllers/client/user";
 
 import {
@@ -91,6 +92,8 @@ routerAPI.post("/signup", guestAPI, signUpCtrl);
 // hacer Login
 //se usa en: logInForm
 routerAPI.post("/login", guestAPI, loginCtrl);
+
+routerAPI.post("/sendUserTempImage", guestAPI, sendUserTempImageCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

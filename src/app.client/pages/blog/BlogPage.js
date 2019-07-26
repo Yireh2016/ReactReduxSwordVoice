@@ -288,7 +288,6 @@ class BlogPage extends React.Component {
   };
 
   componentDidMount() {
-    console.log("blog page componentDidMount");
     this.setPostDimensions();
     window.addEventListener("resize", this.setPostDimensions);
     const isDeviceResult = isDevice();
@@ -363,7 +362,12 @@ class BlogPage extends React.Component {
     const popPostsArray = articlesArr.slice(1);
     const newPostArray = articlesArr.slice(0, 1);
 
-    if (process.env.SERVER) {
+    const isClientSide =
+      typeof window !== "undefined" &&
+      window.document &&
+      window.document.createElement;
+
+    if (!isClientSide) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
     }
 
@@ -486,7 +490,7 @@ class BlogPage extends React.Component {
           }}
         >
           <PostCard
-            id={i}
+            id={`${i}`}
             postH={parseInt(mainPostH) * 0.8}
             hasSummary={true}
             title={title}

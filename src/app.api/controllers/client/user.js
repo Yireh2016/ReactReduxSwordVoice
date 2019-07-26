@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import passport from "passport";
+import axios from "axios";
+import crypto from "crypto";
 
 //services
 import {
@@ -153,4 +155,29 @@ export const autoLogin = (req, res) => {
   } else {
     res.status(404).json("not found");
   }
+};
+
+export const sendUserTempImageCtrl = (req, res) => {
+  const data = req.body;
+  if (!data.userName) {
+    const hash = crypto
+      .pbkdf2Sync(data.base64Img.url, "salt", 1000, 64, null)
+      .toString("hex");
+    data.userName = hash + "_original";
+  } else {
+    data.userName = data.userName + "_original";
+  }
+
+  axios
+    .post(`${process.env.CDN_URL}/cdn/sendUserImage`, data)
+    .then(sendRes => {
+      if (sendRes.status === 200) {
+        res
+          .status(200)
+          .json({ statusText: "OK", filename: sendRes.data.filename });
+      }
+    })
+    .catch(err => {
+      res.status(404).json({ statusText: err });
+    });
 };

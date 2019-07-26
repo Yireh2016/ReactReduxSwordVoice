@@ -15,6 +15,8 @@ import "./signUpForm.css";
 import UploadImage from "./uploadImage";
 import blobToBase64 from "../../../../../services/blobToBase64";
 //components
+//api calls
+import sendUserTempImage from "../../../../apiCalls/sendUserTempImage";
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -57,17 +59,30 @@ class SignUpForm extends Component {
   }
 
   imageUpload = image => {
-    console.log("image uploaded on sigup", image);
-
-    blobToBase64(image, base64 => {
-      this.setState(() => {
-        return {
-          userAvatar: base64.url,
-          userAvatarPreview: `url(${URL.createObjectURL(image)})`,
-          uploadMessage: undefined
-        };
-      });
-      alert("file Uploaded successfully");
+    blobToBase64(image, async base64 => {
+      try {
+        const sendUserTempImageRes = await sendUserTempImage(base64);
+        console.log("sign up form sendUserTempImageRes", sendUserTempImageRes);
+        if (sendUserTempImageRes.status === "OK") {
+          this.setState(() => {
+            return {
+              userAvatar: `${process.env.CDN_URL}/${
+                sendUserTempImageRes.filename
+              }`,
+              userAvatarPreview: `url(${process.env.CDN_URL}/${
+                sendUserTempImageRes.filename
+              })`,
+              uploadMessage: undefined
+            };
+          });
+          alert("file Uploaded successfully");
+          return;
+        }
+        alert("An error has occured ");
+      } catch (err) {
+        console.log("err", err);
+        alert("An error has occured ");
+      }
     });
   };
 

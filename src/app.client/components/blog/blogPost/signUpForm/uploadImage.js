@@ -18,7 +18,6 @@ class UploadImage extends Component {
     if (shouldCompress) {
       new Compressor(files[0], {
         quality: 0.6,
-        width: 200,
         mimeType: "jpg",
         convertSize: 200000,
         success(result) {

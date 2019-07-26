@@ -191,7 +191,7 @@ PostCard.propTypes = {
   avatar: PropTypes.string,
   summaryTextHtml: PropTypes.string,
   style: PropTypes.object,
-  id: PropTypes.number
+  id: PropTypes.string
 };
 
 PostCard.defaultProps = {

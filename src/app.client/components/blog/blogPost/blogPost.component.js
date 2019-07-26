@@ -599,7 +599,7 @@ class BlogArticle extends Component {
       return (
         <div key={i} className="grid popularPost-article">
           <PostCard
-            id={i}
+            id={`${i}`}
             title={post.title}
             postH={this.state.similarPostsWidth / 1.08}
             postImg={post.postImg}

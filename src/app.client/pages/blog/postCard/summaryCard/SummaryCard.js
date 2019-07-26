@@ -48,8 +48,6 @@ class SummaryCard extends React.Component {
       summaryTextHtml
     } = this.props;
 
-    console.log("summaryTextHtml  summary card", this.props.summaryTextHtml);
-    console.log("keywords summary card", this.props.keywords);
     const keywordsMap =
       keywords &&
       keywords.map(word => {

@@ -23,6 +23,7 @@ class Home extends Component {
     this.fondoCursor = React.createRef();
   }
   render() {
+    console.log("${process.env.CDN_URL}", process.env.CDN_URL);
     return (
       <div>
         <Helmet>

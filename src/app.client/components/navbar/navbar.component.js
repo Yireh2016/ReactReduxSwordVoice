@@ -111,8 +111,6 @@ class NavBar extends Component {
     //if is PC
     if (window.innerWidth > 1050) {
       if (window.pageYOffset > 20 && !this.state.menuIsOpaque) {
-        console.log("handleScroll");
-
         this.setState({
           menuIsOpaque: true
         });
@@ -120,7 +118,6 @@ class NavBar extends Component {
         /*
           antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
         */
-        console.log("handleScroll");
 
         this.setState(prevState => {
           const menuState =
@@ -214,7 +211,12 @@ class NavBar extends Component {
     }
   };
   render() {
-    if (process.env.SERVER) {
+    const isClientSide =
+      typeof window !== "undefined" &&
+      window.document &&
+      window.document.createElement;
+
+    if (!isClientSide) {
       global.window = { location: { pathname: "" } }; // Temporarily define window for server-side
     }
 
