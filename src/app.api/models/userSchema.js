@@ -3,7 +3,7 @@ import crypto from "crypto";
 
 const userSchema = new Schema({
   _id: Schema.Types.ObjectId,
-  userAvatar: {},
+  userAvatar: { type: String },
   userFirstName: { type: String, required: true },
   userLastName: { type: String, required: true },
   userEmail: { type: String, unique: true, required: true },

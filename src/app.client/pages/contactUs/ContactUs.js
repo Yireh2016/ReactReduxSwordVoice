@@ -131,11 +131,11 @@ const ContactUs = () => {
   return (
     <NavBarLayout id="navbar">
       <Helmet>
-          <meta
-            name="Description"
-            content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
-          />
-        </Helmet>
+        <meta
+          name="Description"
+          content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
+        />
+      </Helmet>
       <MainLayout
         style={{
           transformOrigin: "top left",
@@ -145,7 +145,7 @@ const ContactUs = () => {
         id="mainLayout"
       >
         <NoPCTitleLay>
-          <NoPCContactTitle id="NoPCcontactTitle">Contact Us</NoPCContactTitle>
+          <NoPCContactTitle id="NoPCcontactTitle">Follow Us</NoPCContactTitle>
         </NoPCTitleLay>
         <LeftAside id="leftAside">
           <Background image={image} id="background" />
@@ -153,7 +153,7 @@ const ContactUs = () => {
           <Button className="call2Action">Send</Button>
         </LeftAside>
         <RightAside id="RightAside">
-          <ContactTitle id="ContactTitle">Contact Us</ContactTitle>
+          <ContactTitle id="ContactTitle">Follow Us</ContactTitle>
           <SocialNetCont id="SocialNetCont">
             <SocialNet id="SocialNet" />
           </SocialNetCont>

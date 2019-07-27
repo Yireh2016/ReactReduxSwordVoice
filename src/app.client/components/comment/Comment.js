@@ -488,7 +488,8 @@ const Comment = ({
             <Avatar
               id=""
               style={{
-                backgroundImage: userAvatar && `url('${userAvatar}`
+                backgroundImage:
+                  userAvatar && `url('${userAvatar}`.replace("big", "small")
               }}
             />
           </AvatarCont>

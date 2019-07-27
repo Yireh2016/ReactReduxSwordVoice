@@ -55,7 +55,6 @@ class LogInForm extends Component {
     // imgBlob = new Blob([imgBytes], {
     //   type: "image/jpeg"
     // });
-    window.localStorage.setItem("userAvatar", userData.userAvatar);
     this.props.onLogIn({
       userAvatar: userData.userAvatar,
       userName: userData.userName,
@@ -157,7 +156,7 @@ class LogInForm extends Component {
                   <label>
                     <span id="loginUsername">Username</span> <br />
                     <input
-                      for="username"
+                      htmlFor="username"
                       aria-label="username"
                       aria-labelledby="logInForm loginUsername"
                       type="text"
@@ -173,7 +172,7 @@ class LogInForm extends Component {
                     <input
                       type="password"
                       name="userPassword"
-                      for="userPassword"
+                      htmlFor="userPassword"
                       aria-label="userPassword"
                       aria-labelledby="logInForm loginuserPassword"
                       value={this.state.userPassword}

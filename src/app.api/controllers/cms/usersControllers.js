@@ -61,6 +61,10 @@ export const updateUserCtrl = (req, res) => {
         ? data.userPassword
         : user[0].userPassword;
 
+      user[0].userAvatar = data.userAvatar
+        ? data.userAvatar
+        : user[0].userAvatar;
+
       data.userPassword && user[0].setPassword(user[0].userPassword);
 
       user[0].save((err, user) => {

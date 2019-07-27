@@ -53,15 +53,10 @@ class NavBar extends Component {
       endOfAnimation: true
     });
 
-    if (
-      window.localStorage.getItem("userAvatar") &&
-      this.props.isUserLoggedIn
-    ) {
+    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
       this.setState({
-        loggedUserAvatar: window.localStorage.getItem("userAvatar")
+        loggedUserAvatar: this.props.loggedUserAvatar
       });
-
-      this.props.setAvatar(window.localStorage.getItem("userAvatar"));
     }
     window.addEventListener("scroll", () => {
       this.handleScroll();
@@ -79,7 +74,6 @@ class NavBar extends Component {
   }
   componentDidUpdate() {
     if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
-      window.localStorage.setItem("userAvatar", this.props.loggedUserAvatar);
       if (this.state.loggedUserAvatar === "") {
         this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
       }
@@ -192,7 +186,10 @@ class NavBar extends Component {
                 backgroundPosition: "center",
                 height: "45px",
                 width: "45px",
-                backgroundImage: `url('${this.state.loggedUserAvatar}`
+                backgroundImage: `url('${this.state.loggedUserAvatar}`.replace(
+                  "big",
+                  "small"
+                )
               }}
             />
           );

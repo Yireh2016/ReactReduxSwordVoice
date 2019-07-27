@@ -8,7 +8,8 @@ export const sessionCookie = async (req, res, user) => {
       userName: user.userName,
       id: user.id,
       userFullName: user.userFullName,
-      userType: user.userType
+      userType: user.userType,
+      userAvatar: user.userAvatar
     },
     {
       encryptKey: `${process.env.ENCRYPTKEY}`,

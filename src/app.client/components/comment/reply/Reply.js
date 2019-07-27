@@ -118,7 +118,8 @@ const Reply = ({ userAvatar, userName, message, date, likes }) => {
       <AvatarCont>
         <Avatar
           style={{
-            backgroundImage: userAvatar && `url('${userAvatar}`
+            backgroundImage:
+              userAvatar && `url('${userAvatar}`.replace("big", "small")
           }}
         />
       </AvatarCont>

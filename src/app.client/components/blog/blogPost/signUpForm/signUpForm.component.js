@@ -59,30 +59,37 @@ class SignUpForm extends Component {
   }
 
   imageUpload = image => {
-    blobToBase64(image, async base64 => {
-      try {
-        const sendUserTempImageRes = await sendUserTempImage(base64);
-        console.log("sign up form sendUserTempImageRes", sendUserTempImageRes);
-        if (sendUserTempImageRes.status === "OK") {
-          this.setState(() => {
-            return {
-              userAvatar: `${process.env.CDN_URL}/${
-                sendUserTempImageRes.filename
-              }`,
-              userAvatarPreview: `url(${process.env.CDN_URL}/${
-                sendUserTempImageRes.filename
-              })`,
-              uploadMessage: undefined
-            };
-          });
-          alert("file Uploaded successfully");
-          return;
-        }
-        alert("An error has occured ");
-      } catch (err) {
-        console.log("err", err);
-        alert("An error has occured ");
-      }
+    blobToBase64(image, base64 => {
+      this.setState(() => {
+        return {
+          userAvatar: `${base64}`,
+          userAvatarPreview: `url(${base64})`,
+          uploadMessage: undefined
+        };
+      });
+      // try {
+      //   const sendUserTempImageRes = await sendUserTempImage(base64);
+      //   console.log("sign up form sendUserTempImageRes", sendUserTempImageRes);
+      //   if (sendUserTempImageRes.status === "OK") {
+      //     this.setState(() => {
+      //       return {
+      //         userAvatar: `${process.env.CDN_URL}/${
+      //           sendUserTempImageRes.filename
+      //         }`,
+      //         userAvatarPreview: `url(${process.env.CDN_URL}/${
+      //           sendUserTempImageRes.filename
+      //         })`,
+      //         uploadMessage: undefined
+      //       };
+      //     });
+      //     alert("file Uploaded successfully");
+      //     return;
+      //   }
+      //   alert("An error has occured ");
+      // } catch (err) {
+      //   console.log("err", err);
+      //   alert("An error has occured ");
+      // }
     });
   };
 
@@ -494,31 +501,18 @@ class SignUpForm extends Component {
 
             const userData = res.data;
 
-            if (userAvatar !== "") {
-              console.log("userAvatar on signupform", userAvatar);
+            console.log("userAvatar on signupform", userData.userAvatar);
 
-              this.props.onLogIn({
-                //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
+            this.props.onLogIn({
+              //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
 
-                userName: userData.userName,
-                userID: userData.id,
-                userType: userData.userType,
-                userAvatar: userAvatar,
-                userFullName: `${userFirstName} ${userLastName}`
-              });
-              alert("data submited ");
-            } else {
-              // console.log("no hay avatar solo se envia usuario");
-              this.props.onLogIn({
-                //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
-
-                userName: userData.userName,
-                userID: userData.id,
-                userType: userData.userType,
-                userFullName: `${userFirstName} ${userLastName}`
-              });
-              alert("data submited without avatar");
-            }
+              userName: userData.userName,
+              userID: userData.id,
+              userType: userData.userType,
+              userAvatar: userData.userAvatar,
+              userFullName: `${userFirstName} ${userLastName}`
+            });
+            alert("data submited ");
           } else {
             //en caso de no poder salvar el usuario en DB se destruye la cookie de session
             //OJO mostrar error

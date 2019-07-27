@@ -63,28 +63,6 @@ function guestAPI(req, res, next) {
 //////////////////////////////////////
 //////////////////////////////////////
 
-// cargar imagen de avatar AUTH
-//se usa en: signUpForm
-routerAPI.post("/upload/:userID", authAPI, (req, res) => {
-  console.log("api/upload/ req.body", req.body);
-  const { userAvatar } = req.body;
-  const userID = req.params.userID;
-
-  usersModel.findByIdAndUpdate(
-    userID,
-    { userAvatar },
-
-    (err, user) => {
-      if (err) {
-        console.log("Something wrong when updating data!", err);
-        res.status(404).json(err);
-        return err;
-      }
-      console.log("avatar actualizado", user[0]);
-      res.status(200).json("avatar uploaded");
-    }
-  );
-});
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
 routerAPI.post("/signup", guestAPI, signUpCtrl);

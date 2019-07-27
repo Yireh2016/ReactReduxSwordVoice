@@ -122,7 +122,7 @@ const swordvoiceWeb = async (req, res) => {
         articleModel
           .findOne({ url: `${url}` })
           .select(
-            "_id date html title description keywords author socialCount comments"
+            "_id date html title description keywords author socialCount comments isPublished"
           )
           .populate({
             path: "author",
@@ -130,7 +130,7 @@ const swordvoiceWeb = async (req, res) => {
           }) //traer solo lo que necesito firstname y lastname
           .exec()
           .then(async completeArticle => {
-            if (completeArticle) {
+            if (completeArticle && completeArticle.isPublished) {
               let commentsArr = [...completeArticle.comments];
               const commentsCount = commentsArr.length;
 
@@ -309,9 +309,10 @@ const swordvoiceWeb = async (req, res) => {
         const usernameID = tokenData.data.id;
         const userFullName = tokenData.data.userFullName;
         const userType = tokenData.data.userType;
+        const userAvatar = tokenData.data.userAvatar;
 
         successOnFindingUserAndDistpach(
-          { userName, _id: usernameID, userFullName, userType },
+          { userName, _id: usernameID, userFullName, userType, userAvatar },
           store
         );
         resolve();

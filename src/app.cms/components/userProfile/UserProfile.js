@@ -26,7 +26,7 @@ import validateEmail from "./validations/validateEmail";
 import blobToBase64 from "../../../services/blobToBase64";
 import isBrowser from "../../../services/isBrowser";
 import sendUserProfile from "../../apiCalls/sendUserProfile";
-import sendAvatar from "../../apiCalls/sendAvatar";
+import uploadAvatar from "../../../apiCalls/uploadAvatar";
 import triggerDialog from "../../controllers/triggerDialog";
 
 const UserProfileView = styled.div`
@@ -318,6 +318,10 @@ const Avatar = styled.div`
   }};
   background-position: center;
   background-size: cover;
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const AvatarEditBtn = styled.img`
@@ -520,6 +524,8 @@ const UserProfile = ({
 
   const [isLoading, setLoading] = useState(false);
 
+  const [cancelMessage, setCancelMessage] = useState("Cancel");
+
   const interestArray = [
     "Graphic Design",
     "UX/UI",
@@ -532,7 +538,6 @@ const UserProfile = ({
   ];
 
   let {
-    _id,
     userAvatar,
     userName,
     userFirstName,
@@ -853,17 +858,19 @@ const UserProfile = ({
       setOtherInterest("");
     }
     if (newAvatar) {
-      const sendAvatarRes = await sendAvatar(
-        userProfile._id,
+      console.log("saveHandler userProfile.userName,", userProfile.userName);
+      const sendAvatarRes = await uploadAvatar(
+        userProfile.userName,
         userProfile.userAvatar
       );
+
+      userProfile.userAvatar = sendAvatarRes.avatarURL;
 
       if (
         sendAvatarRes.status === "OK" &&
         userProfile.userName === loggedUserName
       ) {
         setUserAvatar(userProfile.userAvatar);
-        window.localStorage.setItem("userAvatar", userProfile.userAvatar);
       }
     }
     const sendUserRes = await sendUserProfile(userProfile);
@@ -873,6 +880,7 @@ const UserProfile = ({
         body: "Your profile has been saved",
         status: "OK"
       }); //'Success','Your profile has been saved','OK'
+      setCancelMessage("Back");
     } else {
       triggerDialog({
         title: "Error",
@@ -942,7 +950,13 @@ const UserProfile = ({
                 avatarEditHandler(e.target.files);
               }}
             />
-            <Avatar img={userAvatar} id="avatar">
+            <Avatar
+              img={userAvatar}
+              id="avatar"
+              onClick={() => {
+                inputFile.current.click();
+              }}
+            >
               <AvatarEditBtn
                 id="avatarEditBtn"
                 src={edit}
@@ -1014,7 +1028,7 @@ const UserProfile = ({
                 type="button"
                 className="cmsBtn"
               >
-                Cancel
+                {cancelMessage}
               </ControlBtn>
             </Controls>
           </Column>

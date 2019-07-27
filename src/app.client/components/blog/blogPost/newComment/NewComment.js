@@ -253,7 +253,8 @@ const NewComment = ({
                 id="Avatar"
                 style={{
                   backgroundImage:
-                    typeof avatarState === "string" && `url(${avatarState})`
+                    typeof avatarState === "string" &&
+                    `url(${avatarState})`.replace("big", "small")
                 }}
               />
               <UserNameCont>

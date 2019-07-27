@@ -3,6 +3,8 @@ import passport from "passport";
 import axios from "axios";
 import crypto from "crypto";
 
+//apiCalls
+import uploadAvatar from "../../../apiCalls/uploadAvatar";
 //services
 import {
   sessionCookie,
@@ -12,7 +14,7 @@ import { readToken } from "../../services/tokenHandler";
 
 let usersModel = mongoose.model("User");
 
-export const signUpCtrl = (req, res) => {
+export const signUpCtrl = async (req, res) => {
   let userData = req.body;
 
   //Busco la llave de firmado de las cookies en las variables de entorno
@@ -36,9 +38,23 @@ export const signUpCtrl = (req, res) => {
   //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
 
   console.log("all required fields are CORRECT");
-  if (userData.userAvatar === "") {
-    userData.userAvatar = new Buffer([]);
+  let uploadAvatarRes;
+  if (userData.userAvatar) {
+    uploadAvatarRes = await uploadAvatar(
+      userData.userName,
+      userData.userAvatar
+    );
   }
+
+  if (uploadAvatarRes && uploadAvatarRes.status === "OK") {
+    console.log("uploadAvatarRes.avatarURL", uploadAvatarRes.avatarURL);
+    userData.userAvatar = uploadAvatarRes.avatarURL;
+  } else {
+    userData.userAvatar = "";
+    uploadAvatarRes.status !== "OK" &&
+      console.log("error uploading image", uploadAvatarRes.status);
+  }
+
   userData = { ...userData, _id: mongoose.Types.ObjectId() };
   let user = new usersModel(userData);
 
@@ -64,7 +80,8 @@ export const signUpCtrl = (req, res) => {
           id: savedUser._id,
           userName: savedUser.userName,
           userType: savedUser.userType,
-          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`
+          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+          userAvatar: savedUser.userAvatar
         };
         console.log("sending responseUserData signup[] ", responseUserData);
         res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
@@ -103,7 +120,8 @@ export const loginCtrl = (req, res) => {
           userName: user.userName,
           id: user._id,
           userFullName: `${user.userFirstName} ${user.userLastName}`,
-          userType: user.userType
+          userType: user.userType,
+          userAvatar: user.userAvatar
         });
       } catch (err) {
         console.log("err on user catch on login", err);
