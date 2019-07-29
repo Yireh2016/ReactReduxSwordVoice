@@ -13,7 +13,7 @@ import {
 
 //api calls
 
-import updateSocialCount from "../../assets/apiCalls/updateSocialCount";
+import updateSocialCount from "../../apiCalls/updateSocialCount";
 
 //services
 import countingHTMLwords from "../../services/countingHTMLwords";
@@ -73,6 +73,10 @@ const SocialBar = ({
     #clapsIcon {
       width: 50px;
       height: 50px;
+    }
+
+    &:active #clapsIcon {
+      transform: scale(1.2);
     }
     svg {
       height: 20px;

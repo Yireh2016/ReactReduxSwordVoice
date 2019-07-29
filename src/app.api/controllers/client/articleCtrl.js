@@ -140,29 +140,68 @@ export const setReplyCtrl = async (req, res) => {
 };
 
 export const updateCommentClaps = (req, res) => {
-  const { title, index } = req.query;
+  const { id, index } = req.query;
   const { claps } = req.body;
 
-  articleModel.find({ title }, (err, article) => {
+  articleModel.find({ _id: id }, (err, article) => {
     if (err) {
       console.log("err", err);
       res.status(404).json({ status: "ERR", message: err.message });
       return;
     }
-    err;
+
     let comments = article[0].comments;
 
     comments[index].claps = comments[index].claps + claps;
 
-    articleModel.findOneAndUpdate({ title }, { comments }, (err, commnets) => {
-      if (err) {
-        console.log("err", err);
-        res.status(404).json({ status: "ERR", message: err.message });
-        return;
+    articleModel.findOneAndUpdate(
+      { _id: id },
+      { comments },
+      (err, commnets) => {
+        if (err) {
+          console.log("err", err);
+          res.status(404).json({ status: "ERR", message: err.message });
+          return;
+        }
       }
-    });
+    );
 
     res.status(200).json({ status: "OK", result: comments[index].claps });
+  });
+};
+
+export const updateReplyClaps = (req, res) => {
+  const { id, index, commentIndex } = req.query;
+  const { claps } = req.body;
+
+  articleModel.find({ _id: id }, (err, article) => {
+    if (err) {
+      console.log("err", err);
+      res.status(404).json({ status: "ERR", message: err.message });
+      return;
+    }
+
+    let comments = article[0].comments;
+
+    comments[commentIndex].responses[index].claps =
+      comments[commentIndex].responses[index].claps + claps;
+
+    articleModel.findOneAndUpdate(
+      { _id: id },
+      { comments },
+      (err, commnets) => {
+        if (err) {
+          console.log("err", err);
+          res.status(404).json({ status: "ERR", message: err.message });
+          return;
+        }
+      }
+    );
+
+    res.status(200).json({
+      status: "OK",
+      result: comments[commentIndex].responses[index].claps
+    });
   });
 };
 

@@ -39,7 +39,7 @@ const article = (state = initialState, action) => {
 
     case "SET_RESPONSE_CLAPS": {
       const { iComment, iResponse, count } = action.payload;
-      newState.comments[iComment].response[iResponse].claps = count;
+      newState.comments[iComment].responses[iResponse].claps = count;
       break;
     }
 

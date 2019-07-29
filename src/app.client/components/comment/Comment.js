@@ -16,7 +16,7 @@ import NewComment from "../blog/blogPost/newComment/NewComment";
 import Loading from "../loading/loading";
 
 //api calls
-import updateCommentClaps from "../../assets/apiCalls/updateCommentClaps";
+import updateCommentClaps from "../../apiCalls/updateCommentClaps";
 import apiDeleteComment from "../../apiCalls/apiDeleteComment";
 import apiSetComment from "../../apiCalls/apiSetComment";
 import getMoreResponses from "../../../apiCalls/getMoreResponses";
@@ -119,6 +119,9 @@ const SocialInteractions = styled.div`
   align-items: center;
 `;
 const Icon = styled.span`
+  &:active svg {
+    transform: scale(1.5);
+  }
   svg {
     height: 30px;
     width: 30px;
@@ -294,15 +297,16 @@ const Comment = ({
   let repliesMap;
   if (replies) {
     repliesMap = replies.map((replyObj, i) => {
-      const { userName, userAvatar, message, date, likes } = replyObj;
+      const { userName, userAvatar, message, date } = replyObj;
       return (
         <Reply
           key={i}
+          commentIndex={index}
+          index={i}
           userName={userName}
           userAvatar={userAvatar}
           message={message}
           date={dbDateToNormalDate(date)}
-          likes={likes}
         />
       );
     });
@@ -330,7 +334,7 @@ const Comment = ({
       );
       //api call
       const updatedCommentClaps = await updateCommentClaps(
-        article.title,
+        article.id,
         index,
         clapsAdder + 1
       );

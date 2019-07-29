@@ -79,19 +79,25 @@ const MagicBtn = styled.div`
 `;
 
 const FileListCont = styled.div`
+  section {
+    overflow-y: scroll;
+    height: 50px;
+  }
   @media (max-width: 1050px) {
     width: 100%;
     padding: 15px;
     box-sizing: border-box;
-    overflow: scroll;
   }
   @media (max-width: 700px) {
     width: 100%;
     padding: 15px;
     box-sizing: border-box;
     background: white;
-    height: 95px;
-    overflow: scroll;
+
+    section {
+      overflow-y: scroll;
+      height: 50px;
+    }
   }
 `;
 

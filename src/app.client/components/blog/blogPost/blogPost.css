@@ -120,12 +120,16 @@ aside h2 {
 }
 .blogArticle > code,
 .blogArticle p > code,
-.blogArticle pre {
+.blogArticle pre > code {
   border: 1px solid coral;
   background: #ff7f507a;
   padding: 5px 10px;
   font-family: monospace;
   border-radius: 4px;
+}
+
+.blogArticle code {
+  white-space: normal;
 }
 
 .blogArticle hr {
@@ -246,5 +250,8 @@ aside h2 {
   }
   .blogArticle figure {
     margin: 0;
+  }
+  .blogArticle blockquote {
+    margin: 0 0 0 10px;
   }
 }

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import updateReplyClaps from "../../../apiCalls/updateReplyClaps";
+import { connect } from "react-redux";
 
 //assets
-import { like } from "../../../assets/svgIcons/SvgIcons";
+import { claps as clapsIcon } from "../../../assets/svgIcons/SvgIcons";
 
 const ReplyCard = styled.div`
   padding: 15px 30px 20px 15px;
@@ -90,6 +92,11 @@ const SocialInteractions = styled.div`
   align-items: center;
 `;
 const Icon = styled.span`
+  position: relative;
+
+  &:active svg {
+    transform: scale(1.5);
+  }
   svg {
     height: 20px;
     width: 20px;
@@ -111,7 +118,51 @@ const Counter = styled.span`
   user-select: none;
 `;
 
-const Reply = ({ userAvatar, userName, message, date, likes }) => {
+const Reply = ({
+  userAvatar,
+  userName,
+  message,
+  date,
+  commentIndex,
+  index,
+  article,
+  setResponsesClaps
+}) => {
+  const [clapsTimer, setClapsTimer] = useState();
+  const [clapsAdder, setClapsAdder] = useState(0);
+
+  const clapsAdderHandler = () => {
+    if (clapsTimer) {
+      clearTimeout(clapsTimer);
+    }
+    setClapsAdder(clapsAdder + 1);
+
+    const timer = setTimeout(async () => {
+      setClapsAdder(0);
+
+      console.log(
+        "article.comments[index].claps",
+        article.comments[index].claps
+      );
+      //api call
+      const updateReplyClapsRes = await updateReplyClaps(
+        article.id,
+        commentIndex,
+        index,
+        clapsAdder + 1
+      );
+
+      console.log(" updateReplyClapsRes", updateReplyClapsRes);
+
+      if (updateReplyClapsRes.status === "OK") {
+        setResponsesClaps(commentIndex, index, updateReplyClapsRes.result);
+      }
+
+      return;
+    }, 1000);
+    setClapsTimer(timer);
+  };
+
   return (
     // <ReplyCardLayout>
     <ReplyCard>
@@ -133,8 +184,29 @@ const Reply = ({ userAvatar, userName, message, date, likes }) => {
         </Text>
         <ReplyFooter>
           <SocialInteractions>
-            <Icon>{like}</Icon>
-            <Counter>{likes}</Counter>
+            <Icon onClick={clapsAdderHandler}>
+              {clapsAdder !== 0 && (
+                <Counter
+                  id="clapsAdderCounter"
+                  style={{
+                    position: "absolute",
+                    backgroundColor: "#004059",
+                    color: "white",
+                    borderRadius: "100%",
+                    padding: "7px",
+                    top: "-33px"
+                  }}
+                >
+                  +{clapsAdder}
+                </Counter>
+              )}
+
+              {clapsIcon}
+            </Icon>
+            <Counter>
+              {article.comments[commentIndex].responses[index].claps > 0 &&
+                article.comments[commentIndex].responses[index].claps}
+            </Counter>
           </SocialInteractions>
         </ReplyFooter>
       </ReplyCont>
@@ -150,4 +222,24 @@ const Reply = ({ userAvatar, userName, message, date, likes }) => {
 //             likes={replyData.likes}
 //             replies={replyData.replies}
 
-export default Reply;
+const mapStateToProps = state => {
+  return {
+    article: state.article
+  };
+};
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+
+    setResponsesClaps: (iComment, iResponse, count) =>
+      dispach({
+        type: "SET_RESPONSE_CLAPS",
+        payload: { iComment, iResponse, count }
+      })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(Reply);

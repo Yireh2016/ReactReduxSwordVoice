@@ -28,6 +28,7 @@ import {
   setCommentCtrl,
   setReplyCtrl,
   updateCommentClaps,
+  updateReplyClaps,
   deleteCommentCtrl
 } from "../controllers/client/articleCtrl";
 
@@ -232,6 +233,7 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
 //add comments
 routerAPI.put("/setComment", authAPI, setCommentCtrl);
 routerAPI.put("/updateCommentClaps", authAPI, updateCommentClaps);
+routerAPI.put("/updateReplyClaps", authAPI, updateReplyClaps);
 
 routerAPI.put("/setReply", authAPI, setReplyCtrl);
 

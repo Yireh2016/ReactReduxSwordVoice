@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const updateCommentClaps = (title, index, claps) => {
+const updateCommentClaps = (id, index, claps) => {
   return new Promise((resolve, reject) => {
     axios
 
-      .put(`api/updateCommentClaps?title=${title}&index=${index}`, {
+      .put(`api/updateCommentClaps?id=${id}&index=${index}`, {
         claps
       })
       .then(res => {

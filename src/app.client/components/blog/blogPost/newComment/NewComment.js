@@ -60,7 +60,10 @@ const Inner = styled.div`
   box-sizing: border-box;
   border-radius: 8px;
   background: white;
-  padding-top: 15px;
+  padding: 15px 0;
+  @media (max-width: 700px) {
+    width: 90%;
+  }
 `;
 const TextLayout = styled.div`
   padding: 0 10% 0 13%;
