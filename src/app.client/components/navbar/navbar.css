@@ -146,6 +146,18 @@
   padding: 10px 0;
   margin: 0;
 }
+
+.desplegableProfileLink {
+  padding: 10px 0 !important;
+}
+.desplegableProfileLink a {
+  padding: 10px 30px;
+  cursor: pointer;
+}
+.desplegableProfileLink a:hover {
+  background-color: #0387b7;
+  border-radius: 15px 0px;
+}
 .despleglableContenido ul li {
   padding: 10px 30px;
   cursor: pointer;

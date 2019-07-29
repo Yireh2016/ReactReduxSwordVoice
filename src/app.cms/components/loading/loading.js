@@ -1,13 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 //css
 import "./loading.css";
 
-const Loading = ({ fullscreen }) => {
+const Loading = props => {
   return (
-    <div
-      className={`adminPostSpinnerLay ${fullscreen && "fullscreen"}`}
-      fullscreen={fullscreen}
-    >
+    <div className={`adminPostSpinnerLay ${props.fullscreen && "fullscreen"}`}>
       <div className="lds-ellipsis">
         <div />
         <div />
@@ -16,6 +14,10 @@ const Loading = ({ fullscreen }) => {
       </div>
     </div>
   );
+};
+
+Loading.propTypes = {
+  fullscreen: PropTypes.bool
 };
 
 export default Loading;

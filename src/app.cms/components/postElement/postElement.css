@@ -109,3 +109,25 @@
   width: 21px;
   margin-bottom: 7px;
 }
+
+@media (max-width: 1050px) {
+  .elementEditionLayoutPreview {
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .elementSelectLayout {
+    flex-flow: wrap;
+  }
+  .elementSelect select {
+    margin: 5px 0;
+  }
+  .elementEditionLayoutPreview {
+    padding: 20px 8px;
+  }
+  .elementPreview {
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -436,7 +436,7 @@ class NavBar extends Component {
                       <div className="despleglableContenido">
                         <ul>
                           {this.props.isUserLoggedIn ? (
-                            <li>
+                            <li className="desplegableProfileLink">
                               <a aria-label="go to your dashboard" href="cms">
                                 Profile
                               </a>

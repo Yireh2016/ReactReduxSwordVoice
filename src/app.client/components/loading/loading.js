@@ -2,12 +2,9 @@ import React from "react";
 //css
 import "./loading.css";
 
-const Loading = ({ fullscreen }) => {
+const Loading = ({ fullscreen = false }) => {
   return (
-    <div
-      className={`adminPostSpinnerLay ${fullscreen && "fullscreen"}`}
-      fullscreen={fullscreen}
-    >
+    <div className={`adminPostSpinnerLay ${fullscreen && "fullscreen"}`}>
       <div className="lds-ellipsis">
         <div />
         <div />

@@ -23,7 +23,7 @@ class App extends Component {
         <Route
           path="/cms/*"
           render={() => (
-            <Suspense fallback={<Loading fullscreen={"true"} />}>
+            <Suspense fallback={<Loading fullscreen={true} />}>
               <Dashboard />
             </Suspense>
           )}

@@ -11,14 +11,34 @@
   padding: 10px 15px;
   border-radius: 10px;
 }
-.tagList {
-  display: flex;
-  font-size: calc(16px * 0.6);
-  align-items: center;
-}
-.tagList h6 {
+.readOnlySeoEditor h6 {
   font-size: 16px;
 }
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: calc(16px * 0.6);
+  align-items: center;
+  margin: 20px 0 20px 0;
+}
+
 .tagList input {
   margin: 0 0 0 15px;
+}
+@media (max-width: 700px) {
+  .readOnlySeoEditor {
+    flex-flow: wrap;
+  }
+  .readOnlySeoEditor h6 {
+    width: 100%;
+    text-align: center;
+  }
+  .tagList {
+    width: 80%;
+    margin: 0 0 20px 0;
+  }
+  .tagList div {
+    margin-top: 5px;
+    width: 50%;
+  }
 }

@@ -29,6 +29,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
 `;
+const Logo = styled.img`
+  width: 200px;
+  margin: 0 auto;
+`;
 
 class Welcome extends Component {
   constructor(props) {
@@ -56,7 +60,7 @@ class Welcome extends Component {
             />
           </SVG>
 
-          <img src={svLogo} alt="SwordVoice Logo" />
+          <Logo src={svLogo} alt="SwordVoice Logo" />
           <h1>
             <span>SwordVoice</span>{" "}
             {this.props.userType === "admin"

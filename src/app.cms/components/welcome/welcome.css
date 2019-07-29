@@ -9,6 +9,7 @@
 .welcomeCont {
   flex-grow: 0.6;
   text-align: center;
+  height: 60vh;
 }
 
 .welcomeCont h1 {

@@ -59,6 +59,7 @@ const Form = styled.form`
   background-color: #1a2225;
   border-radius: 8px;
   width: 100%;
+  margin: 0;
 
   @media (max-width: 1050px) {
     #FirstCol {
@@ -71,12 +72,20 @@ const Form = styled.form`
   }
 
   @media (max-width: 700px) {
-    padding: 25px 10px;
+    padding: 25px 25px;
     border-radius: 0px;
+    #FirstCol {
+      width: calc(100% * 12 / 12);
+    }
+
+    #SecondCol {
+      width: calc(100% * 12 / 12);
+      margin-top: 25px;
+    }
   }
 `;
 const Column = styled.div`
-  width: ${props => props.width};
+  width: ${props => props.widthCol};
   display: flex;
   flex-direction: column;
   @media (max-width: 700px) {
@@ -153,6 +162,10 @@ const Select = styled.select`
   color: ${props => (props.active ? "rgb(26, 34, 37)" : "rgb(195, 208, 213)")};
   background-color: ${props =>
     props.active ? "rgb(195, 208, 213)" : "rgba(128, 128, 128, 0.6)"};
+  ${"" /* 
+  @media (max-width: 700px) {
+    margin: auto;
+  } */}
 `;
 
 const Input = styled.input`
@@ -169,6 +182,12 @@ const Row = styled.div`
   @media (max-width: 1050px) {
     #OtherInterestLabel {
       width: 80%;
+    }
+  }
+
+  @media (max-width: 700px) {
+    #OtherInterestLabel {
+      width: 100%;
     }
   }
 `;
@@ -193,6 +212,9 @@ const InputLabel = styled.label`
     #NameInputLayout {
       width: 80%;
     }
+    > span {
+      margin: 10px 0 5px 6px;
+    }
   }
 
   @media (max-width: 700px) {
@@ -206,6 +228,10 @@ const InputLabel = styled.label`
           return "visible";
         }
       }};
+    }
+
+    #NameInputLayout {
+      width: 100%;
     }
   }
 
@@ -310,7 +336,7 @@ const Avatar = styled.div`
   border-radius: 100%;
   height: 200px;
   width: 200px;
-  margin: auto;
+  margin: 0 auto;
   background-color: gray;
   position: relative;
   background: ${props => {
@@ -341,7 +367,6 @@ const UserName = styled.p`
 `;
 
 const UserControl = styled.div`
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -353,6 +378,7 @@ const UserControl = styled.div`
 const Controls = styled.div`
   display: flex;
   justify-content: center;
+  margin: calc(74vh - 300px) 0 0 0;
 
   button {
     margin-left: 15px;
@@ -936,7 +962,7 @@ const UserProfile = ({
     <UserProfileView>
       <FormLayout id="FormLayout">
         <Form id="Form">
-          <Column id="FirstCol" width="calc( 100% * 1 / 4);">
+          <Column id="FirstCol" widthCol="calc( 100% * 1 / 4);">
             <input
               ref={inputFile}
               style={{
@@ -944,7 +970,7 @@ const UserProfile = ({
               }}
               type="file"
               name="avatar"
-              id="avatar"
+              id="avatarInput"
               accept="image/*"
               onChange={e => {
                 avatarEditHandler(e.target.files);
@@ -973,7 +999,13 @@ const UserProfile = ({
                 <React.Fragment>
                   <InputLabelUserProfile width="calc(100% / 2)">
                     <span>User Type</span>
-                    <InputLayout id="userTypeInputLayout">
+                    <InputLayout
+                      id="userTypeInputLayout"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center"
+                      }}
+                    >
                       <Select
                         value={userProfile.userType}
                         name="userType"
@@ -1032,7 +1064,7 @@ const UserProfile = ({
               </ControlBtn>
             </Controls>
           </Column>
-          <Column id="SecondCol" width="calc( 100% * 3 / 4);">
+          <Column id="SecondCol" widthCol="calc( 100% * 3 / 4);">
             <RowLayout id="RowLayout">
               <Row id="securityRow">
                 <MainTitle id="SecMainTitle">Security Info</MainTitle>
@@ -1282,7 +1314,7 @@ const UserProfile = ({
                     <span>Birth Date</span>
                     <InputLayout id="GenderInputLayout">
                       <Input
-                        style={{ padding: "0 0 0 40px" }}
+                        style={{ padding: "0 0 0 40px", width: "auto" }}
                         type="date"
                         value={userBirthDate}
                         name="userBirthDate"

@@ -1,18 +1,18 @@
 .dashboardLayout {
   height: 100vh;
-  display: grid;
-  grid-template-areas: "aside main";
-  grid-template-columns: 20% auto;
-  grid-template-rows: 100vh;
+  display: flex;
+  position: relative;
   transition: all ease 1s;
   transform: translateX(0);
 }
 
-.dashboardLayoutExpand {
-  transform: translateX(-20%);
-}
 .dashAside {
-  grid-area: aside;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  /* transform: translateX(-100%); */
+  transition: all ease 500ms;
   background-color: #1a2225;
   color: white;
   display: flex;
@@ -21,8 +21,8 @@
 }
 
 .dashMain {
-  grid-area: main;
-  transition: all ease 1s;
+  transition: all ease 500ms;
+  overflow: hidden;
   /* position: relative; */
 }
 .dashAvatar {
@@ -156,9 +156,7 @@
   .dashboardLayout {
     grid-template-columns: 30% auto;
   }
-  .dashboardLayoutExpand {
-    transform: translateX(-30%);
-  }
+
   .mainToogleMenu {
     opacity: 1;
   }
@@ -192,8 +190,8 @@
   .dashboardLayout {
     grid-template-columns: 80% auto;
   }
-  .dashboardLayoutExpand {
-    transform: translateX(-80%);
+  .dashMain {
+    overflow-y: scroll;
   }
   .dashMainOpaque {
     display: none;

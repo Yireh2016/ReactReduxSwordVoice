@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 // import is from "is_js";
 import smoothscroll from "smoothscroll-polyfill";
+import styled from "styled-components";
 //css
 import "./createPost.css";
 //assets
@@ -23,6 +24,7 @@ import PostElementPreview from "../postElement/postElementPreview";
 import ProjectTitle from "../projectTitle/projectTitle";
 import ThumbNailEditor from "../thumbnailEditor/thumbnailEditor";
 import ProgramEditor from "./programEditor/ProgramEditor";
+import DobleTapBtn from "./doubleTapBtn/DoubleTapBtn";
 
 //services
 import paragraph from "../../../services/paragraphService";
@@ -32,6 +34,66 @@ import parseHTML2Object from "../../../services/parseHTML2Object";
 import insertIntoArr from "../../../services/insertIntoArr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
 import uploadFileService from "../../../services/uploadFileService";
+
+const Item = styled.div`
+  @media (max-width: 700px) {
+    h4 {
+      font-size: 12px;
+    }
+    img {
+      width: 12px;
+    }
+  }
+`;
+const MagicBtn = styled.div`
+  position: fixed;
+  z-index: 10;
+  top: ${props =>
+    props.isCreateBar ? "calc(50vh - 198px - 40px)" : "calc(50vh - 20px)"};
+  transform: ${props =>
+    props.isCreateBar ? "rotate(360deg)" : "rotate(-360deg)"};
+  right: 8px;
+
+  transition: all cubic-bezier(1, 0.19, 0.44, 1.43) 800ms;
+  /* top: calc(50vh - 20px); */
+
+  svg {
+    width: 40px;
+  }
+
+  @media (min-width: 700px) {
+    position: fixed;
+
+    top: ${props =>
+      props.isCreateBar ? "calc(50vh - 248px - 60px)" : "calc(50vh - 30px)"};
+    right: 20px;
+
+    svg {
+      width: 60px;
+    }
+  }
+
+  @media (min-width: 1050px) {
+    display: none;
+  }
+`;
+
+const FileListCont = styled.div`
+  @media (max-width: 1050px) {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    overflow: scroll;
+  }
+  @media (max-width: 700px) {
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    background: white;
+    height: 95px;
+    overflow: scroll;
+  }
+`;
 
 class CreatePost extends Component {
   constructor(props) {
@@ -48,7 +110,8 @@ class CreatePost extends Component {
       finalHTMLElement: "",
       copiedElement: "",
       dom: "",
-      scrollTopSave: ""
+      scrollTopSave: "",
+      isCreateBar: true
     };
     window.localStorage.setItem("postActiveElID", "");
     window.localStorage.setItem("postElTop", "");
@@ -67,40 +130,78 @@ class CreatePost extends Component {
     }
   }
 
-  componentDidUpdate() {
-    smoothscroll.polyfill();
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.isCreateBar === this.state.isCreateBar) {
+      smoothscroll.polyfill();
 
-    if (window.localStorage.getItem("postElTop") === "addElement") {
-      const el = this.editionAreaRef.current;
-      el &&
-        el.scroll({
-          top: el.scrollHeight,
-          left: 0,
-          behavior: "instant"
-        });
-      return;
+      if (window.localStorage.getItem("postElTop") === "addElement") {
+        const el = this.editionAreaRef.current;
+        el &&
+          el.scroll({
+            top: el.scrollHeight,
+            left: 0,
+            behavior: "instant"
+          });
+        return;
+      }
+      if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
+        const el = this.editionAreaRef.current;
+        el &&
+          el.scroll({
+            top: parseInt(window.localStorage.getItem("postElTop")) - 10,
+            left: 0,
+            behavior: "instant"
+          });
+      }
+      if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
+        const strArr = window.localStorage
+          .getItem("postElTop")
+          .match(/postElement.*/g);
+        const el = this.editionAreaRef.current;
+        el &&
+          el.scroll({
+            top: parseInt(window.localStorage.getItem(strArr)) - 10,
+            left: 0,
+            behavior: "smooth"
+          });
+      }
     }
-    if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
-      const el = this.editionAreaRef.current;
-      el &&
-        el.scroll({
-          top: parseInt(window.localStorage.getItem("postElTop")) - 10,
-          left: 0,
-          behavior: "instant"
-        });
-    }
-    if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
-      const strArr = window.localStorage
-        .getItem("postElTop")
-        .match(/postElement.*/g);
-      const el = this.editionAreaRef.current;
-      el &&
-        el.scroll({
-          top: parseInt(window.localStorage.getItem(strArr)) - 10,
-          left: 0,
-          behavior: "smooth"
-        });
-    }
+
+    return true;
+  }
+  componentDidUpdate() {
+    // smoothscroll.polyfill();
+    // if (window.localStorage.getItem("postElTop") === "addElement") {
+    //   const el = this.editionAreaRef.current;
+    //   el &&
+    //     el.scroll({
+    //       top: el.scrollHeight,
+    //       left: 0,
+    //       behavior: "instant"
+    //     });
+    //   return;
+    // }
+    // if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
+    //   const el = this.editionAreaRef.current;
+    //   el &&
+    //     el.scroll({
+    //       top: parseInt(window.localStorage.getItem("postElTop")) - 10,
+    //       left: 0,
+    //       behavior: "instant"
+    //     });
+    // }
+    // if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
+    //   const strArr = window.localStorage
+    //     .getItem("postElTop")
+    //     .match(/postElement.*/g);
+    //   const el = this.editionAreaRef.current;
+    //   el &&
+    //     el.scroll({
+    //       top: parseInt(window.localStorage.getItem(strArr)) - 10,
+    //       left: 0,
+    //       behavior: "smooth"
+    //     });
+    // }
   }
 
   leavePageHandler = e => {
@@ -269,12 +370,7 @@ class CreatePost extends Component {
     if (e.target.files[0]) {
       this.props.onProjectChange(); //on image change
       const file = e.target.files[0];
-      // for (let i = 0; i < this.props.fileNames.length; i++) {
-      //   if (file.name === this.props.fileNames[i]) {
-      //     return;
-      //   }
-      // }
-
+      console.log("file uploadFileHandler", file);
       let fileNamesArr = this.props.fileNames;
       if (file.name !== oldFileName) {
         fileNamesArr = fileNamesArr.filter(fileName => {
@@ -509,11 +605,15 @@ class CreatePost extends Component {
     }
     const files = this.props.fileNames.map((file, i) => {
       return (
-        <React.Fragment key={i}>
+        <div key={i}>
           <span onClick={this.fileNameCopyHandler} className="fileTitle">
             {file}
           </span>
           <span
+            style={{
+              fontWeight: "bold",
+              color: "red"
+            }}
             className="fileDelete"
             onClick={() => {
               this.onFileRemove(file);
@@ -521,7 +621,7 @@ class CreatePost extends Component {
           >
             X
           </span>
-        </React.Fragment>
+        </div>
       );
     });
     const elements = this.props.elements.map((element, i) => {
@@ -585,7 +685,7 @@ class CreatePost extends Component {
 
     const ExitBtn = withRouter(({ history }) => {
       return (
-        <div
+        <Item
           className="createBarItem"
           onClick={() => {
             this.exitBtnHandler(history);
@@ -593,7 +693,7 @@ class CreatePost extends Component {
         >
           <h4>Exit</h4>
           <img src={exit} alt="Exit botton" />
-        </div>
+        </Item>
       );
     });
     const cssURL = this.props.project.url;
@@ -703,20 +803,36 @@ class CreatePost extends Component {
           </div>
         )}
 
+        <MagicBtn
+          isCreateBar={this.state.isCreateBar}
+          onClick={() => {
+            this.setState(prevState => {
+              return {
+                isCreateBar: !prevState.isCreateBar
+              };
+            });
+          }}
+        >
+          <DobleTapBtn />
+        </MagicBtn>
+
         {/* Create Bar */}
         <div className="createBarCont">
           <div
             className="createBar"
-            style={
-              this.state.isEditionMode
-                ? { visibility: "hidden" }
-                : { visibility: "visible" }
-            }
+            style={{
+              visibility: this.state.isEditionMode ? "hidden" : "visible",
+              transform: this.state.isCreateBar
+                ? "translateX(0%)"
+                : "translateX(100%)",
+              transition: "all ease 500ms"
+            }}
           >
-            <div className="createBarItem">
+            <Item className="createBarItem">
               <Link
                 onClick={this.previewBtnHandler}
-                rel="noopener"  target="_blank"
+                rel="noopener"
+                target="_blank"
                 to={{
                   pathname: "/cms/preview",
                   search: `${cssURL}`
@@ -725,8 +841,8 @@ class CreatePost extends Component {
                 <h4>Preview</h4>
                 <img src={play} alt="preview botton  " />
               </Link>
-            </div>
-            <div
+            </Item>
+            <Item
               className="createBarItem"
               onClick={() => {
                 this.inputFile.current.click();
@@ -751,8 +867,8 @@ class CreatePost extends Component {
                 }}
               />
               <img src={upload} alt="upload botton  " />
-            </div>
-            <div
+            </Item>
+            <Item
               className="createBarItem"
               onClick={() => {
                 this.addElementBtnHandler(this.props.elements.length);
@@ -765,8 +881,8 @@ class CreatePost extends Component {
             >
               <h4>Add Element</h4>
               <img src={plus} alt="Add Element botton  " />
-            </div>
-            <div
+            </Item>
+            <Item
               className="createBarItem"
               onClick={() => {
                 this.nextBtnHandler(1);
@@ -779,9 +895,9 @@ class CreatePost extends Component {
             >
               <h4>Program</h4>
               <img src={time} alt="program botton  " />
-            </div>
+            </Item>
             {!this.props.postCreation.isPublished && (
-              <div
+              <Item
                 className="createBarItem"
                 onClick={() => {
                   this.editPostHandler("publish");
@@ -794,10 +910,10 @@ class CreatePost extends Component {
               >
                 <h4>Publish</h4>
                 <img src={check} alt="publish botton  " />
-              </div>
+              </Item>
             )}
             {this.props.postCreation.isPublished && (
-              <div
+              <Item
                 className="createBarItem"
                 onClick={() => {
                   this.editPostHandler("unpublish");
@@ -810,10 +926,10 @@ class CreatePost extends Component {
               >
                 <h4>Unpublish</h4>
                 <img src={exit} alt="publish botton  " />
-              </div>
+              </Item>
             )}
 
-            <div
+            <Item
               style={
                 this.props.project.hasChanged && !this.state.isEditionMode
                   ? { visibility: "visible" }
@@ -827,9 +943,9 @@ class CreatePost extends Component {
               <h4>Save</h4>
 
               <img src={save} alt="save botton  " className="saveAnimation" />
-            </div>
+            </Item>
 
-            <div
+            <Item
               style={
                 this.state.editionPage < 4 && !this.state.isEditionMode
                   ? { visibility: "visible" }
@@ -842,9 +958,9 @@ class CreatePost extends Component {
             >
               <h4>Next</h4>
               <img src={next} alt="Next botton  " />
-            </div>
+            </Item>
 
-            <div
+            <Item
               style={
                 this.state.editionPage !== 1
                   ? { visibility: "visible" }
@@ -857,7 +973,7 @@ class CreatePost extends Component {
             >
               <h4>Back</h4>
               <img src={back} alt="Next botton  " />
-            </div>
+            </Item>
             <ExitBtn />
           </div>
         </div>
@@ -961,16 +1077,16 @@ class CreatePost extends Component {
               )}
             </div>
 
-            <div>
+            <FileListCont>
               {/* <div className="tagList">
               <h6>Tags:</h6>
               {tags}
             </div> */}
               <div className="fileList">
                 <h6>Available Files: </h6>
-                {files}
+                <section>{files}</section>
               </div>
-            </div>
+            </FileListCont>
           </div>
         )}
       </div>

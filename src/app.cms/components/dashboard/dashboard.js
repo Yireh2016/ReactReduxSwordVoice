@@ -4,6 +4,7 @@ import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
 import axios from "axios";
 import Helmet from "react-helmet";
+import styled from "styled-components";
 
 //components
 
@@ -36,6 +37,35 @@ import erasePreviewDataFromElements from "../../../services/erasePreviewDataFrom
 import getUserFromId from "../../apiCalls/getUserFromId";
 import apiLogout from "../../../apiCalls/apiLogout";
 
+const Aside = styled.aside`
+  width: 20%;
+  transform: ${props => (props.isMenu ? "translateX(0)" : "translateX(-100%)")};
+
+  @media (max-width: 1050px) {
+    width: 40%;
+  }
+  @media (max-width: 700px) {
+    width: 80%;
+  }
+`;
+
+const Main = styled.section`
+  width: ${props => (props.isMenu ? "80%" : "100%")};
+  transform: ${props => (props.isMenu ? "translateX(20vw)" : "translateX(0)")};
+
+  @media (max-width: 1050px) {
+    width: ${props => (props.isMenu ? "60%" : "100%")};
+    transform: ${props =>
+      props.isMenu ? "translateX(40vw)" : "translateX(0)"};
+  }
+
+  @media (max-width: 700px) {
+    width: ${props => (props.isMenu ? "20%" : "100%")};
+    transform: ${props =>
+      props.isMenu ? "translateX(80vw)" : "translateX(0)"};
+  }
+`;
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -63,10 +93,6 @@ class Dashboard extends Component {
         });
       }
     });
-  }
-
-  componentDidUpdate() {
-    console.log("this.props.menu.exitBtn", this.props.menu.exitBtn);
   }
 
   toogleClickHandler = () => {
@@ -390,8 +416,6 @@ class Dashboard extends Component {
 
       const classesInput = <ClassesInput />;
 
-      const expand = this.state.isMenu ? "" : "dashboardLayoutExpand";
-
       return (
         <div>
           {this.state.showClassesModal && (
@@ -424,7 +448,7 @@ class Dashboard extends Component {
             />
           )}
 
-          <div className={`dashboardLayout ${expand}`}>
+          <div className={`dashboardLayout`}>
             <Helmet>
               <link
                 rel="stylesheet"
@@ -434,7 +458,7 @@ class Dashboard extends Component {
               />
             </Helmet>
 
-            <aside className="dashAside">
+            <Aside isMenu={this.state.isMenu} className="dashAside">
               <div className="dashAvatar">
                 <p>
                   Welcome <span>{this.props.loggedUserName}</span>
@@ -508,19 +532,9 @@ class Dashboard extends Component {
                   </div>
                 </div>
               )}
-            </aside>
-            <section
-              className="dashMain"
-              style={
-                this.state.isMenu
-                  ? {
-                      width: "100%"
-                    }
-                  : {
-                      width: "100vw"
-                    }
-              }
-            >
+            </Aside>
+
+            <Main isMenu={this.state.isMenu} className="dashMain">
               <div onClick={this.toogleClickHandler} className="mainToogleMenu">
                 <img src={hamburger} alt="hamburger" />
               </div>
@@ -532,7 +546,7 @@ class Dashboard extends Component {
                     exact
                     path="/cms/dashboard/"
                     render={() => (
-                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                      <Suspense fallback={<Loading fullscreen={true} />}>
                         <Welcome />
                       </Suspense>
                     )}
@@ -541,7 +555,7 @@ class Dashboard extends Component {
                     exact
                     path="/cms/createPost/"
                     render={() => (
-                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                      <Suspense fallback={<Loading fullscreen={true} />}>
                         <CreatePost
                           showExitModalHandler={this.showExitModalHandler}
                         />
@@ -552,7 +566,7 @@ class Dashboard extends Component {
                     exact
                     path="/cms/adminPost/"
                     render={() => (
-                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                      <Suspense fallback={<Loading fullscreen={true} />}>
                         <AdminPost />
                       </Suspense>
                     )}
@@ -561,7 +575,7 @@ class Dashboard extends Component {
                     exact
                     path="/cms/userProfile/"
                     render={() => (
-                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                      <Suspense fallback={<Loading fullscreen={true} />}>
                         <UserProfile />
                       </Suspense>
                     )}
@@ -570,14 +584,14 @@ class Dashboard extends Component {
                     exact
                     path="/cms/usersList/"
                     render={() => (
-                      <Suspense fallback={<Loading fullscreen={"true"} />}>
+                      <Suspense fallback={<Loading fullscreen={true} />}>
                         <ProfilesTable />
                       </Suspense>
                     )}
                   />
                 </Switch>
               </div>
-            </section>
+            </Main>
           </div>
         </div>
       );

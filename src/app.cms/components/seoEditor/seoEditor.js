@@ -1,8 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import styled from "styled-components";
 //css
 import "./seoEditor.css";
 import keywordsToArr from "../../../services/keywordsToArr";
+
+const SeoInputCont = styled.div`
+  overflow: scroll;
+  width: 100%;
+  @media (min-width: 700px) {
+    width: 70%;
+  }
+  @media (min-width: 1050px) {
+    overflow: hidden;
+    width: 60%;
+  }
+`;
 
 class SeoEditor extends Component {
   constructor(props) {
@@ -84,7 +97,7 @@ class SeoEditor extends Component {
         }
       }
       return (
-        <React.Fragment key={i}>
+        <div key={i}>
           <input
             onChange={this.tagOptionHandler}
             checked={checked}
@@ -92,13 +105,13 @@ class SeoEditor extends Component {
             name="tagsList"
             value={tag}
           />
-          {tag}
-        </React.Fragment>
+          <span>{tag}</span>
+        </div>
       );
     });
 
     return (
-      <div style={{ display: "grid", gridRowGap: "20px" }}>
+      <SeoInputCont>
         <div className="readOnlySeoEditor">
           <label>
             <span>Title</span>
@@ -123,18 +136,6 @@ class SeoEditor extends Component {
         </div>
         <div className="readOnlySeoEditor">
           <label>
-            Keywords
-            <textarea
-              type="text"
-              name="keywords"
-              value={this.props.seo.keywords}
-              onChange={this.inputSEOHandler}
-              cols="30"
-              rows="10"
-            />
-          </label>
-
-          <label>
             URL
             <textarea
               type="text"
@@ -145,14 +146,23 @@ class SeoEditor extends Component {
               rows="10"
             />
           </label>
+          <label>
+            Keywords
+            <textarea
+              type="text"
+              name="keywords"
+              value={this.props.seo.keywords}
+              onChange={this.inputSEOHandler}
+              cols="30"
+              rows="10"
+            />
+          </label>
         </div>
         <div className="readOnlySeoEditor">
-          <div className="tagList">
-            <h6>Tags:</h6>
-            {tags}
-          </div>
+          <h6>Tags:</h6>
+          <div className="tagList">{tags}</div>
         </div>
-      </div>
+      </SeoInputCont>
     );
   }
 }

@@ -4,7 +4,8 @@ export default ({
   linkTags,
   styleTags,
   title,
-  initialState
+  initialState,
+  seoID
 }) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
@@ -47,6 +48,17 @@ export default ({
         <base href="/">
         ${linkTags}
         ${styleTags}
+        
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=${seoID}"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${seoID}');
+        </script>
+
       </head>
       
       <body>
