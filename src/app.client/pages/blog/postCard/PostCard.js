@@ -87,7 +87,13 @@ class PostCard extends React.Component {
             {
               backgroundImage: postImg,
               height: `${postH}px`,
-              width: `${postH * 1.028}px`
+              width: `${postH * 1.028}px`,
+              "@media (max-width:1050px)": {
+                backgroundImage: postImg
+              },
+              "@media (max-width:700px)": {
+                backgroundImage: postImg
+              }
             }
           ]}
         >

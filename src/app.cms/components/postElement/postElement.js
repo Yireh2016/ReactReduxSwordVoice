@@ -18,7 +18,9 @@ import CustomElement from "../customElement/customElement";
 import CustomParagraph from "../customParagraph/customParagraph";
 import ImageElement from "../imageElement/imageElement";
 //services
-import uploadFileService from "../../../services/uploadFileService";
+import responsiveImages from "../../../services/responsiveImages";
+//apiCalls
+import uploadPostImage from "../../../apiCalls/uploadPostImage";
 
 //react map
 /*
@@ -91,7 +93,8 @@ class PostElement extends Component {
       h4: `<h4 style={styles} class={classes}> {content}</h4>`,
       h5: `<h5 style={styles} class={classes}> {content}</h5>`,
       h6: `<h6 style={styles} class={classes}> {content}</h6>`,
-      figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
+      // figure: `<figure><picture><source media="(max-width: 700px)" srcset={imgFileMobile}><source media="(max-width: 1050px)" srcset={imgFileTablet}><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /></picture><figcaption>{imgFigcaption}</figcaption></figure>`
+      figure: `<figure><picture><source media='(max-width: 700px)' srcset={imgFileMobile}/><source media='(max-width: 1050px)' srcset={imgFileTablet}/><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /></picture><figcaption>{imgFigcaption}</figcaption></figure>`
     };
   }
 
@@ -121,8 +124,14 @@ class PostElement extends Component {
     } = e;
     this.setState({ [name]: value });
   };
-  imgFileSet = (previewURL, filename) => {
-    this.setState({ imgFile: { previewURL: previewURL, filename: filename } });
+  imgFileSet = (previewURL, filename, base64) => {
+    this.setState({
+      imgFile: {
+        previewURL: previewURL,
+        filename: filename,
+        base64: base64
+      }
+    });
   };
   stylesHTMLHandler = (e, flag) => {
     let value = "";
@@ -301,7 +310,7 @@ class PostElement extends Component {
     styles,
     classes,
     content,
-    file,
+    imageFileObj,
     alt,
     figcaption
   ) => {
@@ -319,7 +328,9 @@ class PostElement extends Component {
       }
 
       str = str.replace("{content}", content);
-      str = str.replace("{imgFile}", `"${file}"`);
+      str = str.replace("{imgFile}", `"${imageFileObj.imgFile}"`);
+      str = str.replace("{imgFileTablet}", `"${imageFileObj.imgFileTablet}"`);
+      str = str.replace("{imgFileMobile}", `"${imageFileObj.imgFileMobile}"`);
       str = str.replace("{imgAlt}", `"${alt}"`);
       str = str.replace("{imgFigcaption}", figcaption);
 
@@ -359,13 +370,25 @@ class PostElement extends Component {
       const alt = this.state.imgAlt;
       const imgFile = this.state.imgFile;
       const figcaption = this.state.imgFigcaption;
+      let imgFileTablet, imgFileMobile;
+      const responsiveImg = responsiveImages(imgFile.filename);
+      imgFileTablet = responsiveImg.tablet;
+      imgFileMobile = responsiveImg.mobile;
 
+      const imgFileObj = {
+        imgFile: imgFile.filename,
+        imgFileTablet,
+        imgFileMobile
+      };
+      console.log("imgFileObj", imgFileObj);
       finalHTMLElement = this.prepareHTMLFilter(
         finalHTMLElement,
         styles,
         classes,
         content,
-        imgFile ? imgFile.filename : "",
+        imgFile
+          ? imgFileObj
+          : { imgFile: "", imgFileTablet: "", imgFileMobile: "" },
         alt,
         figcaption
       );
@@ -438,16 +461,21 @@ class PostElement extends Component {
       const successUpload = fileNamesArr => {
         this.props.onAddDeleteFile(fileNamesArr);
       };
-      const dataToUploadFromFile = {
-        file: file,
-        name: file.name,
-        url: this.props.project.url
-      };
-      uploadFileService(dataToUploadFromFile, () => {
-        successUpload(fileNamesArr);
-      });
+
+      uploadPostImage(
+        this.state.imgFile.base64,
+        this.props.project.url,
+        file.name,
+        () => {
+          successUpload(fileNamesArr);
+        },
+        err => {
+          console.log("An error has ocurred during image Upload", err);
+        }
+      );
     }
   };
+
   render() {
     const parser = () => {
       if (
@@ -456,12 +484,18 @@ class PostElement extends Component {
       ) {
         return ReactHtmlParser(this.state.HTMLPreviewStr);
       } else if (this.state.HTMLElementType.match(/figure/g)) {
-        this.state.imgFile && this.state.imgFile.previewURL;
         let imgFile = "";
+        let imgFileTablet = "";
+        let imgFileMobile = "";
         if (this.state.imgFile && this.state.imgFile.previewURL === "") {
           imgFile = this.state.imgFile.filename;
+
+          const responsiveImg = responsiveImages(imgFile);
+          imgFileTablet = responsiveImg.tablet;
+          imgFileMobile = responsiveImg.mobile;
         } else if (this.state.imgFile) {
-          imgFile = this.state.imgFile.previewURL;
+          imgFile = imgFileTablet = imgFileMobile = this.state.imgFile
+            .previewURL;
         }
         return (
           <JsxParser
@@ -470,6 +504,8 @@ class PostElement extends Component {
               styles: this.state.HTMLStylesStr,
               classes: this.state.HTMLClassesStr,
               imgFile: imgFile,
+              imgFileTablet: imgFileTablet,
+              imgFileMobile: imgFileMobile,
               imgAlt: this.state.imgAlt,
               imgFigcaption: this.state.imgFigcaption
             }}

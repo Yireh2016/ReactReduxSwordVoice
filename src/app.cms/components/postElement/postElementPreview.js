@@ -11,6 +11,7 @@ import copy from "../../assets/createPost/copy.svg";
 import up from "../../assets/createPost/up.svg";
 import down from "../../assets/createPost/down.svg";
 //services
+import responsiveImages from "../../../services/responsiveImages";
 
 //react map
 /*
@@ -29,16 +30,6 @@ class PostElementPreview extends PureComponent {
     super(props);
 
     this.postElement = React.createRef();
-    this.elementsJSX = {
-      p: `<p style={styles} class={classes}> {content}</p>`,
-      h1: `<h1 style={styles} class={classes}> {content}</h1>`,
-      h2: `<h2 style={styles} class={classes}> {content}</h2>`,
-      h3: `<h3 style={styles} class={classes}> {content}</h3>`,
-      h4: `<h4 style={styles} class={classes}> {content}</h4>`,
-      h5: `<h5 style={styles} class={classes}> {content}</h5>`,
-      h6: `<h6 style={styles} class={classes}> {content}</h6>`,
-      figure: `<figure><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /><figcaption>{imgFigcaption}</figcaption></figure>`
-    };
   }
 
   // PROPS
@@ -163,6 +154,13 @@ class PostElementPreview extends PureComponent {
       ) {
         return ReactHtmlParser(this.props.HTMLPreviewStr);
       } else if (this.props.HTMLElementType.match(/figure/g)) {
+        let imgFileTablet = "";
+        let imgFileMobile = "";
+
+        const responsiveImg = responsiveImages(this.props.imgFile.filename);
+        imgFileTablet = responsiveImg.tablet;
+        imgFileMobile = responsiveImg.mobile;
+
         return (
           <JsxParser
             jsx={this.props.HTMLPreviewStr}
@@ -170,6 +168,8 @@ class PostElementPreview extends PureComponent {
               styles: this.props.HTMLStylesStr,
               classes: this.props.HTMLClassesStr,
               imgFile: this.props.imgFile.filename,
+              imgFileTablet: imgFileTablet,
+              imgFileMobile: imgFileMobile,
               imgAlt: this.props.imgAlt,
               imgFigcaption: this.props.imgFigcaption
             }}
@@ -198,28 +198,6 @@ class PostElementPreview extends PureComponent {
           <div className="elementSelect">
             <div className="elementSelectLayout">
               <span>Element</span>
-              <select
-                value={this.props.HTMLElementType}
-                name="HTMLElementType"
-                disabled={!this.props.isEditionMode}
-              >
-                <option value="">Select one</option>
-                {this.props.HTMLid === 1 ? (
-                  <option value={this.elementsJSX.h1}>Header 1</option>
-                ) : (
-                  <React.Fragment>
-                    <option value={this.elementsJSX.h2}>Header 2</option>
-                    <option value={this.elementsJSX.h3}>Header 3</option>
-                    <option value={this.elementsJSX.h4}>Header 4</option>
-                    <option value={this.elementsJSX.h5}>Header 5</option>
-                    <option value={this.elementsJSX.h6}>Header 6</option>
-                    <option value={this.elementsJSX.p}>One Paragraph</option>
-                    <option value="manyParagraph">Multiple Paragraph</option>
-                    <option value={this.elementsJSX.figure}>Image</option>
-                    <option value="custom">Custom Element</option>
-                  </React.Fragment>
-                )}
-              </select>
             </div>
 
             <div

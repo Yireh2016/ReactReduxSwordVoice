@@ -3,6 +3,8 @@ import axios from "axios";
 const uploadFileService = (fileData, successFn, errFn) => {
   let data = new FormData();
 
+  console.log("fileData", fileData);
+
   data.append("file", fileData.file);
   data.append("filename", fileData.name);
   data.append("fileURL", fileData.url);
@@ -22,7 +24,7 @@ const uploadFileService = (fileData, successFn, errFn) => {
   console.log("uploadFileService sending file");
 
   axios
-    .post("https://cdn.swordvoice.com/cdn/uploadTempFile", data)
+    .post(`${process.env.CDN_URL}/cdn/uploadTempFile`, data)
     .then(res => {
       alert("file uploaded");
       if (successFn) successFn(res);

@@ -148,7 +148,7 @@ class CreatePost extends Component {
             left: 0,
             behavior: "instant"
           });
-        return;
+        return true;
       }
       if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
         const el = this.editionAreaRef.current;

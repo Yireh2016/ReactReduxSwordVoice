@@ -8,6 +8,7 @@ import UploadImage from "../uploadImage/uploadImage";
 //services
 import isBrowser from "../../../services/isBrowser";
 import compressImage from "../../../services/compressImage";
+import blobToBase64 from "../../../services/blobToBase64";
 
 //react map
 /*
@@ -65,20 +66,23 @@ class ImageElement extends Component {
   };
 
   imageUpload = image => {
-    const file = new File([image], image.name);
-    // this.props.onProjectChange();
-    this.props.imgFileSet(
-      `${URL.createObjectURL(image)}`,
-      `https://cdn.swordvoice.com/articles/${this.props.project.url}/${image.name}`
-    );
-    this.setState(() => {
-      return {
+    blobToBase64(image, base64Obj => {
+      const file = new File([image], image.name);
+      // this.props.onProjectChange();
+      this.props.imgFileSet(
+        `${URL.createObjectURL(image)}`,
+        `${process.env.CDN_URL}/articles/${this.props.project.url}/${
+          image.name
+        }`,
+        base64Obj.url
+      );
+      this.setState({
         // uploadMessage: undefined,
         isImageUploaded: true,
         compressedImg: file
-      };
+      });
+      alert("file Uploaded successfully");
     });
-    alert("file Uploaded successfully");
   };
 
   originalImageSaver = image => {
@@ -135,14 +139,6 @@ class ImageElement extends Component {
     return (
       <div>
         <div>
-          {/* <input
-          type="text"
-          onChange={e => {
-            this.props.inputTextHTMLHandler(e);
-          }}
-          name="HTMLElementContent"
-          value={this.props.HTMLElementContent}
-        /> */}
           <UploadImage
             imageUpload={this.imageUpload}
             imageUploadErr={this.imageUploadErr}

@@ -4,8 +4,12 @@ import { connect } from "react-redux";
 //components
 import UploadImage from "../uploadImage/uploadImage";
 import compressImage from "../../../services/compressImage";
-import uploadFileService from "../../../services/uploadFileService";
 import PostCard from "../../../app.client/pages/blog/postCard/PostCard";
+import { StyleRoot } from "radium";
+
+//apiCalls
+import uploadPostImage from "../../../apiCalls/uploadPostImage";
+import blobToBase64 from "../../../services/blobToBase64";
 
 class ThumbNailEditor extends Component {
   constructor(props) {
@@ -72,8 +76,22 @@ class ThumbNailEditor extends Component {
     };
     let fileNamesArr = this.props.fileNames;
 
-    uploadFileService(dataToUploadFromFile, () => {
-      successUpload(fileNamesArr, dataToUploadFromFile.name);
+    // uploadFileService(dataToUploadFromFile, () => {
+    //   successUpload(fileNamesArr, dataToUploadFromFile.name);
+    // });
+    blobToBase64(this.state.compressedImg, base64Obj => {
+      uploadPostImage(
+        base64Obj.url,
+        this.props.project.url,
+        this.props.thumbnail.name,
+        () => {
+          successUpload((fileNamesArr, dataToUploadFromFile.name));
+        },
+        err => {
+          console.log("An error has ocurred during image Upload", err);
+        },
+        true
+      );
     });
   };
 
@@ -154,18 +172,19 @@ class ThumbNailEditor extends Component {
         >
           Upload Image
         </button>
-
-        <PostCard
-          title={this.props.seo.title}
-          postH={300}
-          postImg={this.state.imagePreview}
-          postGradient={
-            this.props.thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              this.props.thumbnail.color
-            } 73.79%)`
-          }
-        />
+        <StyleRoot>
+          <PostCard
+            title={this.props.seo.title}
+            postH={300}
+            postImg={this.state.imagePreview}
+            postGradient={
+              this.props.thumbnail &&
+              `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                this.props.thumbnail.color
+              } 73.79%)`
+            }
+          />
+        </StyleRoot>
       </div>
     );
   }
