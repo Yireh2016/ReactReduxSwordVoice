@@ -61,9 +61,6 @@ const Inner = styled.div`
   border-radius: 8px;
   background: white;
   padding: 15px 0;
-  @media (max-width: 700px) {
-    width: 90%;
-  }
 `;
 const TextLayout = styled.div`
   padding: 0 10% 0 13%;

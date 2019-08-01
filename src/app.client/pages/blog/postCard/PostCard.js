@@ -19,7 +19,9 @@ const styles = {
     overflow: "hidden"
   },
   postLayout: {
-    position: "relative"
+    display: "flex",
+    position: "relative",
+    justifyContent: "center"
   }
 };
 
@@ -85,16 +87,12 @@ class PostCard extends React.Component {
           style={[
             styles.post,
             {
-              backgroundImage: postImg,
               height: `${postH}px`,
-              width: `${postH * 1.028}px`,
-              "@media (max-width:1050px)": {
-                backgroundImage: postImg
-              },
-              "@media (max-width:700px)": {
-                backgroundImage: postImg
-              }
-            }
+              width: `${postH * 1.028}px`
+            },
+            typeof postImg === "string"
+              ? { backgroundImage: `${postImg}` }
+              : postImg
           ]}
         >
           <a aria-label="go and read this article" href={url}>
@@ -187,7 +185,7 @@ class PostCard extends React.Component {
 }
 PostCard.propTypes = {
   postH: PropTypes.number.isRequired,
-  postImg: PropTypes.string.isRequired,
+  postImg: PropTypes.any.isRequired,
   title: PropTypes.string.isRequired,
   hasSummary: PropTypes.bool,
   keywords: PropTypes.array,

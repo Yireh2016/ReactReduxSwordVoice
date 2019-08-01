@@ -51,6 +51,7 @@ const SocialBar = ({
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.09);
     border-radius: 5px;
     padding: 15px 15px 0 15px;
+    margin: 15px 0 0 0;
     box-sizing: border-box;
   `;
   const BarLayout = styled.div`

@@ -18,7 +18,7 @@ class ThumbNailEditor extends Component {
     this.state = {
       isImageUploaded: false,
       imagePreview: this.props.thumbnail
-        ? `url(https://cdn.swordvoice.com/articles/${this.props.project.url}/${
+        ? `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${
             this.props.thumbnail.name
           })`
         : null,
@@ -45,12 +45,10 @@ class ThumbNailEditor extends Component {
     this.props.onProjectChange();
     this.props.onThumbnailChange(image);
 
-    this.setState(() => {
-      return {
-        imagePreview: `url(${URL.createObjectURL(image)})`,
-        isImageUploaded: true,
-        compressedImg: image
-      };
+    this.setState({
+      imagePreview: `url(${URL.createObjectURL(image)})`,
+      isImageUploaded: true,
+      compressedImg: image
     });
     alert("file Uploaded successfully");
   };
@@ -66,26 +64,39 @@ class ThumbNailEditor extends Component {
       name: this.props.thumbnail.name,
       url: this.props.project.url
     };
+
     const successUpload = (fileNamesArr, filename) => {
+      console.log("successUpload fileNamesArr", fileNamesArr);
+
       fileNamesArr = fileNamesArr.filter(el => {
         return !el.match(/thumb-.*/g);
       });
       fileNamesArr.push(filename);
 
+      console.log(
+        `url(${process.env.CDN_URL}/articles/${
+          this.props.project.url
+        }/${filename})`
+      );
+
       this.props.onAddDeleteFile(fileNamesArr);
+      this.setState({
+        imagePreview: `url(${process.env.CDN_URL}/articles/${
+          this.props.project.url
+        }/${filename})`
+      });
     };
+
     let fileNamesArr = this.props.fileNames;
 
-    // uploadFileService(dataToUploadFromFile, () => {
-    //   successUpload(fileNamesArr, dataToUploadFromFile.name);
-    // });
     blobToBase64(this.state.compressedImg, base64Obj => {
       uploadPostImage(
         base64Obj.url,
         this.props.project.url,
         this.props.thumbnail.name,
         () => {
-          successUpload((fileNamesArr, dataToUploadFromFile.name));
+          console.log("uploadPostImage fileNamesArr", fileNamesArr);
+          successUpload(fileNamesArr, dataToUploadFromFile.name);
         },
         err => {
           console.log("An error has ocurred during image Upload", err);

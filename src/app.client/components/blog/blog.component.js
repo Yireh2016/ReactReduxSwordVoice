@@ -119,7 +119,7 @@ class BlogComponent extends Component {
           for (let i = 0; i < data.length; i++) {
             newDataArr[i] = {
               articleProps: {
-                image: `https://cdn.swordvoice.com/articles/${data[i].url}/${
+                image: `${process.env.CDN_URL}/articles/${data[i].url}/${
                   data[i].imageURL
                 }`,
                 title: data[i].title,

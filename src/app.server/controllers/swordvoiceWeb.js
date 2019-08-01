@@ -199,7 +199,7 @@ const swordvoiceWeb = async (req, res) => {
 
               console.log("SEARCHING SIMILAR ARTICLES");
               articleModel
-                .find()
+                .find({ isPublished: true })
                 .select()
                 .limit(7)
                 .populate("author")
@@ -212,9 +212,9 @@ const swordvoiceWeb = async (req, res) => {
                       url: posts[i].url,
                       postImg:
                         posts[i].thumbnail &&
-                        `url(https://cdn.swordvoice.com/articles/${
-                          posts[i].url
-                        }/${posts[i].thumbnail.name})`,
+                        `url(${process.env.CDN_URL}/articles/${posts[i].url}/${
+                          posts[i].thumbnail.name
+                        })`,
                       postGradient:
                         posts[i].thumbnail &&
                         `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
@@ -263,7 +263,7 @@ const swordvoiceWeb = async (req, res) => {
                 url: posts[i].url,
                 postImg:
                   posts[i].thumbnail &&
-                  `url(https://cdn.swordvoice.com/articles//${posts[i].url}/${
+                  `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
                     posts[i].thumbnail.name
                   })`,
                 postGradient:

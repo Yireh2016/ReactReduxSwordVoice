@@ -121,6 +121,7 @@ aside h2 {
 .blogArticle > code,
 .blogArticle p > code,
 .blogArticle pre > code {
+  line-height: 2;
   border: 1px solid coral;
   background: #ff7f507a;
   padding: 5px 10px;

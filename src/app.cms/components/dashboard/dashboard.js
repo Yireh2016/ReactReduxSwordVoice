@@ -232,7 +232,7 @@ class Dashboard extends Component {
 
     axios
       .get(
-        `https://cdn.swordvoice.com/cdn/getClasses/${this.props.project.url}`
+        `${process.env.CDN_URL}/cdn/getClasses/${this.props.project.url}`
       )
       .then(res => {
         if (res.status === 200) {
@@ -452,7 +452,7 @@ class Dashboard extends Component {
             <Helmet>
               <link
                 rel="stylesheet"
-                href={`https://cdn.swordvoice.com/articles/${
+                href={`${process.env.CDN_URL}/articles/${
                   this.props.project.url
                 }/${this.props.project.url}.css`}
               />

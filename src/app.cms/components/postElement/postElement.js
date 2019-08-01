@@ -94,7 +94,7 @@ class PostElement extends Component {
       h5: `<h5 style={styles} class={classes}> {content}</h5>`,
       h6: `<h6 style={styles} class={classes}> {content}</h6>`,
       // figure: `<figure><picture><source media="(max-width: 700px)" srcset={imgFileMobile}><source media="(max-width: 1050px)" srcset={imgFileTablet}><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /></picture><figcaption>{imgFigcaption}</figcaption></figure>`
-      figure: `<figure><picture><source media='(max-width: 700px)' srcset={imgFileMobile}/><source media='(max-width: 1050px)' srcset={imgFileTablet}/><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /></picture><figcaption>{imgFigcaption}</figcaption></figure>`
+      figure: `<figure><picture><source media='(max-width: 700px)' srcSet={imgFileMobile}/><source media='(max-width: 1050px)' srcSet={imgFileTablet}/><img src={imgFile} alt={imgAlt}  style={styles} class={classes} /></picture><figcaption>{imgFigcaption}</figcaption></figure>`
     };
   }
 

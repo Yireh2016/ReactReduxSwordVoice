@@ -71,7 +71,7 @@ const Title = styled.h2`
     if (props.postW) {
       return (0.069 * props.postW * 6) / 6 >= 20
         ? `${(0.069 * props.postW * 6) / 6}px`
-        : "20px";
+        : "16px";
     }
   }} 
 `;

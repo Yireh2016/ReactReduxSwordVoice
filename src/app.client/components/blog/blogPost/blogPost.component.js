@@ -73,6 +73,7 @@ class BlogArticle extends Component {
   }
   componentDidMount() {
     const device = isDevice();
+    const FETCH_POSTS = 7;
     let similarPostsWidth;
     if (device === "pc") {
       similarPostsWidth = ((window.outerWidth * 4) / 12) * 0.8;
@@ -83,7 +84,7 @@ class BlogArticle extends Component {
     }
     // this.setState({ device: device });
 
-    const similDataArray = this.fetchData();
+    // const similDataArray = this.fetchData();
 
     const win = window.outerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
@@ -92,403 +93,20 @@ class BlogArticle extends Component {
       similarPostsWidth,
 
       // isUserLoggedIn: isLoggedIn(),
-      similPostContWidth:
-        device === "pc" ? "100%" : similDataArray.length * win + "px",
+      similPostContWidth: device === "pc" ? "100%" : FETCH_POSTS * win + "px",
 
-      similPostsArray: similDataArray,
-      authorAvatar: this.props.article.avatar
+      // similPostsArray: similDataArray,
+      authorAvatar: this.props.article.avatar.replace("_big.", "_small.")
     });
   }
-  componentDidUpdate() {
-    if (
-      //ojo esta asumiendo que el avatar estara en el localstorage, que passa si se llega aqui directo
-      this.props.isUserLoggedIn &&
-      window.localStorage.getItem("userAvatar") &&
-      this.state.loggedUserAvatar === ""
-    ) {
-      this.setState({
-        loggedUserAvatar: window.localStorage.getItem("userAvatar")
-      });
-    }
-  }
+
   static getDerivedStateFromProps(props) {
     if (props.isUserLoggedIn) {
       return { loggedUserAvatar: props.loggedUserAvatar };
     }
     return null;
   }
-  fetchData() {
-    return [
-      //halar de la base de datos los ultimos 6 registros
-      {
-        articleProps: {
-          image: avatarImg,
-          title: "Jainer Munoz, Enterprenour and Director of SwordVoice",
 
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          autorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I Left My Cushy Job to Study Depression. Here’s What I Learned. The self-loathing that often strikes in adolescence can fuel our inner critics",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "I just got a developer job at Facebook. Here’s how I prepped for my interviews.",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "5 Lessons Learned From Writing Over 300,000 Lines of Infrastructure Code",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      },
-      {
-        articleProps: {
-          image: newPostImg,
-          title: "Magnus Carlsen Campeón del mundo de ajedrez 2018",
-
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-      			<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          categories: [
-            {
-              category: "Desing"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ]
-        }
-      }
-    ];
-  }
-
-  fetchArticle = () => {
-    return [
-      {
-        articleProps: {
-          image: newPostImg,
-          title:
-            "Confessions of a U.S. Postal Worker: “We deliver Amazon packages until we drop dead.”",
-          widthHeightRatio: "1.3",
-          summaryText: `<p>Visual Hierarchy has become one of the most important concept in modern design.</p>
-						<p>Today we are going to learn how to apply these concepts and techniques to our favorite typography. Come and check it out!!!.</p>`,
-
-          author: "Jainer Muñoz",
-          date: "August, 21 2018",
-          authorAvatar: avatarImg,
-          articleJSX: `<h1>{title}</h1>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus
-							est facere voluptate omnis porro minima nemo eaque ratione saepe
-							totam cum, pariatur obcaecati, voluptates in eveniet! Ab minima
-							autem nemo!
-						</p>
-						<p>
-							Recuerda que tu experiencia en Medium está basada en los
-							escritores, publicaciones y etiquetas que sigues, y hay mucho y
-							bueno que seguir en nuestro idioma.
-						</p>
-						<figure>
-							<img src={image}
-								alt="article image"
-								class="  grid col-12"
-							/>
-							<figcaption>Test Figure</figcaption>
-						</figure>
-						<h2>And finally: Protect the nerds</h2>
-						<p>
-							A computer programmer from Seattle is doing more to alleviate
-							world poverty, hunger, and disease through the Bill & Melinda
-							Gates Foundation than any other person in America right now. Nerds
-							create vaccines. Nerds engineer bridges and roadways. Nerds become
-							teachers and librarians. We need those obnoxiously smart people,
-							because they make the world a better place. We can’t have them
-							cowering before a society that rolls their eyes at every word they
-							say. Ross needs better friends
-						</p>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-							Quibusdam placeat recusandae nemo necessitatibus quidem, eum sint
-							saepe eveniet accusantium porro numquam? Ab culpa veritatis, nam
-							dolores commodi corporis, odio itaque.
-						</p>
-
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit
-							ipsam numquam porro laborum cupiditate minima voluptatem, aliquid
-							quasi reiciendis. Officiis dolores, ad nam repellendus
-							repudiandae. Ea similique facilis assumenda dolores.
-						</p>
-						<p>
-							Dolores voluptatum modi itaque eos sequi eaque corrupti! Alias,
-							facere suscipit consequuntur architecto reprehenderit atque sunt
-							perferendis amet dicta illum molestias, enim consectetur eos quae
-							esse aliquid, veniam quia quis!
-						</p>
-						<p>
-							Unde accusamus repudiandae magnam ab quaerat, eligendi quae
-							nesciunt ea id maxime. Illo, suscipit nesciunt explicabo esse
-							vitae, porro tempora, reiciendis magnam itaque neque consequatur
-							repudiandae, doloremque aliquam! Possimus, dignissimos!
-						</p>
-						<p>
-							Ullam nesciunt quis cupiditate quia vel magni dicta eius in
-							voluptatibus aperiam. Pariatur, non, ratione. Eum, quasi tempore
-							ea eligendi aspernatur maxime ex earum. Vel quis doloremque odit,
-							esse incidunt.
-						</p>`,
-          categories: [
-            {
-              category: "Design"
-            },
-            {
-              category: "UX/UI"
-            },
-            {
-              category: "Web"
-            },
-            {
-              category: "Mobile"
-            }
-          ],
-          comments: [
-            {
-              userName: "Jainer Munoz",
-              userAvatar: avatarImg,
-              comment:
-                "This is my second Comment on this...I've had to said it again. Thankssssss",
-              date: "August 21th, 2018",
-              likes: 5,
-              replies: [
-                {
-                  userName: "Jainer Munoz",
-                  userAvatar: avatarImg,
-                  reply:
-                    "This is my second REPLYYYYYY on this...I've had to said it again. Thankssssss",
-                  date: "August 21th, 2018",
-                  likes: 5
-                },
-                {
-                  userName: "Franci Calvetti",
-                  userAvatar: avatarImg,
-                  reply: "This is my second Comment on this...JAJAJAJAJA",
-                  date: "August 25th, 2018",
-                  likes: 5
-                }
-              ]
-            },
-            {
-              userName: "Anais Valera",
-              userAvatar: fondoImg,
-              comment:
-                "I found this very amazing. Can you take this even further???",
-              date: "April 30th, 2016",
-              likes: 5,
-              replies: [
-                {
-                  userName: "Jainer Munoz",
-                  userAvatar: avatarImg,
-                  reply:
-                    "This is my second Comment on this...I've had to said it again. Thankssssss",
-                  date: "August 21th, 2018",
-                  likes: 5
-                },
-                {
-                  userName: "Jainer Munoz",
-                  userAvatar: avatarImg,
-                  reply:
-                    "This is my second Comment on this...I've had to said it again. Thankssssss",
-                  date: "August 21th, 2018",
-                  likes: 5
-                }
-              ]
-            }
-          ]
-        }
-      }
-    ];
-  };
-  seeMorePosts = newData => {
-    //funcion para fetch la base de datos de nuevos post
-    const mockData = this.fetchData();
-    newData.push(...mockData);
-    return newData;
-  };
-
-  nodeScrollControl = (e, newData) => {
-    const node = e.target;
-    //Redux leer device desde store
-    if (this.state.device === "pc") {
-      //this.seeMorePosts();
-      const maxScroll = node.scrollHeight - node.clientHeight;
-
-      if (node.scrollTop + 1 >= maxScroll) {
-        newData = this.seeMorePosts(newData);
-      }
-    } else {
-      const maxScroll = node.scrollWidth - node.clientWidth;
-
-      if (node.scrollLeft == maxScroll) {
-        newData = this.seeMorePosts(newData);
-      }
-    }
-
-    return newData;
-  };
   onSignUpClick = () => {
     this.setState(prevState => {
       return {
@@ -500,20 +118,6 @@ class BlogArticle extends Component {
     this.setState(prevState => {
       return {
         showLogIn: prevState.showLogIn ? false : true
-      };
-    });
-  };
-
-  similPostScroll = e => {
-    let newData = this.state.similPostsArray;
-    newData = this.nodeScrollControl(e, newData);
-
-    this.setState(prevState => {
-      const win = window.innerWidth * 0.6;
-      return {
-        similPostContWidth:
-          prevState.device === "pc" ? "100%" : newData.length * win + "px",
-        similPostsArray: newData
       };
     });
   };
@@ -550,11 +154,7 @@ class BlogArticle extends Component {
         </span>
       );
     });
-    // const newPostData = this.fetchArticle();
-    // console.log(
-    //   "newPostData[0].articleProps.comments",
-    //   newPostData[0].articleProps.comments
-    // );
+
     const commentsMap = this.props.article.comments.map((comment, i) => {
       return (
         <Comment
@@ -597,12 +197,17 @@ class BlogArticle extends Component {
       }
 
       return (
-        <div key={i} className="grid popularPost-article">
+        <div key={i} className="popularPost-article">
           <PostCard
             id={`${i}`}
             title={post.title}
             postH={this.state.similarPostsWidth / 1.08}
-            postImg={post.postImg}
+            postImg={post.postImg.replace(
+              `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+              `${post.postImg
+                .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                .replace(".", "_mobile.")}`
+            )}
             postGradient={post.postGradient}
             hasSummary={true}
             keywords={post.keywords}
@@ -766,7 +371,7 @@ class BlogArticle extends Component {
             <div className="grid col-4 col-12-md  asideContenedor">
               <AsidePost
                 asideTitle="Similar Posts"
-                onScroll={this.similPostScroll}
+                // onScroll={this.similPostScroll}
                 device={this.state.device}
                 postSectionHeight={this.state.similPostSectionHeight}
                 postContWidth={this.state.similPostContWidth}

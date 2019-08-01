@@ -415,7 +415,12 @@ class BlogPage extends React.Component {
             id={i}
             size="md"
             title={title}
-            backgroundURL={postImg}
+            backgroundURL={postImg.replace(
+              `${postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+              `${postImg
+                .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                .replace(".", "_mobile.")}`
+            )}
             postGradient={postGradient}
             keywords={keywords}
             author={author}
@@ -467,7 +472,6 @@ class BlogPage extends React.Component {
     const recentPostCards = recentPostsArray.map((post, i) => {
       const {
         title,
-        postImg,
         postGradient,
         keywords,
         author,
@@ -475,6 +479,23 @@ class BlogPage extends React.Component {
         url,
         summaryTextHtml
       } = post;
+
+      let postImg = {
+        backgroundImage: post.postImg.replace(
+          `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+          `${post.postImg
+            .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+            .replace(".", "_tablet.")}`
+        ),
+        "@media (max-width:700px)": {
+          backgroundImage: post.postImg.replace(
+            `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+            `${post.postImg
+              .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+              .replace(".", "_mobile.")}`
+          )
+        }
+      };
 
       let avatar;
       if (typeof post.avatar === "object") {
@@ -504,6 +525,32 @@ class BlogPage extends React.Component {
             summaryTextHtml={summaryTextHtml}
           />
         </div>
+      );
+    });
+
+    const lastPost = newPostArray.map((post, i) => {
+      let postImg = {
+        backgroundImage: post.postImg,
+        "@media (max-width:700px)": {
+          backgroundImage: post.postImg.replace(
+            `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+            `${post.postImg
+              .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+              .replace(".", "_mobile.")}`
+          )
+        }
+      };
+
+      return (
+        <PostCard
+          key={i}
+          id="latest"
+          title={post.title}
+          postH={mainPostH}
+          postImg={postImg}
+          postGradient={post.postGradient}
+          url={`/blog/post/${post.url}`}
+        />
       );
     });
 
@@ -567,14 +614,7 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
-              <PostCard
-                id="latest"
-                title={newPostArray[0].title}
-                postH={mainPostH}
-                postImg={newPostArray[0].postImg}
-                postGradient={newPostArray[0].postGradient}
-                url={`/blog/post/${newPostArray[0].url}`}
-              />
+              {lastPost}
             </div>
 
             <div

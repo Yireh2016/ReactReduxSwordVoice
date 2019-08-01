@@ -550,7 +550,7 @@ class CreatePost extends Component {
           }
         );
         axios
-          .post("https://cdn.swordvoice.com/cdn/deleteFiles/", {
+          .post(`${process.env.CDN_URL}/cdn/deleteFiles/`, {
             url: dataToUpdate.url,
             files: dataToUpdate.files
           })

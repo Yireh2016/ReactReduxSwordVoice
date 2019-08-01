@@ -186,6 +186,7 @@ const ReplyCardLayout = styled.div`
   flex-direction: column;
   align-items: center;
   width: 80%;
+  margin: 15px 0 0 0;
   @media (max-width: 700px) {
     width: 90%;
   }
