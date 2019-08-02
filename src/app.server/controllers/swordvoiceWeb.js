@@ -24,6 +24,8 @@ import keywordsToArr from "../../services/keywordsToArr";
 //services
 import { readToken } from "../../app.api/services/tokenHandler";
 import { updateArticleAvatars } from "../../services/updateArticleAvatars";
+//queries
+import getPopularPosts from "./queries/getPopularPosts";
 
 const renderTemplate = (req, store) => {
   const sheet = new ServerStyleSheet();
@@ -200,7 +202,7 @@ const swordvoiceWeb = async (req, res) => {
               console.log("SEARCHING SIMILAR ARTICLES");
               articleModel
                 .find({ isPublished: true })
-                .select()
+                .select("url thumbnail title date keywords description")
                 .limit(7)
                 .populate("author")
                 .sort({ _id: "descending" })
@@ -251,43 +253,100 @@ const swordvoiceWeb = async (req, res) => {
         console.log("entrando a /BLOG");
         articleModel
           .find({ isPublished: true })
-          .select()
-          .limit(7)
-          .populate("author")
-          .sort({ _id: "descending" })
-          .exec()
-          .then(posts => {
-            let postMinimumData = [];
-            for (let i = 0; i < posts.length; i++) {
-              postMinimumData[i] = {
-                url: posts[i].url,
-                postImg:
-                  posts[i].thumbnail &&
-                  `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
-                    posts[i].thumbnail.name
-                  })`,
-                postGradient:
-                  posts[i].thumbnail &&
-                  `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                    posts[i].thumbnail.color
-                  } 73.79%)`,
-                title: posts[i].title,
-                summaryTextHtml: paragraphService(posts[i].description),
-                author:
-                  `${posts[i].author.userFirstName} ` +
-                  `${posts[i].author.userLastName}`,
-                avatar: posts[i].author.userAvatar,
-                date: dbDateToNormalDate(posts[i].date),
-                keywords: keywordsToArr(posts[i].keywords[0])
-              };
+          .countDocuments((err, count) => {
+            if (err) {
+              console.log("error en blog ", err);
+              reject(err);
+              return;
             }
+            console.log("articles count", count);
+            store.dispatch({ type: "SET_ARTICLES_COUNT", payload: count });
+            articleModel
+              .find({ isPublished: true })
+              .select("url thumbnail title date keywords description")
+              .limit(7)
+              .populate("author")
+              .sort({ _id: "descending" })
+              .exec()
+              .then(posts => {
+                let postMinimumData = [];
+                for (let i = 0; i < posts.length; i++) {
+                  postMinimumData[i] = {
+                    url: posts[i].url,
+                    postImg:
+                      posts[i].thumbnail &&
+                      `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
+                        posts[i].thumbnail.name
+                      })`,
+                    postGradient:
+                      posts[i].thumbnail &&
+                      `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                        posts[i].thumbnail.color
+                      } 73.79%)`,
+                    title: posts[i].title,
+                    summaryTextHtml: paragraphService(posts[i].description),
+                    author:
+                      `${posts[i].author.userFirstName} ` +
+                      `${posts[i].author.userLastName}`,
+                    avatar: posts[i].author.userAvatar,
+                    date: dbDateToNormalDate(posts[i].date),
+                    keywords: keywordsToArr(posts[i].keywords[0])
+                  };
+                }
 
-            store.dispatch({ type: "ARTICLES_ARR", payload: postMinimumData });
-            resolve();
-          })
-          .catch(err => {
-            console.log("error en blog ", err);
-            reject(err);
+                store.dispatch({
+                  type: "ARTICLES_ARR",
+                  payload: postMinimumData
+                });
+              })
+              .then(() => {
+                console.log("other then");
+
+                getPopularPosts(
+                  articleModel,
+                  "views",
+                  posts => {
+                    let postMinimumData = [];
+                    for (let i = 0; i < posts.length; i++) {
+                      postMinimumData[i] = {
+                        url: posts[i].url,
+                        postImg:
+                          posts[i].thumbnail &&
+                          `url(${process.env.CDN_URL}/articles//${
+                            posts[i].url
+                          }/${posts[i].thumbnail.name})`,
+                        postGradient:
+                          posts[i].thumbnail &&
+                          `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                            posts[i].thumbnail.color
+                          } 73.79%)`,
+                        title: posts[i].title,
+                        summaryTextHtml: paragraphService(posts[i].description),
+                        author:
+                          `${posts[i].author.userFirstName} ` +
+                          `${posts[i].author.userLastName}`,
+                        avatar: posts[i].author.userAvatar,
+                        date: dbDateToNormalDate(posts[i].date),
+                        keywords: keywordsToArr(posts[i].keywords[0])
+                      };
+                    }
+
+                    store.dispatch({
+                      type: "SET_POPULAR_ARR",
+                      payload: postMinimumData
+                    });
+                    resolve();
+                  },
+                  err => {
+                    console.log("error en blog ", err);
+                    reject(err);
+                  }
+                );
+              })
+              .catch(err => {
+                console.log("error en blog ", err);
+                reject(err);
+              });
           });
       } else {
         resolve();

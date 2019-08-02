@@ -8,6 +8,15 @@ import Helmet from "react-helmet";
 
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
+
+//assets
+import {
+  claps as claps2,
+  comments as comments2,
+  share as share2,
+  views as view2
+} from "../../assets/svgIcons/SvgIcons";
+
 import "./blog.css";
 
 //layouts
@@ -25,13 +34,38 @@ import ScrollMouse from "../../components/scrollMouse/ScrollMouse";
 import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
 import PostCard from "./postCard/PostCard";
 import Post from "./post/Post";
+import Loading from "../../components/loading/loading";
 
 //services
 import isDevice from "../../../services/isDevice";
 import NewPostLayout from "./newPostLayout/NewPostLayout";
+//apiCalls
+import getMorePosts from "../../../apiCalls/getMorePosts";
+import filterPopular from "../../apiCalls/filterPopular";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
+
+const MorePostsCont = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const MorePosts = styled.div`
+  box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  margin: 0 0 40px 0;
+  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  text-align: center;
+  box-sizing: border-box;
+  width: 50%;
+  background: #00171f;
+  color: #00171f;
+  color: coral;
+  font-weight: bold;
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 const styles = {
   tablet: {
@@ -116,10 +150,9 @@ const styles = {
       }
     },
     layout: {
-      backgroundColor: "#00171f",
       margin: "5vmin 0",
       borderRadius: "8px",
-      height: "calc(100vh - 15vmin - 112px)",
+      height: "calc(100vh - 20vmin - 112px)",
       "@media (max-width: 1050px)": {
         height: "auto",
         margin: "0",
@@ -173,12 +206,43 @@ const styles = {
   },
   popularPostLayout: {
     overflow: "hidden",
-    height: "calc(100vh - 10vmin)",
+    height: "calc(100vh - 7vmin)",
     "@media (max-width: 1050px)": {
       height: "auto"
     }
   }
 };
+
+const FilterLayout = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h5 {
+    color: #00171f;
+    font-family: "Work Sans", sans-serif;
+  }
+`;
+
+const IconsCont = styled.div`
+  margin: 0 0 0 10px;
+  display: flex;
+  align-items: center;
+`;
+
+const Icon = styled.span`
+  padding: 15px;
+  :hover {
+    cursor: pointer;
+  }
+  svg {
+    fill: coral;
+    width: ${props => (props.selected ? "30px" : "25px")};
+    padding-bottom: 5px;
+    border-bottom: ${props => (props.selected ? "3px solid coral" : "none")};
+    transition: all ease 500ms;
+  }
+`;
 
 const AsidePostsCont = styled.div`
   display: flex;
@@ -214,6 +278,8 @@ class BlogPage extends React.Component {
     this.state = {
       isDeviceResult: "pc",
       isLoading: true, // true,
+      isLoadingPosts: false, // true,
+      isFilterLoading: false,
       mainPostH: 0,
       searchBorder: " 1px transparent solid",
       searchTranslateX: "70%",
@@ -339,9 +405,94 @@ class BlogPage extends React.Component {
           });
     }
   };
+
+  MorePostsHandler = async () => {
+    console.log("click more posts");
+
+    this.setState({ isLoadingPosts: true });
+    const getMorePostsRes = await getMorePosts(
+      this.props.blog.articlesCount,
+      this.props.blog.articlesArr.length
+    );
+
+    console.log("getMorePostsRes", getMorePostsRes);
+    if (getMorePostsRes.status === "OK") {
+      let articlesArr = this.props.blog.articlesArr;
+
+      articlesArr = [...articlesArr, ...getMorePostsRes.articles];
+      this.props.setArticlesArr(articlesArr);
+    }
+    this.setState({ isLoadingPosts: false });
+  };
+
+  onFilterIconClick = async filter => {
+    const lastFilter = this.props.blog.popularFilter;
+
+    switch (filter) {
+      case "views":
+        this.props.setFilter({
+          views: true,
+          shares: false,
+          comments: false,
+          claps: false
+        });
+        break;
+      case "claps":
+        this.props.setFilter({
+          claps: true,
+          views: false,
+          shares: false,
+          comments: false
+        });
+        break;
+      case "shares":
+        this.props.setFilter({
+          shares: true,
+          views: false,
+          comments: false,
+          claps: false
+        });
+        break;
+      case "comments":
+        this.props.setFilter({
+          comments: true,
+          shares: false,
+          views: false,
+          claps: false
+        });
+
+        break;
+
+      default:
+        this.props.setFilter({
+          views: true,
+          shares: false,
+          comments: false,
+          claps: false
+        });
+        break;
+    }
+
+    this.setState({
+      isFilterLoading: true
+    });
+
+    const filterPopularRes = await filterPopular(filter);
+
+    if (filterPopularRes.statusText === "OK") {
+      this.setState({
+        isFilterLoading: false
+      });
+
+      this.props.setPopularArr(filterPopularRes.popularArr);
+      return;
+    }
+    console.log("Error changing filter", filterPopularRes.statusText);
+    this.props.setFilter(lastFilter);
+  };
   render() {
     const { mainPostH, searchBorder, searchTranslateX } = this.state;
-    let { articlesArr } = this.props.blog;
+    let { articlesArr, popularArticlesArr } = this.props.blog;
     if (articlesArr.length === 0) {
       articlesArr = [
         {
@@ -358,8 +509,24 @@ class BlogPage extends React.Component {
       ];
     }
 
+    if (popularArticlesArr.length === 0) {
+      popularArticlesArr = [
+        {
+          title: "",
+          postImg: "",
+          postGradient: "",
+          keywords: [],
+          author: "",
+          date: "",
+          url: "",
+          avatar: "",
+          summaryTextHtml: ""
+        }
+      ];
+    }
+
     const recentPostsArray = articlesArr.slice(1);
-    const popPostsArray = articlesArr.slice(1);
+    const popPostsArray = popularArticlesArr;
     const newPostArray = articlesArr.slice(0, 1);
 
     const isClientSide =
@@ -459,9 +626,52 @@ class BlogPage extends React.Component {
                 style={[styles.aside.layout, styles.layout.flexColumn]}
               >
                 <h3 style={styles.aside.title}>Popular Posts</h3>
-                <AsidePostsCont data-simplebar id="postsContainer">
-                  {asidePosts}
-                </AsidePostsCont>
+
+                <FilterLayout>
+                  <h5>Filter</h5>
+                  <IconsCont>
+                    <Icon
+                      onClick={() => {
+                        this.onFilterIconClick("views");
+                      }}
+                      selected={this.props.blog.popularFilter.views}
+                    >
+                      {view2}
+                    </Icon>
+                    <Icon
+                      onClick={() => {
+                        this.onFilterIconClick("claps");
+                      }}
+                      selected={this.props.blog.popularFilter.claps}
+                    >
+                      {claps2}
+                    </Icon>
+                    <Icon
+                      onClick={() => {
+                        this.onFilterIconClick("shares");
+                      }}
+                      selected={this.props.blog.popularFilter.shares}
+                    >
+                      {share2}
+                    </Icon>
+                    <Icon
+                      onClick={() => {
+                        this.onFilterIconClick("comments");
+                      }}
+                      selected={this.props.blog.popularFilter.comments}
+                    >
+                      {comments2}
+                    </Icon>
+                  </IconsCont>
+                </FilterLayout>
+
+                {this.state.isFilterLoading ? (
+                  <Loading />
+                ) : (
+                  <AsidePostsCont data-simplebar id="postsContainer">
+                    {asidePosts}
+                  </AsidePostsCont>
+                )}
               </div>
             </section>
           </div>
@@ -745,6 +955,19 @@ class BlogPage extends React.Component {
             <div id="recentPostLayout" style={styles.recentPostLayout}>
               {recentPostCards}
             </div>
+
+            {this.props.blog.articlesCount >
+              this.props.blog.articlesArr.length && (
+              <MorePostsCont>
+                <MorePosts
+                  onClick={this.MorePostsHandler}
+                  id="MorePosts"
+                  noPadding={this.state.isLoadingPosts}
+                >
+                  {this.state.isLoadingPosts ? <Loading /> : "More Posts..."}
+                </MorePosts>
+              </MorePostsCont>
+            )}
           </section>
         </TwoColumnAside>
       </React.Fragment>
@@ -757,9 +980,13 @@ const mapStateToProps2 = state => {
     blog: state.blog
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
+    setArticlesArr: arr => dispatch({ type: "ARTICLES_ARR", payload: arr }),
+    setPopularArr: arr => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
+    setFilter: filter =>
+      dispatch({ type: "SET_POPULAR_FILTER", payload: filter })
   };
 };
 

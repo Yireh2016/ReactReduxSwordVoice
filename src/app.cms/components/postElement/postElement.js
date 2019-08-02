@@ -371,12 +371,12 @@ class PostElement extends Component {
       const imgFile = this.state.imgFile;
       const figcaption = this.state.imgFigcaption;
       let imgFileTablet, imgFileMobile;
-      const responsiveImg = responsiveImages(imgFile.filename);
+      const responsiveImg = responsiveImages(imgFile && imgFile.filename);
       imgFileTablet = responsiveImg.tablet;
       imgFileMobile = responsiveImg.mobile;
 
       const imgFileObj = {
-        imgFile: imgFile.filename,
+        imgFile: imgFile && imgFile.filename,
         imgFileTablet,
         imgFileMobile
       };
@@ -488,7 +488,7 @@ class PostElement extends Component {
         let imgFileTablet = "";
         let imgFileMobile = "";
         if (this.state.imgFile && this.state.imgFile.previewURL === "") {
-          imgFile = this.state.imgFile.filename;
+          imgFile = this.state.imgFile ? this.state.imgFile.filename : null;
 
           const responsiveImg = responsiveImages(imgFile);
           imgFileTablet = responsiveImg.tablet;

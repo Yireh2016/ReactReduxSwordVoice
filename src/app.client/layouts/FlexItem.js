@@ -39,8 +39,11 @@ const Item = styled.div`
   }};
 
   @media (min-width: 700px) {
-    margin: 30px;
+    margin: 20px;
     padding: 0px;
+    :first-child {
+      margin-top: 0;
+    }
   }
 `;
 

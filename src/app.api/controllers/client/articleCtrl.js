@@ -9,6 +9,11 @@ import {
   updateReplyAvatars
 } from "../../../services/updateArticleAvatars";
 
+import paragraphService from "../../../services/paragraphService";
+import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
+import keywordsToArr from "../../../services/keywordsToArr";
+import getPopularPosts from "../../../app.server/controllers/queries/getPopularPosts";
+
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
 
@@ -96,6 +101,53 @@ export const getMoreResponsesCtrl = (req, res) => {
       .status(200)
       .send({ statusText: "OK", responses: updateReplyAvatarsRes.replyArr });
   });
+};
+
+export const getMorePostsCtrl = (req, res) => {
+  const { totalPosts, postsCount } = req.query;
+  const limit = totalPosts - postsCount >= 7 ? 7 : totalPosts - postsCount;
+
+  articleModel
+    .find({ isPublished: true })
+    .select("url thumbnail title date keywords description")
+    .skip(parseInt(postsCount))
+    .limit(limit)
+    .populate("author")
+    .sort({ _id: "descending" })
+    .exec()
+    .then(posts => {
+      let postMinimumData = [];
+      for (let i = 0; i < posts.length; i++) {
+        postMinimumData[i] = {
+          url: posts[i].url,
+          postImg:
+            posts[i].thumbnail &&
+            `url(${process.env.CDN_URL}/articles/${posts[i].url}/${
+              posts[i].thumbnail.name
+            })`,
+          postGradient:
+            posts[i].thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              posts[i].thumbnail.color
+            } 73.79%)`,
+          title: posts[i].title,
+          summaryTextHtml: paragraphService(posts[i].description),
+          author:
+            `${posts[i].author.userFirstName} ` +
+            `${posts[i].author.userLastName}`,
+          avatar: posts[i].author.userAvatar,
+          date: dbDateToNormalDate(posts[i].date),
+          keywords: keywordsToArr(posts[i].keywords[0])
+        };
+      }
+
+      res.status(200).send(postMinimumData);
+    })
+    .catch(err => {
+      console.log("err", err);
+      res.status(404).json(err);
+    });
+  // resolve();
 };
 
 export const setReplyCtrl = async (req, res) => {
@@ -310,4 +362,45 @@ export const deleteCommentCtrl = (req, res) => {
   //   }
   //   res.status(204).json({ message: "user removed" });
   // }
+};
+
+export const filterPopularCtrl = (req, res) => {
+  const { filter } = req.body;
+
+  getPopularPosts(
+    articleModel,
+    `${filter}`,
+    posts => {
+      let postMinimumData = [];
+      for (let i = 0; i < posts.length; i++) {
+        postMinimumData[i] = {
+          url: posts[i].url,
+          postImg:
+            posts[i].thumbnail &&
+            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
+              posts[i].thumbnail.name
+            })`,
+          postGradient:
+            posts[i].thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              posts[i].thumbnail.color
+            } 73.79%)`,
+          title: posts[i].title,
+          summaryTextHtml: paragraphService(posts[i].description),
+          author:
+            `${posts[i].author.userFirstName} ` +
+            `${posts[i].author.userLastName}`,
+          avatar: posts[i].author.userAvatar,
+          date: dbDateToNormalDate(posts[i].date),
+          keywords: keywordsToArr(posts[i].keywords[0])
+        };
+      }
+
+      res.status(200).send({ statusText: "OK", popularArr: postMinimumData });
+    },
+    err => {
+      console.log("error en blog ", err);
+      res.status(404).json(err);
+    }
+  );
 };

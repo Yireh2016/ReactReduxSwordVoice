@@ -24,7 +24,7 @@ const initialState = isServer ? undefined : window.__PRELOADED_STATE__;
 
 //habilito el redux dev tool solo para chrome
 const composeEnhancer =
-  !isServer && is.chrome()
+  !isServer && is.chrome() && process.env.NODE_ENV === "development"
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 

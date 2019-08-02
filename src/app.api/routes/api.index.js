@@ -25,11 +25,13 @@ import {
   socialCtrl,
   getMoreCommentsCtrl,
   getMoreResponsesCtrl,
+  getMorePostsCtrl,
   setCommentCtrl,
   setReplyCtrl,
   updateCommentClaps,
   updateReplyClaps,
-  deleteCommentCtrl
+  deleteCommentCtrl,
+  filterPopularCtrl
 } from "../controllers/client/articleCtrl";
 
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
@@ -167,6 +169,7 @@ routerAPI.get("/searchSessionID/", authAPI, autoLogin);
 
 routerAPI.get("/getMoreComments/", guestAPI, getMoreCommentsCtrl);
 routerAPI.get("/getMoreResponses/", guestAPI, getMoreResponsesCtrl);
+routerAPI.get("/getMorePosts/", guestAPI, getMorePostsCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -239,6 +242,7 @@ routerAPI.put("/setReply", authAPI, setReplyCtrl);
 
 //update post Social ej claps,share,comments
 routerAPI.put("/socialCounter", guestAPI, socialCtrl);
+routerAPI.put("/filterPopular", guestAPI, filterPopularCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
