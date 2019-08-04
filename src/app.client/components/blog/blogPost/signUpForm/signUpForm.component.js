@@ -16,7 +16,6 @@ import UploadImage from "./uploadImage";
 import blobToBase64 from "../../../../../services/blobToBase64";
 //components
 //api calls
-import sendUserTempImage from "../../../../apiCalls/sendUserTempImage";
 
 class SignUpForm extends Component {
   constructor(props) {

@@ -1,4 +1,11 @@
-const getPopularPosts = (articleModel, filter, callback, errCallback) => {
+const getPopularPosts = (
+  articleModel,
+  filter,
+  totalCount,
+  count,
+  callback,
+  errCallback
+) => {
   let sort;
 
   switch (filter) {
@@ -19,11 +26,12 @@ const getPopularPosts = (articleModel, filter, callback, errCallback) => {
       sort = { "socialCount.views": "descending" };
       break;
   }
-
+  const limit = totalCount - count >= 7 ? 7 : totalCount - count;
   return articleModel
     .find({ isPublished: true })
     .select("url thumbnail title date keywords description")
-    .limit(7)
+    .limit(limit)
+    .skip(count)
     .populate("author")
     .sort(sort)
     .exec()

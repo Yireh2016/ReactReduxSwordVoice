@@ -19,6 +19,7 @@ const articleSchema = new Schema({
   elements: [{}],
   files: { type: [String] },
   html: { type: String },
+  content: { type: String },
   projectName: { type: String, required: true, unique: true },
   description: { type: String },
   keywords: { type: [String] }, //keywords
@@ -33,6 +34,14 @@ const articleSchema = new Schema({
     comments: { type: Number, default: 0 },
     views: { type: Number, default: 0 }
   }
+});
+
+articleSchema.index({
+  "author.userName": "text",
+  content: "text",
+  title: "text",
+  description: "text",
+  keywords: "text"
 });
 
 mongoose.model("Article", articleSchema);

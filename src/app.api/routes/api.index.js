@@ -31,14 +31,17 @@ import {
   updateCommentClaps,
   updateReplyClaps,
   deleteCommentCtrl,
-  filterPopularCtrl
+  filterPopularCtrl,
+  searchArticleCtrl,
+  searchLastArticlesCtrl,
+  advancedSearchDbCtrl
 } from "../controllers/client/articleCtrl";
 
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
-// let articleModel = mongoose.model("Article");
+let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
   if (req.signedCookies.sessionID) {
@@ -170,6 +173,9 @@ routerAPI.get("/searchSessionID/", authAPI, autoLogin);
 routerAPI.get("/getMoreComments/", guestAPI, getMoreCommentsCtrl);
 routerAPI.get("/getMoreResponses/", guestAPI, getMoreResponsesCtrl);
 routerAPI.get("/getMorePosts/", guestAPI, getMorePostsCtrl);
+routerAPI.get("/searchArticle/", guestAPI, searchArticleCtrl);
+routerAPI.get("/searchLastArticles/", guestAPI, searchLastArticlesCtrl);
+routerAPI.get("/advancedSearchDb/", advancedSearchDbCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -304,5 +310,28 @@ routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
 //////////////////////////////////////
 
 routerAPI.delete("/deletePost/:projectName", authAPI, deletePostCtrl);
+
+// routerAPI.get("/generateContent/", (req, res) => {
+//   articleModel.find({}).exec((err, articles) => {
+//     if (err) {
+//       res.status(404).json(err);
+//       return;
+//     }
+//     for (let index = 0; index < articles.length; index++) {
+/*       const content = articles[index].html.replace(
+        />undefined|<\/?html|<\/?xmp|<\/?wbr|<\/?video|<\/?var|<\/?ul|<\/?u|<\/?tt|<\/?track|<\/?tr|<\/?title|<\/?time|<\/?thead|<\/?th|<\/?tfoot|<\/?textarea|<\/?template|<\/?td|<\/?tbody|<\/?table|<\/?sup|<\/?summary|<\/?sub|<\/?style|<\/?strong|<\/?strike|<\/?span|<\/?spacer|<\/?source|<\/?small|<\/?slot|<\/?shadow|<\/?select|<\/?section|<\/?script|<\/?samp|<\/?s|<\/?ruby|<\/?rtc|<\/?rt|<\/?rp|<\/?rb|<\/?q|<\/?progress|<\/?pre|<\/?plaintext|<\/?picture|<\/?param|<\/?p|<\/?output|<\/?option|<\/?optgroup|<\/?ol|<\/?object|<\/?noscript|<\/?noframes|<\/?noembed|<\/?nobr|<\/?nextid|<\/?nav|<\/?multicol|<\/?meter|<\/?meta|<\/?menuitem|<\/?menu|<\/?marquee|<\/?mark|<\/?map|<\/?main|<\/?listing|<\/?link|<\/?li|<\/?legend|<\/?label|<\/?keygen|<\/?kbd|<\/?isindex|<\/?ins|<\/?input|<\/?img|<\/?image|<\/?iframe|<\/?i|<\/?hr|<\/?hgroup|<\/?header|<\/?head|<\/?frameset|<\/?frame|<\/?form|<\/?footer|<\/?font|<\/?figure|<\/?figcaption|<\/?fieldset|<\/?embed|<\/?em|<\/?element|<\/?dt|<\/?dl|<\/?div|<\/?dir|<\/?dialog|<\/?dfn|<\/?details|<\/?del|<\/?dd|<\/?datalist|<\/?data|<\/?content|<\/?command|<\/?colgroup|<\/?col|<\/?code|<\/?cite|<\/?center|<\/?caption|<\/?canvas|<\/?button|<\/?br|<\/?body|<\/?blockquote|<\/?blink|<\/?big|<\/?bgsound|<\/?bdo|<\/?bdi|<\/?basefont|<\/?base|<\/?b|<\/?audio|<\/?aside|<\/?article|<\/?area|<\/?applet|<\/?address|<\/?acronym|<\/?abbr|<\/?a|[\w-]+="?'?[\w:;.\/&()%#?@\s,\\-]*"?'?|<\/?h[1-6]|\/?>/gi,
+*/
+//         ""
+//       );
+
+//       console.log(content);
+
+//       articles[index].content = content;
+
+//       articles[index].save();
+//     }
+//     res.status(200).send("ready");
+//   });
+// });
 
 export default routerAPI;

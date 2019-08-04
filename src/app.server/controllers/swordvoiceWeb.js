@@ -251,6 +251,7 @@ const swordvoiceWeb = async (req, res) => {
           });
       } else if (req.url.match("/blog")) {
         console.log("entrando a /BLOG");
+
         articleModel
           .find({ isPublished: true })
           .countDocuments((err, count) => {
@@ -305,6 +306,8 @@ const swordvoiceWeb = async (req, res) => {
                 getPopularPosts(
                   articleModel,
                   "views",
+                  count,
+                  0,
                   posts => {
                     let postMinimumData = [];
                     for (let i = 0; i < posts.length; i++) {
@@ -347,6 +350,9 @@ const swordvoiceWeb = async (req, res) => {
                 console.log("error en blog ", err);
                 reject(err);
               });
+          })
+          .catch(err => {
+            reject(err);
           });
       } else {
         resolve();

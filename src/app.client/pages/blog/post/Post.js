@@ -43,29 +43,17 @@ const ForeGround = styled.div`
   position: relative;
 
   height: 100%;
-
-  a {
-    width: 100%;
-    text-decoration: none;
-    position: absolute;
-    bottom: 0;
-  }
 `;
 
 const Title = styled.h2`
   color: white;
   padding: 0 3.8% 4.8% 3.8%;
   font-family: "Work Sans";
-  
-  /* ${props => {
-    if (props.size === "md") {
-      return "0 20px 25px 20px";
-    } else if (props.size === "sm") {
-      return "0 15px 17px 15px";
-    } else {
-      return "0 25px 35px 25px";
-    }
-  }}; */
+
+  text-decoration: none;
+  position: absolute;
+  bottom: 0;
+
   margin: 0;
   font-size: ${props => {
     if (props.postW) {
@@ -73,7 +61,7 @@ const Title = styled.h2`
         ? `${(0.069 * props.postW * 6) / 6}px`
         : "16px";
     }
-  }} 
+  }};
 `;
 
 const SlideCont = styled.div`
@@ -148,13 +136,13 @@ const Post = ({
   return (
     <Layout size={size} backgroundURL={backgroundURL}>
       <Container>
-        <ForeGround postGradient={postGradient} ref={postRef} size={size}>
-          <a aria-label="go and read this article" href={link}>
+        <a aria-label="go and read this article" href={link}>
+          <ForeGround postGradient={postGradient} ref={postRef} size={size}>
             <Title postW={postW} size={size}>
               {title}
             </Title>
-          </a>
-        </ForeGround>
+          </ForeGround>
+        </a>
         <SlideCont isDetail={isDetail}>
           <Summary
             id={id}

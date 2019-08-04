@@ -13,6 +13,8 @@ import paragraphService from "../../../services/paragraphService";
 import dbDateToNormalDate from "../../../services/dbDateToNormalDate";
 import keywordsToArr from "../../../services/keywordsToArr";
 import getPopularPosts from "../../../app.server/controllers/queries/getPopularPosts";
+//queries
+import searchLastArticlesQuery from "../../../common/queries/searchLastArticlesQuery";
 
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
@@ -365,11 +367,13 @@ export const deleteCommentCtrl = (req, res) => {
 };
 
 export const filterPopularCtrl = (req, res) => {
-  const { filter } = req.body;
+  const { filter, popularTotalCount, popularCount } = req.body;
 
   getPopularPosts(
     articleModel,
     `${filter}`,
+    popularTotalCount,
+    popularCount,
     posts => {
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
@@ -403,4 +407,158 @@ export const filterPopularCtrl = (req, res) => {
       res.status(404).json(err);
     }
   );
+};
+
+export const searchArticleCtrl = (req, res) => {
+  const { searchValue } = req.query;
+  const errHandler = err => {
+    console.log("searchArticleCtrl err", err);
+    res.status(404).json(err);
+  };
+
+  articleModel
+    .find(
+      { $text: { $search: `${searchValue}` } },
+      { score: { $meta: "textScore" } }
+    )
+    .select("url thumbnail title date keywords description")
+    .populate({
+      path: "author",
+      select: "userFirstName userLastName userAvatar userName"
+    })
+    .sort({ score: { $meta: "textScore" } })
+    .exec()
+    .then(posts => {
+      let postMinimumData = [];
+      for (let i = 0; i < posts.length; i++) {
+        postMinimumData[i] = {
+          url: posts[i].url,
+          postImg:
+            posts[i].thumbnail &&
+            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
+              posts[i].thumbnail.name
+            })`,
+          postGradient:
+            posts[i].thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              posts[i].thumbnail.color
+            } 73.79%)`,
+          title: posts[i].title,
+          summaryTextHtml: paragraphService(posts[i].description),
+          author:
+            `${posts[i].author.userFirstName} ` +
+            `${posts[i].author.userLastName}`,
+          avatar: posts[i].author.userAvatar,
+          date: dbDateToNormalDate(posts[i].date),
+          keywords: keywordsToArr(posts[i].keywords[0])
+        };
+      }
+
+      res.status(200).send({ statusText: "OK", searchArr: postMinimumData });
+    })
+    .catch(err => {
+      errHandler(err);
+    });
+};
+
+export const searchLastArticlesCtrl = (req, res) => {
+  searchLastArticlesQuery(
+    articleModel,
+    (articlesTotalCount, articlesArr) => {
+      res.status(200).send({ articlesTotalCount, articlesArr });
+    },
+    err => {
+      res.status(404).json(err);
+    }
+  );
+};
+
+export const advancedSearchDbCtrl = (req, res) => {
+  let { author, dateFrom, dateTo } = req.query;
+
+  if (!dateTo) {
+    dateTo = new Date();
+  }
+  if (!dateFrom) {
+    dateFrom = new Date("1990");
+  }
+
+  let populateObj;
+
+  if (!author) {
+    populateObj = {
+      path: "author",
+      select: "userFirstName userLastName userAvatar userName"
+    };
+  } else {
+    const authorWordsArr = author.match(/[^\s]+/g);
+    let authorPattern = "";
+
+    for (let index = 0; index < authorWordsArr.length; index++) {
+      if (index === authorWordsArr.length - 1) {
+        authorPattern = authorPattern + `${authorWordsArr[index]}`;
+      } else {
+        authorPattern = authorPattern + `${authorWordsArr[index]}|`;
+      }
+    }
+
+    populateObj = {
+      path: "author",
+      match: {
+        $or: [
+          { userFirsName: { $regex: authorPattern, $options: "i" } },
+          { userLastName: { $regex: authorPattern, $options: "i" } },
+          { userName: { $regex: authorPattern, $options: "i" } }
+        ]
+      },
+      select: "userFirstName userLastName userAvatar userName"
+    };
+  }
+
+  articleModel
+    .find({
+      date: {
+        $gt: dateFrom,
+        $lt: dateTo
+      }
+    })
+    .sort({ date: "descending" })
+    .select("url thumbnail title date keywords description")
+    .populate(populateObj)
+    .exec((err, posts) => {
+      if (err) {
+        console.log("advancedSearchDbCtrl err ", err);
+
+        res.status(404).send(err);
+        return;
+      }
+
+      let postMinimumData = [];
+      for (let i = 0; i < posts.length; i++) {
+        postMinimumData[i] = {
+          url: posts[i].url,
+          postImg:
+            posts[i].thumbnail &&
+            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
+              posts[i].thumbnail.name
+            })`,
+          postGradient:
+            posts[i].thumbnail &&
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+              posts[i].thumbnail.color
+            } 73.79%)`,
+          title: posts[i].title,
+          summaryTextHtml: paragraphService(posts[i].description),
+          author:
+            `${posts[i].author.userFirstName} ` +
+            `${posts[i].author.userLastName}`,
+          avatar: posts[i].author.userAvatar,
+          date: dbDateToNormalDate(posts[i].date),
+          keywords: keywordsToArr(posts[i].keywords[0])
+        };
+      }
+
+      console.log("articles", postMinimumData);
+      res.status(200).send({ advancedArr: postMinimumData });
+    });
 };

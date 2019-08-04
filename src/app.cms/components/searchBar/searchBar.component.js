@@ -4,16 +4,23 @@ import "./searchBar.css";
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      searchValue: ""
+    };
   }
-
+  searchHandler = e => {
+    const { value } = e.target;
+    this.setState({ searchValue: value });
+  };
   render() {
+    const { className, searchBorder, searchTranslateX } = this.props;
     return (
       <div
         onFocus={this.props.onFocus}
         onBlur={this.props.onBlur}
-        className={this.props.className}
+        className={className}
         style={{
-          border: this.props.searchBorder,
+          border: searchBorder,
           borderRadius: " 10px",
           paddingBottom: " 0px 5px",
           overflow: " hidden "
@@ -22,7 +29,7 @@ class SearchBar extends React.Component {
         <div
           className="searchBar"
           style={{
-            transform: "translateX(" + this.props.searchTranslateX + ")"
+            transform: "translateX(" + searchTranslateX + ")"
           }}
         >
           <svg viewBox="0 0 37 36" fill="none">
@@ -43,7 +50,13 @@ class SearchBar extends React.Component {
               strokeWidth="5"
             />
           </svg>
-          <input type="text" placeholder="Search" />
+          <input
+            type="text"
+            placeholder="Search"
+            name="search"
+            value={this.state.searchValue}
+            onChange={this.searchHandler}
+          />
           <span>Advanced</span>
         </div>
       </div>

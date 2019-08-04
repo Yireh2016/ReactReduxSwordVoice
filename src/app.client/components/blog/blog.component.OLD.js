@@ -11,14 +11,14 @@ import Call2Action from "../general/call2action.component";
 import FooterApp from "../footer/footer.component";
 import Logo from "../general/logo.component";
 import SearchBar from "./searchBar/searchBar.component";
-import AsidePost from "../blog/asidePost/asidePost.component";
+import AsidePost from "./asidePost/asidePost.component";
 // import LightShadow from "../general/lightShadow/lightShadow.component";
 //css
 import "./blog.css";
 //images
 import newPostImg from "../../assets/img/blog/newPost.jpg";
 import avatarImg from "../../assets/img/general/avatar.jpg";
-import Summary2 from "../blog/common/summary/summary2.component";
+import Summary2 from "./common/summary/summary2.component";
 //services
 import isDevice from "../../../services/isDevice";
 import keywordsToArr from "../../../services/keywordsToArr";

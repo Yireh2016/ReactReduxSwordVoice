@@ -34,4 +34,8 @@ userSchema.methods.verifyPassword = function(password) {
   return this.userPassword === hash;
 };
 
+userSchema.index({
+  userName: "text"
+});
+
 mongoose.model("User", userSchema);

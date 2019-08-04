@@ -23,7 +23,7 @@ import "./blog.css";
 import FlexItem from "../../layouts/FlexItem";
 
 //components
-
+import AdvancedSearch from "../../components/advancedSearch/AdvancedSearch";
 import SummaryCard from "./postCard/summaryCard/SummaryCard";
 import TwoColumnAside from "../../layouts/TwoColumnAside";
 import Logo from "../../components/general/logo.component";
@@ -35,6 +35,7 @@ import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
 import PostCard from "./postCard/PostCard";
 import Post from "./post/Post";
 import Loading from "../../components/loading/loading";
+import Modal from "../../components/modal/modal";
 
 //services
 import isDevice from "../../../services/isDevice";
@@ -42,6 +43,9 @@ import NewPostLayout from "./newPostLayout/NewPostLayout";
 //apiCalls
 import getMorePosts from "../../../apiCalls/getMorePosts";
 import filterPopular from "../../apiCalls/filterPopular";
+import searchArticle from "../../apiCalls/searchArticle";
+import searchLastArticles from "../../apiCalls/searchLastArticles";
+import advancedSearchDb from "../../apiCalls/advancedSearchDb";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
@@ -280,9 +284,12 @@ class BlogPage extends React.Component {
       isLoading: true, // true,
       isLoadingPosts: false, // true,
       isFilterLoading: false,
+      isAdvancedSearch: false,
+      isLoadingPopularPosts: false,
       mainPostH: 0,
-      searchBorder: " 1px transparent solid",
+      lastPostW: 0,
       searchTranslateX: "70%",
+      searchValue: "",
       recentPostsArray: [
         {
           postImg: ``,
@@ -328,6 +335,7 @@ class BlogPage extends React.Component {
     let asidePostW = 9;
 
     const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
 
     switch (isDeviceResult) {
       case "pc":
@@ -350,12 +358,22 @@ class BlogPage extends React.Component {
         break;
     }
 
-    this.setState({ mainPostH: postH, asidePostW });
+    let lastPostW = isDeviceResult === "tablet" ? 10 : 12;
+
+    this.setState({
+      mainPostH: postH,
+      asidePostW,
+      lastPostW: windowHeight > windowWidth * 1.3 ? lastPostW : 5
+    });
   };
 
   componentDidMount() {
+    console.log("blogpage did mount");
     this.setPostDimensions();
-    window.addEventListener("resize", this.setPostDimensions);
+    window.addEventListener("resize", () => {
+      console.log("resizing", navigator.userAgent);
+      this.setPostDimensions();
+    });
     const isDeviceResult = isDevice();
     let postH;
 
@@ -382,29 +400,10 @@ class BlogPage extends React.Component {
       this.setState({
         isDeviceResult: isDeviceResult,
         isLoading: false,
-        mainPostH: postH,
-        searchBorder:
-          isDeviceResult === "phone"
-            ? "1px #0387b7 solid"
-            : "1px transparent solid",
-        searchTranslateX: isDeviceResult === "phone" ? "0" : "70%"
+        mainPostH: postH
       });
     }, 3 * 1000);
   }
-
-  handleSearchBarFocus = () => {
-    if (this.state.isDeviceResult !== "phone") {
-      this.state.searchTranslateX === "0"
-        ? this.setState({
-            searchBorder: " 1px transparent solid",
-            searchTranslateX: "70%"
-          })
-        : this.setState({
-            searchBorder: "1px #0387b7 solid",
-            searchTranslateX: "0"
-          });
-    }
-  };
 
   MorePostsHandler = async () => {
     console.log("click more posts");
@@ -477,21 +476,92 @@ class BlogPage extends React.Component {
       isFilterLoading: true
     });
 
-    const filterPopularRes = await filterPopular(filter);
+    const filterPopularRes = await filterPopular(
+      filter,
+      this.props.blog.articlesCount,
+      this.props.blog.popularArticlesArr.length
+    );
 
     if (filterPopularRes.statusText === "OK") {
       this.setState({
         isFilterLoading: false
       });
 
-      this.props.setPopularArr(filterPopularRes.popularArr);
+      this.props.setPopularArr([
+        ...this.props.blog.popularArticlesArr,
+        ...filterPopularRes.popularArr
+      ]);
       return;
     }
     console.log("Error changing filter", filterPopularRes.statusText);
     this.props.setFilter(lastFilter);
   };
+
+  MorePopularPostsHandler = () => {
+    console.log("click MorePopularPostsHandler");
+  };
+
+  onSearch = async value => {
+    console.log("onSearch value ", value);
+    const searchArticleRes = await searchArticle(value);
+
+    if (searchArticleRes.statusText === "OK") {
+      this.props.setArticlesCount(searchArticleRes.searchArr.length);
+      this.props.setArticlesArr([
+        this.props.blog.articlesArr[0],
+        ...searchArticleRes.searchArr
+      ]);
+      return;
+    }
+
+    console.log("error finding articles", searchArticleRes.statusText);
+  };
+
+  onSearchBarReset = async () => {
+    const searchLastArticlesRes = await searchLastArticles();
+
+    if (searchLastArticlesRes.statusText === "OK") {
+      this.props.setArticlesCount(searchLastArticlesRes.articlesTotalCount);
+      this.props.setArticlesArr(searchLastArticlesRes.articlesArr);
+      return;
+    }
+
+    console.log(
+      "error finding last articles",
+      searchLastArticlesRes.statusText
+    );
+  };
+
+  onAdvancedSearchClick = () => {
+    this.setState(prevState => {
+      return {
+        isAdvancedSearch: !prevState.isAdvancedSearch
+      };
+    });
+  };
+  advancedSearchHandler = async (author, dateFrom, dateTo) => {
+    const advancedSearchDbRes = await advancedSearchDb(
+      author,
+      dateFrom,
+      dateTo
+    );
+
+    if (advancedSearchDbRes.statusText === "OK") {
+      this.props.setArticlesArr([
+        this.props.blog.articlesArr[0],
+        ...advancedSearchDbRes.advancedArr
+      ]);
+
+      this.props.setArticlesCount(advancedSearchDbRes.advancedCount);
+
+      this.onAdvancedSearchClick();
+      return;
+    }
+
+    console.log("error on advanced search", advancedSearchDbRes.statusText);
+  };
   render() {
-    const { mainPostH, searchBorder, searchTranslateX } = this.state;
+    const { mainPostH, searchTranslateX } = this.state;
     let { articlesArr, popularArticlesArr } = this.props.blog;
     if (articlesArr.length === 0) {
       articlesArr = [
@@ -672,6 +742,22 @@ class BlogPage extends React.Component {
                     {asidePosts}
                   </AsidePostsCont>
                 )}
+                {this.props.blog.popularCount >
+                  this.props.blog.popularArticlesArr.length && (
+                  <MorePostsCont>
+                    <MorePosts
+                      onClick={this.MorePopularPostsHandler}
+                      id="MorePopularPosts"
+                      noPadding={this.state.isLoadingPopularPosts}
+                    >
+                      {this.state.isLoadingPopularPosts ? (
+                        <Loading />
+                      ) : (
+                        "More..."
+                      )}
+                    </MorePosts>
+                  </MorePostsCont>
+                )}
               </div>
             </section>
           </div>
@@ -773,6 +859,17 @@ class BlogPage extends React.Component {
             content="SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to tutorials nad more. Come and check it out!"
           />
         </Helmet>
+        {this.state.isAdvancedSearch && (
+          <Modal
+            title="Advanced Search"
+            modalHandler={this.onAdvancedSearchClick}
+          >
+            <AdvancedSearch
+              onCancel={this.onAdvancedSearchClick}
+              onSearch={this.advancedSearchHandler}
+            />
+          </Modal>
+        )}
         {isLoading && (
           <div
             style={{
@@ -837,9 +934,7 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
-              <NewPostLayout
-                size={this.state.isDeviceResult === "tablet" ? 10 : 12}
-              >
+              <NewPostLayout size={this.state.lastPostW}>
                 <Post
                   id="latest"
                   title={newPostArray[0].title}
@@ -860,11 +955,11 @@ class BlogPage extends React.Component {
                 {
                   display: "none",
                   position: "absolute",
-                  bottom: "10vh",
+                  top: "100%",
                   display: "none",
                   position: "absolute",
                   left: "50%",
-                  transform: "translateX( -50% )"
+                  transform: "translate( -50% , -100%)"
                 },
                 {
                   "@media (max-width: 1050px)": {
@@ -938,10 +1033,10 @@ class BlogPage extends React.Component {
             >
               <SearchBar
                 className="searchContainer"
-                searchBorder={searchBorder}
                 searchTranslateX={searchTranslateX}
-                onFocus={this.handleSearchBarFocus}
-                onBlur={this.handleSearchBarFocus}
+                onSearch={this.onSearch}
+                onReset={this.onSearchBarReset}
+                onAdvancedClick={this.onAdvancedSearchClick}
               />
             </div>
           </section>
@@ -984,6 +1079,8 @@ const mapDispachToProps = dispatch => {
   return {
     //acciones
     setArticlesArr: arr => dispatch({ type: "ARTICLES_ARR", payload: arr }),
+    setArticlesCount: count =>
+      dispatch({ type: "SET_ARTICLES_COUNT", payload: count }),
     setPopularArr: arr => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
     setFilter: filter =>
       dispatch({ type: "SET_POPULAR_FILTER", payload: filter })

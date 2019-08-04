@@ -16,9 +16,7 @@ export const createPostCtrl = (req, res) => {
   let article = new articleModel(projectData.article);
 
   axios
-    .post(
-      `${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`
-    )
+    .post(`${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`)
     .then(result => {
       console.log("respuesta correcta del post", result);
 
@@ -44,7 +42,9 @@ export const addClassToPostCtrl = (req, res) => {
 
   axios
     .post(
-      `${process.env.CDN_URL}/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
+      `${
+        process.env.CDN_URL
+      }/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
     )
     .then(apiRes => {
       if (apiRes.status === 200) {
@@ -233,7 +233,18 @@ export const updatePostCtrl = (req, res) => {
       article[0].elements = elements ? elements : article[0].elements;
       article[0].files = files ? files : article[0].files;
       article[0].keywords = keywords ? keywords : article[0].keywords;
+
       article[0].html = html ? html : article[0].html;
+
+      if (html) {
+        const content = html.replace(
+          />undefined|<\/?html|<\/?xmp|<\/?wbr|<\/?video|<\/?var|<\/?ul|<\/?u|<\/?tt|<\/?track|<\/?tr|<\/?title|<\/?time|<\/?thead|<\/?th|<\/?tfoot|<\/?textarea|<\/?template|<\/?td|<\/?tbody|<\/?table|<\/?sup|<\/?summary|<\/?sub|<\/?style|<\/?strong|<\/?strike|<\/?span|<\/?spacer|<\/?source|<\/?small|<\/?slot|<\/?shadow|<\/?select|<\/?section|<\/?script|<\/?samp|<\/?s|<\/?ruby|<\/?rtc|<\/?rt|<\/?rp|<\/?rb|<\/?q|<\/?progress|<\/?pre|<\/?plaintext|<\/?picture|<\/?param|<\/?p|<\/?output|<\/?option|<\/?optgroup|<\/?ol|<\/?object|<\/?noscript|<\/?noframes|<\/?noembed|<\/?nobr|<\/?nextid|<\/?nav|<\/?multicol|<\/?meter|<\/?meta|<\/?menuitem|<\/?menu|<\/?marquee|<\/?mark|<\/?map|<\/?main|<\/?listing|<\/?link|<\/?li|<\/?legend|<\/?label|<\/?keygen|<\/?kbd|<\/?isindex|<\/?ins|<\/?input|<\/?img|<\/?image|<\/?iframe|<\/?i|<\/?hr|<\/?hgroup|<\/?header|<\/?head|<\/?frameset|<\/?frame|<\/?form|<\/?footer|<\/?font|<\/?figure|<\/?figcaption|<\/?fieldset|<\/?embed|<\/?em|<\/?element|<\/?dt|<\/?dl|<\/?div|<\/?dir|<\/?dialog|<\/?dfn|<\/?details|<\/?del|<\/?dd|<\/?datalist|<\/?data|<\/?content|<\/?command|<\/?colgroup|<\/?col|<\/?code|<\/?cite|<\/?center|<\/?caption|<\/?canvas|<\/?button|<\/?br|<\/?body|<\/?blockquote|<\/?blink|<\/?big|<\/?bgsound|<\/?bdo|<\/?bdi|<\/?basefont|<\/?base|<\/?b|<\/?audio|<\/?aside|<\/?article|<\/?area|<\/?applet|<\/?address|<\/?acronym|<\/?abbr|<\/?a|[\w-]+="?'?[\w:;.\/&()%#?@\s,\\-]*"?'?|<\/?h[1-6]|\/?>/gi,
+          ""
+        );
+
+        article[0].content = content;
+      }
+
       article[0].projectName = projectName
         ? projectName
         : article[0].projectName;
