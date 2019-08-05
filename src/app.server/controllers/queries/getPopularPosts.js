@@ -6,6 +6,8 @@ const getPopularPosts = (
   callback,
   errCallback
 ) => {
+  console.log("functions", filter, totalCount, count);
+
   let sort;
 
   switch (filter) {
@@ -22,17 +24,23 @@ const getPopularPosts = (
       sort = { "socialCount.claps": "descending" };
       break;
 
-    default:
-      sort = { "socialCount.views": "descending" };
-      break;
+    // default:
+    //   sort = { "socialCount.views": "descending" };
+    //   break;
   }
   const limit = totalCount - count >= 7 ? 7 : totalCount - count;
+  console.log("totalCount", totalCount);
+  console.log("limit", limit);
+  console.log("count", count);
   return articleModel
     .find({ isPublished: true })
     .select("url thumbnail title date keywords description")
     .limit(limit)
     .skip(count)
-    .populate("author")
+    .populate({
+      path: "author",
+      select: "userFirstName userLastName userAvatar userName"
+    })
     .sort(sort)
     .exec()
     .then(posts => {

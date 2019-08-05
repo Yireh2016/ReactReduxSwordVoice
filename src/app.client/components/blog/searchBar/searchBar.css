@@ -36,9 +36,9 @@
   cursor: pointer;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 700px) {
   .searchBar input {
-    width: 35vh;
+    width: 100%;
     margin: 0;
   }
 }

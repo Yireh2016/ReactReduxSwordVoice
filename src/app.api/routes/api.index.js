@@ -175,7 +175,7 @@ routerAPI.get("/getMoreResponses/", guestAPI, getMoreResponsesCtrl);
 routerAPI.get("/getMorePosts/", guestAPI, getMorePostsCtrl);
 routerAPI.get("/searchArticle/", guestAPI, searchArticleCtrl);
 routerAPI.get("/searchLastArticles/", guestAPI, searchLastArticlesCtrl);
-routerAPI.get("/advancedSearchDb/", advancedSearchDbCtrl);
+routerAPI.get("/advancedSearchDb/", guestAPI, advancedSearchDbCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

@@ -375,6 +375,8 @@ export const filterPopularCtrl = (req, res) => {
     popularTotalCount,
     popularCount,
     posts => {
+      console.log("filter posts", posts);
+
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {

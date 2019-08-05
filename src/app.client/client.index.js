@@ -12,6 +12,8 @@ import { loadableReady } from "@loadable/component";
 //components
 import App from "./app";
 import ScrollToTop from "../app.client/components/general/scrollToTop/scrollToTop.component";
+
+import ErrorBoundary from "./components/errorBoundary/ErrorBoundary";
 //Store
 import { store, history } from "../app.redux.store/store/configStore";
 
@@ -27,7 +29,9 @@ loadableReady(() => {
           <Router>
             <ScrollToTop>
               <StyleRoot>
-                <App />
+                <ErrorBoundary>
+                  <App />
+                </ErrorBoundary>
               </StyleRoot>
             </ScrollToTop>
           </Router>

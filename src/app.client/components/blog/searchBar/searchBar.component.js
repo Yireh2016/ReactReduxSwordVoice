@@ -7,7 +7,7 @@ const SearchBarCont = styled.div`
   border: ${props =>
     props.isFocus ? "1px #0387b7 solid" : "1px transparent solid"};
   @media (max-width: 700px) {
-    border: "1px #0387b7 solid";
+    border: 1px #0387b7 solid;
   }
   border-radius: 10px;
   padding-bottom: 0px 5px;
@@ -19,7 +19,7 @@ const Bar = styled.div`
   transform: ${props =>
     !props.isFocus ? "translateX(70%)" : "translateX(0%)"};
   @media (max-width: 700px) {
-    transform: "translateX(0%)";
+    transform: translateX(0%);
   }
 `;
 

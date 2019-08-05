@@ -1,6 +1,22 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
+import styled from "styled-components";
+
+const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const NoLandscape = ({
   children,
   showResolutionWarning,
@@ -11,6 +27,10 @@ const NoLandscape = ({
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
+      console.log("windowHeight", windowHeight);
+
+      console.log("windowWidth", windowWidth);
+
       if (
         navigator.userAgent.match(/Android/i) ||
         navigator.userAgent.match(/webOS/i) ||
@@ -18,15 +38,15 @@ const NoLandscape = ({
         navigator.userAgent.match(/iPad/i) ||
         navigator.userAgent.match(/iPod/i) ||
         navigator.userAgent.match(/BlackBerry/i) ||
-        navigator.userAgent.match(/Windows Phone/i)
+        navigator.userAgent.match(/Windows Phone/i) ||
+        navigator.userAgent.match(/PlayBook/i)
       ) {
+        console.log("mobile");
         if (windowWidth > windowHeight) {
           //landscape
-          if (windowWidth < 1050) {
-            setShowResolutionWarning(true);
-          } else {
-            setShowResolutionWarning(false);
-          }
+          console.log("landscape");
+
+          setShowResolutionWarning(true);
         } else {
           setShowResolutionWarning(false);
         }
@@ -40,10 +60,10 @@ const NoLandscape = ({
   return (
     <React.Fragment>
       {showResolutionWarning && (
-        <div className="nolandscape">
+        <Container id="nolandscape">
           <span>This site is not landscape friendly</span>
           <span>Please, turn your device to portrait position. Thanks </span>
-        </div>
+        </Container>
       )}
       {children}
     </React.Fragment>

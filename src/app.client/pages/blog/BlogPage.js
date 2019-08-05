@@ -416,9 +416,7 @@ class BlogPage extends React.Component {
 
     console.log("getMorePostsRes", getMorePostsRes);
     if (getMorePostsRes.status === "OK") {
-      let articlesArr = this.props.blog.articlesArr;
-
-      articlesArr = [...articlesArr, ...getMorePostsRes.articles];
+      let articlesArr = [...articlesArr, ...getMorePostsRes.articles];
       this.props.setArticlesArr(articlesArr);
     }
     this.setState({ isLoadingPosts: false });
@@ -479,7 +477,7 @@ class BlogPage extends React.Component {
     const filterPopularRes = await filterPopular(
       filter,
       this.props.blog.articlesCount,
-      this.props.blog.popularArticlesArr.length
+      0
     );
 
     if (filterPopularRes.statusText === "OK") {
@@ -487,18 +485,43 @@ class BlogPage extends React.Component {
         isFilterLoading: false
       });
 
-      this.props.setPopularArr([
-        ...this.props.blog.popularArticlesArr,
-        ...filterPopularRes.popularArr
-      ]);
+      this.props.setPopularArr([...filterPopularRes.popularArr]);
       return;
     }
     console.log("Error changing filter", filterPopularRes.statusText);
     this.props.setFilter(lastFilter);
   };
 
-  MorePopularPostsHandler = () => {
-    console.log("click MorePopularPostsHandler");
+  MorePopularPostsHandler = async () => {
+    this.setState({ isLoadingPopularPosts: true });
+
+    let filter;
+    const filterObj = this.props.blog.popularFilter;
+
+    Object.keys(filterObj).forEach(key => {
+      let value = filterObj[key];
+
+      if (value === true) {
+        filter = key;
+        return;
+      }
+    });
+
+    const filterPopularRes = await filterPopular(
+      filter,
+      this.props.blog.articlesCount,
+      this.props.blog.popularArticlesArr.length
+    );
+
+    if (filterPopularRes.statusText === "OK") {
+      this.props.setPopularArr([
+        ...this.props.blog.popularArticlesArr,
+        ...filterPopularRes.popularArr
+      ]);
+
+      return;
+    }
+    console.log("Error searching filter", filterPopularRes.statusText);
   };
 
   onSearch = async value => {
@@ -596,7 +619,7 @@ class BlogPage extends React.Component {
     }
 
     const recentPostsArray = articlesArr.slice(1);
-    const popPostsArray = popularArticlesArr;
+    const popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
     const newPostArray = articlesArr.slice(0, 1);
 
     const isClientSide =
@@ -630,7 +653,9 @@ class BlogPage extends React.Component {
         </div>
       </footer>
     );
-    const asidePosts = popPostsArray.map((post, i) => {
+
+    const asidePosts = popPostsArray.map((post, i, arr) => {
+      const arrLen = arr.length;
       const {
         title,
         keywords,
@@ -645,9 +670,26 @@ class BlogPage extends React.Component {
       let avatar;
 
       avatar = post.avatar;
+      const size = this.state.asidePostW;
 
+      if (post.moreBtn && post.moreBtn === "exist") {
+        return (
+          <FlexItem key={i} size={size}>
+            <MorePostsCont>
+              <MorePosts
+                onClick={this.MorePopularPostsHandler}
+                id="MorePopularPosts"
+                noPadding={showLoading}
+              >
+                {showLoading ? <Loading /> : "More..."}
+              </MorePosts>
+            </MorePostsCont>
+          </FlexItem>
+        );
+      }
+      const showLoading = this.state.isLoadingPopularPosts;
       return (
-        <FlexItem key={i} size={this.state.asidePostW}>
+        <FlexItem key={i} size={size}>
           <Post
             id={i}
             size="md"
@@ -669,6 +711,7 @@ class BlogPage extends React.Component {
         </FlexItem>
       );
     });
+
     const aside = (
       <React.Fragment>
         <section id="popularPost">{footerBlog}</section>
@@ -741,22 +784,6 @@ class BlogPage extends React.Component {
                   <AsidePostsCont data-simplebar id="postsContainer">
                     {asidePosts}
                   </AsidePostsCont>
-                )}
-                {this.props.blog.popularCount >
-                  this.props.blog.popularArticlesArr.length && (
-                  <MorePostsCont>
-                    <MorePosts
-                      onClick={this.MorePopularPostsHandler}
-                      id="MorePopularPosts"
-                      noPadding={this.state.isLoadingPopularPosts}
-                    >
-                      {this.state.isLoadingPopularPosts ? (
-                        <Loading />
-                      ) : (
-                        "More..."
-                      )}
-                    </MorePosts>
-                  </MorePostsCont>
                 )}
               </div>
             </section>
