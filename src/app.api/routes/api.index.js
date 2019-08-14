@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 //controllers
 import {
   signUpCtrl,
+  signUpEmailConfirmCtrl,
   loginCtrl,
   logoutCtrl,
   autoLogin,
@@ -41,7 +42,6 @@ import { updateUserCtrl } from "../controllers/cms/usersControllers";
 
 let routerAPI = express.Router();
 let usersModel = mongoose.model("User");
-let articleModel = mongoose.model("Article");
 
 function authAPI(req, res, next) {
   if (req.signedCookies.sessionID) {
@@ -72,6 +72,8 @@ function guestAPI(req, res, next) {
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
 routerAPI.post("/signup", guestAPI, signUpCtrl);
+
+routerAPI.post("/signUpEmailConfirm", signUpEmailConfirmCtrl);
 
 // hacer Login
 //se usa en: logInForm

@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import NavBar from "../navbar/navbar.component";
 import is from "is_js";
 import Helmet from "react-helmet";
+import styled from "styled-components";
 //imagenes
 import imgFondo from "../../assets/img/home/creative1280.jpg";
 import imgFondoMed from "../../assets/img/home/creative760.jpg";
@@ -13,7 +14,36 @@ import FooterApp from "../footer/footer.component";
 import Call2Action from "../general/call2action.component";
 import SwordVoice from "../general/swordVoice/swordVoice.component";
 
+import whiteSeal from "../../assets/svgIcons/selloSWAcademy_white.png";
+
 //layouts
+
+const Seal = styled.img`
+  width: 125px;
+  transform: rotate(-20deg);
+
+  @media (max-width: 700px) {
+    width: 70px;
+  }
+`;
+
+const Slogan = styled.h2`
+  font-weight: 500 !important;
+  color: hsla(196, 97%, 46%, 1);
+  word-spacing: 5px;
+  letter-spacing: 0.9px !important;
+  font-size: 5.5vh !important;
+  position: fixed;
+  bottom: 19vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  text-align: center;
+  @media (max-width: 700px) {
+    font-size: 4.5vh !important;
+    bottom: 22vh;
+  }
+`;
 
 class Home extends Component {
   constructor(props) {
@@ -27,9 +57,14 @@ class Home extends Component {
     return (
       <div>
         <Helmet>
+          <title>
+            SwordVoice.com &#183; Fullstack Web/Mobile Developers and UI/UX
+            Designers Community
+          </title>
           <meta
             name="Description"
-            content="From custom web development and UI/UX to courses and tutorials come and discover by yourself what we offer, come and discover SwordVoice"
+            content="SwordVoice.com &#183; Online Community of Fullstack Web/Mobile Developers and UI/UX
+            Designers. Join Us and... Let Your SwordVoice be Heard!!!"
           />
         </Helmet>
         <header>
@@ -125,7 +160,7 @@ class Home extends Component {
           </svg>
         </div>
         {/*Hero Section*/}
-        <section className="home-hero center">
+        <section className="home-hero ">
           <div id="tarjetaAnimada" className="center" />
           {/* <LightShadow factor={-10}> */}
           <h1 ref={this.titleRef}>
@@ -133,8 +168,20 @@ class Home extends Component {
             {is.edge() ? "SwordVoice" : <SwordVoice delay={4} />}
           </h1>
           {/* </LightShadow> */}
-          <h2>Custom Web Design and Development, Courses and more</h2>
+          <h2>
+            FullStack Web/Mobile and UI/UX Developers and Designers Community.
+            Come and...
+          </h2>
+
+          <div
+            style={{
+              position: "fixed"
+            }}
+          >
+            <Seal src={whiteSeal} alt="white Swordvoice Seal" />
+          </div>
         </section>
+        <Slogan>Let Your SwordVoice be Heard!!!</Slogan>
         {/*Boton de accion y footer*/}
         <Call2Action className="call2Action-home appear" />
         <FooterApp

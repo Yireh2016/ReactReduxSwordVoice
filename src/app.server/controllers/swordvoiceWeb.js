@@ -101,7 +101,6 @@ const renderWithPreloadedState = (req, res, store) => {
       scriptTags,
       linkTags,
       styleTags,
-      title: "SwordVoice | Custom Web Development",
       initialState: safeStringify(preloadedState),
       seoID: process.env.SEO_ID
     })

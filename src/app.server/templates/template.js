@@ -3,7 +3,6 @@ export default ({
   scriptTags,
   linkTags,
   styleTags,
-  title,
   initialState,
   seoID
 }) => {
@@ -44,7 +43,6 @@ export default ({
         <script>window.__PRELOADED_STATE__ = ${initialState}</script>
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
-        <title>${title}</title>
         <base href="/">
         ${linkTags}
         ${styleTags}

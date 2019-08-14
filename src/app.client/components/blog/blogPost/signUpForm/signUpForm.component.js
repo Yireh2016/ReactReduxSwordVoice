@@ -61,8 +61,8 @@ class SignUpForm extends Component {
     blobToBase64(image, base64 => {
       this.setState(() => {
         return {
-          userAvatar: `${base64}`,
-          userAvatarPreview: `url(${base64})`,
+          userAvatar: `${base64.url}`,
+          userAvatarPreview: `url(${base64.url})`,
           uploadMessage: undefined
         };
       });

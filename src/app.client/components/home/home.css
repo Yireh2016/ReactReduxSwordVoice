@@ -132,6 +132,11 @@
   -o-animation: bounce 2s cubic-bezier(1, 0, 0.445, 1.435) 1s normal forwards;
   animation: bounce 2s cubic-bezier(1, 0, 0.445, 1.435) 1s normal forwards;
   transform: translate(-50%, -500%);
+
+  position: fixed;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
 }
 @keyframes bounce {
   from {
@@ -152,9 +157,12 @@
   font-style: normal;
   font-weight: 300;
   line-height: normal;
-  font-size: 6vh;
+  font-size: 5vh;
+  letter-spacing: 0.4px;
   text-align: right;
   margin-right: 18px;
+  width: 80%;
+  float: right;
 }
 
 .home-hero * {
@@ -236,7 +244,7 @@
     font-weight: 400;
   }
   .call2Action-home {
-    bottom: 20%;
+    bottom: 13vh;
   }
   .redesSociales-home {
     width: 5vw;
@@ -288,13 +296,13 @@
     letter-spacing: 0.5rem;
   }
   .home-hero h2 {
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: 0.05em;
     margin: 10px 0 20px 0;
   }
   .call2Action-home {
-    bottom: 20%;
+    bottom: 13vh;
   }
   .redesSociales-home {
     fill: #f95f0b !important;

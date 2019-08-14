@@ -14,7 +14,7 @@ class LightShadow extends Component {
     window.addEventListener("mousemove", e => {
       const cursorX = e.x;
       const cursorY = e.y;
-      if (this.props.children.ref) {
+      if (this.props.children.ref && this.props.children.ref.current) {
         const childElementX =
           this.props.children.ref.current.getBoundingClientRect().top +
           this.props.children.ref.current.clientWidth;

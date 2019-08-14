@@ -30,7 +30,8 @@
   z-index: -1;
 }
 .texto {
-  padding-left: 5%;
+  padding: 0 5%;
+  margin: 0 0 100px 0;
 }
 
 .contenedorTexto {
@@ -38,9 +39,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  height: 100%;
   box-sizing: border-box;
-  padding-top: 4vh;
 }
 
 .parrafo {
@@ -48,6 +47,8 @@
   color: white;
   font-style: normal;
   font-weight: normal;
+  overflow-y: scroll;
+  padding: 20px 0 0 0;
 }
 .parrafo a {
   text-decoration: none;
@@ -60,11 +61,13 @@
   line-height: normal;
   font-size: 5vh;
   color: #f95f0b;
+  margin: 0 0 15px 0;
 }
 .parrafo p {
   margin: 0;
   line-height: 5vh;
   font-size: 3vh;
+  margin: 0 0 30px 0;
 }
 .PCdecoration {
   width: 100%;
@@ -84,7 +87,7 @@
   margin-top: 16vh;
 }
 .asidePC {
-  margin-top: 64vh;
+  margin-top: 63vh;
 }
 
 .call2actionAside {
@@ -98,6 +101,7 @@
 }
 
 .contenedorFila-about {
+  padding: 20px 0 0 0;
   border: 2px var(--orange) solid;
   border-bottom: none;
   border-radius: 210px 210px 0 0;
@@ -188,13 +192,12 @@
   }
   .texto {
     padding: 0;
+    margin: 0px 0 150px 0;
   }
 
   .contenedorTexto {
     padding: 15px 25px 0 40px;
     margin: 0;
-    display: flex;
-    flex-direction: column;
     justify-content: space-evenly;
   }
   .call2action-med {
@@ -214,6 +217,7 @@
 @media (max-width: 700px) /*phones */ {
   .parrafo {
     width: 100%;
+    overflow: none;
   }
   .parrafo h2 {
     font-size: 10vmin;
@@ -228,9 +232,14 @@
     margin: 0;
     padding: 0 16px;
     height: 120vh;
+    display: block;
   }
   .texto {
     padding-left: 5%;
+    margin: 0 0 120px 0;
+  }
+  .contenedorTexto article:nth-child(3) {
+    margin: 0 0 30px 0;
   }
 
   .footerContainer-about {

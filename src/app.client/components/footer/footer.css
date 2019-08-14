@@ -32,7 +32,7 @@
     left: 50%;
     bottom: 5%;
     width: fit-content;
-    transform: translateX(calc(-50% + 16px));
+    transform: translateX(calc(-50%));
   }
 }
 /**/
