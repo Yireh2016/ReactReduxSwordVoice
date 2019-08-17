@@ -64,6 +64,10 @@ class PostCard extends React.Component {
       title,
       summaryTextHtml
     } = this.props;
+
+    console.log("postImg", postImg);
+    console.log("postImg", postImg);
+    console.log("postImg again", postImg);
     const { isDetail, isDeviceResult } = this.state;
 
     let conditionStyle;
@@ -89,25 +93,41 @@ class PostCard extends React.Component {
             {
               height: `${postH}px`,
               width: `${postH * 1.028}px`
-            },
-            typeof postImg === "string"
-              ? { backgroundImage: `${postImg}` }
-              : postImg
+            }
+            // typeof postImg === "string"
+            //   ? { backgroundImage: `${postImg}` }
+            //   : postImg
           ]}
         >
           <a aria-label="go and read this article" href={url}>
+            <img
+              style={[
+                {
+                  width: "100%"
+                }
+              ]}
+              src={
+                typeof postImg === "string"
+                  ? postImg.match(/url\("?(.*)"?\)/)[1]
+                  : postImg.backgroundImage.match(/url\("?(.*)"?\)/)[1]
+              }
+              alt="Article Thumbnail"
+            />
             <div
               id={`${this.props.id}` + "gradientBackground"}
               style={[
                 // styles.gradientBackground,
                 {
+                  position: "absolute",
+                  top: "0",
+                  left: "0",
                   backgroundImage: postGradient,
                   width: "100%",
                   height: "100%"
                 }
               ]}
             >
-              <h3
+              <h2
                 id={`${this.props.id}` + "postTitle"}
                 style={[
                   {
@@ -123,7 +143,7 @@ class PostCard extends React.Component {
                 ]}
               >
                 {title}
-              </h3>
+              </h2>
             </div>
           </a>
 

@@ -235,13 +235,13 @@
 }
 .personalData {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 .personalData label {
-  width: 50%;
+  width: 75%;
 }
 .personalData label:nth-child(2) {
-  margin-left: 1.3vw;
+  margin-top: 1.3vw;
 }
 @media (max-width: 1050px) {
   .formCard {

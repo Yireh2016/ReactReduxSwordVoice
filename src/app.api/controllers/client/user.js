@@ -52,8 +52,6 @@ export const signUpCtrl = async (req, res) => {
     userData.userAvatar = uploadAvatarRes.avatarURL;
   } else {
     userData.userAvatar = "";
-    uploadAvatarRes.status !== "OK" &&
-      console.log("error uploading image", uploadAvatarRes.status);
   }
 
   userData = { ...userData, _id: mongoose.Types.ObjectId() };

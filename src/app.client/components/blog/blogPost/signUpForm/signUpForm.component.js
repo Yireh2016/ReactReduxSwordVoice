@@ -15,6 +15,7 @@ import "./signUpForm.css";
 import UploadImage from "./uploadImage";
 import blobToBase64 from "../../../../../services/blobToBase64";
 //components
+import Dialog from "../../../../components/dialog/Dialog.component";
 //api calls
 
 class SignUpForm extends Component {
@@ -66,29 +67,6 @@ class SignUpForm extends Component {
           uploadMessage: undefined
         };
       });
-      // try {
-      //   const sendUserTempImageRes = await sendUserTempImage(base64);
-      //   console.log("sign up form sendUserTempImageRes", sendUserTempImageRes);
-      //   if (sendUserTempImageRes.status === "OK") {
-      //     this.setState(() => {
-      //       return {
-      //         userAvatar: `${process.env.CDN_URL}/${
-      //           sendUserTempImageRes.filename
-      //         }`,
-      //         userAvatarPreview: `url(${process.env.CDN_URL}/${
-      //           sendUserTempImageRes.filename
-      //         })`,
-      //         uploadMessage: undefined
-      //       };
-      //     });
-      //     alert("file Uploaded successfully");
-      //     return;
-      //   }
-      //   alert("An error has occured ");
-      // } catch (err) {
-      //   console.log("err", err);
-      //   alert("An error has occured ");
-      // }
     });
   };
 
@@ -371,47 +349,116 @@ class SignUpForm extends Component {
     });
   };
   onNextClick = () => {
-    this.setState(prevState => {
-      let nextPage = prevState.formPage + 1;
+    const nextPage = this.state.formPage + 1;
+    if (nextPage === 2) {
+      const {
+        userEmailIsValid,
+        userFirstNameIsValid,
+        userLastNameIsValid,
+        userCountry
+      } = this.state;
+
       if (
-        nextPage === 2 &&
-        prevState.userEmailIsValid.valid === true &&
-        prevState.userFirstNameIsValid === true &&
-        prevState.userLastNameIsValid === true &&
-        prevState.userCountry !== " "
+        userEmailIsValid.valid === true &&
+        userFirstNameIsValid === true &&
+        userLastNameIsValid === true &&
+        userCountry !== " "
       ) {
-        return {
+        this.setState({
           formPage: nextPage,
           animControl1: "flyToLeft",
           animControl2: "flyIn"
-        };
+        });
+        return;
       }
-
+    } else if (nextPage === 3) {
+      const {
+        userBirthDateIsValid,
+        userGenderIsValid,
+        userOtherInterestsTextIsValid,
+        userOtherInterestsText
+      } = this.state;
       if (
-        nextPage === 3 &&
-        prevState.userBirthDateIsValid === true &&
-        prevState.userGenderIsValid === true &&
-        prevState.userOtherInterestsTextIsValid
+        userBirthDateIsValid === true &&
+        userGenderIsValid === true &&
+        userOtherInterestsTextIsValid
       ) {
-        if (prevState.userOtherInterestsText !== "") {
-          const text = prevState.userOtherInterestsText;
-          const interests = prevState.userOtherInterests;
+        if (userOtherInterestsText !== "") {
+          const text = userOtherInterestsText;
+          const interests = userOtherInterests;
           interests.push(text);
-          return {
+          this.setState({
             formPage: nextPage,
             animControl2: "flyToLeft",
             animControl3: "flyIn",
             userOtherInterests: interests
-          };
+          });
+          return;
         }
-        return {
+        this.setState({
           formPage: nextPage,
           animControl2: "flyToLeft",
           animControl3: "flyIn"
-        };
+        });
+        return;
       }
-      alert("Please, fill all required values");
-    });
+    }
+
+    this.triggerDialog("Ups 😅", "Please, fill all required values");
+
+    // this.setState(prevState => {
+    //   let nextPage = prevState.formPage + 1;
+    //   if (
+    //     nextPage === 2 &&
+    //     prevState.userEmailIsValid.valid === true &&
+    //     prevState.userFirstNameIsValid === true &&
+    //     prevState.userLastNameIsValid === true &&
+    //     prevState.userCountry !== " "
+    //   ) {
+    //     return {
+    //       formPage: nextPage,
+    //       animControl1: "flyToLeft",
+    //       animControl2: "flyIn"
+    //     };
+    //   }
+
+    //   if (
+    //     nextPage === 3 &&
+    //     prevState.userBirthDateIsValid === true &&
+    //     prevState.userGenderIsValid === true &&
+    //     prevState.userOtherInterestsTextIsValid
+    //   ) {
+    //     if (prevState.userOtherInterestsText !== "") {
+    //       const text = prevState.userOtherInterestsText;
+    //       const interests = prevState.userOtherInterests;
+    //       interests.push(text);
+    //       return {
+    //         formPage: nextPage,
+    //         animControl2: "flyToLeft",
+    //         animControl3: "flyIn",
+    //         userOtherInterests: interests
+    //       };
+    //     }
+    //     return {
+    //       formPage: nextPage,
+    //       animControl2: "flyToLeft",
+    //       animControl3: "flyIn"
+    //     };
+    //   }
+
+    //   return;
+    // });
+  };
+
+  triggerDialog = (title, body, auto) => {
+    this.props.setDialog({ title, body, show: true, status: auto });
+
+    if (auto) {
+      setTimeout(() => {
+        this.props.setDialog({ title, body, show: false });
+        this.props.onCancelClick();
+      }, 3000);
+    }
   };
   onBackClick = () => {
     this.setState(prevState => {
@@ -511,20 +558,34 @@ class SignUpForm extends Component {
               userAvatar: userData.userAvatar,
               userFullName: `${userFirstName} ${userLastName}`
             });
-            alert("data submited ");
+            this.triggerDialog(
+              "Way to Go!! 😁",
+              `Welcome to our Comunity ${userName}`,
+              true
+            );
           } else {
             //en caso de no poder salvar el usuario en DB se destruye la cookie de session
             //OJO mostrar error
           }
-          this.props.onCancelClick(); //se cierra el modal de signup
+          return;
+          // this.props.onCancelClick(); //se cierra el modal de signup
         })
         .catch(err => {
-          alert(`There was an error status:  ${err}`);
+          let errorText;
+          if (!err.response) {
+            errorText = "Network Error";
+          }
+          errorText = err.response.data.message;
+
+          triggerDialog(
+            "Error 🤬",
+            ` There was an error status:  ${errorText}`
+          );
         });
 
       return;
     }
-    alert("Please, fill all required values");
+    this.triggerDialog("Ups 😅", "Please, fill all required values");
   };
 
   componentDidMount() {
@@ -545,7 +606,7 @@ class SignUpForm extends Component {
   render() {
     let controlButtons;
     switch (this.state.formPage) {
-      case 3: {
+      default: {
         controlButtons = (
           <React.Fragment>
             <button
@@ -555,19 +616,29 @@ class SignUpForm extends Component {
             >
               Back
             </button>
-            <button
-              className="logSignBtn"
-              onClick={this.onSubmitClick}
-              type="button"
-            >
-              Submit
-            </button>
+            {this.state.formPage === 3 ? (
+              <button
+                className="logSignBtn"
+                onClick={this.onSubmitClick}
+                type="button"
+              >
+                Submit
+              </button>
+            ) : (
+              <button
+                className="logSignBtn"
+                onClick={this.onNextClick}
+                type="button"
+              >
+                Next
+              </button>
+            )}
           </React.Fragment>
         );
         break;
       }
 
-      default: {
+      case 1: {
         controlButtons = (
           <React.Fragment>
             <button
@@ -640,6 +711,7 @@ class SignUpForm extends Component {
         }}
         onClick={this.props.onCancelClick}
       >
+        {this.props.dialogShow && <Dialog />}
         <div
           className="formCard "
           onClick={e => {
@@ -1123,7 +1195,7 @@ class SignUpForm extends Component {
                         <span id="signUpuseruserBirthDate">Birth Date</span>{" "}
                         <br />
                         <input
-                          type="date"
+                          type="month"
                           name="userBirthDate"
                           htmlFor="userBirthDate"
                           aria-label="userBirthDate"
@@ -1146,8 +1218,9 @@ class SignUpForm extends Component {
                           onBlur={this.handleOnBlur}
                         >
                           <option value=" ">Select one</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
+                          <option value="male">😎 Male</option>
+                          <option value="female">😘 Female</option>
+                          <option value="other">😍 Other</option>
                         </select>
                       </label>
                     </div>
@@ -1280,7 +1353,7 @@ class SignUpForm extends Component {
                         fontWeight: "300"
                       }}
                     >
-                      I accept the
+                      I accept the{" "}
                       <a
                         aria-label="go and check the term of service"
                         href="#"
@@ -1310,19 +1383,17 @@ const mapStateToProps = state => {
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
-    loggedUserAvatar: state.logInStatus.loggedUserAvatar
-
-    /*   isUserLoggedIn: false,
-  loggedUserAvatar: undefined,
-  loggedUserName: undefined
-          
-          */
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar,
+    dialogTitle: state.dialog.title,
+    dialogBody: state.dialog.body,
+    dialogShow: state.dialog.show
   };
 };
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
+    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload }),
+    setDialog: dialogObj => dispach({ type: "SET_DIALOG", payload: dialogObj })
   };
 };
 

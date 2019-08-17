@@ -60,21 +60,24 @@ const Button = styled.button`
     cursor: pointer;
   }
 `;
-const Dialog = ({ title, body, status, showDialog }) => {
+const Dialog = ({ title, body, status = false, showDialog }) => {
   return (
     <Container id="dialogCont">
       <Layout id="dialogLayout">
         <Title id="dialogTitle"> {title}</Title>
         <p id="dialogBody"> {body}</p>
         <Control id="dialogCtrlCont">
-          <Button
-            className="cmsBtn"
-            onClick={() => {
-              showDialog(false);
-            }}
-          >
-            Ok
-          </Button>
+          {!status && (
+            <Button
+              className="cmsBtn"
+              onClick={e => {
+                e.stopPropagation();
+                showDialog(false);
+              }}
+            >
+              Ok
+            </Button>
+          )}
         </Control>
       </Layout>
     </Container>

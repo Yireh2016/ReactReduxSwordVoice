@@ -27,10 +27,6 @@ const NoLandscape = ({
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      console.log("windowHeight", windowHeight);
-
-      console.log("windowWidth", windowWidth);
-
       if (
         navigator.userAgent.match(/Android/i) ||
         navigator.userAgent.match(/webOS/i) ||
@@ -44,7 +40,6 @@ const NoLandscape = ({
         console.log("mobile");
         if (windowWidth > windowHeight) {
           //landscape
-          console.log("landscape");
 
           setShowResolutionWarning(true);
         } else {

@@ -114,7 +114,7 @@ const swordvoiceWeb = async (req, res) => {
 
   const routerPromise = () =>
     new Promise((resolve, reject) => {
-      console.log(" routerPromise EJECUTANDOSE");
+      console.log(" routerPromise EJECUTANDOSE", req.url);
 
       if (req.url.match("/blog/post/")) {
         const RESPONSES_LIMIT = 3;
