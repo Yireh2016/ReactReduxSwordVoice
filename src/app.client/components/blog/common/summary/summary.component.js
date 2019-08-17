@@ -59,7 +59,8 @@ class Summary extends React.Component {
     });
 
     const readMore = this.props.hasReadMore ? (
-      <a aria-label="go and read more about this article"
+      <a
+        aria-label="go and read more about this article"
         style={{
           fontWeight: "bold",
           paddingLeft: "20px",
@@ -67,7 +68,7 @@ class Summary extends React.Component {
         }}
         href="/blog/post"
       >
-        Read More ...
+        📚 Read More ...
       </a>
     ) : null;
 

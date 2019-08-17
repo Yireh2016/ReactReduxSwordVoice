@@ -5,6 +5,7 @@ import { connectRouter } from "connected-react-router";
 import reducer from "./reducer";
 import article from "./article";
 import blog from "./blogReducer";
+import responsiveDialog from "./responsiveDialog";
 import dialog from "./dialogReducer";
 
 export default history =>
@@ -13,5 +14,6 @@ export default history =>
     logInStatus: reducer,
     article: article,
     blog: blog,
+    responsiveDialog: responsiveDialog,
     dialog: dialog
   });

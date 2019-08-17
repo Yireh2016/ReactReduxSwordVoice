@@ -12,7 +12,7 @@ export default ({
     <html lang="en">
       <head>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-
+      <title>SwordVoice.com</title>
       <meta charset="utf-8">
       <meta name="language" content="english"> 
       <meta http-equiv="content-type" content="text/html">

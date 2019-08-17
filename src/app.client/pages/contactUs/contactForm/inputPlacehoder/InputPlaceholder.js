@@ -35,12 +35,58 @@ const Placeholder = styled.span`
 `;
 
 const Input = styled.input`
+  border-right: ${props => {
+    const { valid } = props;
+    let result;
+
+    switch (valid) {
+      case true: {
+        result = "5px solid #4caf50";
+        break;
+      }
+
+      case false: {
+        result = "5px solid #e91e63";
+        break;
+      }
+
+      default: {
+        result = "5px solid transparent";
+        break;
+      }
+    }
+    return result;
+  }};
+  border-radius: 0 5px 5px 0;
+
   :focus {
     outline: none;
   }
 `;
 
 const Textarea = styled.textarea`
+  border-right: ${props => {
+    const { valid } = props;
+    let result;
+
+    switch (valid) {
+      case true: {
+        result = "5px solid #4caf50";
+        break;
+      }
+
+      case false: {
+        result = "5px solid #e91e63";
+        break;
+      }
+
+      default: {
+        result = "5px solid transparent";
+        break;
+      }
+    }
+    return result;
+  }};
   font-family: "Work Sans", monospace;
   :focus {
     outline: none;
@@ -53,28 +99,34 @@ const InputPlaceholder = ({
   placeholder,
   onChange,
   placeholderStyle,
-  inputStyle
+  inputStyle,
+  value,
+  valid
 }) => {
   const [isFocus, setisFocus] = useState(false);
   const [isInputFilled, setisInputFilled] = useState(false);
   const inputRef = React.createRef();
 
   const onInputChange = e => {
-    const { value } = e.target;
+    const event = e;
+    const { value } = event.target;
     if (value) {
       setisInputFilled(true);
     } else {
       setisInputFilled(false);
     }
 
-    onChange();
+    onChange(event);
   };
 
   const focusPlaceholder = () => {
+    console.log("focus");
+
     setisFocus(true);
   };
 
   const unfocusPlaceholder = () => {
+    console.log("blur");
     if (!isInputFilled) {
       setisFocus(false);
     }
@@ -103,16 +155,20 @@ const InputPlaceholder = ({
           style={inputStyle}
           onFocus={focusPlaceholder}
           onBlur={unfocusPlaceholder}
+          value={value}
+          valid={valid}
         />
       ) : (
         <Input
           ref={inputRef}
-          onChange={onInputChange}
           style={inputStyle}
           onFocus={focusPlaceholder}
           onBlur={unfocusPlaceholder}
+          onChange={onInputChange}
+          value={value}
           type={type}
           name={name}
+          valid={valid}
         />
       )}
     </InputContainer>

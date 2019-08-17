@@ -192,7 +192,7 @@ const Summary = ({
       <Container>
         <SummaryLay postW={postW}>
           <SummaryTitle postW={postW} size={size}>
-            Summary
+            🕮 Summary
           </SummaryTitle>
           <SummarySection>
             <SummaryText postW={postW} size={size}>
@@ -201,7 +201,7 @@ const Summary = ({
           </SummarySection>
           <SummaryFooter>
             <SummaryLink postW={postW} href={link}>
-              Read More...
+              📚 Read More...
             </SummaryLink>
             <div id={`${id}` + "keywordsArea"}>{keywordsMap}</div>
             <SummaryDate postW={postW}>{date}</SummaryDate>

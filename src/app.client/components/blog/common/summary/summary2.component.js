@@ -86,7 +86,7 @@ class Summary2 extends React.Component {
       const fontStyle = { fontSize: `${fontSize}px` };
       return (
         <h3 style={fontStyle} className={titleCSS}>
-          Summary
+          🕮 Summary
         </h3>
       );
     };
@@ -140,12 +140,12 @@ class Summary2 extends React.Component {
       return (
         <p>
           <a
-          aria-label="go and read more about this article"
+            aria-label="go and read more about this article"
             href={`/blog/post/${this.props.url}`}
             style={fontStyle}
             className={readMoreCSS}
           >
-            Read More ...
+            📚 Read More ...
           </a>
         </p>
       );

@@ -38,6 +38,8 @@ import {
   advancedSearchDbCtrl
 } from "../controllers/client/articleCtrl";
 
+import { sendContactFormCtrl } from "../controllers/visitor/visitorCtrl";
+
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
 
 let routerAPI = express.Router();
@@ -80,6 +82,8 @@ routerAPI.post("/signUpEmailConfirm", signUpEmailConfirmCtrl);
 routerAPI.post("/login", guestAPI, loginCtrl);
 
 routerAPI.post("/sendUserTempImage", guestAPI, sendUserTempImageCtrl);
+
+routerAPI.post("/sendContactForm", guestAPI, sendContactFormCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

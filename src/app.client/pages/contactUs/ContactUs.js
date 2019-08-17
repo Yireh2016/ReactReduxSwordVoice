@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+
 import styled from "styled-components";
-import Helmet from "react-helmet";
+// import Helmet from "react-helmet";
 
 //layout
 import NavBarLayout from "../../layouts/NavBarLayout";
@@ -9,9 +11,13 @@ import NavBarLayout from "../../layouts/NavBarLayout";
 import Background from "./background/background";
 import ContactForm from "./contactForm/ContactForm";
 import SocialNet from "./socialNet/SocialNet";
+import Dialog from "../../components/dialog/Dialog.component";
 
 //assets
 import image from "../../assets/img/contact/message-in-a-bottle-3437294_960_720.jpg";
+
+//api call
+import sendContactForm from "../../../apiCalls/sendContactForm";
 
 const MainLayout = styled.div`
   display: flex;
@@ -77,8 +83,9 @@ const RightAside = styled.div`
     width: calc(12 * 100% / 12);
     position: fixed;
     height: auto;
-    bottom: 15px;
-    transform: translateY(-3vh);
+    bottom: 0px;
+    padding: 15px 0;
+    background: rgba(0, 23, 31, 0.7);
   }
 
   @media (max-width: 700px) {
@@ -87,20 +94,9 @@ const RightAside = styled.div`
   }
 `;
 
-const Button = styled.button`
-  z-index: 2;
-  margin-top: 30px;
-
-  @media (max-width: 1050px) {
-    margin-top: 40px;
-  }
-`;
 const ContactTitle = styled.h1`
   font-family: "Work sans", sans-serif;
   color: var(--orange);
-  @media (max-width: 1050px) {
-    display: none;
-  }
 `;
 
 const SocialNetCont = styled.div`
@@ -119,7 +115,7 @@ const SocialNetCont = styled.div`
   }
 `;
 
-const ContactUs = () => {
+const ContactUs = ({ isDialog, setDialog }) => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -128,39 +124,89 @@ const ContactUs = () => {
     }, 2000);
   }, []);
 
+  const triggerDialog = (title, body) => {
+    setDialog({ title, body, show: true, status: "" });
+    // :dialogObj=>{dispatch({type:"SET_DIALOG",payload:dialogObj})}
+
+    // setDialogTitle(title);
+    // setDialogBody(body);
+    // setShowDialog(true);
+  };
+  const submitHandler = async (isFormValid, form) => {
+    if (!isFormValid) {
+      const title = "Ups 😅 ";
+      const body = form.message;
+
+      triggerDialog(title, body);
+      return;
+    }
+
+    console.log(`form elements`, JSON.stringify(form));
+
+    const sendContactFormRes = await sendContactForm(form);
+
+    if (sendContactFormRes.status === "OK") {
+      triggerDialog("Way to Go!! 😁", sendContactFormRes.message);
+      return sendContactFormRes.status;
+    }
+    console.log("error sendContactFormRes", sendContactFormRes);
+    triggerDialog("Error 🤬", sendContactFormRes.message);
+    return sendContactFormRes.status;
+  };
+
   return (
-    <NavBarLayout id="navbar">
-      <Helmet>
+    <div>
+      {isDialog && <Dialog />}
+      <NavBarLayout id="navbar">
+        {/* <Helmet>
+        <title>SwordVoice.com &#183; 💌 Contact Us Here</title>
         <meta
           name="Description"
           content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
         />
-      </Helmet>
-      <MainLayout
-        style={{
-          transformOrigin: "top left",
-          transform: "rotate(180deg)"
-        }}
-        animation={animation}
-        id="mainLayout"
-      >
-        <NoPCTitleLay>
-          <NoPCContactTitle id="NoPCcontactTitle">Follow Us</NoPCContactTitle>
-        </NoPCTitleLay>
-        <LeftAside id="leftAside">
-          <Background image={image} id="background" />
-          <ContactForm id="ContactForm" />
-          <Button className="call2Action">Send</Button>
-        </LeftAside>
-        <RightAside id="RightAside">
-          <ContactTitle id="ContactTitle">Follow Us</ContactTitle>
-          <SocialNetCont id="SocialNetCont">
-            <SocialNet id="SocialNet" />
-          </SocialNetCont>
-        </RightAside>
-      </MainLayout>
-    </NavBarLayout>
+      </Helmet> */}
+        <MainLayout
+          style={{
+            transformOrigin: "top left",
+            transform: "rotate(180deg)"
+          }}
+          animation={animation}
+          id="mainLayout"
+        >
+          <NoPCTitleLay>
+            <NoPCContactTitle id="NoPCcontactTitle">
+              Contact Us
+            </NoPCContactTitle>
+          </NoPCTitleLay>
+          <LeftAside id="leftAside">
+            <Background image={image} id="background" />
+            <ContactForm id="ContactForm" onSubmit={submitHandler} />
+          </LeftAside>
+          <RightAside id="RightAside">
+            <ContactTitle id="ContactTitle">Follow Us</ContactTitle>
+            <SocialNetCont id="SocialNetCont">
+              <SocialNet id="SocialNet" />
+            </SocialNetCont>
+          </RightAside>
+        </MainLayout>
+      </NavBarLayout>
+    </div>
   );
 };
 
-export default ContactUs;
+const stateToProps = state => {
+  return {
+    isDialog: state.dialog.show
+  };
+};
+const actionsToProps = dispatch => {
+  return {
+    setDialog: dialogObj => {
+      dispatch({ type: "SET_DIALOG", payload: dialogObj });
+    }
+  };
+};
+export default connect(
+  stateToProps,
+  actionsToProps
+)(ContactUs);

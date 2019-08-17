@@ -416,7 +416,10 @@ class BlogPage extends React.Component {
 
     console.log("getMorePostsRes", getMorePostsRes);
     if (getMorePostsRes.status === "OK") {
-      let articlesArr = [...articlesArr, ...getMorePostsRes.articles];
+      let articlesArr = [
+        ...this.props.blog.articlesArr,
+        ...getMorePostsRes.articles
+      ];
       this.props.setArticlesArr(articlesArr);
     }
     this.setState({ isLoadingPosts: false });
@@ -897,7 +900,7 @@ class BlogPage extends React.Component {
             />
           </Modal>
         )}
-        {isLoading && (
+        {false && (
           <div
             style={{
               position: "fixed",

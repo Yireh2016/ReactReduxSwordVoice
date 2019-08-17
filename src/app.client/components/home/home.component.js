@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import NavBar from "../navbar/navbar.component";
 import is from "is_js";
 import Helmet from "react-helmet";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 //imagenes
 import imgFondo from "../../assets/img/home/creative1280.jpg";
 import imgFondoMed from "../../assets/img/home/creative760.jpg";
@@ -27,6 +27,135 @@ const Seal = styled.img`
   }
 `;
 
+const verticalMoveIn1 = keyframes`
+
+0%{
+   transform: translateY(0%);
+ }
+33%{
+  transform: translateY(-25%) ;
+}
+ 100%{
+   transform: translateY(0%);
+  }
+
+ 
+`; //.13,.84,.87,.29
+
+const verticalMoveOut1 = keyframes`
+
+0%{
+   transform: translateY(0%);
+ }
+33%{
+  transform: translateY(-8%) ;
+}
+ 100%{
+   transform: translateY(0%);
+  }
+`;
+
+const sealMoveIn = keyframes`
+
+0%{
+   transform: translateX(-100%);
+ }
+
+ 100%{
+   transform: translateX(calc(125px * 4)) 
+  }
+
+ 
+`;
+
+const sealMoveOut = keyframes`
+
+0%{
+   transform: translateX(calc(125px * 4));
+  }
+  100%{
+    transform: translateX(0) ;
+   }
+`;
+
+const shrinkIn = keyframes`
+0%{
+    transform:scale(1,1);
+  }
+  100%{
+     transform:scale(0.8,1) ;
+   }
+`;
+
+const shrinkOut = keyframes`
+0%{
+   transform:scale(0.8,1);
+  }
+  25%{
+     transform:scale(1.15,1) ;
+   }
+   50%{
+    transform:scale(.9,1);
+  }
+   100%{
+    transform:scale(1,1);
+  }
+`;
+
+const sealRotate = keyframes`
+
+  0%{
+    transform:rotate(0deg) ;
+  }
+
+  100%{
+    transform:rotate(1080deg)
+  }
+
+`;
+
+const sealRotate2 = keyframes`
+
+  0%{
+    transform:rotate(1080deg)
+  }
+
+  100%{
+    transform:rotate(700deg) ;
+  }
+
+`;
+const BouncerContainer = styled.div`
+  bottom: 0%;
+  position: fixed;
+  left: 0.5vw;
+  transform: translateX(-100%);
+
+  animation-name: ${sealMoveIn}, ${sealMoveOut};
+  animation-duration: 1.5s, 2s;
+  animation-delay: 6s, 7.5s;
+  animation-timing-function: cubic-bezier(0.47, 0.75, 0.82, 0.89), ease-out;
+  animation-fill-mode: none, forwards;
+`;
+
+const SealContainer = styled.div`
+  animation-name: ${shrinkIn}, ${shrinkOut};
+  animation-duration: 200ms, 400ms;
+  animation-delay: 7.5s, 7700ms;
+  animation-timing-function: ease, ease;
+
+  @media (max-width: 1050px) {
+    display: none;
+  }
+
+  img {
+    animation-name: ${sealRotate}, ${sealRotate2};
+    animation-duration: 1.5s, 2s;
+    animation-delay: 6s, 7.5s;
+    animation-timing-function: cubic-bezier(0.47, 0.75, 0.82, 0.89), ease-out;
+  }
+`;
+
 const Slogan = styled.h2`
   font-weight: 500 !important;
   color: hsla(196, 97%, 46%, 1);
@@ -39,6 +168,11 @@ const Slogan = styled.h2`
   transform: translateX(-50%);
   width: 100vw;
   text-align: center;
+
+  @media (max-width: 1050px) {
+    font-size: 1.8rem !important;
+  }
+
   @media (max-width: 700px) {
     font-size: 4.5vh !important;
     bottom: 22vh;
@@ -169,19 +303,16 @@ class Home extends Component {
           </h1>
           {/* </LightShadow> */}
           <h2>
-            FullStack Web/Mobile and UI/UX Developers and Designers Community.
-            Come and...
+            FullStack Web/Mobile Developers and UI/UX Designers Online
+            Community. Join Us and...
           </h2>
-
-          <div
-            style={{
-              position: "fixed"
-            }}
-          >
-            <Seal src={whiteSeal} alt="white Swordvoice Seal" />
-          </div>
         </section>
-        <Slogan>Let Your SwordVoice be Heard!!!</Slogan>
+        <BouncerContainer>
+          <SealContainer>
+            <Seal src={whiteSeal} alt="white Swordvoice Seal" />
+          </SealContainer>
+        </BouncerContainer>
+        <Slogan>Let Your SwordVoice be Heard!!! </Slogan>
         {/*Boton de accion y footer*/}
         <Call2Action className="call2Action-home appear" />
         <FooterApp

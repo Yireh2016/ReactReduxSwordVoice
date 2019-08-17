@@ -72,7 +72,7 @@ const NoLandscape = ({
 
 const stateToProps = state => {
   return {
-    showResolutionWarning: state.dialog.showResolutionWarning
+    showResolutionWarning: state.responsiveDialog.showResolutionWarning
   };
 };
 const actionsToProps = dispatch => {

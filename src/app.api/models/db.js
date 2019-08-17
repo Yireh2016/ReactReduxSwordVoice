@@ -41,6 +41,7 @@ process.on("SIGINT", function() {
   });
 });
 
+require("./visitorSchema");
 require("./commentSchema");
 require("./responseSchema");
 require("./articleSchema");

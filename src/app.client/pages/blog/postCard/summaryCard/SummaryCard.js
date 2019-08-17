@@ -93,7 +93,7 @@ class SummaryCard extends React.Component {
             fontFamily: "Work Sans"
           }}
         >
-          Summary
+          🕮 Summary
         </h2>
         <section
           data-simplebar
@@ -132,7 +132,7 @@ class SummaryCard extends React.Component {
               padding: `${cardH * 0.04807692307692307692307692307692}px  0`
             }}
           >
-            Read More...
+            📚 Read More...
           </a>
           <div id={`${this.props.id}` + "keywordsAreaCard"}>{keywordsMap}</div>
           <div

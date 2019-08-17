@@ -2,6 +2,7 @@
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
 import Helmet from "react-helmet";
+import "simplebar";
 //components
 import Navbar from "../navbar/navbar.component";
 import FooterApp from "../footer/footer.component";
@@ -10,7 +11,6 @@ import LightShadow from "../general/lightShadow/lightShadow.component";
 import styled, { keyframes } from "styled-components";
 
 //services
-import isDevice from "../../../services/isDevice";
 //css
 import "./about.css";
 //assets
@@ -123,12 +123,11 @@ class About extends React.Component {
       textHeightOnTablet: {},
       midDecorationTopOnTablet: { top: "initial" },
       aboutThumbnail: 1,
-      isDevice: ""
+
+      isScrolling: false
     };
   }
   componentDidMount() {
-    this.setState({ isDevice: isDevice() });
-
     window.addEventListener("resize", this.setTextHeightOnTablet);
     // this.scrollSection.current.addEventListener(
     //   "scroll",
@@ -137,8 +136,6 @@ class About extends React.Component {
     this.setTextHeightOnTablet();
   }
   setTextHeightOnTablet = () => {
-    this.setState({ isDevice: isDevice() });
-
     if (window.innerWidth <= 1050 && window.innerWidth > 750) {
       //tablets only
       this.setState({
@@ -158,7 +155,25 @@ class About extends React.Component {
     }
   };
 
-  controlScrollSection = () => {
+  controlScrollSection = e => {
+    if (this.state.isScrolling) {
+      return;
+    }
+
+    let deltaY;
+
+    if (e.deltaY) {
+      deltaY = e.deltaY;
+
+      deltaY = deltaY > 0 ? 175 : -175;
+
+      this.scrollSection.current.scrollBy({
+        top: deltaY,
+        left: 0,
+        behavior: "smooth"
+      });
+    }
+
     const {
       scrollHeight,
       scrollTop,
@@ -187,6 +202,14 @@ class About extends React.Component {
       this.setState({
         aboutThumbnail: 3
       });
+
+    if (deltaY) {
+      this.setState({ isScrolling: true });
+
+      setTimeout(() => {
+        this.setState({ isScrolling: false });
+      }, 400);
+    }
   };
   render() {
     const avatarArr = [
@@ -196,7 +219,7 @@ class About extends React.Component {
     ];
     const HTMLdata = [
       {
-        HTML: `<h2>Who am I?</h2><p>Hello There!!!, <b>My name is Jainer Muñoz: </b>I am a Web Developer, IT Consultant and Founder of <strong>SwordVoice.com</strong> with over 10 years of experience on the IT / telecommunications industry, my main focus being real-time communications.</p> 
+        HTML: `<h2>🎓 Who am I?</h2><p>Hello There!!!, <b>My name is Jainer Muñoz: </b>I am a Web Developer, IT Consultant and Founder of <strong>SwordVoice.com</strong> with over 10 years of experience on the IT / telecommunications industry, my main focus being real-time communications.</p> 
 
         <p>My biggest passion is <strong>teaching</strong>: So I have been teaching at my local community youth about Leadership and Ethics ​​for more than 8 years. Recently, i've been working on a project to teach them Graphic and Web Design and Development, UX / UI Principles, Photopraphy, Social Media, Digital Marketing, Leadership, Project Management, Bussiness Administration, Entrepreneurship and Professional Ethics in a non-profit freelancer academy. </p> 
         
@@ -204,11 +227,11 @@ class About extends React.Component {
       },
       {
         HTML:
-          "<h2>What Is SwordVoice?</h2><p><strong>Swordvoice.com</strong> has being designed to be an <strong>Online Community</strong> of professionals, amateurs, self-taught and enthusiats web and mobile app developers, UI/UX designers and tech adicts that want to be up to date about the latest technologies, programing languages and paradigms, coding practices, FrontEnd and BackEnd frameworks and libraries, news, and trends.  <a aria-label='go to blog page' href='/blog'>Go and check our blog.</a></p>"
+          "<h2>💻 What Is SwordVoice?</h2><p><strong>Swordvoice.com</strong> has being designed to be an <strong>Online Community</strong> of professionals, amateurs, self-taught and enthusiats web and mobile app developers, UI/UX designers and tech adicts that want to be up to date about the latest technologies, programing languages and paradigms, coding practices, FrontEnd and BackEnd frameworks and libraries, news, and trends.  <a aria-label='go to blog page' href='/blog'>Go and check our blog.</a></p>"
       },
       {
         HTML:
-          "<h2>What SwordVoice has to offer?</h2><p>SwordVoice offer blog articles, tutorials, courses and a variety of social media interaction options for the community to be in touch. If you want to be an active writer, editor, tutorial or courses creator, do not hesitate and <a aria-label='go to our blog' href='/contact'>Contact Us</a> and <strong>Let Your SwordVoice be Heard!!!</strong></p>"
+          "<h2>👨‍🏫 What SwordVoice has to offer?</h2><p>SwordVoice offer blog articles, tutorials, courses and a variety of social media interaction options for the community to be in touch. If you want to be an active writer, editor, tutorial or courses creator, do not hesitate and <a aria-label='go to our blog' href='/contact'>Contact Us</a> and <strong>Let Your SwordVoice be Heard!!!</strong></p>"
       }
     ];
 
@@ -321,13 +344,10 @@ class About extends React.Component {
             </section>
             {/*Parrafos */}
             <section
-              className={
-                this.state.isDevice !== "phone"
-                  ? "col-5 col-6-md col-12-sm  fila grid parrafo style-7"
-                  : "col-5 col-6-md col-12-sm  fila grid parrafo"
-              }
+              className="col-5 col-6-md col-12-sm  fila grid parrafo"
               style={this.state.textHeightOnTablet}
               ref={this.scrollSection}
+              onWheel={this.controlScrollSection}
               onScroll={this.controlScrollSection}
             >
               <div className="contenedorTexto ">

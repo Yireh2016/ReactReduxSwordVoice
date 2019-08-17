@@ -238,10 +238,10 @@ class NavBar extends Component {
     let isVisible = this.state.menuVisible;
     const menu = [
       {
-        nombre: "Home"
+        nombre: "🏠 Home"
       },
       {
-        nombre: "About"
+        nombre: "💪 About"
       },
       // {
       //   nombre: "Portfolio"
@@ -250,25 +250,25 @@ class NavBar extends Component {
       //   nombre: "Courses"
       // },
       {
-        nombre: "Blog"
+        nombre: "✍️ Blog"
       },
       {
-        nombre: "Contact"
+        nombre: "🤝 Contact"
       }
     ];
 
     const desplegableMenu = [
       {
-        nombre: "Profile"
+        nombre: "📱 Profile"
       },
       {
-        nombre: "Log out"
+        nombre: "😲 Log out"
       }
     ];
     const contentMenuSmall = menu.map((smallMenuContent, i) => {
       const activeClass =
         this.props.location.pathname ===
-        `/${smallMenuContent.nombre.toLowerCase()}`
+        `/${smallMenuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]}`
           ? "activeLink"
           : "";
       return (
@@ -276,7 +276,10 @@ class NavBar extends Component {
           <a
             aria-label={`go to ${smallMenuContent.nombre} page`}
             key={i}
-            href={"/" + smallMenuContent.nombre.toLowerCase()}
+            href={
+              "/" +
+              smallMenuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
+            }
             className={"flyingLink " + activeClass}
           >
             {smallMenuContent.nombre}
@@ -288,7 +291,7 @@ class NavBar extends Component {
       return (
         <React.Fragment key={i}>
           <li>
-            {desplegableMenu.nombre === "Profile" ? (
+            {desplegableMenu.nombre.match("Profile") ? (
               <a
                 aria-label="go to your dashboard"
                 href="cms"
@@ -312,29 +315,32 @@ class NavBar extends Component {
       );
     });
     const content = menu.map((menuContent, i) => {
-      const activeBarFragment =
-        menuContent.nombre === "Home" ? (
-          <React.Fragment key={i}>
-            <Route
-              exact
-              path={"/" + menuContent.nombre.toLowerCase()}
-              component={ActiveBar}
-            />
-            <Route exact path={"/"} render={() => <ActiveBar />} />
-          </React.Fragment>
-        ) : (
+      const activeBarFragment = menuContent.nombre.match("Home") ? (
+        <React.Fragment key={i}>
           <Route
-            exact={false}
-            path={"/" + menuContent.nombre.toLowerCase()}
+            exact
+            path={
+              "/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
+            }
             component={ActiveBar}
           />
-        );
+          <Route exact path={"/"} render={() => <ActiveBar />} />
+        </React.Fragment>
+      ) : (
+        <Route
+          exact={false}
+          path={"/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]}
+          component={ActiveBar}
+        />
+      );
 
       return (
         <React.Fragment key={i}>
           <a
             aria-label={`go to ${menuContent.nombre} page`}
-            href={"/" + menuContent.nombre.toLowerCase()}
+            href={
+              "/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
+            }
             className="enlace"
           >
             {menuContent.nombre} <br />
@@ -438,16 +444,18 @@ class NavBar extends Component {
                           {this.props.isUserLoggedIn ? (
                             <li className="desplegableProfileLink">
                               <a aria-label="go to your dashboard" href="cms">
-                                Profile
+                                📱 Profile
                               </a>
                             </li>
                           ) : (
-                            <li onClick={this.signClickHandler}>Sign Up</li>
+                            <li onClick={this.signClickHandler}>🔥 Sign Up</li>
                           )}
                           {this.props.isUserLoggedIn ? (
-                            <li onClick={this.logOutClickHandler}>Log Out</li>
+                            <li onClick={this.logOutClickHandler}>
+                              😲 Log out
+                            </li>
                           ) : (
-                            <li onClick={this.logInClickHandler}>Log In</li>
+                            <li onClick={this.logInClickHandler}>👊 Log In</li>
                           )}
                         </ul>
                       </div>
@@ -461,7 +469,7 @@ class NavBar extends Component {
                 ) : (
                   <div className="menuPcWelcome">
                     Click!!! <br />
-                    <span style={{ color: "#f95f0b" }}> for sign up</span>
+                    <span style={{ color: "#f95f0b" }}> for Join in</span>
                   </div>
                 )}
               </div>

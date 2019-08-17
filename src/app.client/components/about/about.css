@@ -47,7 +47,7 @@
   color: white;
   font-style: normal;
   font-weight: normal;
-  overflow-y: scroll;
+  overflow-y: hidden;
   padding: 20px 0 0 0;
 }
 .parrafo a {
@@ -177,6 +177,7 @@
   }
   .parrafo {
     width: 55%;
+    overflow-y: scroll;
   }
 
   .parrafo h2 {
@@ -217,7 +218,6 @@
 @media (max-width: 700px) /*phones */ {
   .parrafo {
     width: 100%;
-    overflow: none;
   }
   .parrafo h2 {
     font-size: 10vmin;

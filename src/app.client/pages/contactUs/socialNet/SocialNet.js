@@ -19,6 +19,7 @@ const SocialNetLayout = styled.div`
 
   @media (max-width: 1050px) {
     padding: 0;
+    background: rgba(0, 23, 31, 0.7);
   }
 
   @media (max-width: 700px) {
