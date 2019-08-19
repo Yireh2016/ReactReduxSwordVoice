@@ -71,6 +71,44 @@ const MorePosts = styled.div`
   }
 `;
 
+const RecentPostCont = styled.section`
+  display: flex;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 4;
+  justify-content: space-around;
+  padding: 15px 0;
+  transition: transform 1.5s ease;
+
+  transform: ${props => {
+    if (props.scrollTop > window.innerHeight)
+      return props.delta < 0 ? "translateY(71px)" : "translateY(0)";
+
+    return "translateY(0)";
+  }};
+
+  @media (max-width: 1050px)  {
+    flex-wrap: wrap;
+    position: relative;
+    transform: "translateY(0)";
+  }
+  @media (max-width: 700px)  {
+    flex-direction: column;
+  }
+  h2 {
+    font-weight: normal;
+    color: #f95f0b;
+  }
+`;
+
+const RecentPostCardCont=styled.div`
+ margin: 0 4vw 0 0;
+ @media(max-width:1050px){
+   margin:0;
+ }
+
+`;
 const styles = {
   tablet: {
     "@media (max-width: 150px)": {
@@ -182,7 +220,8 @@ const styles = {
     backgroundColor: "white",
     zIndex: "4",
     justifyContent: "space-around",
-    padding: "15px 0 0 0",
+    padding: "15px 0",
+
     "@media (max-width: 1050px)": {
       position: "relative"
     },
@@ -351,7 +390,7 @@ class BlogPage extends React.Component {
         break;
 
       case "phone":
-        postH = (windowWidth * 0.95) / 1.028;
+        postH = (windowWidth * 0.6) / 1.028;
         break;
 
       default:
@@ -360,6 +399,7 @@ class BlogPage extends React.Component {
 
     let lastPostW = isDeviceResult === "tablet" ? 10 : 12;
 
+    console.log("postH", postH);
     this.setState({
       mainPostH: postH,
       asidePostW,
@@ -370,39 +410,40 @@ class BlogPage extends React.Component {
   componentDidMount() {
     console.log("blogpage did mount");
     this.setPostDimensions();
+
     window.addEventListener("resize", () => {
       console.log("resizing", navigator.userAgent);
       this.setPostDimensions();
     });
-    const isDeviceResult = isDevice();
-    let postH;
+    // const isDeviceResult = isDevice();
+    // let postH;
 
-    switch (isDeviceResult) {
-      case "pc":
-        postH =
-          (window.outerWidth * 0.4) / 1.028 >= 520
-            ? 520
-            : (window.outerWidth * 0.4) / 1.028;
-        break;
-      case "tablet":
-        postH = (window.outerWidth * 0.8) / 1.028;
-        break;
+    // switch (isDeviceResult) {
+    //   case "pc":
+    //     postH =
+    //       (window.outerWidth * 0.4) / 1.028 >= 520
+    //         ? 520
+    //         : (window.outerWidth * 0.4) / 1.028;
+    //     break;
+    //   case "tablet":
+    //     postH = (window.outerWidth * 0.8) / 1.028;
+    //     break;
 
-      case "phone":
-        postH = (window.outerWidth * 0.95) / 1.028 - 24;
-        break;
+    //   case "phone":
+    //     postH = (window.outerWidth * 0.95) / 1.028 - 24;
+    //     break;
 
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
 
-    setTimeout(() => {
-      this.setState({
-        isDeviceResult: isDeviceResult,
-        isLoading: false,
-        mainPostH: postH
-      });
-    }, 3 * 1000);
+    // // setTimeout(() => {
+    //   this.setState({
+    //     isDeviceResult: isDeviceResult,
+    //     isLoading: false,
+    //     mainPostH: postH
+    //   });
+    // // }, 3 * 1000);
   }
 
   MorePostsHandler = async () => {
@@ -588,6 +629,7 @@ class BlogPage extends React.Component {
   };
   render() {
     const { mainPostH, searchTranslateX } = this.state;
+    console.log("mainPostH", mainPostH);
     let { articlesArr, popularArticlesArr } = this.props.blog;
     if (articlesArr.length === 0) {
       articlesArr = [
@@ -645,7 +687,11 @@ class BlogPage extends React.Component {
 
           {this.state.isDeviceResult !== "pc" && (
             <React.Fragment>
-              <Call2Action className="call2ActionBlog" />
+              <Call2Action
+                className="call2ActionBlog"
+                text="Courses"
+                link="https://udemy.com"
+              />
               <FooterApp
                 id="blogPage2"
                 estilos="appear footer-blog "
@@ -658,7 +704,7 @@ class BlogPage extends React.Component {
     );
 
     const asidePosts = popPostsArray.map((post, i, arr) => {
-      const arrLen = arr.length;
+      // const arrLen = arr.length;
       const {
         title,
         keywords,
@@ -730,7 +776,12 @@ class BlogPage extends React.Component {
                   styles.footer.layout
                 ]}
               >
-                <Call2Action className="call2ActionBlog" />
+                <Call2Action
+                  className="call2ActionBlog"
+                  text="Courses"
+                  link="https://udemy.com"
+                  target="blank"
+                />
                 <FooterApp
                   estilos="appear footer-blog "
                   size="redesSociales-blog"
@@ -829,15 +880,15 @@ class BlogPage extends React.Component {
       } else if (typeof post.avatar === "string") {
         avatar = post.avatar;
       }
+
+      // console.log("postH", postH);
       return (
-        <div
+        <RecentPostCardCont
           key={i}
-          style={{
-            margin: "0 4vw 0 0"
-          }}
+    
         >
           <PostCard
-            id={`${i}`}
+            id={`PostCard${i}`}
             postH={parseInt(mainPostH) * 0.8}
             hasSummary={true}
             title={title}
@@ -850,7 +901,7 @@ class BlogPage extends React.Component {
             avatar={avatar}
             summaryTextHtml={summaryTextHtml}
           />
-        </div>
+        </RecentPostCardCont>
       );
     });
 
@@ -1043,13 +1094,24 @@ class BlogPage extends React.Component {
           </section>
         </header>
         <TwoColumnAside aside={aside}>
-          <section
+          <RecentPostCont
+            delta={this.props.scroll.delta}
+            scrollTop={this.props.scroll.scrollTop}
             id="recentPostTitleContainer"
-            style={styles.recentPostTitleContainer}
+            // style={[
+            //   styles.recentPostTitleContainer,
+            //   {
+            //     transform:
+            //       this.props.scroll.delta < 0
+            //         ? "translateY(71px)"
+            //         : "translateY(0)",
+            //     transition: "transform 500ms ease"
+            //   }
+            // ]}
           >
             <h2
               id="recentPostTitleText"
-              style={styles.recentPostTitleContainer.title}
+              // style={styles.recentPostTitleContainer.title}
             >
               Recent Posts
             </h2>
@@ -1069,7 +1131,8 @@ class BlogPage extends React.Component {
                 onAdvancedClick={this.onAdvancedSearchClick}
               />
             </div>
-          </section>
+          </RecentPostCont>
+
           <section
             id="recentPostContainer"
             style={{
@@ -1102,7 +1165,8 @@ class BlogPage extends React.Component {
 
 const mapStateToProps2 = state => {
   return {
-    blog: state.blog
+    blog: state.blog,
+    scroll: state.scroll
   };
 };
 const mapDispachToProps = dispatch => {

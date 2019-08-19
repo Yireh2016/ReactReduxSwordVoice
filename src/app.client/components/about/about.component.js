@@ -219,7 +219,7 @@ class About extends React.Component {
     ];
     const HTMLdata = [
       {
-        HTML: `<h2>🎓 Who am I?</h2><p>Hello There!!!, <b>My name is Jainer Muñoz: </b>I am a Web Developer, IT Consultant and Founder of <strong>SwordVoice.com</strong> with over 10 years of experience on the IT / telecommunications industry, my main focus being real-time communications.</p> 
+        HTML: `<h2>🎓 Who am I?</h2><p>Hello There!!!, <b>My name is Jainer Muñoz: </b>I'm a Web Developer, IT Consultant, Enterprenour and Founder of <strong>SwordVoice.com</strong> with over 10 years of experience on the IT / telecommunications industry, my main focus being real-time communications.</p> 
 
         <p>My biggest passion is <strong>teaching</strong>: So I have been teaching at my local community youth about Leadership and Ethics ​​for more than 8 years. Recently, i've been working on a project to teach them Graphic and Web Design and Development, UX / UI Principles, Photopraphy, Social Media, Digital Marketing, Leadership, Project Management, Bussiness Administration, Entrepreneurship and Professional Ethics in a non-profit freelancer academy. </p> 
         
@@ -365,7 +365,11 @@ class About extends React.Component {
                   {/* //    display: flex;
     flex-direction: row;
     justify-content: center; */}
-                  <Call2Action className="call2action-med col-0 col-0-sm" />
+                  <Call2Action
+                    className="call2action-med col-0 col-0-sm"
+                    text="Blog"
+                    link="/blog"
+                  />
                 </div>
               </div>
             </section>
@@ -374,7 +378,11 @@ class About extends React.Component {
             </div>
 
             <section className="col-2 grid asidePC col-0-md col-0-sm">
-              <Call2Action className="call2action-about call2actionAside " />
+              <Call2Action
+                className="call2action-about call2actionAside "
+                text="Blog"
+                link="/blog"
+              />
               <FooterApp
                 estilos=" appear container asideRedes"
                 size="footer-about-pcSize"
@@ -386,7 +394,11 @@ class About extends React.Component {
           <section className="footerContainer-about col-0-md col-0">
             <div className="footerElements-about">
               {/*boton de accion y redes sociales*/}
-              <Call2Action className="call2action-about" />
+              <Call2Action
+                className="call2action-about"
+                text="Blog"
+                link="/blog"
+              />
               <FooterApp
                 estilos=" appear col-12 container grid footer-about center-flex"
                 size="footer-about-size"

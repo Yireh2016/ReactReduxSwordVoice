@@ -39,17 +39,17 @@ class LogInForm extends Component {
   onSuccessLogIn = userData => {
     //Redux: hacer este metodo en el componente LogInForm
 
-    if (userData.userAvatar === "") {
-      //si no existe avatar
-      this.props.onLogIn({
-        userAvatar: undefined,
-        userName: userData.userName,
-        userID: userData._id,
-        userType: userData.userType,
-        userFullName: userData.userFullName
-      });
-      return;
-    }
+    // if (userData.userAvatar === "") {
+    //   //si no existe avatar
+    //   this.props.onLogIn({
+    //     userAvatar: undefined,
+    //     userName: userData.userName,
+    //     userID: userData._id,
+    //     userType: userData.userType,
+    //     userFullName: userData.userFullName
+    //   });
+    //   return;
+    // }
 
     // let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
     // imgBlob = new Blob([imgBytes], {

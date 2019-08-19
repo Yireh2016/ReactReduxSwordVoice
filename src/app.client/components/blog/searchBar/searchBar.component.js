@@ -12,7 +12,6 @@ const SearchBarCont = styled.div`
   border-radius: 10px;
   padding-bottom: 0px 5px;
   overflow: hidden;
-  margin: 30px;
 `;
 
 const Bar = styled.div`

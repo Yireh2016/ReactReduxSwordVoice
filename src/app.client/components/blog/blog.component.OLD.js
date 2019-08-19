@@ -359,7 +359,11 @@ class BlogComponent extends Component {
             />
           </div>
           {/* </LightShadow> */}
-          <Call2Action className="call2ActionBlog" />
+          <Call2Action
+            className="call2ActionBlog"
+            text="Courses"
+            link="https://udemy.com"
+          />
           <FooterApp
             id="blogPage"
             estilos="appear footer-blog "

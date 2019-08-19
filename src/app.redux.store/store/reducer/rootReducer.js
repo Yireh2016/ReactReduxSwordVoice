@@ -7,6 +7,7 @@ import article from "./article";
 import blog from "./blogReducer";
 import responsiveDialog from "./responsiveDialog";
 import dialog from "./dialogReducer";
+import scroll from "./scrollReducer";
 
 export default history =>
   combineReducers({
@@ -15,5 +16,6 @@ export default history =>
     article: article,
     blog: blog,
     responsiveDialog: responsiveDialog,
-    dialog: dialog
+    dialog: dialog,
+    scroll: scroll
   });

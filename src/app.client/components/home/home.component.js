@@ -314,7 +314,11 @@ class Home extends Component {
         </BouncerContainer>
         <Slogan>Let Your SwordVoice be Heard!!! </Slogan>
         {/*Boton de accion y footer*/}
-        <Call2Action className="call2Action-home appear" />
+        <Call2Action
+          className="call2Action-home appear"
+          text="Blog"
+          link="/blog"
+        />
         <FooterApp
           id="homePage"
           estilos="appear footer"

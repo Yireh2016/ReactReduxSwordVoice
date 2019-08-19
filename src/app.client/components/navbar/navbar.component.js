@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route, withRouter } from "react-router-dom";
 import { withCookies } from "react-cookie";
+import styled from "styled-components";
 //css
 import "./navbar.css";
 //assets
@@ -21,6 +22,18 @@ import apiLogout from "../../../apiCalls/apiLogout";
 
 import { guestCookie } from "../../../app.client/services/cookieManager";
 
+const Nav = styled.nav`
+  animation: ${props => props.animation};
+  transition: all 500ms ease;
+  transform: ${props => props.navTransformation};
+  opacity: ${props => props.navOpacity};
+
+  @media (max-width: 1050px) {
+    opacity: 1;
+    transform: translateY(0) rotateZ(0deg) !important;
+  }
+`;
+
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +49,9 @@ class NavBar extends Component {
       loggedUserAvatar: "",
       toggleAnim: false,
       tempUnmount: false,
-      endOfAnimation: false
+      endOfAnimation: false,
+      scrollTop: 0,
+      deltaScroll: 0
     };
 
     if (
@@ -53,11 +68,11 @@ class NavBar extends Component {
       endOfAnimation: true
     });
 
-    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
-      this.setState({
-        loggedUserAvatar: this.props.loggedUserAvatar
-      });
-    }
+    // if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
+    //   this.setState({
+    //     loggedUserAvatar: this.props.loggedUserAvatar
+    //   });
+    // }
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
@@ -72,13 +87,13 @@ class NavBar extends Component {
       });
     }
   }
-  componentDidUpdate() {
-    if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
-      if (this.state.loggedUserAvatar === "") {
-        this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
-      }
-    }
-  }
+  // componentDidUpdate() {
+  //   if (this.props.isUserLoggedIn && this.props.loggedUserAvatar) {
+  //     if (this.props.loggedUserAvatar === "") {
+  //       this.setState({ loggedUserAvatar: this.props.loggedUserAvatar });
+  //     }
+  //   }
+  // }
 
   handleClick() {
     if (this.state.menuVisible === "translateX(0)") {
@@ -104,24 +119,35 @@ class NavBar extends Component {
 
     //if is PC
     if (window.innerWidth > 1050) {
-      if (window.pageYOffset > 20 && !this.state.menuIsOpaque) {
-        this.setState({
-          menuIsOpaque: true
-        });
-      } else if (window.pageYOffset <= 20 && this.state.menuIsOpaque === true) {
-        /*
-          antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
-        */
+      const pageYoffset = window.pageYOffset;
+      const delta = -this.props.scroll.scrollTop + pageYoffset;
 
-        this.setState(prevState => {
-          const menuState =
-            prevState.menuIsOpaque === null //verifico la primera animacion
-              ? { menuIsOpaque: null } // dejo el estado actual si vengo de la animacion primera
-              : { menuIsOpaque: false }; //si no entonces si disparo la animacion de "ocultar menu"
-
-          return menuState;
-        });
+      this.props.setScroll(pageYoffset);
+      this.props.setDeltaScroll(delta);
+      if (delta < 0) {
+        this.setState({ menuIsOpaque: false });
+      } else {
+        this.setState({ menuIsOpaque: true });
       }
+
+      // if (pageYoffset > 20 && !this.state.menuIsOpaque) {
+      //   this.setState({
+      //     menuIsOpaque: true
+      //   });
+      // } else if (pageYoffset <= 20 && this.state.menuIsOpaque === true) {
+      //   /*
+      //     antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
+      //   */
+
+      //   this.setState(prevState => {
+      //     const menuState =
+      //       prevState.menuIsOpaque === null //verifico la primera animacion
+      //         ? { menuIsOpaque: null } // dejo el estado actual si vengo de la animacion primera
+      //         : { menuIsOpaque: false }; //si no entonces si disparo la animacion de "ocultar menu"
+
+      //     return menuState;
+      //   });
+      // }
     }
   }
 
@@ -166,7 +192,7 @@ class NavBar extends Component {
     if (this.props.isUserLoggedIn) {
       let salida;
 
-      switch (this.state.loggedUserAvatar) {
+      switch (this.props.loggedUserAvatar) {
         case "": {
           salida = (
             <div className="grid userLogo">
@@ -186,7 +212,7 @@ class NavBar extends Component {
                 backgroundPosition: "center",
                 height: "45px",
                 width: "45px",
-                backgroundImage: `url('${this.state.loggedUserAvatar}`.replace(
+                backgroundImage: `url('${this.props.loggedUserAvatar}`.replace(
                   "big",
                   "small"
                 )
@@ -218,23 +244,33 @@ class NavBar extends Component {
     }
 
     let animation;
+    let navTransformation;
+    let navOpacity;
+
     switch (this.state.menuIsOpaque) {
       case null: {
         animation = "navbarRotate 2s ease 1s normal forwards";
-
+        navOpacity = "1";
         break;
       }
+
+      // this.state.menuIsOpaque === false
+      //           ? "translateY(0) rotateZ(0)"
+      //           : "translateY(-100%) rotateZ(0)",
+
       case true: {
-        animation =
-          " MenuPChidden 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)";
+        navTransformation = "translateY(-100%) rotateZ(0)";
+        navOpacity = "0";
         break;
       }
       case false: {
-        animation =
-          " MenuPCshow 500ms forwards cubic-bezier(0.39, 0.575, 0.565, 1)";
+        navTransformation = " translateY(0) rotateZ(0)";
+        navOpacity = "1";
+
         break;
       }
     }
+
     let isVisible = this.state.menuVisible;
     const menu = [
       {
@@ -366,11 +402,11 @@ class NavBar extends Component {
             }}
           />
         )}
-        <nav
+        <Nav
           id="navBar"
-          style={{
-            animation: animation
-          }}
+          animation={animation}
+          navTransformation={navTransformation}
+          navOpacity={navOpacity}
         >
           <div
             id="menu-pc"
@@ -383,7 +419,7 @@ class NavBar extends Component {
               id="1"
               className="fixedPcLogo"
               style={{
-                top: "20px",
+                top: "12px",
                 position: "fixed",
                 left: "50%",
                 transform: "translateX(-50%)"
@@ -626,7 +662,7 @@ class NavBar extends Component {
                         className="avatarMenu"
                         onClick={this.onAvatarClick}
                         style={{
-                          backgroundImage: `url('${this.state.loggedUserAvatar}`
+                          backgroundImage: `url('${this.props.loggedUserAvatar}`
                         }}
                       />
                       <div className="desplegable-login">
@@ -679,7 +715,7 @@ class NavBar extends Component {
               </div>
             </div>
           )}
-        </nav>
+        </Nav>
       </div>
     );
   }
@@ -689,20 +725,25 @@ const mapStateToProps = state => {
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
-    loggedUserAvatar: state.logInStatus.loggedUserAvatar
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar,
+    scroll: state.scroll
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispatchToProps = dispatch => {
   return {
     //acciones
-    setAvatar: avatar => dispach({ type: "SET_AVATAR", payload: avatar }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
+    setAvatar: avatar => dispatch({ type: "SET_AVATAR", payload: avatar }),
+    onLogOut: () => dispatch({ type: "LOGGED_OUT" }),
+    setScroll: scrollTop =>
+      dispatch({ type: "SET_SCROLL_TOP", payload: scrollTop }),
+    setDeltaScroll: delta =>
+      dispatch({ type: "SET_DELTA_SCROLL", payload: delta })
   };
 };
 
 const NavBar2 = connect(
   mapStateToProps,
-  mapDispachToProps
+  mapDispatchToProps
 )(NavBar);
 const NavBar3 = withRouter(NavBar2);
 

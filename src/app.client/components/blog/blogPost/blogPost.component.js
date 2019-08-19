@@ -177,7 +177,7 @@ class BlogArticle extends Component {
             style={{ top: "100px" }}
             logoWidth="20vw"
           />
-          <Call2Action className="call2ActionBlog" />
+          <Call2Action className="call2ActionBlog" text="Blog" link="/blog" />
           <FooterApp
             id="blogpostPage"
             estilos="appear footer-blog "
