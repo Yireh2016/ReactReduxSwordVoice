@@ -134,19 +134,16 @@ const Post = ({
     postRef.current && setPostW(postRef.current.clientWidth);
   }, [postRef]);
   return (
-    <Layout size={size} backgroundURL={backgroundURL}>
+    <Layout backgroundURL={backgroundURL}>
       <Container>
         <a aria-label="go and read this article" href={link}>
           <ForeGround postGradient={postGradient} ref={postRef} size={size}>
-            <Title postW={postW} size={size}>
-              {title}
-            </Title>
+            <Title postW={postW}>{title}</Title>
           </ForeGround>
         </a>
         <SlideCont isDetail={isDetail}>
           <Summary
             id={id}
-            size={size}
             postW={postW}
             keywords={keywords}
             date={date}

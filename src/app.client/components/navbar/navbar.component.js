@@ -29,6 +29,7 @@ const Nav = styled.nav`
   opacity: ${props => props.navOpacity};
 
   @media (max-width: 1050px) {
+    animation: none;
     opacity: 1;
     transform: translateY(0) rotateZ(0deg) !important;
   }
@@ -249,7 +250,7 @@ class NavBar extends Component {
 
     switch (this.state.menuIsOpaque) {
       case null: {
-        animation = "navbarRotate 2s ease 1s normal forwards";
+        animation = "navbarRotate 2s ease 1s normal forwards !important";
         navOpacity = "1";
         break;
       }
@@ -259,12 +260,12 @@ class NavBar extends Component {
       //           : "translateY(-100%) rotateZ(0)",
 
       case true: {
-        navTransformation = "translateY(-100%) rotateZ(0)";
+        navTransformation = "translateY(-100%) rotateZ(0) !important";
         navOpacity = "0";
         break;
       }
       case false: {
-        navTransformation = " translateY(0) rotateZ(0)";
+        navTransformation = " translateY(0) rotateZ(0) !important";
         navOpacity = "1";
 
         break;

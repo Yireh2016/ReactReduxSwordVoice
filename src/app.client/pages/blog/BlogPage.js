@@ -88,12 +88,12 @@ const RecentPostCont = styled.section`
     return "translateY(0)";
   }};
 
-  @media (max-width: 1050px)  {
+  @media (max-width: 1050px) {
     flex-wrap: wrap;
     position: relative;
     transform: "translateY(0)";
   }
-  @media (max-width: 700px)  {
+  @media (max-width: 700px) {
     flex-direction: column;
   }
   h2 {
@@ -102,12 +102,11 @@ const RecentPostCont = styled.section`
   }
 `;
 
-const RecentPostCardCont=styled.div`
- margin: 0 4vw 0 0;
- @media(max-width:1050px){
-   margin:0;
- }
-
+const RecentPostCardCont = styled.div`
+  margin: 0 4vw 0 0;
+  @media (max-width: 1050px) {
+    margin: 0;
+  }
 `;
 const styles = {
   tablet: {
@@ -369,7 +368,9 @@ class BlogPage extends React.Component {
   }
 
   setPostDimensions = () => {
+    console.log("blogpage setPostDimensions", window.innerWidth);
     const isDeviceResult = isDevice();
+    console.log("isDeviceResult", isDeviceResult);
     let postH;
     let asidePostW = 9;
 
@@ -386,7 +387,7 @@ class BlogPage extends React.Component {
         break;
       case "tablet":
         asidePostW = 6;
-        postH = (windowWidth * 0.8) / 1.028;
+        postH = (windowWidth * 0.9) / 1.028;
         break;
 
       case "phone":
@@ -408,14 +409,17 @@ class BlogPage extends React.Component {
   };
 
   componentDidMount() {
-    console.log("blogpage did mount");
+    // console.log("blogpage did mount", window.innerWidth);
     this.setPostDimensions();
 
     window.addEventListener("resize", () => {
-      console.log("resizing", navigator.userAgent);
+      // console.log("resizing", navigator.userAgent);
       this.setPostDimensions();
     });
+
     // const isDeviceResult = isDevice();
+    // console.log("blogpage after listener", isDeviceResult);
+
     // let postH;
 
     // switch (isDeviceResult) {
@@ -629,7 +633,6 @@ class BlogPage extends React.Component {
   };
   render() {
     const { mainPostH, searchTranslateX } = this.state;
-    console.log("mainPostH", mainPostH);
     let { articlesArr, popularArticlesArr } = this.props.blog;
     if (articlesArr.length === 0) {
       articlesArr = [
@@ -883,10 +886,7 @@ class BlogPage extends React.Component {
 
       // console.log("postH", postH);
       return (
-        <RecentPostCardCont
-          key={i}
-    
-        >
+        <RecentPostCardCont key={i}>
           <PostCard
             id={`PostCard${i}`}
             postH={parseInt(mainPostH) * 0.8}

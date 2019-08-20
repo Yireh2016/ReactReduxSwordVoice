@@ -168,7 +168,6 @@ const Author = styled.span`
 
 const Summary = ({
   link,
-  size,
   author,
   keywords,
   date,
@@ -191,11 +190,9 @@ const Summary = ({
     <Layout>
       <Container>
         <SummaryLay postW={postW}>
-          <SummaryTitle postW={postW} size={size}>
-            🕮 Summary
-          </SummaryTitle>
+          <SummaryTitle postW={postW}>🕮 Summary</SummaryTitle>
           <SummarySection>
-            <SummaryText postW={postW} size={size}>
+            <SummaryText postW={postW}>
               {ReactHtmlParser(summaryTextHtml)}
             </SummaryText>
           </SummarySection>
