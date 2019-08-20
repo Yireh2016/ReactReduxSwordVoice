@@ -6,11 +6,12 @@ const uploadAvatar = (userName, base64) => {
       base64
     })
     .then(res => {
-      console.log("uploadAvatar res", res.data);
-      return { status: res.statusText, avatarURL: res.data.avatarURL };
+      console.log("uploadAvatar res.data", res.data);
+      console.log("uploadAvatar res", res);
+      return { status: "OK", avatarURL: res.data.avatarURL };
     })
     .catch(err => {
-      console.log("err on uploadAvatar", err);
+      console.log("err on uploadAvatar", err.data);
 
       return { status: err };
     });

@@ -885,20 +885,44 @@ const UserProfile = ({
     }
     if (newAvatar) {
       console.log("saveHandler userProfile.userName,", userProfile.userName);
-      const sendAvatarRes = await uploadAvatar(
-        userProfile.userName,
-        userProfile.userAvatar
-      );
+      try {
+        var sendAvatarRes = await uploadAvatar(
+          userProfile.userName,
+          userProfile.userAvatar
+        );
+      } catch (err) {
+        console.log("err on catch", err);
+        triggerDialog({
+          title: "Error",
+          body: `There was an error: ${
+            sendAvatarRes.status
+          } err.response.data.message: ${err.response.data.message} `,
+          status: "ERR"
+        });
 
-      userProfile.userAvatar = sendAvatarRes.avatarURL;
+        return;
+      }
 
-      if (
-        sendAvatarRes.status === "OK" &&
-        userProfile.userName === loggedUserName
-      ) {
-        setUserAvatar(userProfile.userAvatar);
+      console.log("saveHandler sendAvatarRes.status", sendAvatarRes.status);
+
+      if (sendAvatarRes.status === "OK") {
+        userProfile.userAvatar = sendAvatarRes.avatarURL;
+
+        if (userProfile.userName === loggedUserName) {
+          setUserAvatar(userProfile.userAvatar);
+        }
+      } else {
+        triggerDialog({
+          title: "Error",
+          body: `There was an error: ${sendAvatarRes.status} `,
+          status: "ERR"
+        });
+        resetUserProfileUI();
+        setLoading(false);
+        return;
       }
     }
+
     const sendUserRes = await sendUserProfile(userProfile);
     if (sendUserRes.status === "OK") {
       triggerDialog({
