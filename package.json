@@ -6,7 +6,7 @@
     "dev:build-server": "webpack --env.ENVIRONMENT=development --config webpack.config.js --mode=development -w     ",
     "dev:start": "nodemon server/server.js",
     "dev": "concurrently \"npm:dev:build-server\" \"npm:dev:start\" ",
-    "build": "webpack --config webpack.config.js --mode=production",
+    "build": "webpack --env.ENVIRONMENT=production --config webpack.config.js --mode=production",
     "start": "node server/server.js",
     "build-start": "npm run build && npm run start",
     "build-prod-local": "webpack --env.ENVIRONMENT=production --config webpack.config.js --mode=production",
