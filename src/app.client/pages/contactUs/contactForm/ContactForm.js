@@ -159,7 +159,7 @@ const ContactForm = ({ onSubmit }) => {
       newsletter
     });
 
-    if (submitResponse.status === "OK") {
+    if (submitResponse === "OK") {
       setEmailValid({ valid: " " });
       setNameValid({ valid: " " });
       setMessageValid({ valid: " " });

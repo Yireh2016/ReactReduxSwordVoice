@@ -92,7 +92,10 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
-  console.log("RENDERING preloadedState to send to templeta preloadedState");
+  console.log(
+    "RENDERING preloadedState to send to templeta preloadedState",
+    preloadedState
+  );
 
   const { body, scriptTags, linkTags, styleTags } = renderTemplate(req, store);
   res.send(

@@ -65,8 +65,6 @@ class PostCard extends React.Component {
       summaryTextHtml
     } = this.props;
 
-    console.log("post card postH", postH);
-
     const { isDetail, isDeviceResult } = this.state;
 
     let conditionStyle;

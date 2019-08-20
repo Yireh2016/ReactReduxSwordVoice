@@ -5,7 +5,7 @@ const sendContactForm = form => {
     .post(`api/sendContactForm`, form)
     .then(res => {
       console.log("sendContactForm res", res);
-      return { status: res.statusText, message: res.data.message };
+      return { status: "OK", message: res.data.message };
     })
     .catch(err => {
       if (!err.response) {

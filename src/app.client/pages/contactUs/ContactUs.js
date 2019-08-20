@@ -141,16 +141,22 @@ const ContactUs = ({ isDialog, setDialog }) => {
       return;
     }
 
-    console.log(`form elements`, JSON.stringify(form));
-
-    const sendContactFormRes = await sendContactForm(form);
+    try {
+      var sendContactFormRes = await sendContactForm(form);
+    } catch (err) {
+      triggerDialog("Error 🤬", `There was an error status: ${err}`);
+      return;
+    }
 
     if (sendContactFormRes.status === "OK") {
       triggerDialog("Way to Go!! 😁", sendContactFormRes.message);
       return sendContactFormRes.status;
     }
     console.log("error sendContactFormRes", sendContactFormRes);
-    triggerDialog("Error 🤬", sendContactFormRes.message);
+    triggerDialog(
+      "Error 🤬",
+      `There was an error status: ${err} ${sendContactFormRes.message}`
+    );
     return sendContactFormRes.status;
   };
 

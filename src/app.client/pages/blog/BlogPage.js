@@ -634,6 +634,9 @@ class BlogPage extends React.Component {
   render() {
     const { mainPostH, searchTranslateX } = this.state;
     let { articlesArr, popularArticlesArr } = this.props.blog;
+    let popPostsArray;
+    let recentPostsArray;
+    let newPostArray;
     if (articlesArr.length === 0) {
       articlesArr = [
         {
@@ -648,6 +651,12 @@ class BlogPage extends React.Component {
           summaryTextHtml: ""
         }
       ];
+
+      recentPostsArray = newPostArray = [];
+    } else {
+      recentPostsArray = articlesArr.slice(1);
+
+      newPostArray = articlesArr.slice(0, 1);
     }
 
     if (popularArticlesArr.length === 0) {
@@ -664,11 +673,10 @@ class BlogPage extends React.Component {
           summaryTextHtml: ""
         }
       ];
+      popPostsArray = [];
+    } else {
+      popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
     }
-
-    const recentPostsArray = articlesArr.slice(1);
-    const popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
-    const newPostArray = articlesArr.slice(0, 1);
 
     const isClientSide =
       typeof window !== "undefined" &&
@@ -706,63 +714,66 @@ class BlogPage extends React.Component {
       </footer>
     );
 
-    const asidePosts = popPostsArray.map((post, i, arr) => {
-      // const arrLen = arr.length;
-      const {
-        title,
-        keywords,
-        author,
-        date,
-        url,
-        summaryTextHtml,
-        postImg,
-        postGradient
-      } = post;
+    const asidePosts =
+      popPostsArray.lastIndexOf > 0
+        ? popPostsArray.map((post, i, arr) => {
+            // const arrLen = arr.length;
+            const {
+              title,
+              keywords,
+              author,
+              date,
+              url,
+              summaryTextHtml,
+              postImg,
+              postGradient
+            } = post;
 
-      let avatar;
+            let avatar;
 
-      avatar = post.avatar;
-      const size = this.state.asidePostW;
+            avatar = post.avatar;
+            const size = this.state.asidePostW;
 
-      if (post.moreBtn && post.moreBtn === "exist") {
-        return (
-          <FlexItem key={i} size={size}>
-            <MorePostsCont>
-              <MorePosts
-                onClick={this.MorePopularPostsHandler}
-                id="MorePopularPosts"
-                noPadding={showLoading}
-              >
-                {showLoading ? <Loading /> : "More..."}
-              </MorePosts>
-            </MorePostsCont>
-          </FlexItem>
-        );
-      }
-      const showLoading = this.state.isLoadingPopularPosts;
-      return (
-        <FlexItem key={i} size={size}>
-          <Post
-            id={i}
-            size="md"
-            title={title}
-            backgroundURL={postImg.replace(
-              `${postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-              `${postImg
-                .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-                .replace(".", "_mobile.")}`
-            )}
-            postGradient={postGradient}
-            keywords={keywords}
-            author={author}
-            date={date}
-            link={`/blog/post/${url}`}
-            avatar={avatar}
-            summaryTextHtml={summaryTextHtml}
-          />
-        </FlexItem>
-      );
-    });
+            if (post.moreBtn && post.moreBtn === "exist") {
+              return (
+                <FlexItem key={i} size={size}>
+                  <MorePostsCont>
+                    <MorePosts
+                      onClick={this.MorePopularPostsHandler}
+                      id="MorePopularPosts"
+                      noPadding={showLoading}
+                    >
+                      {showLoading ? <Loading /> : "More..."}
+                    </MorePosts>
+                  </MorePostsCont>
+                </FlexItem>
+              );
+            }
+            const showLoading = this.state.isLoadingPopularPosts;
+            return (
+              <FlexItem key={i} size={size}>
+                <Post
+                  id={i}
+                  size="md"
+                  title={title}
+                  backgroundURL={postImg.replace(
+                    `${postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                    `${postImg
+                      .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                      .replace(".", "_mobile.")}`
+                  )}
+                  postGradient={postGradient}
+                  keywords={keywords}
+                  author={author}
+                  date={date}
+                  link={`/blog/post/${url}`}
+                  avatar={avatar}
+                  summaryTextHtml={summaryTextHtml}
+                />
+              </FlexItem>
+            );
+          })
+        : null;
 
     const aside = (
       <React.Fragment>
@@ -849,87 +860,93 @@ class BlogPage extends React.Component {
       </React.Fragment>
     );
 
-    const recentPostCards = recentPostsArray.map((post, i) => {
-      const {
-        title,
-        postGradient,
-        keywords,
-        author,
-        date,
-        url,
-        summaryTextHtml
-      } = post;
+    const recentPostCards =
+      recentPostsArray.length > 0
+        ? recentPostsArray.map((post, i) => {
+            const {
+              title,
+              postGradient,
+              keywords,
+              author,
+              date,
+              url,
+              summaryTextHtml
+            } = post;
 
-      let postImg = {
-        backgroundImage: post.postImg.replace(
-          `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-          `${post.postImg
-            .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-            .replace(".", "_tablet.")}`
-        ),
-        "@media (max-width:700px)": {
-          backgroundImage: post.postImg.replace(
-            `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-            `${post.postImg
-              .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-              .replace(".", "_mobile.")}`
-          )
-        }
-      };
+            let postImg = {
+              backgroundImage: post.postImg.replace(
+                `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                `${post.postImg
+                  .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                  .replace(".", "_tablet.")}`
+              ),
+              "@media (max-width:700px)": {
+                backgroundImage: post.postImg.replace(
+                  `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                  `${post.postImg
+                    .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                    .replace(".", "_mobile.")}`
+                )
+              }
+            };
 
-      let avatar;
-      if (typeof post.avatar === "object") {
-        avatar = JSON.stringify(post.avatar);
-      } else if (typeof post.avatar === "string") {
-        avatar = post.avatar;
-      }
+            let avatar;
+            if (typeof post.avatar === "object") {
+              avatar = JSON.stringify(post.avatar);
+            } else if (typeof post.avatar === "string") {
+              avatar = post.avatar;
+            }
 
-      // console.log("postH", postH);
-      return (
-        <RecentPostCardCont key={i}>
-          <PostCard
-            id={`PostCard${i}`}
-            postH={parseInt(mainPostH) * 0.8}
-            hasSummary={true}
-            title={title}
-            postImg={postImg}
-            postGradient={postGradient}
-            keywords={keywords}
-            author={author}
-            date={date}
-            url={`/blog/post/${url}`}
-            avatar={avatar}
-            summaryTextHtml={summaryTextHtml}
-          />
-        </RecentPostCardCont>
-      );
-    });
+            // console.log("postH", postH);
+            return (
+              <RecentPostCardCont key={i}>
+                <PostCard
+                  id={`PostCard${i}`}
+                  postH={parseInt(mainPostH) * 0.8}
+                  hasSummary={true}
+                  title={title}
+                  postImg={postImg}
+                  postGradient={postGradient}
+                  keywords={keywords}
+                  author={author}
+                  date={date}
+                  url={`/blog/post/${url}`}
+                  avatar={avatar}
+                  summaryTextHtml={summaryTextHtml}
+                />
+              </RecentPostCardCont>
+            );
+          })
+        : null;
 
-    const lastPost = newPostArray.map((post, i) => {
-      let postImg = {
-        backgroundImage: post.postImg,
-        "@media (max-width:700px)": {
-          backgroundImage: post.postImg.replace(
-            `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-            `${post.postImg
-              .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-              .replace(".", "_mobile.")}`
-          )
-        }
-      };
+    const lastPost =
+      newPostArray.length > 0
+        ? newPostArray.map((post, i) => {
+            let postImg = {
+              backgroundImage: post.postImg,
+              "@media (max-width:700px)": {
+                backgroundImage: post.postImg.replace(
+                  `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                  `${post.postImg
+                    .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                    .replace(".", "_mobile.")}`
+                )
+              }
+            };
 
-      return (
-        <PostCard
-          key={i}
-          id="latest"
-          title={post.title}
-          postH={mainPostH}
-          postImg={postImg}
-          postGradient={post.postGradient}
-          url={`/blog/post/${post.url}`}
-        />
-      );
-    });
+            return (
+              <PostCard
+                key={i}
+                id="latest"
+                title={post.title}
+                postH={mainPostH}
+                postImg={postImg}
+                postGradient={post.postGradient}
+                url={`/blog/post/${post.url}`}
+              />
+            );
+          })
+        : null;
 
     const { isLoading } = this.state;
     return (
@@ -1015,20 +1032,22 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
-              <NewPostLayout size={this.state.lastPostW}>
-                <Post
-                  id="latest"
-                  title={newPostArray[0].title}
-                  backgroundURL={newPostArray[0].postImg}
-                  postGradient={newPostArray[0].postGradient}
-                  keywords={newPostArray[0].keywords}
-                  author={newPostArray[0].author}
-                  date={newPostArray[0].date}
-                  link={`/blog/post/${newPostArray[0].url}`}
-                  avatar={newPostArray[0].avatar}
-                  summaryTextHtml={newPostArray[0].summaryTextHtml}
-                />
-              </NewPostLayout>
+              {newPostArray.length > 0 && (
+                <NewPostLayout size={this.state.lastPostW}>
+                  <Post
+                    id="latest"
+                    title={newPostArray[0].title}
+                    backgroundURL={newPostArray[0].postImg}
+                    postGradient={newPostArray[0].postGradient}
+                    keywords={newPostArray[0].keywords}
+                    author={newPostArray[0].author}
+                    date={newPostArray[0].date}
+                    link={`/blog/post/${newPostArray[0].url}`}
+                    avatar={newPostArray[0].avatar}
+                    summaryTextHtml={newPostArray[0].summaryTextHtml}
+                  />
+                </NewPostLayout>
+              )}
             </div>
 
             <div
@@ -1073,23 +1092,25 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
-              <SummaryCard
-                cardW={260}
-                cardH={260 * 1.2}
-                keywords={newPostArray[0].keywords}
-                author={newPostArray[0].author}
-                date={newPostArray[0].date}
-                url={`/blog/post/${newPostArray[0].url}`}
-                avatar={
-                  typeof newPostArray[0].avatar === "string"
-                    ? newPostArray[0].avatar
-                    : JSON.stringify(newPostArray[0].avatar)
-                }
-                summaryTextHtml={newPostArray[0].summaryTextHtml}
-                style={{
-                  borderRadius: "5px"
-                }}
-              />
+              {newPostArray.length > 0 && (
+                <SummaryCard
+                  cardW={260}
+                  cardH={260 * 1.2}
+                  keywords={newPostArray[0].keywords}
+                  author={newPostArray[0].author}
+                  date={newPostArray[0].date}
+                  url={`/blog/post/${newPostArray[0].url}`}
+                  avatar={
+                    typeof newPostArray[0].avatar === "string"
+                      ? newPostArray[0].avatar
+                      : JSON.stringify(newPostArray[0].avatar)
+                  }
+                  summaryTextHtml={newPostArray[0].summaryTextHtml}
+                  style={{
+                    borderRadius: "5px"
+                  }}
+                />
+              )}
             </div>
           </section>
         </header>
