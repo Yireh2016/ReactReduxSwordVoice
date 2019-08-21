@@ -105,7 +105,7 @@ class LogInForm extends Component {
 
       return;
     }
-    alert("Please, fill all required values");
+    alert("Please, fill all the required values");
   };
 
   onScrollformLayout = e => {

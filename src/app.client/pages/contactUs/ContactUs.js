@@ -11,7 +11,6 @@ import NavBarLayout from "../../layouts/NavBarLayout";
 import Background from "./background/background";
 import ContactForm from "./contactForm/ContactForm";
 import SocialNet from "./socialNet/SocialNet";
-import Dialog from "../../components/dialog/Dialog.component";
 
 //assets
 import image from "../../assets/img/contact/message-in-a-bottle-3437294_960_720.jpg";
@@ -162,7 +161,6 @@ const ContactUs = ({ isDialog, setDialog }) => {
 
   return (
     <div>
-      {isDialog && <Dialog />}
       <NavBarLayout id="navbar">
         {/* <Helmet>
         <title>SwordVoice.com &#183; 💌 Contact Us Here</title>
@@ -200,10 +198,8 @@ const ContactUs = ({ isDialog, setDialog }) => {
   );
 };
 
-const stateToProps = state => {
-  return {
-    isDialog: state.dialog.show
-  };
+const stateToProps = () => {
+  return {};
 };
 const actionsToProps = dispatch => {
   return {

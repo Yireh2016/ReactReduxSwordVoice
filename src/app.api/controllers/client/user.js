@@ -107,8 +107,10 @@ export const loginCtrl = (req, res) => {
       res.status(404).json(err);
       return;
     }
-
-    if (!user.isUserActive) {
+    console.log(`on login: \n err ${err}
+                info ${info}\n
+                user ${user}`);
+    if (user && !user.isUserActive) {
       res.status(401).json("user is not active");
       return;
     }
@@ -142,7 +144,7 @@ export const loginCtrl = (req, res) => {
 
 export const logoutCtrl = (req, res) => {
   deleteCookie(req, res);
-  res.status(200).json({ status: "OK" });
+  res.status(200).json({ status: "OK", message: "Log Out Successful" });
 };
 
 export const autoLogin = (req, res) => {

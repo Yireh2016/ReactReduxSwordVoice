@@ -9,6 +9,9 @@ const checkPostStatus = () => {
     .where("programDate")
     .lt(now)
     .exec((err, articles) => {
+      if (articles.length === 0) {
+        return;
+      }
       articles.forEach(article => {
         console.log("article.programDate  ", article.programDate);
         console.log("article.title where programDate< now  ", article.title);

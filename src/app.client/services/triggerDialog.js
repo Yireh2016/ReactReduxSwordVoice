@@ -1,4 +1,4 @@
-import { store } from "../cms.index";
+import { store } from "../../app.redux.store/store/configStore";
 
 const setDialog = obj => {
   store.dispatch({ type: "SET_DIALOG", payload: obj });

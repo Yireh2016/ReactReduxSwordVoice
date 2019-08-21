@@ -1,6 +1,6 @@
 let keywordsToArr = keywords => {
   if (!keywords) {
-    return;
+    return [];
   }
 
   if (

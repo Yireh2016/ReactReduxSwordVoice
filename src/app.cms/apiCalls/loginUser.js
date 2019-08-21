@@ -9,10 +9,11 @@ const loginUser = (username, password) => {
   return axios
     .post("/api/login", data)
     .then(res => {
+      console.log("res on login", res);
       return { status: "OK", data: res.data };
     })
     .catch(err => {
-      return { status: "err", data: err };
+      return { status: err.response.data.message, data: err.response.data };
     });
 };
 

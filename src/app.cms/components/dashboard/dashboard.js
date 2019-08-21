@@ -32,10 +32,13 @@ import parseHTML2Object from "../../../services/parseHTML2Object";
 import removeSuffixClasses from "../../../services/suffixClasses";
 import classesArrObjToStr from "../../../services/classesArrObjToStr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
+import triggerDialog from "../../controllers/triggerDialog";
 
 //api calls
 import getUserFromId from "../../apiCalls/getUserFromId";
-import apiLogout from "../../../apiCalls/apiLogout";
+
+import apiCtrl from "../../../apiCalls/generic/apiCtrl";
+// import apiLogout from "../../../apiCalls/apiLogout";
 
 const Aside = styled.aside`
   width: 20%;
@@ -231,9 +234,7 @@ class Dashboard extends Component {
     };
 
     axios
-      .get(
-        `${process.env.CDN_URL}/cdn/getClasses/${this.props.project.url}`
-      )
+      .get(`${process.env.CDN_URL}/cdn/getClasses/${this.props.project.url}`)
       .then(res => {
         if (res.status === 200) {
           viewClasses(res.data);
@@ -297,11 +298,49 @@ class Dashboard extends Component {
         break;
       }
       case "Log Out": {
-        const logoutRes = await apiLogout();
-        if (logoutRes.status === "OK") {
-          console.log("logued out");
-          window.location.href = "/cms";
-        }
+        const logOutObj = {
+          url: "api/logout",
+          method: "get"
+        };
+
+        apiCtrl(
+          logOutObj,
+          res => {
+            console.log("logout Ok exitBtnClickHandler  ", res);
+
+            if (res.data.status === "OK") {
+              console.log("logued out");
+
+              triggerDialog(
+                {
+                  title: "Success 😃",
+                  body: `${res.data.message}`,
+                  auto: 3000
+                },
+                () => {
+                  window.location.href = "/cms";
+                }
+              );
+
+              return;
+            }
+          },
+          err => {
+            console.log("logout Ok exitBtnClickHandler", err);
+            const message = err.response.data.message;
+            triggerDialog({
+              title: "Error 🤬",
+              body: `There was a error on Log out: ${message}. Please, try again`,
+              status: "auto"
+            });
+          }
+        );
+
+        // const logoutRes = await apiLogout();
+        // if (logoutRes.status === "OK") {
+        //   console.log("logued out");
+        //   window.location.href = "/cms";
+        // }
         break;
       }
       case "Home": {
@@ -471,9 +510,9 @@ class Dashboard extends Component {
                       backgroundSize: "cover",
                       borderRadius: "100%",
 
-                      backgroundImage:
-                        this.props.loggedUserAvatar &&
-                        `url('${this.props.loggedUserAvatar}`
+                      backgroundImage: this.props.loggedUserAvatar
+                        ? `url('${this.props.loggedUserAvatar}`
+                        : "none"
                     }}
                   />
                 </div>

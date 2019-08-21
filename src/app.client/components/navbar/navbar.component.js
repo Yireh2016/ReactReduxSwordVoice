@@ -14,13 +14,16 @@ import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
 import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
 import Logo from "../general/logo.component";
 import Footer from "../footer/footer.component";
+import Dialog from "../dialog/Dialog.component";
 
 //api calls
 import apiLogout from "../../../apiCalls/apiLogout";
+import apiCtrl from "../../../apiCalls/generic/apiCtrl";
 
 //services
 
 import { guestCookie } from "../../../app.client/services/cookieManager";
+import triggerDialog from "../../services/triggerDialog";
 
 const Nav = styled.nav`
   animation: ${props => props.animation};
@@ -176,17 +179,66 @@ class NavBar extends Component {
   };
 
   logOutClickHandler = async () => {
-    const logoutRes = await apiLogout();
-    if (logoutRes.status === "OK") {
-      this.props.onLogOut();
+    const logOutObj = {
+      url: "api/logout",
+      method: "get"
+    };
 
-      window.localStorage.removeItem("userAvatar");
-      this.setState({
-        showDesplegable: false,
-        loggedUserAvatar: "",
-        toggleAnim: false
-      });
-    }
+    apiCtrl(
+      logOutObj,
+      res => {
+        console.log("navbar logoutclickhandler Ok ", res);
+
+        if (res.data.status === "OK") {
+          this.props.onLogOut();
+
+          this.setState({
+            showDesplegable: false,
+            loggedUserAvatar: "",
+            toggleAnim: false
+          });
+
+          triggerDialog({
+            title: "Success 😃",
+            body: `${res.data.message}`,
+            auto: true
+          });
+
+          return;
+        }
+      },
+      err => {
+        console.log("navbar logoutclickhandler  Err", err);
+        const message = err.response.data.message;
+        triggerDialog({
+          title: "Error 🤬",
+          body: `There was a error on Log out: ${message}. Please, try again`,
+          status: "auto"
+        });
+      }
+    );
+
+    // try {
+    //   var logoutRes = await apiLogout();
+    //   console.log("logoutRes", logoutRes);
+    // } catch (error) {
+    //   triggerDialog({
+    //     title: "Error 🤬",
+    //     body: "There was a Network Error on Log out, Please try again later",
+    //     status: "auto"
+    //   });
+    // }
+
+    // if (logoutRes.status === "OK") {
+    //   this.props.onLogOut();
+
+    //   this.setState({
+    //     showDesplegable: false,
+    //     loggedUserAvatar: "",
+    //     toggleAnim: false
+    //   });
+    //   return;
+    // }
   };
 
   avatarToRender = () => {
@@ -389,6 +441,7 @@ class NavBar extends Component {
 
     return (
       <div id="wrapper">
+        {this.props.isDialog && <Dialog />}
         {this.state.showSignUp && (
           <SignUpForm
             onCancelClick={() => {
@@ -727,7 +780,8 @@ const mapStateToProps = state => {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
-    scroll: state.scroll
+    scroll: state.scroll,
+    isDialog: state.dialog.show
   };
 };
 const mapDispatchToProps = dispatch => {

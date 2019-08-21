@@ -184,17 +184,19 @@ class ThumbNailEditor extends Component {
           Upload Image
         </button>
         <StyleRoot>
-          <PostCard
-            title={this.props.seo.title}
-            postH={300}
-            postImg={this.state.imagePreview}
-            postGradient={
-              this.props.thumbnail &&
-              `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                this.props.thumbnail.color
-              } 73.79%)`
-            }
-          />
+          {this.state.imagePreview && (
+            <PostCard
+              title={this.props.seo.title}
+              postH={300}
+              postImg={this.state.imagePreview}
+              postGradient={
+                this.props.thumbnail &&
+                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
+                  this.props.thumbnail.color
+                } 73.79%)`
+              }
+            />
+          )}
         </StyleRoot>
       </div>
     );

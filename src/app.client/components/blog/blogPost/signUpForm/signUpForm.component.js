@@ -7,15 +7,13 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 import { connect } from "react-redux";
 import { withCookies } from "react-cookie";
 //services
-// import { sessionCookie } from "../../../../services/cookieManager";
-// import isBrowser from "../../../../../services/isBrowser";
+import triggerDialog from "../../../../services/triggerDialog";
 
 //css
 import "./signUpForm.css";
 import UploadImage from "./uploadImage";
 import blobToBase64 from "../../../../../services/blobToBase64";
 //components
-import Dialog from "../../../../components/dialog/Dialog.component";
 //api calls
 
 class SignUpForm extends Component {
@@ -404,71 +402,17 @@ class SignUpForm extends Component {
       }
     }
 
-    this.triggerDialog("Ups 😅", "Please, fill all required values");
+    // this.triggerDialog("Ups 😅", "Please, fill all the required values");
 
-    // this.setState(prevState => {
-    //   let nextPage = prevState.formPage + 1;
-    //   if (
-    //     nextPage === 2 &&
-    //     prevState.userEmailIsValid.valid === true &&
-    //     prevState.userFirstNameIsValid === true &&
-    //     prevState.userLastNameIsValid === true &&
-    //     prevState.userCountry !== " "
-    //   ) {
-    //     return {
-    //       formPage: nextPage,
-    //       animControl1: "flyToLeft",
-    //       animControl2: "flyIn"
-    //     };
-    //   }
-
-    //   if (
-    //     nextPage === 3 &&
-    //     prevState.userBirthDateIsValid === true &&
-    //     prevState.userGenderIsValid === true &&
-    //     prevState.userOtherInterestsTextIsValid
-    //   ) {
-    //     if (prevState.userOtherInterestsText !== "") {
-    //       const text = prevState.userOtherInterestsText;
-    //       const interests = prevState.userOtherInterests;
-    //       interests.push(text);
-    //       return {
-    //         formPage: nextPage,
-    //         animControl2: "flyToLeft",
-    //         animControl3: "flyIn",
-    //         userOtherInterests: interests
-    //       };
-    //     }
-    //     return {
-    //       formPage: nextPage,
-    //       animControl2: "flyToLeft",
-    //       animControl3: "flyIn"
-    //     };
-    //   }
-
-    //   return;
-    // });
+    triggerDialog({
+      title: "Ups 😅",
+      body: "Please, fill all the required values"
+    });
   };
 
-  triggerDialog = (title, body, auto) => {
-    this.props.setDialog({ title, body, show: true, status: auto });
-
-    if (auto) {
-      setTimeout(() => {
-        this.props.setDialog({ title, body, show: false });
-        this.props.onCancelClick();
-      }, 3000);
-    }
-  };
   onBackClick = () => {
     this.setState(prevState => {
       let backPage = prevState.formPage - 1;
-
-      // return ({
-      //   formPage: backPage,
-      //   animControl1: "flyIn",
-      //   animControl2: "flyToRight"
-      // })
 
       if (backPage === 2) {
         return {
@@ -558,14 +502,21 @@ class SignUpForm extends Component {
               userAvatar: userData.userAvatar,
               userFullName: `${userFirstName} ${userLastName}`
             });
-            this.triggerDialog(
-              "Way to Go!! 😁",
-              `Welcome to our Comunity ${userName}`,
-              true
+            triggerDialog(
+              {
+                title: "Way to Go!! 😁",
+                body: `Welcome to our Comunity ${userName}`,
+                auto: true
+              },
+              () => {
+                this.props.onCancelClick();
+              }
             );
           } else {
-            //en caso de no poder salvar el usuario en DB se destruye la cookie de session
-            //OJO mostrar error
+            triggerDialog({
+              title: "Ups 😅",
+              body: `We receive an invalid response from the server. Please try again later.`
+            });
           }
           return;
           // this.props.onCancelClick(); //se cierra el modal de signup
@@ -577,15 +528,18 @@ class SignUpForm extends Component {
           }
           errorText = err.response.data.message;
 
-          triggerDialog(
-            "Error 🤬",
-            ` There was an error status:  ${errorText}`
-          );
+          triggerDialog({
+            title: "Error 🤬",
+            body: ` There was an error status:  ${errorText}`
+          });
         });
 
       return;
     }
-    this.triggerDialog("Ups 😅", "Please, fill all required values");
+    triggerDialog({
+      title: "Ups 😅",
+      body: "Please, fill all the required values"
+    });
   };
 
   componentDidMount() {
@@ -711,7 +665,6 @@ class SignUpForm extends Component {
         }}
         onClick={this.props.onCancelClick}
       >
-        {this.props.dialogShow && <Dialog />}
         <div
           className="formCard "
           onClick={e => {
@@ -1383,10 +1336,7 @@ const mapStateToProps = state => {
   return {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
-    loggedUserAvatar: state.logInStatus.loggedUserAvatar,
-    dialogTitle: state.dialog.title,
-    dialogBody: state.dialog.body,
-    dialogShow: state.dialog.show
+    loggedUserAvatar: state.logInStatus.loggedUserAvatar
   };
 };
 const mapDispachToProps = dispach => {

@@ -2,8 +2,8 @@ import axios from "axios";
 
 const apiLogout = () => {
   return axios(`api/logout`)
-    .then(res => {
-      return { status: res.statusText };
+    .then(() => {
+      return { status: "OK" };
     })
     .catch(err => {
       console.log("err on logout", err);

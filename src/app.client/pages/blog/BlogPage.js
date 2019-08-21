@@ -715,7 +715,7 @@ class BlogPage extends React.Component {
     );
 
     const asidePosts =
-      popPostsArray.lastIndexOf > 0
+      popPostsArray.length > 0
         ? popPostsArray.map((post, i, arr) => {
             // const arrLen = arr.length;
             const {

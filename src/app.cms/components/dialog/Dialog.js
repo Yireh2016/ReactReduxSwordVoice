@@ -29,6 +29,27 @@ const Control = styled.div`
     float: right;
   }
 `;
+
+const Button = styled.button`
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  background: #00171f;
+  border: 1px solid coral;
+  color: #fff;
+  transition: all ease 300ms;
+  justify-content: center;
+  :hover {
+    color: #00171f;
+    background-color: #fff;
+    cursor: pointer;
+  }
+`;
 const Dialog = ({ title, body, status, showDialog }) => {
   return (
     <Container id="dialogCont">
@@ -36,14 +57,14 @@ const Dialog = ({ title, body, status, showDialog }) => {
         <Title id="dialogTitle"> {title}</Title>
         <p id="dialogBody"> {body}</p>
         <Control id="dialogCtrlCont">
-          <button
+          <Button
             className="cmsBtn"
             onClick={() => {
               showDialog(false);
             }}
           >
             Ok
-          </button>
+          </Button>
         </Control>
       </Layout>
     </Container>

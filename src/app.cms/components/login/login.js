@@ -11,6 +11,10 @@ import "./login.css";
 //apiCalls
 import loginUser from "../../apiCalls/loginUser";
 
+//services
+import triggerDialog from "../../controllers/triggerDialog";
+import Dialog from "../dialog/Dialog";
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -55,12 +59,19 @@ class Login extends Component {
     const { userName, userPassword } = this.state;
 
     if (userName && userPassword) {
-      const loginRes = await loginUser(userName, userPassword);
+      try {
+        var loginRes = await loginUser(userName, userPassword);
+      } catch (error) {
+        triggerDialog({ title: "Error 🤬", body: err.response.data.message });
+      }
 
       if (loginRes.status === "OK") {
-        alert("Login Successful");
-
-        window.localStorage.setItem("userAvatar", loginRes.data.userAvatar);
+        triggerDialog({
+          title: "Way to Go!! 😁",
+          body: `Welcome Back ${userName}`,
+          auto: true,
+          time: 3000
+        });
 
         const data = {
           userAvatar: loginRes.data.userAvatar,
@@ -70,11 +81,17 @@ class Login extends Component {
           userFullName: loginRes.data.userFullName
         };
         this.props.onLogIn(data);
+        return;
       }
 
+      triggerDialog({ title: "Ups 😅", body: loginRes.status });
       return;
     }
-    alert("Please, fill all required values");
+
+    triggerDialog({
+      title: "Ups 😅",
+      body: "Please, fill all the required values"
+    });
   };
 
   render() {
@@ -83,6 +100,7 @@ class Login extends Component {
     }
     return (
       <div className="loginLayout">
+        {this.props.isDialog && <Dialog />}
         <div className="loginCont">
           <div className="loginInputLayout">
             <label>User</label>
@@ -109,7 +127,8 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    isUserLoggedIn: state.login.isUserLoggedIn
+    isUserLoggedIn: state.login.isUserLoggedIn,
+    isDialog: state.dialog.show
   };
 };
 const mapDispachToProps = dispach => {
