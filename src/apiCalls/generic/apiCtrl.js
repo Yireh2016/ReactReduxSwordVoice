@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "./apiCalls";
+import { apiGet, apiPost, apiPut } from "./apiCalls";
 
 const apiCtrl = async ({ url, data, method, config }, success, error) => {
   let response;
@@ -19,6 +19,11 @@ const apiCtrl = async ({ url, data, method, config }, success, error) => {
 
       case "post": {
         response = await apiPost(url, data, config);
+        break;
+      }
+
+      case "put": {
+        response = await apiPut(url, data, config);
         break;
       }
     }

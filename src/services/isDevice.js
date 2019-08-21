@@ -1,8 +1,6 @@
 const isDevice = () => {
-  const winWidth = window.innerWidth;
+  const winWidth = window.outerWidth;
   let device;
-
-  console.log("winWidth", winWidth);
 
   if (winWidth <= 700) {
     device = "phone";

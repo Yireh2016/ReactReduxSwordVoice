@@ -80,7 +80,7 @@ export const getMoreCommentsCtrl = (req, res) => {
 
     commentsArr = await updateArticleAvatars(commentsArr);
 
-    res.status(200).send({ statusText: "OK", comments: commentsArr });
+    res.status(200).send({ status: "OK", comments: commentsArr });
   });
 };
 
@@ -101,7 +101,7 @@ export const getMoreResponsesCtrl = (req, res) => {
 
     res
       .status(200)
-      .send({ statusText: "OK", responses: updateReplyAvatarsRes.replyArr });
+      .send({ status: "OK", responses: updateReplyAvatarsRes.replyArr });
   });
 };
 
@@ -402,7 +402,7 @@ export const filterPopularCtrl = (req, res) => {
         };
       }
 
-      res.status(200).send({ statusText: "OK", popularArr: postMinimumData });
+      res.status(200).send({ status: "OK", popularArr: postMinimumData });
     },
     err => {
       console.log("error en blog ", err);
@@ -456,7 +456,7 @@ export const searchArticleCtrl = (req, res) => {
         };
       }
 
-      res.status(200).send({ statusText: "OK", searchArr: postMinimumData });
+      res.status(200).send({ status: "OK", searchArr: postMinimumData });
     })
     .catch(err => {
       errHandler(err);

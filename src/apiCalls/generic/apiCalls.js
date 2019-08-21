@@ -1,15 +1,24 @@
 import axios from "axios";
 
+const errorFn = (err, reject) => {
+  console.log("error on apiPost", JSON.stringify(err));
+  reject(err);
+};
+
+const successFn = (res, resolve) => {
+  console.log("successFn res", res);
+  resolve(res);
+};
+
 export const apiPost = (url, data, config) => {
   return new Promise((resolve, reject) => {
     axios
       .post(url, data, config)
       .then(res => {
-        resolve({ status: res.data.status, message: res.data.message });
+        successFn(res, resolve);
       })
       .catch(err => {
-        console.log("error on apiPost", JSON.stringify(err));
-        reject({ status: "ERR", message: err.data.response.message });
+        errorFn(err, reject);
       });
   });
 };
@@ -19,10 +28,23 @@ export const apiGet = (url, config) => {
     axios
       .get(url, config)
       .then(res => {
-        resolve(res);
+        successFn(res, resolve);
       })
       .catch(err => {
-        reject(err);
+        errorFn(err, reject);
+      });
+  });
+};
+
+export const apiPut = (url, data, config) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .put(url, data, config)
+      .then(res => {
+        successFn(res, resolve);
+      })
+      .catch(err => {
+        errorFn(err, reject);
       });
   });
 };

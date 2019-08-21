@@ -40,12 +40,14 @@ import Modal from "../../components/modal/modal";
 //services
 import isDevice from "../../../services/isDevice";
 import NewPostLayout from "./newPostLayout/NewPostLayout";
+import triggerDialog from "../../services/triggerDialog";
+
 //apiCalls
 import getMorePosts from "../../../apiCalls/getMorePosts";
-import filterPopular from "../../apiCalls/filterPopular";
 import searchArticle from "../../apiCalls/searchArticle";
 import searchLastArticles from "../../apiCalls/searchLastArticles";
 import advancedSearchDb from "../../apiCalls/advancedSearchDb";
+import apiCtrl from "../../../apiCalls/generic/apiCtrl";
 
 const navBarHeight = "93px";
 const headerRadius = 140;
@@ -368,15 +370,14 @@ class BlogPage extends React.Component {
   }
 
   setPostDimensions = () => {
-    console.log("blogpage setPostDimensions", window.innerWidth);
     const isDeviceResult = isDevice();
-    console.log("isDeviceResult", isDeviceResult);
     let postH;
     let asidePostW = 9;
 
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
+    const windowWidth = window.outerWidth;
+    const windowHeight = window.outerHeight;
 
+    console.log("isDeviceResult", isDeviceResult);
     switch (isDeviceResult) {
       case "pc":
         asidePostW = 10;
@@ -391,7 +392,7 @@ class BlogPage extends React.Component {
         break;
 
       case "phone":
-        postH = (windowWidth * 0.6) / 1.028;
+        postH = (windowWidth * 1) / 1.028;
         break;
 
       default:
@@ -522,22 +523,61 @@ class BlogPage extends React.Component {
       isFilterLoading: true
     });
 
-    const filterPopularRes = await filterPopular(
-      filter,
-      this.props.blog.articlesCount,
-      0
+    apiCtrl(
+      {
+        url: "api/filterPopular",
+        data: {
+          filter,
+          popularTotalCount: this.props.blog.articlesCount,
+          popularCount: 0
+        },
+        method: "put"
+      },
+      res => {
+        if (res.data.status === "OK") {
+          this.setState({
+            isFilterLoading: false
+          });
+          this.props.setPopularArr([...res.data.popularArr]);
+          return;
+        }
+
+        console.log("Error changing filter", res.data.status);
+        this.props.setFilter(lastFilter);
+        this.setState({
+          isFilterLoading: false
+        });
+      },
+      err => {
+        console.log("Error changing filter err", err);
+        const message = err.response.data.message;
+        triggerDialog({
+          title: "Error 🤬",
+          body: `There was a error : ${message}. Please, try again later`
+        });
+        this.setState({
+          isFilterLoading: false
+        });
+        this.props.setFilter(lastFilter);
+      }
     );
 
-    if (filterPopularRes.statusText === "OK") {
-      this.setState({
-        isFilterLoading: false
-      });
+    // const filterPopularRes = await filterPopular(
+    //   filter,
+    //   this.props.blog.articlesCount,
+    //   0
+    // );
 
-      this.props.setPopularArr([...filterPopularRes.popularArr]);
-      return;
-    }
-    console.log("Error changing filter", filterPopularRes.statusText);
-    this.props.setFilter(lastFilter);
+    // if (filterPopularRes.statusText === "OK") {
+    //   this.setState({
+    //     isFilterLoading: false
+    //   });
+
+    //   this.props.setPopularArr([...filterPopularRes.popularArr]);
+    //   return;
+    // }
+    // console.log("Error changing filter", filterPopularRes.statusText);
+    // this.props.setFilter(lastFilter);
   };
 
   MorePopularPostsHandler = async () => {
@@ -555,21 +595,68 @@ class BlogPage extends React.Component {
       }
     });
 
-    const filterPopularRes = await filterPopular(
-      filter,
-      this.props.blog.articlesCount,
-      this.props.blog.popularArticlesArr.length
+    apiCtrl(
+      {
+        url: "api/filterPopular",
+        data: {
+          filter,
+          popularTotalCount: this.props.blog.articlesCount,
+          popularCount: this.props.blog.popularArticlesArr.length
+        },
+        method: "put"
+      },
+      res => {
+        if (res.data.status === "OK") {
+          this.props.setPopularArr([
+            ...this.props.blog.popularArticlesArr,
+            ...res.data.popularArr
+          ]);
+          this.setState({
+            isFilterLoading: false
+          });
+          return;
+        }
+
+        console.log("Error searching filter", res.data.status);
+        triggerDialog({
+          title: "Error 🤬",
+          body: `There was a error : ${
+            res.data.message
+          }. Please, try again later`
+        });
+        this.setState({
+          isFilterLoading: false
+        });
+      },
+      err => {
+        console.log("Error changing filter err", err);
+        console.log("navbar logoutclickhandler  Err", err);
+        const message = err.response.data.message;
+        triggerDialog({
+          title: "Error 🤬",
+          body: `There was a error : ${message}. Please, try again later`
+        });
+        this.setState({
+          isFilterLoading: false
+        });
+      }
     );
 
-    if (filterPopularRes.statusText === "OK") {
-      this.props.setPopularArr([
-        ...this.props.blog.popularArticlesArr,
-        ...filterPopularRes.popularArr
-      ]);
+    // const filterPopularRes = await filterPopular(
+    //   filter,
+    //   this.props.blog.articlesCount,
+    //   this.props.blog.popularArticlesArr.length
+    // );
 
-      return;
-    }
-    console.log("Error searching filter", filterPopularRes.statusText);
+    // if (filterPopularRes.statusText === "OK") {
+    //   this.props.setPopularArr([
+    //     ...this.props.blog.popularArticlesArr,
+    //     ...filterPopularRes.popularArr
+    //   ]);
+
+    //   return;
+    // }
+    // console.log("Error searching filter", filterPopularRes.statusText);
   };
 
   onSearch = async value => {
@@ -675,7 +762,14 @@ class BlogPage extends React.Component {
       ];
       popPostsArray = [];
     } else {
-      popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
+      if (
+        this.props.blog.articlesCount >
+        this.props.blog.popularArticlesArr.length
+      ) {
+        popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
+      } else {
+        popPostsArray = [...popularArticlesArr];
+      }
     }
 
     const isClientSide =

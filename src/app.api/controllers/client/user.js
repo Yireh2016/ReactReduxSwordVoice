@@ -193,11 +193,11 @@ export const sendUserTempImageCtrl = (req, res) => {
       if (sendRes.status === 200) {
         res
           .status(200)
-          .json({ statusText: "OK", filename: sendRes.data.filename });
+          .json({ status: "OK", filename: sendRes.data.filename });
       }
     })
     .catch(err => {
-      res.status(404).json({ statusText: err });
+      res.status(404).json({ status: err });
     });
 };
 
