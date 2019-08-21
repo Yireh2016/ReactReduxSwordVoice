@@ -16,7 +16,11 @@ const ProfilesTable = ({ setUserProfile, history }) => {
 
   useEffect(() => {
     const asyncFn = async () => {
-      const usersObj = await getUsers();
+      try {
+        var usersObj = await getUsers();
+      } catch (err) {
+        console.error("error", err);
+      }
 
       if (usersObj.status === "OK") {
         setUsers(usersObj.data);
