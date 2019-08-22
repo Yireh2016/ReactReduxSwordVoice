@@ -15,7 +15,6 @@ const compressImage = (
   const shouldCompress = browser === "ie" || browser === "edge" ? false : true;
 
   const image = files[0] ? files[0] : files;
-
   if (shouldCompress) {
     new Compressor(image, {
       quality: imgQuality,

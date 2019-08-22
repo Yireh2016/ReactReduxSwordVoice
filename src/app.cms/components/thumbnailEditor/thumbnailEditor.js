@@ -94,7 +94,9 @@ class ThumbNailEditor extends Component {
         base64Obj.url,
         this.props.project.url,
         this.props.thumbnail.name,
-        () => {
+        res => {
+          console.log("uploadPostImage res", res);
+
           console.log("uploadPostImage fileNamesArr", fileNamesArr);
           successUpload(fileNamesArr, dataToUploadFromFile.name);
         },
