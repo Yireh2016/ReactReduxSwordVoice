@@ -9,6 +9,7 @@ import FooterApp from "../footer/footer.component";
 import Call2Action from "../general/call2action.component";
 import LightShadow from "../general/lightShadow/lightShadow.component";
 import styled, { keyframes } from "styled-components";
+// import Modernizr from "../../../modernizr/modernizr";
 
 //services
 //css
@@ -108,6 +109,15 @@ const PhoneAvatar = styled.div`
     display: none;
   }
 `;
+
+const AboutText = styled.div`
+  height: calc(100vh - 120px);
+
+  @media (max-width: 1050px) {
+    height: calc(100vh - 190px);
+  }
+`;
+
 class About extends React.Component {
   constructor(props) {
     super(props);
@@ -120,40 +130,27 @@ class About extends React.Component {
     this.midDecoration = React.createRef();
     this.scrollSection = React.createRef();
     this.state = {
-      textHeightOnTablet: {},
-      midDecorationTopOnTablet: { top: "initial" },
       aboutThumbnail: 1,
 
       isScrolling: false
     };
   }
-  componentDidMount() {
-    window.addEventListener("resize", this.setTextHeightOnTablet);
-    // this.scrollSection.current.addEventListener(
-    //   "scroll",
-    //   this.controlScrollSection
-    // );
-    this.setTextHeightOnTablet();
-  }
-  setTextHeightOnTablet = () => {
-    if (window.innerWidth <= 1050 && window.innerWidth > 750) {
-      //tablets only
-      this.setState({
-        textHeightOnTablet: {
-          height: `calc(100vh - ${this.topDecorationRef.current.clientHeight}px`
-        },
 
-        midDecorationTopOnTablet: {
-          top: `calc(50vh - ${this.topDecorationRef.current.clientHeight}px`,
-          transform: "translateY(-50%)"
-        }
-      });
-    } else {
-      this.setState({
-        textHeightOnTablet: {}
-      });
-    }
-  };
+  componentDidMount() {
+    console.log("window", window);
+    // Modernizr.addTest("scrollBy", () => {
+    //   try {
+    //     this.scrollSection.current.scrollBy({
+    //       top: deltaY,
+    //       left: 0,
+    //       behavior: "smooth"
+    //     });
+    //   } catch (err) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
+  }
 
   controlScrollSection = e => {
     if (this.state.isScrolling) {
@@ -167,11 +164,16 @@ class About extends React.Component {
 
       deltaY = deltaY > 0 ? 175 : -175;
 
-      this.scrollSection.current.scrollBy({
-        top: deltaY,
-        left: 0,
-        behavior: "smooth"
-      });
+      try {
+        this.scrollSection.current.scrollBy({
+          top: deltaY,
+          left: 0,
+          behavior: "smooth"
+        });
+      } catch (err) {
+        this.scrollSection.current.scrollTop =
+          this.scrollSection.current.scrollTop + deltaY;
+      }
     }
 
     const {
@@ -317,10 +319,7 @@ class About extends React.Component {
           {/*Parrafos de contenido*/}
           <section className="fila contenedorFila-about  ">
             {/*decoracion tablets*/}
-            <section
-              style={this.state.midDecorationTopOnTablet}
-              className="tabletDecoration grid   col-0-sm col-0"
-            >
+            <section className="tabletDecoration grid   col-0-sm col-0">
               <svg
                 ref={this.midDecoration}
                 className="midDecoration"
@@ -343,9 +342,8 @@ class About extends React.Component {
               />
             </section>
             {/*Parrafos */}
-            <section
+            <AboutText
               className="col-5 col-6-md col-12-sm  fila grid parrafo"
-              style={this.state.textHeightOnTablet}
               ref={this.scrollSection}
               onWheel={this.controlScrollSection}
               onScroll={this.controlScrollSection}
@@ -372,7 +370,7 @@ class About extends React.Component {
                   />
                 </div>
               </div>
-            </section>
+            </AboutText>
             <div className="col-0-sm col-0-md col-4 grid midDecorationPC ">
               <LightShadow factor={4}>{midDecorationPC}</LightShadow>
             </div>
