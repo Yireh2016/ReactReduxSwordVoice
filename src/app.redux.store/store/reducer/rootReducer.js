@@ -8,6 +8,7 @@ import blog from "./blogReducer";
 import responsiveDialog from "./responsiveDialog";
 import dialog from "./dialogReducer";
 import scroll from "./scrollReducer";
+import resize from "./resizeReducer";
 
 export default history =>
   combineReducers({
@@ -17,5 +18,6 @@ export default history =>
     blog: blog,
     responsiveDialog: responsiveDialog,
     dialog: dialog,
+    resize: resize,
     scroll: scroll
   });

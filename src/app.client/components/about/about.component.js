@@ -2,7 +2,7 @@
 import React from "react";
 import ReactHtmlParser from "react-html-parser";
 import Helmet from "react-helmet";
-import "simplebar";
+import { connect } from "react-redux";
 //components
 import Navbar from "../navbar/navbar.component";
 import FooterApp from "../footer/footer.component";
@@ -116,6 +116,9 @@ const AboutText = styled.div`
   @media (max-width: 1050px) {
     height: calc(100vh - 190px);
   }
+  @media (max-width: 700px) {
+    height: initial;
+  }
 `;
 
 class About extends React.Component {
@@ -157,22 +160,24 @@ class About extends React.Component {
       return;
     }
 
-    let deltaY;
+    if (this.props.device === "pc") {
+      let deltaY;
 
-    if (e.deltaY) {
-      deltaY = e.deltaY;
+      if (e.deltaY) {
+        deltaY = e.deltaY;
 
-      deltaY = deltaY > 0 ? 175 : -175;
+        deltaY = deltaY > 0 ? 175 : -175;
 
-      try {
-        this.scrollSection.current.scrollBy({
-          top: deltaY,
-          left: 0,
-          behavior: "smooth"
-        });
-      } catch (err) {
-        this.scrollSection.current.scrollTop =
-          this.scrollSection.current.scrollTop + deltaY;
+        try {
+          this.scrollSection.current.scrollBy({
+            top: deltaY,
+            left: 0,
+            behavior: "smooth"
+          });
+        } catch (err) {
+          this.scrollSection.current.scrollTop =
+            this.scrollSection.current.scrollTop + deltaY;
+        }
       }
     }
 
@@ -420,4 +425,10 @@ class About extends React.Component {
   }
 }
 
-export default About;
+const stateToProps = state => {
+  return {
+    device: state.resize.device
+  };
+};
+
+export default connect(stateToProps)(About);

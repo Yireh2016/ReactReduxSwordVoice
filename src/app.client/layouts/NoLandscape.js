@@ -24,8 +24,8 @@ const NoLandscape = ({
 }) => {
   useEffect(() => {
     const setPostDimensions = () => {
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
+      const windowWidth = window.outerWidth;
+      const windowHeight = window.outerHeight;
 
       if (
         navigator.userAgent.match(/Android/i) ||
@@ -37,7 +37,6 @@ const NoLandscape = ({
         navigator.userAgent.match(/Windows Phone/i) ||
         navigator.userAgent.match(/PlayBook/i)
       ) {
-        console.log("mobile");
         if (windowWidth > windowHeight) {
           //landscape
 

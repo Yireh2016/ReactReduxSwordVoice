@@ -17,11 +17,10 @@ import Footer from "../footer/footer.component";
 import Dialog from "../dialog/Dialog.component";
 
 //api calls
-import apiLogout from "../../../apiCalls/apiLogout";
 import apiCtrl from "../../../apiCalls/generic/apiCtrl";
 
 //services
-
+import isDevice from "../../../services/isDevice";
 import { guestCookie } from "../../../app.client/services/cookieManager";
 import triggerDialog from "../../services/triggerDialog";
 
@@ -77,6 +76,8 @@ class NavBar extends Component {
     //     loggedUserAvatar: this.props.loggedUserAvatar
     //   });
     // }
+    this.checkDevice();
+    window.addEventListener("resize", this.checkDevice);
     window.addEventListener("scroll", () => {
       this.handleScroll();
     });
@@ -98,6 +99,13 @@ class NavBar extends Component {
   //     }
   //   }
   // }
+
+  checkDevice = () => {
+    const actualDevice = isDevice();
+    if (this.props.device !== actualDevice) {
+      this.props.setDevice(actualDevice);
+    }
+  };
 
   handleClick() {
     if (this.state.menuVisible === "translateX(0)") {
@@ -781,7 +789,8 @@ const mapStateToProps = state => {
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
     scroll: state.scroll,
-    isDialog: state.dialog.show
+    isDialog: state.dialog.show,
+    device: state.resize.device
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -792,7 +801,8 @@ const mapDispatchToProps = dispatch => {
     setScroll: scrollTop =>
       dispatch({ type: "SET_SCROLL_TOP", payload: scrollTop }),
     setDeltaScroll: delta =>
-      dispatch({ type: "SET_DELTA_SCROLL", payload: delta })
+      dispatch({ type: "SET_DELTA_SCROLL", payload: delta }),
+    setDevice: device => dispatch({ type: "SET_DEVICE", payload: device })
   };
 };
 
