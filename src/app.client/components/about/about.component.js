@@ -159,10 +159,8 @@ class About extends React.Component {
     if (this.state.isScrolling) {
       return;
     }
-
+    let deltaY;
     if (this.props.device === "pc") {
-      let deltaY;
-
       if (e.deltaY) {
         deltaY = e.deltaY;
 
