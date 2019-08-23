@@ -139,28 +139,13 @@ class About extends React.Component {
     };
   }
 
-  componentDidMount() {
-    console.log("window", window);
-    // Modernizr.addTest("scrollBy", () => {
-    //   try {
-    //     this.scrollSection.current.scrollBy({
-    //       top: deltaY,
-    //       left: 0,
-    //       behavior: "smooth"
-    //     });
-    //   } catch (err) {
-    //     return false;
-    //   }
-    //   return true;
-    // });
-  }
-
   controlScrollSection = e => {
     if (this.state.isScrolling) {
       return;
     }
     let deltaY;
     if (this.props.device === "pc") {
+      console.log("controlScrollSection", this.props.device);
       if (e.deltaY) {
         deltaY = e.deltaY;
 
