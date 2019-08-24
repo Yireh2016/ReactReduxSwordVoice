@@ -72,12 +72,11 @@ class BlogArticle extends Component {
     };
   }
   componentDidMount() {
-    const device = isDevice();
-    const FETCH_POSTS = 7;
+    const FETCH_POSTS = this.props.article.similarPosts.length;
     let similarPostsWidth;
-    if (device === "pc") {
+    if (this.props.device === "pc") {
       similarPostsWidth = ((window.outerWidth * 4) / 12) * 0.8;
-    } else if (device === "tablet") {
+    } else if (this.props.device === "tablet") {
       similarPostsWidth = window.outerWidth / 2;
     } else {
       similarPostsWidth = window.outerWidth * 0.7;
@@ -89,11 +88,11 @@ class BlogArticle extends Component {
     const win = window.outerWidth * 0.6;
     //Redux: guardar en el store el tipo de dispositivo
     this.setState({
-      device: device,
       similarPostsWidth,
 
       // isUserLoggedIn: isLoggedIn(),
-      similPostContWidth: device === "pc" ? "100%" : FETCH_POSTS * win + "px",
+      similPostContWidth:
+        this.props.device === "pc" ? "100%" : FETCH_POSTS * win + "px",
 
       // similPostsArray: similDataArray,
       authorAvatar: this.props.article.avatar.replace("_big.", "_small.")
@@ -186,7 +185,7 @@ class BlogArticle extends Component {
         </div>
       </footer>
     );
-    const similarPostArray = this.props.blog.articlesArr;
+    const similarPostArray = this.props.article.similarPosts;
 
     const similarPostsJSX = similarPostArray.map((post, i) => {
       let avatar;
@@ -372,7 +371,7 @@ class BlogArticle extends Component {
               <AsidePost
                 asideTitle="Similar Posts"
                 // onScroll={this.similPostScroll}
-                device={this.state.device}
+                device={this.props.device}
                 postSectionHeight={this.state.similPostSectionHeight}
                 postContWidth={this.state.similPostContWidth}
               >
@@ -397,7 +396,8 @@ const mapStateToProps2 = state => {
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
     article: state.article,
-    blog: state.blog
+    blog: state.blog,
+    device: state.resize.device
   };
 };
 

@@ -65,7 +65,6 @@ class ProjectTitle extends Component {
     axios
       .post("/api/createPost", finalPost)
       .then(res => {
-        console.log("res.status", res.status);
         if (res.status === 200) {
           onSavePostProjectName(savedURLText, savedTitleText);
           alert(`Project ${savedTitleText} saved`);

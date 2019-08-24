@@ -475,7 +475,7 @@
 
   .avatarMenuLayout {
     padding-right: 10px;
-    height: calc(100vh - 190px);
+    /* height: calc(100vh - 190px); */
   }
   .avatarMenu {
     height: 70px;

@@ -73,11 +73,6 @@ class ThumbNailEditor extends Component {
       });
       fileNamesArr.push(filename);
 
-      console.log(
-        `url(${process.env.CDN_URL}/articles/${
-          this.props.project.url
-        }/${filename})`
-      );
 
       this.props.onAddDeleteFile(fileNamesArr);
       this.setState({
@@ -95,9 +90,7 @@ class ThumbNailEditor extends Component {
         this.props.project.url,
         this.props.thumbnail.name,
         res => {
-          console.log("uploadPostImage res", res);
 
-          console.log("uploadPostImage fileNamesArr", fileNamesArr);
           successUpload(fileNamesArr, dataToUploadFromFile.name);
         },
         err => {

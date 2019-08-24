@@ -4,7 +4,6 @@ const apiCtrl = async ({ url, data, method, config }, success, error) => {
   let response;
 
   const isOnline = navigator.onLine;
-  console.log("isOnline", isOnline);
   if (!isOnline) {
     error({ response: { data: { message: "NetworK Error" } } });
     return;
@@ -28,15 +27,12 @@ const apiCtrl = async ({ url, data, method, config }, success, error) => {
       }
     }
   } catch (err) {
-    console.log("apiCtrl json err ", JSON.stringify(err));
-    console.log("apiCtrl typeof err ", typeof err);
-    console.log("apiCtrl  err ", err);
+
 
     error(err);
     return;
   }
 
-  console.log("apiCtrl response ", response);
   if (response.data.status === "OK") {
     success(response);
 

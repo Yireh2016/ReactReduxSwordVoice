@@ -8,10 +8,10 @@
   letter-spacing: 1px;
   color: white;
   font-weight: bold;
-  display: grid;
-  grid-row-gap: 4vh;
-  justify-content: center;
-  grid-template-columns: 100%;
+
+  height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
 }
 .logInForm label span {
   font-weight: bold;
@@ -41,13 +41,11 @@
 }
 
 .controlButtonLogin {
-  padding: 25px 0 0 0;
   display: flex;
   flex-direction: row;
   flex-grow: 1;
   align-items: center;
-  justify-content: center;
-  justify-content: space-around;
+
   justify-content: space-evenly;
 }
 

@@ -9,7 +9,6 @@ const loginUser = (username, password) => {
   return axios
     .post("/api/login", data)
     .then(res => {
-      console.log("res on login", res);
       return { status: "OK", data: res.data };
     })
     .catch(err => {

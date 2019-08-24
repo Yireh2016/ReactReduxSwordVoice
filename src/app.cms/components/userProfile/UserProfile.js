@@ -903,7 +903,7 @@ const UserProfile = ({
         return;
       }
 
-      console.log("saveHandler sendAvatarRes.status", sendAvatarRes.status);
+     
 
       if (sendAvatarRes.status === "OK") {
         userProfile.userAvatar = sendAvatarRes.avatarURL;

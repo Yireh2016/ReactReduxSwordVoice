@@ -92,7 +92,6 @@ const MapOption = styled.span`
 
 const MultiBtn = ({ options, clickHandler }) => {
   //state declaration
-  console.log("render MultiBtn");
   const [option, setOption] = useState(options[0]);
   const [showDropDown, setShowDropDown] = useState(false);
 

@@ -380,7 +380,6 @@ class PostElement extends Component {
         imgFileTablet,
         imgFileMobile
       };
-      console.log("imgFileObj", imgFileObj);
       finalHTMLElement = this.prepareHTMLFilter(
         finalHTMLElement,
         styles,

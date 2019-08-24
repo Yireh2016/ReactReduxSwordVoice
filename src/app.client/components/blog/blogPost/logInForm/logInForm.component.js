@@ -2,11 +2,40 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { withCookies } from "react-cookie";
+import styled from "styled-components";
+
 //css
 import "./logInForm.css";
 //components
 import Logo from "../../../general/logo.component";
 import { connect } from "react-redux";
+import UserManageForm from "../../../../layouts/UserManageForm";
+
+const LogoContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const InputContainer = styled.div`
+  flex-grow: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const FormContainer = styled.div`
+  @media (max-width: 1050px) {
+    height: 100%;
+  }
+
+  > form {
+    @media (max-width: 1050px) {
+      height: 100%;
+    }
+  }
+`;
 
 class LogInForm extends Component {
   constructor(props) {
@@ -129,73 +158,59 @@ class LogInForm extends Component {
 
     // const logo = logoSV;
     return (
-      <div
-        className="formLayout"
-        onWheel={e => {
-          this.onScrollformLayout(e);
-        }}
-        onScroll={e => {
-          this.onScrollformLayout(e);
-        }}
-        onClick={this.props.onCancelClick}
-      >
-        <div
-          className="formCardLogin"
-          onClick={e => {
-            e.stopPropagation();
-          }}
-        >
-          <div className="signUpPageCont">
-            <section
-              id="logInPage"
-              className={`fila signUpPage1 col-12 ${this.state.animControl1} `}
-            >
-              <div className="grid col-12">
-                <form id="logInForm" className="logInForm">
-                  <Logo className="col-8 logInLogo col-5-sm" />
-                  <label>
-                    <span id="loginUsername">Username</span> <br />
-                    <input
-                      htmlFor="username"
-                      aria-label="username"
-                      aria-labelledby="logInForm loginUsername"
-                      type="text"
-                      name="userName"
-                      value={this.state.userName}
-                      onBlur={this.handleOnBlur}
-                      onChange={this.handleFormInputChange}
-                    />
-                  </label>
+      <UserManageForm onClick={this.props.onCancelClick}>
+        <div className="signUpPageCont">
+          <FormContainer
+            id="logInPage"
+            className={`fila signUpPage1 col-12 ${this.state.animControl1} `}
+          >
+            <form id="logInForm" className="logInForm">
+              <LogoContainer>
+                <Logo className="col-8 logInLogo col-5-sm" />
+              </LogoContainer>
+              <InputContainer>
+                <label>
+                  <span id="loginUsername">Username</span> <br />
+                  <input
+                    htmlFor="username"
+                    aria-label="username"
+                    aria-labelledby="logInForm loginUsername"
+                    type="text"
+                    name="userName"
+                    value={this.state.userName}
+                    onBlur={this.handleOnBlur}
+                    onChange={this.handleFormInputChange}
+                  />
+                </label>
 
-                  <label>
-                    <span id="loginuserPassword">Password</span> <br />
-                    <input
-                      type="password"
-                      name="userPassword"
-                      htmlFor="userPassword"
-                      aria-label="userPassword"
-                      aria-labelledby="logInForm loginuserPassword"
-                      value={this.state.userPassword}
-                      onBlur={this.handleOnBlur}
-                      onChange={this.handleFormInputChange}
-                    />
-                  </label>
-                  <div>
-                    <span>
-                      Forgot{" "}
-                      <a aria-label="go to password recovery" href="#">
-                        {" "}
-                        Password?
-                      </a>
-                    </span>
-                  </div>
-                </form>
-              </div>
-            </section>
-          </div>
-          <div className="controlButtonLogin">{controlButtons}</div>
+                <label>
+                  <span id="loginuserPassword">Password</span> <br />
+                  <input
+                    type="password"
+                    name="userPassword"
+                    htmlFor="userPassword"
+                    aria-label="userPassword"
+                    aria-labelledby="logInForm loginuserPassword"
+                    value={this.state.userPassword}
+                    onBlur={this.handleOnBlur}
+                    onChange={this.handleFormInputChange}
+                  />
+                </label>
+                <div>
+                  <span>
+                    Forgot{" "}
+                    <a aria-label="go to password recovery" href="#">
+                      {" "}
+                      Password?
+                    </a>
+                  </span>
+                </div>
+              </InputContainer>
+            </form>
+          </FormContainer>
         </div>
-      </div>
+        <div className="controlButtonLogin">{controlButtons}</div>
+      </UserManageForm>
     );
   }
 }

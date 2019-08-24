@@ -45,9 +45,9 @@ export const limitingComments = (commentsArr, commentsCount) => {
     };
   }
 
-  console.log("limitingComments commentsArr Len", commentsArr.length);
+  ;
   //limiting Comments
-  console.log("COMMENT_LIMIT + commentsCount", COMMENT_LIMIT + commentsCount);
+
 
   if (commentsCount + COMMENT_LIMIT <= commentsArr.length) {
     resultArr = commentsArr.slice(0, COMMENT_LIMIT + commentsCount);
@@ -55,10 +55,7 @@ export const limitingComments = (commentsArr, commentsCount) => {
     resultArr = commentsArr;
   }
 
-  console.log(
-    "limitingComments after limitting resultArr Len",
-    resultArr.length
-  );
+
 
   return { totalCommentsCount, commentsArr: resultArr };
 };

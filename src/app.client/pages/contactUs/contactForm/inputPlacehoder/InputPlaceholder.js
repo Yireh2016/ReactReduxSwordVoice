@@ -120,13 +120,11 @@ const InputPlaceholder = ({
   };
 
   const focusPlaceholder = () => {
-    console.log("focus");
 
     setisFocus(true);
   };
 
   const unfocusPlaceholder = () => {
-    console.log("blur");
     if (!isInputFilled) {
       setisFocus(false);
     }

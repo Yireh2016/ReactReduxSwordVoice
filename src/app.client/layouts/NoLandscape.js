@@ -15,6 +15,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  @media (orientation: landscape) {
+    display: none;
+  }
 `;
 
 const NoLandscape = ({

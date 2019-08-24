@@ -30,7 +30,6 @@ const SocialBar = ({
   useEffect(() => {
     const timerExpires = (countingHTMLwords(article.html) * 60 * 1000 * 2) / 3;
 
-    console.log("timerExpires", timerExpires);
 
     setTimeout(async () => {
       const updatedSocialCountRes = await updateSocialCount(

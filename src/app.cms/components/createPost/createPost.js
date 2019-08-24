@@ -537,18 +537,7 @@ class CreatePost extends Component {
     axios
       .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
       .then(() => {
-        console.log(
-          `
-        {
-          url: dataToUpdate.url,
-          files: dataToUpdate.files
-        }\n
-        `,
-          {
-            url: dataToUpdate.url,
-            files: dataToUpdate.files
-          }
-        );
+
         axios
           .post(`${process.env.CDN_URL}/cdn/deleteFiles/`, {
             url: dataToUpdate.url,

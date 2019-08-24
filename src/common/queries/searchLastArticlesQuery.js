@@ -9,7 +9,6 @@ const searchLastArticlesQuery = (articleModel, successFn, errFn) => {
       if (err) {
         errFn(err);
       }
-      console.log("articles count", count);
 
       articleModel
         .find({ isPublished: true })
@@ -22,7 +21,6 @@ const searchLastArticlesQuery = (articleModel, successFn, errFn) => {
         .sort({ _id: "descending" })
         .exec()
         .then(posts => {
-          console.log(`\npost[0] ${posts[0]} \n`);
           let postMinimumData = [];
           for (let i = 0; i < posts.length; i++) {
             postMinimumData[i] = {

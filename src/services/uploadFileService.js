@@ -3,7 +3,6 @@ import axios from "axios";
 const uploadFileService = (fileData, successFn, errFn) => {
   let data = new FormData();
 
-  console.log("fileData", fileData);
 
   data.append("file", fileData.file);
   data.append("filename", fileData.name);

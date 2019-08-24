@@ -7,6 +7,7 @@ const initialState = {
   description: "",
   keywords: "",
   commentsCount: 0,
+  similarPosts: [],
   comments: [
     {
       _id: "",
@@ -69,6 +70,11 @@ const article = (state = initialState, action) => {
     }
     case "SET_COMMENTS": {
       newState.comments = action.payload;
+      break;
+    }
+
+    case "SET_SIMILAR_ARTICLES": {
+      newState.similarPosts = action.payload;
       break;
     }
 

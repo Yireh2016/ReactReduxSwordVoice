@@ -6,7 +6,6 @@ const getPopularPosts = (
   callback,
   errCallback
 ) => {
-  console.log("functions", filter, totalCount, count);
 
   let sort;
 
@@ -29,9 +28,7 @@ const getPopularPosts = (
     //   break;
   }
   const limit = totalCount - count >= 7 ? 7 : totalCount - count;
-  console.log("totalCount", totalCount);
-  console.log("limit", limit);
-  console.log("count", count);
+
   return articleModel
     .find({ isPublished: true })
     .select("url thumbnail title date keywords description")

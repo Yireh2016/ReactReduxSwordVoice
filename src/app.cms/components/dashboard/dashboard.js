@@ -281,7 +281,6 @@ class Dashboard extends Component {
   };
 
   exitBtnClickHandler = async option => {
-    console.log("option", option);
     switch (option) {
       case "Exit": {
         this.linkBtnHandler(this.props.history, "adminPost");
@@ -309,7 +308,6 @@ class Dashboard extends Component {
             console.log("logout Ok exitBtnClickHandler  ", res);
 
             if (res.data.status === "OK") {
-              console.log("logued out");
 
               triggerDialog(
                 {
@@ -336,11 +334,7 @@ class Dashboard extends Component {
           }
         );
 
-        // const logoutRes = await apiLogout();
-        // if (logoutRes.status === "OK") {
-        //   console.log("logued out");
-        //   window.location.href = "/cms";
-        // }
+   
         break;
       }
       case "Home": {

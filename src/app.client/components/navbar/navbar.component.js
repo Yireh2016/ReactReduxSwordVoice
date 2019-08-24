@@ -130,7 +130,11 @@ class NavBar extends Component {
     //evita que hayan llamadas innecesarioas al setstate, ya que el scroll es un evento que puede llenar la cola de tareas facilmente
 
     //if is PC
-    if (window.innerWidth > 1050) {
+
+    if (!this.props.pathname.match("/blog")) {
+      return;
+    }
+    if (window.outerWidth > 1050) {
       const pageYoffset = window.pageYOffset;
       const delta = -this.props.scroll.scrollTop + pageYoffset;
 
@@ -141,25 +145,6 @@ class NavBar extends Component {
       } else {
         this.setState({ menuIsOpaque: true });
       }
-
-      // if (pageYoffset > 20 && !this.state.menuIsOpaque) {
-      //   this.setState({
-      //     menuIsOpaque: true
-      //   });
-      // } else if (pageYoffset <= 20 && this.state.menuIsOpaque === true) {
-      //   /*
-      //     antes de disparar la animacion de "ocultar el menu", debo asegurarme que el estado de la animacion previo sea "aparecer menu" en vez de la animacion de inicio q hace rotar el menu al iniciar cada pagina.
-      //   */
-
-      //   this.setState(prevState => {
-      //     const menuState =
-      //       prevState.menuIsOpaque === null //verifico la primera animacion
-      //         ? { menuIsOpaque: null } // dejo el estado actual si vengo de la animacion primera
-      //         : { menuIsOpaque: false }; //si no entonces si disparo la animacion de "ocultar menu"
-
-      //     return menuState;
-      //   });
-      // }
     }
   }
 
@@ -748,12 +733,12 @@ class NavBar extends Component {
                       </div>
                     </div>
                   )}
-                  <a aria-label="go to home page" href="/home">
+                  {/* <a aria-label="go to home page" href="/home">
                     <Logo
                       id="5"
                       className="col-6-md col-12-sm grid desplegable-logo"
                     />
-                  </a>
+                  </a> */}
                 </div>
               </div>
 
@@ -790,7 +775,8 @@ const mapStateToProps = state => {
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
     scroll: state.scroll,
     isDialog: state.dialog.show,
-    device: state.resize.device
+    device: state.resize.device,
+    pathname: state.router.location.pathname
   };
 };
 const mapDispatchToProps = dispatch => {

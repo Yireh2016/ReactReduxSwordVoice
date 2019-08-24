@@ -15,6 +15,7 @@ import keywordsToArr from "../../../services/keywordsToArr";
 import getPopularPosts from "../../../app.server/controllers/queries/getPopularPosts";
 //queries
 import searchLastArticlesQuery from "../../../common/queries/searchLastArticlesQuery";
+import searchSimilarArticles from "../../../common/queries/searchSimilarArticles";
 
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
@@ -418,49 +419,11 @@ export const searchArticleCtrl = (req, res) => {
     res.status(404).json(err);
   };
 
-  articleModel
-    .find(
-      { $text: { $search: `${searchValue}` } },
-      { score: { $meta: "textScore" } }
-    )
-    .select("url thumbnail title date keywords description")
-    .populate({
-      path: "author",
-      select: "userFirstName userLastName userAvatar userName"
-    })
-    .sort({ score: { $meta: "textScore" } })
-    .exec()
-    .then(posts => {
-      let postMinimumData = [];
-      for (let i = 0; i < posts.length; i++) {
-        postMinimumData[i] = {
-          url: posts[i].url,
-          postImg:
-            posts[i].thumbnail &&
-            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
-              posts[i].thumbnail.name
-            })`,
-          postGradient:
-            posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%)`,
-          title: posts[i].title,
-          summaryTextHtml: paragraphService(posts[i].description),
-          author:
-            `${posts[i].author.userFirstName} ` +
-            `${posts[i].author.userLastName}`,
-          avatar: posts[i].author.userAvatar,
-          date: dbDateToNormalDate(posts[i].date),
-          keywords: keywordsToArr(posts[i].keywords[0])
-        };
-      }
+  const successHandler = arr => {
+    res.status(200).send({ status: "OK", searchArr: arr });
+  };
 
-      res.status(200).send({ status: "OK", searchArr: postMinimumData });
-    })
-    .catch(err => {
-      errHandler(err);
-    });
+  searchSimilarArticles(articleModel, searchValue, successHandler, errHandler);
 };
 
 export const searchLastArticlesCtrl = (req, res) => {
