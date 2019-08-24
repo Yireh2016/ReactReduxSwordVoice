@@ -23,6 +23,14 @@ const Layout = styled.div`
   }
 `;
 
+const CloseBtn = styled.div`
+  top: 20px;
+  right: 25px;
+  position: fixed;
+  z-index: 300;
+  color: white;
+`;
+
 const FormCard = styled.div`
   position: relative;
   border: 3px solid #f95f0b;
@@ -69,6 +77,7 @@ const UserManageForm = ({ children, onClick }) => {
       ref={formLayoutRef}
       onClick={onClick}
     >
+      <CloseBtn onClick={onClick}>X</CloseBtn>
       <FormCard
         layoutH={formHeight}
         onClick={e => {
