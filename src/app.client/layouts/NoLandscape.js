@@ -16,7 +16,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  @media (orientation: landscape) {
+  @media (orientation: portrait) {
     display: none;
   }
 `;
@@ -30,6 +30,8 @@ const NoLandscape = ({
     const setPostDimensions = () => {
       const windowWidth = window.outerWidth;
       const windowHeight = window.outerHeight;
+
+      console.log("navigator.userAgent", navigator.userAgent);
 
       if (
         navigator.userAgent.match(/Android/i) ||

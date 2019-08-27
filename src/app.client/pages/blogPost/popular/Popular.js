@@ -75,7 +75,7 @@ const Icon = styled.span`
 
 const AsidePostsCont = styled.div`
   display: flex;
-  width: 2202px;
+  width: ${props => props.popWidth + "px"};
 `;
 
 const MorePostsCont = styled.div`
