@@ -346,11 +346,20 @@ class NavBar extends Component {
       }
     ];
     const contentMenuSmall = menu.map((smallMenuContent, i) => {
-      const activeClass =
+      let activeClass = "";
+
+      if (
         this.props.location.pathname ===
         `/${smallMenuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]}`
-          ? "activeLink"
-          : "";
+      ) {
+        activeClass = "activeLink";
+      } else if (
+        this.props.location.pathname === "/" &&
+        smallMenuContent.nombre === "🏠 Home"
+      ) {
+        activeClass = "activeLink";
+      }
+
       return (
         <li key={i}>
           <a
