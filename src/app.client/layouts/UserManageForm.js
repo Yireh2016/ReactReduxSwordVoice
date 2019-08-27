@@ -26,9 +26,13 @@ const Layout = styled.div`
 const CloseBtn = styled.div`
   top: 20px;
   right: 25px;
-  position: fixed;
+  position: absolute;
   z-index: 300;
   color: white;
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 const FormCard = styled.div`
@@ -77,13 +81,13 @@ const UserManageForm = ({ children, onClick }) => {
       ref={formLayoutRef}
       onClick={onClick}
     >
-      <CloseBtn onClick={onClick}>X</CloseBtn>
       <FormCard
         layoutH={formHeight}
         onClick={e => {
           e.stopPropagation();
         }}
       >
+        <CloseBtn onClick={onClick}>X</CloseBtn>
         {children}
       </FormCard>
     </Layout>

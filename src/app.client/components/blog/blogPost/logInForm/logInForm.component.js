@@ -22,7 +22,15 @@ const InputContainer = styled.div`
   flex-grow: 3;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  > * {
+    margin: 4vh 0 0 0;
+  }
+  > * {
+    :first-child {
+      margin: 0;
+    }
+  }
 `;
 
 const FormContainer = styled.div`
@@ -35,6 +43,14 @@ const FormContainer = styled.div`
       height: 100%;
     }
   }
+`;
+
+const LogInCont = styled.div`
+  height: 80%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 class LogInForm extends Component {
@@ -159,7 +175,7 @@ class LogInForm extends Component {
     // const logo = logoSV;
     return (
       <UserManageForm onClick={this.props.onCancelClick}>
-        <div className="signUpPageCont">
+        <LogInCont className="signUpPageCont">
           <FormContainer
             id="logInPage"
             className={`fila signUpPage1 col-12 ${this.state.animControl1} `}
@@ -208,7 +224,7 @@ class LogInForm extends Component {
               </InputContainer>
             </form>
           </FormContainer>
-        </div>
+        </LogInCont>
         <div className="controlButtonLogin">{controlButtons}</div>
       </UserManageForm>
     );
