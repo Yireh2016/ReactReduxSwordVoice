@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
+import { store } from "../../app.redux.store/store/configStore";
+
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -31,7 +33,23 @@ const NoLandscape = ({
       const windowWidth = window.outerWidth;
       const windowHeight = window.outerHeight;
 
-      console.log("navigator.userAgent", navigator.userAgent);
+      let state = store.getState();
+
+      const { showLogIn, showSignUp } = state.logInStatus;
+
+      console.log(
+        `\n\nshowLogIn ${showLogIn} showSignUp ${showSignUp} =>`,
+        showLogIn || showSignUp
+      );
+      console.log(
+        `windowHeight/ windowWidth <= 1.2 ${windowHeight / windowWidth} =>`,
+        windowHeight / windowWidth <= 1.2,
+        "\n\n"
+      );
+
+      if ((showLogIn || showSignUp) && windowHeight / windowWidth <= 1.2) {
+        return;
+      }
 
       if (
         navigator.userAgent.match(/Android/i) ||
@@ -73,6 +91,8 @@ const NoLandscape = ({
 const stateToProps = state => {
   return {
     showResolutionWarning: state.responsiveDialog.showResolutionWarning
+    // showSignUp: state.logInStatus.showSignUp,
+    // showLogIn: state.logInStatus.showLogIn
   };
 };
 const actionsToProps = dispatch => {
