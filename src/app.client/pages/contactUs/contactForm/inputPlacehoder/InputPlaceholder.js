@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
 const InputContainer = styled.div`
@@ -62,6 +63,10 @@ const Input = styled.input`
   :focus {
     outline: none;
   }
+
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 const Textarea = styled.textarea`
@@ -101,7 +106,8 @@ const InputPlaceholder = ({
   placeholderStyle,
   inputStyle,
   value,
-  valid
+  valid,
+  setAbleWarning
 }) => {
   const [isFocus, setisFocus] = useState(false);
   const [isInputFilled, setisInputFilled] = useState(false);
@@ -120,11 +126,13 @@ const InputPlaceholder = ({
   };
 
   const focusPlaceholder = () => {
-
+    setAbleWarning(false);
     setisFocus(true);
   };
 
   const unfocusPlaceholder = () => {
+    setAbleWarning(true);
+
     if (!isInputFilled) {
       setisFocus(false);
     }
@@ -173,4 +181,20 @@ const InputPlaceholder = ({
   );
 };
 
-export default InputPlaceholder;
+const mapStateToProps = () => {
+  return {};
+};
+
+const mapDispachToProps = dispach => {
+  return {
+    //acciones
+
+    setAbleWarning: isAble =>
+      dispach({ type: "SET_ABLE_WARNING", payload: isAble })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(InputPlaceholder);
