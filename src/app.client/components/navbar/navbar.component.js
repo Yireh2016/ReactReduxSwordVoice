@@ -46,8 +46,6 @@ class NavBar extends Component {
       navBarMarginTop: "20",
       navBarBackgroundOnScroll: "transparent",
       logoWidth: "90px",
-      showSignUp: false,
-      showLogIn: false,
       showDesplegable: false,
       loggedUserAvatar: "",
       toggleAnim: false,
@@ -152,8 +150,8 @@ class NavBar extends Component {
     this.setState({ toggleAnim: !this.state.toggleAnim });
   };
   signClickHandler = () => {
+    this.props.setSignUp(true);
     this.setState({
-      showSignUp: true,
       showDesplegable: false
     });
   };
@@ -165,9 +163,9 @@ class NavBar extends Component {
     this.setState({ showDesplegable: true });
   };
   logInClickHandler = () => {
+    this.props.setLogIn(true);
     this.setState({
-      showDesplegable: false,
-      showLogIn: true
+      showDesplegable: false
     });
   };
 
@@ -435,17 +433,17 @@ class NavBar extends Component {
     return (
       <div id="wrapper">
         {this.props.isDialog && <Dialog />}
-        {this.state.showSignUp && (
+        {this.props.showSignUp && (
           <SignUpForm
             onCancelClick={() => {
-              this.setState({ showSignUp: false });
+              this.props.setSignUp(false);
             }}
           />
         )}
-        {this.state.showLogIn && (
+        {this.props.showLogIn && (
           <LogInForm
             onCancelClick={() => {
-              this.setState({ showLogIn: false });
+              this.props.setLogIn(false);
             }}
           />
         )}
@@ -773,6 +771,8 @@ const mapStateToProps = state => {
     loggedUserName: state.logInStatus.loggedUserName,
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
+    showLogIn: state.logInStatus.showLogIn,
+    showSignUp: state.logInStatus.showSignUp,
     scroll: state.scroll,
     isDialog: state.dialog.show,
     device: state.resize.device,
@@ -788,7 +788,10 @@ const mapDispatchToProps = dispatch => {
       dispatch({ type: "SET_SCROLL_TOP", payload: scrollTop }),
     setDeltaScroll: delta =>
       dispatch({ type: "SET_DELTA_SCROLL", payload: delta }),
-    setDevice: device => dispatch({ type: "SET_DEVICE", payload: device })
+    setDevice: device => dispatch({ type: "SET_DEVICE", payload: device }),
+    setSignUp: isSignUp =>
+      dispatch({ type: "SET_SHOW_SIGNUP", payload: isSignUp }),
+    setLogIn: isLogIn => dispatch({ type: "SET_SHOW_LOGIN", payload: isLogIn })
   };
 };
 

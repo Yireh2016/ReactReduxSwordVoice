@@ -2,7 +2,7 @@ const initialState = {
   device: "pc"
 };
 //estado inicial viene del CONFIG REDUCER.JS
-const resizeReducer = (state = initialState, action) => {
+const resize = (state = initialState, action) => {
   let newState = state;
 
   switch (action.type) {
@@ -15,4 +15,4 @@ const resizeReducer = (state = initialState, action) => {
   return newState;
 };
 
-export default resizeReducer;
+export default resize;

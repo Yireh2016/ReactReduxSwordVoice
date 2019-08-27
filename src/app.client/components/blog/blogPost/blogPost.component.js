@@ -20,7 +20,7 @@ import Logo from "../../general/logo.component";
 import SignUpForm from "./signUpForm/signUpForm.component";
 import LogInForm from "./logInForm/logInForm.component";
 import SocialBar from "../../socialBar/SocialBar";
-import PostCard from "../../../pages/blog/postCard/PostCard";
+import PostCard from "../../../components/postCard/PostCard";
 import Loading from "../../loading/loading";
 //imagenes
 import newPostImg from "../../../assets/img/blog/newPost.jpg";

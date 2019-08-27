@@ -33,6 +33,7 @@ import removeSuffixClasses from "../../../services/suffixClasses";
 import classesArrObjToStr from "../../../services/classesArrObjToStr";
 import erasePreviewDataFromElements from "../../../services/erasePreviewDataFromElements";
 import triggerDialog from "../../controllers/triggerDialog";
+import isDevice from "../../../services/isDevice";
 
 //api calls
 import getUserFromId from "../../apiCalls/getUserFromId";
@@ -96,6 +97,9 @@ class Dashboard extends Component {
         });
       }
     });
+
+    const device = isDevice();
+    this.props.setDevice(device);
   }
 
   toogleClickHandler = () => {
@@ -308,7 +312,6 @@ class Dashboard extends Component {
             console.log("logout Ok exitBtnClickHandler  ", res);
 
             if (res.data.status === "OK") {
-
               triggerDialog(
                 {
                   title: "Success 😃",
@@ -334,7 +337,6 @@ class Dashboard extends Component {
           }
         );
 
-   
         break;
       }
       case "Home": {
@@ -485,9 +487,7 @@ class Dashboard extends Component {
             <Helmet>
               <link
                 rel="stylesheet"
-                href={`${process.env.CDN_URL}/articles/${
-                  this.props.project.url
-                }/${this.props.project.url}.css`}
+                href={`${process.env.CDN_URL}/articles/${this.props.project.url}/${this.props.project.url}.css`}
               />
             </Helmet>
 
@@ -668,7 +668,8 @@ const mapDispachToProps = dispatch => {
       dispatch({ type: "CHANGE_MENU", payload: payload }),
     onAddClasses: payload =>
       dispatch({ type: "ADD_CLASSES", payload: payload }),
-    onAddFile: payload => dispatch({ type: "ADD_DELETE_FILE", payload })
+    onAddFile: payload => dispatch({ type: "ADD_DELETE_FILE", payload }),
+    setDevice: device => dispatch({ type: "SET_DEVICE", payload: device })
   };
 };
 

@@ -4,10 +4,12 @@ const initialState = {
   loggedUserAvatar: undefined,
   loggedUserName: undefined,
   loggedUserID: undefined,
-  userType: "user"
+  userType: "user",
+  showSignUp: false,
+  showLogIn: false
 };
 //estado inicial viene del CONFIG REDUCER.JS
-const reducer = (state = initialState, action) => {
+const login = (state = initialState, action) => {
   const newState = { ...state };
   switch (action.type) {
     case "LOGGED_IN": {
@@ -35,6 +37,18 @@ const reducer = (state = initialState, action) => {
       break;
     }
 
+    case "SET_SHOW_SIGNUP": {
+      newState.showSignUp = action.payload;
+
+      break;
+    }
+
+    case "SET_SHOW_LOGIN": {
+      newState.showLogIn = action.payload;
+
+      break;
+    }
+
     case "DEFAULT": {
       newState.isUserLoggedIn = false;
       newState.loggedUserAvatar = undefined;
@@ -46,4 +60,4 @@ const reducer = (state = initialState, action) => {
   return newState;
 };
 
-export default reducer;
+export default login;

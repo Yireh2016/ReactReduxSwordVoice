@@ -25,9 +25,12 @@ import ContactUs from "./pages/contactUs/ContactUs";
 
 const Home = loadable(() => import("./components/home/home.component"));
 const About = loadable(() => import("./components/about/about.component"));
-const BlogArticle = loadable(() =>
-  import("./components/blog/blogPost/blogPost.component")
-);
+// const BlogArticle = loadable(() =>
+//   import("./components/blog/blogPost/blogPost.component")
+// );
+
+const BlogArticle = loadable(() => import("./pages/blogPost/BlogPost"));
+
 const BlogPage = loadable(() => import("./pages/blog/BlogPage"));
 // const ContactUs = loadable(() => import("./pages/contactUs/ContactUs"));
 
@@ -87,11 +90,7 @@ class App extends Component {
           path="/newBlog"
           render={() => <BlogPage cookies={this.props.cookies} />}
         /> */}
-          <Route
-            strict
-            path="/blog/post/"
-            render={() => <BlogArticle cookies={this.props.cookies} />}
-          />
+          <Route strict path="/blog/post/" render={() => <BlogArticle />} />
           <Route
             strict
             path="/"

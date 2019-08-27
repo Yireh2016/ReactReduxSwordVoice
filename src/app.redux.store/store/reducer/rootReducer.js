@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
 
 //other Reducers
-import reducer from "./reducer";
+import login from "./login";
 import article from "./article";
 import blog from "./blogReducer";
 import responsiveDialog from "./responsiveDialog";
@@ -13,7 +13,7 @@ import resize from "./resizeReducer";
 export default history =>
   combineReducers({
     router: connectRouter(history),
-    logInStatus: reducer,
+    logInStatus: login,
     article: article,
     blog: blog,
     responsiveDialog: responsiveDialog,

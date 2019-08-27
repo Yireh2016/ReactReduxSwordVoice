@@ -32,8 +32,8 @@ import FooterApp from "../../components/footer/footer.component";
 import SearchBar from "../../components/blog/searchBar/searchBar.component";
 import ScrollMouse from "../../components/scrollMouse/ScrollMouse";
 import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
-import PostCard from "./postCard/PostCard";
-import Post from "./post/Post";
+import PostCard from "../../components/postCard/PostCard";
+import Post from "../../components/post/Post";
 import Loading from "../../components/loading/loading";
 import Modal from "../../components/modal/modal";
 
@@ -620,9 +620,7 @@ class BlogPage extends React.Component {
         console.log("Error searching filter", res.data.status);
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${
-            res.data.message
-          }. Please, try again later`
+          body: `There was a error : ${res.data.message}. Please, try again later`
         });
         this.setState({
           isFilterLoading: false

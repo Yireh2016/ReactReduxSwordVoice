@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 //components
 import UploadImage from "../uploadImage/uploadImage";
 import compressImage from "../../../services/compressImage";
-import PostCard from "../../../app.client/pages/blog/postCard/PostCard";
+import PostCard from "../../../app.client/components/postCard/PostCard";
 import { StyleRoot } from "radium";
 
 //apiCalls

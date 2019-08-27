@@ -210,56 +210,72 @@ const swordvoiceWeb = async (req, res) => {
                 articleModel,
                 searchStr,
                 arr => {
+                  const filterArr =
+                    arr.length > 1
+                      ? arr.filter(article => article.url !== url)
+                      : arr;
                   store.dispatch({
                     type: "SET_SIMILAR_ARTICLES",
-                    payload: arr
+                    payload: filterArr
                   });
-                  resolve();
                 },
                 err => {
                   reject(err);
                 }
               );
-              // articleModel
-              //   .find({ isPublished: true })
-              //   .select("url thumbnail title date keywords description")
-              //   .limit(7)
-              //   .populate("author")
-              //   .sort({ _id: "descending" })
-              //   .exec()
-              //   .then(posts => {
-              //     let postMinimumData = [];
-              //     for (let i = 0; i < posts.length; i++) {
-              //       postMinimumData[i] = {
-              //         url: posts[i].url,
-              //         postImg:
-              //           posts[i].thumbnail &&
-              //           `url(${process.env.CDN_URL}/articles/${posts[i].url}/${
-              //             posts[i].thumbnail.name
-              //           })`,
-              //         postGradient:
-              //           posts[i].thumbnail &&
-              //           `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              //             posts[i].thumbnail.color
-              //           } 73.79%)`,
-              //         title: posts[i].title,
-              //         summaryTextHtml: paragraphService(posts[i].description),
-              //         author:
-              //           `${posts[i].author.userFirstName} ` +
-              //           `${posts[i].author.userLastName}`,
-              //         avatar: posts[i].author.userAvatar,
-              //         date: dbDateToNormalDate(posts[i].date),
-              //         keywords: keywordsToArr(posts[i].keywords[0])
-              //       };
-              //     }
 
-              //     store.dispatch({
-              //       type: "SET_SIMILAR_ARTICLES",
-              //       payload: postMinimumData
-              //     });
-              //     resolve();
-              //   });
-              // resolve();
+              articleModel
+                .find({ isPublished: true })
+                .countDocuments((err, count) => {
+                  store.dispatch({
+                    type: "SET_ARTICLES_COUNT",
+                    payload: count
+                  });
+                  getPopularPosts(
+                    articleModel,
+                    "views",
+                    count,
+                    0,
+                    posts => {
+                      let postMinimumData = [];
+                      for (let i = 0; i < posts.length; i++) {
+                        postMinimumData[i] = {
+                          url: posts[i].url,
+                          postImg:
+                            posts[i].thumbnail &&
+                            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
+                          postGradient:
+                            posts[i].thumbnail &&
+                            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
+                          title: posts[i].title,
+                          summaryTextHtml: paragraphService(
+                            posts[i].description
+                          ),
+                          author:
+                            `${posts[i].author.userFirstName} ` +
+                            `${posts[i].author.userLastName}`,
+                          avatar: posts[i].author.userAvatar,
+                          date: dbDateToNormalDate(posts[i].date),
+                          keywords: keywordsToArr(posts[i].keywords[0])
+                        };
+                      }
+
+                      store.dispatch({
+                        type: "SET_POPULAR_ARR",
+                        payload: postMinimumData
+                      });
+                      resolve();
+                    },
+                    err => {
+                      console.log("error en blog ", err);
+                      reject(err);
+                    }
+                  );
+                })
+                .catch(err => {
+                  console.log("error en blog ", err);
+                  reject(err);
+                });
             } else {
               console.log(" ARTICLE NOT FOUND");
               store.dispatch({ type: "DEFAULT_ARTICLE" });

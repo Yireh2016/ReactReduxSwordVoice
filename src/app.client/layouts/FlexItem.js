@@ -41,13 +41,14 @@ const Item = styled.div`
   @media (min-width: 700px) {
     margin: 20px;
     padding: 0px;
-    :first-child {
-      margin-top: 0;
-    }
   }
 `;
 
-const FlexItem = ({ children, size }) => {
-  return <Item size={size}>{children}</Item>;
+const FlexItem = ({ children, size, style }) => {
+  return (
+    <Item style={style} size={size}>
+      {children}
+    </Item>
+  );
 };
 export default FlexItem;

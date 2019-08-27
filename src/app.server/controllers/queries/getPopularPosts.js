@@ -6,7 +6,6 @@ const getPopularPosts = (
   callback,
   errCallback
 ) => {
-
   let sort;
 
   switch (filter) {

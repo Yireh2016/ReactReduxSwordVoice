@@ -17,6 +17,7 @@ import postEditCtlreducer from "./store/reducers/postEditionControlReducer";
 import menuHandleReducer from "./store/reducers/menuHandleReducer";
 import userProfileReducer from "./store/reducers/userProfileReducer";
 import dialogReducer from "./store/reducers/dialogReducer";
+import resize from "./store/reducers/resize";
 
 //components
 import App from "./app.cms";
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   postCreation: postEditCtlreducer,
   menu: menuHandleReducer,
   userProfile: userProfileReducer,
-  dialog: dialogReducer
+  dialog: dialogReducer,
+  resize: resize
 });
 export const store = createStore(
   rootReducer,

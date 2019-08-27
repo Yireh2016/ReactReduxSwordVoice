@@ -130,7 +130,7 @@ aside h2 {
 }
 
 .blogArticle code {
-  white-space: normal;
+  white-space: pre-wrap;
 }
 
 .blogArticle hr {
