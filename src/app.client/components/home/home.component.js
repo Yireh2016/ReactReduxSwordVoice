@@ -201,6 +201,17 @@ class Home extends Component {
             Designers. Join Us and... Let Your SwordVoice be Heard!!!"
           />
         </Helmet>
+        <span
+          style={{
+            visibility: "hidden",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            zIndex: "-100"
+          }}
+        >
+          SwordVoice
+        </span>
         <header>
           <NavBar />
         </header>
@@ -298,7 +309,6 @@ class Home extends Component {
           <div id="tarjetaAnimada" className="center" />
           {/* <LightShadow factor={-10}> */}
           <h1 ref={this.titleRef}>
-            <span>SwordVoice</span>
             {is.edge() ? "SwordVoice" : <SwordVoice delay={4} />}
           </h1>
           {/* </LightShadow> */}

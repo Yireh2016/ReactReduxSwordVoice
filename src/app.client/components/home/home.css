@@ -149,8 +149,10 @@
 	100% {transform: translate(-50%,-50%);}*/
 }
 
-.home-hero h1 span {
-  visibility: hidden;
+.home-hero > h1 {
+  font-size: 20vh;
+  letter-spacing: 10px;
+  text-align: center;
 }
 
 .home-hero h2 {
@@ -181,6 +183,7 @@
   animation: bounceCont 1s cubic-bezier(0.87, -0.19, 0.975, 0.67) 3s normal
     forwards;
 }
+
 @keyframes bounceCont {
   to {
     transform: translate(-50%, 500%);
