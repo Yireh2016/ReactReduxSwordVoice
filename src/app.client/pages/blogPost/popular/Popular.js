@@ -366,25 +366,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           }
           const showLoading = isLoadingPopularPosts;
           return (
-            <FlexItem key={i} size={size}>
-              {/* <Post
-                id={i}
-                size="md"
-                title={title}
-                backgroundURL={postImg.replace(
-                  `${postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-                  `${postImg
-                    .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-                    .replace(".", "_mobile.")}`
-                )}
-                postGradient={postGradient}
-                keywords={keywords}
-                author={author}
-                date={date}
-                link={`/blog/post/${url}`}
-                avatar={avatar}
-                summaryTextHtml={summaryTextHtml}
-              /> */}
+            <FlexItem key={i}>
               <PostCard
                 id={`PopPostCard${i}`}
                 postH={popWidth / (blog.popularArticlesArr.length * 1.028)}

@@ -34,7 +34,7 @@ const Item = styled.div`
         return "calc(100%)";
 
       default:
-        return "calc(100%)";
+        return "auto";
     }
   }};
 
