@@ -265,13 +265,14 @@ class About extends React.Component {
       <div>
         <Helmet>
           <title>
-            About Us &#183; Online Community of Web and Mobile developers and
-            UI/UX designers
+            About Us &#183; Fullstack Web & Mobile App Developers and UI/UX
+            designers Online Community.
           </title>
           <meta
             name="Description"
             content={`
-            We are an Online Community of Web and Mobile developers and UI/UX designers who wanted to be up to date about the latest technologies, programing languages and paradigms, coding practices, FrontEnd and BackEnd frameworks and libraries, news, and trends throught Blog Articles, Tutorials, Courses and Social Media Interactions.
+            We are an Online Community of Web and Mobile developers and UI/UX designers. 
+            Come and Check our Blog, Tutorials and Courses.
             `}
           />
         </Helmet>

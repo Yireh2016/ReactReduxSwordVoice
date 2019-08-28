@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import Helmet from "react-helmet";
 
 import styled from "styled-components";
 // import Helmet from "react-helmet";
@@ -142,7 +143,7 @@ const BackgroundCont = styled.div`
     }
   }
 `;
-const ContactUs = ({ isDialog, setDialog }) => {
+const ContactUs = ({ setDialog }) => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -189,6 +190,13 @@ const ContactUs = ({ isDialog, setDialog }) => {
 
   return (
     <div>
+      <Helmet>
+        <title>Contact Us Dude</title>
+        <meta
+          name="Description"
+          content="Send your Questions, Suggestions, Feedback or whatever you want to tell and we will hit you back in no time. Hey, don't forget to follow us on Social Medi"
+        />
+      </Helmet>
       <NavBarLayout id="navbar">
         {/* <Helmet>
         <title>SwordVoice.com &#183; 💌 Contact Us Here</title>

@@ -1017,9 +1017,10 @@ class BlogPage extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
+          <title>Blog &#183; News, Tuturials and How to's.</title>
           <meta
             name="Description"
-            content="SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to tutorials nad more. Come and check it out!"
+            content="SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to's, tutorials and more. Hurry up and Join our Community"
           />
         </Helmet>
         {this.state.isAdvancedSearch && (
