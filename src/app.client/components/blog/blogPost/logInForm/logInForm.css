@@ -8,7 +8,6 @@
   color: white;
   font-weight: bold;
 
-  height: calc(100vh - 100px);
   display: flex;
   flex-direction: column;
 }

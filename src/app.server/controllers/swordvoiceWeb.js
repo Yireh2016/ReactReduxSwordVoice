@@ -205,7 +205,6 @@ const swordvoiceWeb = async (req, res) => {
               keywords.forEach(keyword => {
                 searchStr = `${searchStr}${keyword} `;
               });
-              console.log("searchStr", searchStr);
               searchSimilarArticles(
                 articleModel,
                 searchStr,
@@ -214,6 +213,8 @@ const swordvoiceWeb = async (req, res) => {
                     arr.length > 1
                       ? arr.filter(article => article.url !== url)
                       : arr;
+
+                  console.log("filterArr", filterArr);
                   store.dispatch({
                     type: "SET_SIMILAR_ARTICLES",
                     payload: filterArr
