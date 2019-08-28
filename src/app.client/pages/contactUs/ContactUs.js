@@ -13,7 +13,7 @@ import ContactForm from "./contactForm/ContactForm";
 import SocialNet from "./socialNet/SocialNet";
 
 //assets
-import image from "../../assets/img/contact/message-in-a-bottle-3437294_960_720.jpg";
+import image from "../../assets/svgIcons/bottleMessage.svg";
 
 //api call
 import sendContactForm from "../../../apiCalls/sendContactForm";

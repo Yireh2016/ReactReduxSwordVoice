@@ -16,11 +16,9 @@ import styled, { keyframes } from "styled-components";
 import "./about.css";
 //assets
 import avatarImg from "../../assets/img/general/avatar2.jpg";
+import svAvatar from "../../assets/svgIcons/aboutTeclado.svg";
 
-import {
-  SwordVoiceAvatar,
-  CodersAvatar
-} from "../../assets/svgIcons/aboutSVGs";
+import { CodersAvatar } from "../../assets/svgIcons/aboutSVGs";
 
 const Avatar = styled.div`
   width: 100%;
@@ -204,7 +202,7 @@ class About extends React.Component {
   render() {
     const avatarArr = [
       <Avatar image={avatarImg} />,
-      <SwordVoiceAvatar />,
+      <img src={svAvatar} alt="swordvoice avatar" />,
       <CodersAvatar />
     ];
     const HTMLdata = [
