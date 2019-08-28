@@ -561,23 +561,6 @@ class BlogPage extends React.Component {
         this.props.setFilter(lastFilter);
       }
     );
-
-    // const filterPopularRes = await filterPopular(
-    //   filter,
-    //   this.props.blog.articlesCount,
-    //   0
-    // );
-
-    // if (filterPopularRes.statusText === "OK") {
-    //   this.setState({
-    //     isFilterLoading: false
-    //   });
-
-    //   this.props.setPopularArr([...filterPopularRes.popularArr]);
-    //   return;
-    // }
-    // console.log("Error changing filter", filterPopularRes.statusText);
-    // this.props.setFilter(lastFilter);
   };
 
   MorePopularPostsHandler = async () => {
@@ -639,22 +622,6 @@ class BlogPage extends React.Component {
         });
       }
     );
-
-    // const filterPopularRes = await filterPopular(
-    //   filter,
-    //   this.props.blog.articlesCount,
-    //   this.props.blog.popularArticlesArr.length
-    // );
-
-    // if (filterPopularRes.statusText === "OK") {
-    //   this.props.setPopularArr([
-    //     ...this.props.blog.popularArticlesArr,
-    //     ...filterPopularRes.popularArr
-    //   ]);
-
-    //   return;
-    // }
-    // console.log("Error searching filter", filterPopularRes.statusText);
   };
 
   onSearch = async value => {
@@ -825,6 +792,7 @@ class BlogPage extends React.Component {
 
             avatar = post.avatar;
             const size = this.state.asidePostW;
+            const showLoading = this.state.isLoadingPopularPosts;
 
             if (post.moreBtn && post.moreBtn === "exist") {
               return (
@@ -841,7 +809,6 @@ class BlogPage extends React.Component {
                 </FlexItem>
               );
             }
-            const showLoading = this.state.isLoadingPopularPosts;
             return (
               <FlexItem key={i} size={size}>
                 <Post
@@ -1060,7 +1027,7 @@ class BlogPage extends React.Component {
             />
           </Modal>
         )}
-        {false && (
+        {isLoading && (
           <div
             style={{
               position: "fixed",

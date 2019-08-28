@@ -23,9 +23,9 @@ const Form = styled.div`
 
   @media (max-width: 700px) {
     box-sizing: border-box;
-    width: 95%;
+    width: 300px;
     padding: 25px 18px;
-    margin: 50px 0 0 0;
+    margin: 59px 0px 35px 0;
   }
 `;
 

@@ -8,7 +8,6 @@ import styled from "styled-components";
 import NavBarLayout from "../../layouts/NavBarLayout";
 
 //compoenents
-import Background from "./background/background";
 import ContactForm from "./contactForm/ContactForm";
 import SocialNet from "./socialNet/SocialNet";
 
@@ -22,6 +21,9 @@ const MainLayout = styled.div`
   display: flex;
   flex-flow: wrap;
   margin-top: 100px;
+
+  transform-origin: top left;
+  transform: rotate(180deg);
 
   transform: ${props => props.animation && "rotate(0deg) !important"};
   transition: transform ease 1000ms;
@@ -45,12 +47,10 @@ const LeftAside = styled.div`
   }
 
   @media (max-width: 700px) {
+    justify-content: normal;
     overflow: hidden;
-    height: calc(100vh);
-  }
-
-  @media (max-width: 330px) and (max-height: 490px) {
-    height: calc(120vh);
+    height: auto;
+    margin: -3vh 0 0 0;
   }
 `;
 
@@ -113,7 +113,35 @@ const SocialNetCont = styled.div`
     width: 100%;
   }
 `;
+const BackgroundCont = styled.div`
+  left: -4px;
+  top: -30px;
+  height: 800px;
+  position: absolute;
 
+  img {
+    width: 100%;
+  }
+
+  @media (max-width: 1050px) {
+    left: -1vw;
+    height: auto;
+    img {
+      width: auto;
+      height: calc(100vh - 82px);
+    }
+  }
+
+  @media (max-width: 700px) {
+    width: 178vw;
+    left: -70px;
+    top: 0px;
+
+    img {
+      height: 630px;
+    }
+  }
+`;
 const ContactUs = ({ isDialog, setDialog }) => {
   const [animation, setAnimation] = useState(false);
 
@@ -169,21 +197,17 @@ const ContactUs = ({ isDialog, setDialog }) => {
           content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
         />
       </Helmet> */}
-        <MainLayout
-          style={{
-            transformOrigin: "top left",
-            transform: "rotate(180deg)"
-          }}
-          animation={animation}
-          id="mainLayout"
-        >
+        <MainLayout animation={animation} id="mainLayout">
           <NoPCTitleLay>
             <NoPCContactTitle id="NoPCcontactTitle">
               Contact Us
             </NoPCContactTitle>
           </NoPCTitleLay>
           <LeftAside id="leftAside">
-            <Background image={image} id="background" />
+            <BackgroundCont>
+              <img src={image} alt="SwordVoice Symbol" />
+            </BackgroundCont>
+
             <ContactForm id="ContactForm" onSubmit={submitHandler} />
           </LeftAside>
           <RightAside id="RightAside">
