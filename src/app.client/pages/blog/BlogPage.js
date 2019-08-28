@@ -294,7 +294,7 @@ const AsidePostsCont = styled.div`
   align-items: center;
   white-space: normal;
   overflow-x: hidden;
-  height: calc(100% - 100px);
+
   > div {
     margin-bottom: 40px;
   }
@@ -304,8 +304,8 @@ const AsidePostsCont = styled.div`
     overflow-y: hidden;
     white-space: nowrap;
     padding: 0 0 15px 0;
+    box-sizing: border-box;
 
-    height: calc(100% - 100px);
     flex-direction: row;
     > div {
       margin-right: 20px;
@@ -314,6 +314,13 @@ const AsidePostsCont = styled.div`
       margin: 0 20px 40px 20px;
     }
   }
+`;
+
+const LoadingCont = styled.div`
+  display: flex;
+  justify-content: center;
+
+  height: 40vh;
 `;
 
 class BlogPage extends React.Component {
@@ -330,6 +337,7 @@ class BlogPage extends React.Component {
       lastPostW: 0,
       searchTranslateX: "70%",
       searchValue: "",
+
       recentPostsArray: [
         {
           postImg: ``,
@@ -367,6 +375,8 @@ class BlogPage extends React.Component {
         }
       ]
     };
+
+    this.asidePostsRef = React.createRef();
   }
 
   setPostDimensions = () => {
@@ -418,36 +428,28 @@ class BlogPage extends React.Component {
       this.setPostDimensions();
     });
 
-    // const isDeviceResult = isDevice();
-    // console.log("blogpage after listener", isDeviceResult);
-
-    // let postH;
-
-    // switch (isDeviceResult) {
-    //   case "pc":
-    //     postH =
-    //       (window.outerWidth * 0.4) / 1.028 >= 520
-    //         ? 520
-    //         : (window.outerWidth * 0.4) / 1.028;
-    //     break;
-    //   case "tablet":
-    //     postH = (window.outerWidth * 0.8) / 1.028;
-    //     break;
-
-    //   case "phone":
-    //     postH = (window.outerWidth * 0.95) / 1.028 - 24;
-    //     break;
-
-    //   default:
-    //     break;
-    // }
-
     setTimeout(() => {
       this.setState({
         isLoading: false
       });
     }, 1.5 * 1000);
   }
+
+  // componentDidUpdate() {
+  //   console.log("this.asidePostsRef.current", this.asidePostsRef.current);
+
+  //   if (!this.asidePostsRef.current) {
+  //     return;
+  //   }
+  //   const popularPostH = this.asidePostsRef.current.clientHeight;
+
+  //   console.log("componentDidUpdate popularPostH", popularPostH); //TODO erase
+  //   this.setState(prevState => {
+  //     if (prevState.popPostLoadingH !== popularPostH) {
+  //       return { popPostLoadingH: popularPostH };
+  //     }
+  //   });
+  // }
 
   MorePostsHandler = async () => {
     console.log("click more posts");
@@ -904,9 +906,15 @@ class BlogPage extends React.Component {
                 </FilterLayout>
 
                 {this.state.isFilterLoading ? (
-                  <Loading />
+                  <LoadingCont>
+                    <Loading />
+                  </LoadingCont>
                 ) : (
-                  <AsidePostsCont data-simplebar id="postsContainer">
+                  <AsidePostsCont
+                    ref={this.asidePostsRef}
+                    data-simplebar
+                    id="postsContainer"
+                  >
                     {asidePosts}
                   </AsidePostsCont>
                 )}

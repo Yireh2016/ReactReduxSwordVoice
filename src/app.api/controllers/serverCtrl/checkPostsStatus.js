@@ -9,7 +9,7 @@ const checkPostStatus = () => {
     .where("programDate")
     .lt(now)
     .exec((err, articles) => {
-      if (articles.length === 0) {
+      if (err || articles.length === 0) {
         return;
       }
       articles.forEach(article => {

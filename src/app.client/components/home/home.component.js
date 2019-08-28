@@ -192,13 +192,13 @@ class Home extends Component {
       <div>
         <Helmet>
           <title>
-            SwordVoice.com &#183; Fullstack Web/Mobile Developers and UI/UX
-            Designers Community
+            Fullstack Web & Mobile App Developers and UI/UX Designers Online
+            Community
           </title>
           <meta
             name="Description"
-            content="SwordVoice.com &#183; Online Community of Fullstack Web/Mobile Developers and UI/UX
-            Designers. Join Us and... Let Your SwordVoice be Heard!!!"
+            content="SwordVoice.com &#183; Online Community of Fullstack Web & Mobile App Developers and UI/UX
+            Designers. Join Us and Let Your SwordVoice be Heard!!!"
           />
         </Helmet>
         <span
@@ -313,7 +313,7 @@ class Home extends Component {
           </h1>
           {/* </LightShadow> */}
           <h2>
-            FullStack Web/Mobile Developers and UI/UX Designers Online
+            Fullstack Web & Mobile App Developers & UI/UX Designers Online
             Community. Join Us and...
           </h2>
         </section>
