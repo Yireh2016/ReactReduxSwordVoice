@@ -62,7 +62,8 @@ class NavBar extends Component {
       tempUnmount: false,
       endOfAnimation: false,
       scrollTop: 0,
-      deltaScroll: 0
+      deltaScroll: 0,
+      smallestLogoW: "24vw"
     };
 
     if (
@@ -139,10 +140,19 @@ class NavBar extends Component {
 
     //if is PC
 
+    if (this.props.device !== "pc") {
+      const pageYoffset = window.pageYOffset;
+      if (pageYoffset > 10) {
+        this.setState({ smallestLogoW: "15vw" });
+      } else {
+        this.setState({ smallestLogoW: "24vw" });
+      }
+    }
+
     if (!this.props.pathname.match("/blog")) {
       return;
     }
-    if (window.outerWidth > 1050) {
+    if (this.props.device === "pc" && this.props.pathname.match("/blog")) {
       const pageYoffset = window.pageYOffset;
       const delta = -this.props.scroll.scrollTop + pageYoffset;
 
@@ -638,7 +648,8 @@ class NavBar extends Component {
               <Logo
                 id="4"
                 className="verticalCenter horizontalCenter"
-                logoWidth="24vw"
+                logoWidth={this.state.smallestLogoW}
+                style={{ transition: "all ease 500ms" }}
               />
             </a>
           </div>

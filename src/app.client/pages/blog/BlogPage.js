@@ -442,13 +442,11 @@ class BlogPage extends React.Component {
     //     break;
     // }
 
-    // // setTimeout(() => {
-    //   this.setState({
-    //     isDeviceResult: isDeviceResult,
-    //     isLoading: false,
-    //     mainPostH: postH
-    //   });
-    // // }, 3 * 1000);
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      });
+    }, 1.5 * 1000);
   }
 
   MorePostsHandler = async () => {

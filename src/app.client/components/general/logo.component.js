@@ -6,16 +6,10 @@ const Logo = props => {
   return (
     <div
       className={props.className}
-      style={props.style}
+      style={{ ...props.style, width: `${props.logoWidth}` }}
       onClick={props.onClick}
     >
-      <svg
-        viewBox="0 0 45.943593 51.839252"
-        version="1.1"
-        style={{
-          width: props.logoWidth
-        }}
-      >
+      <svg viewBox="0 0 45.943593 51.839252" version="1.1">
         <defs>
           <linearGradient id={`linearGradient867${props.id}`}>
             <stop style={{ stopColor: "#000000", stopOpacity: 1 }} offset="0" />
