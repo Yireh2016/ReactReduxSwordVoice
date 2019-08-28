@@ -9,6 +9,7 @@ import "./navbar.css";
 //assets
 import ActiveBar from "./activeBar";
 import userLogo from "../../assets/img/general/userLogo.svg";
+import contactSVG from "../../assets/svgIcons/handshake.svg";
 //components
 import SignUpForm from "../blog/blogPost/signUpForm/signUpForm.component";
 import LogInForm from "../blog/blogPost/logInForm/logInForm.component";
@@ -34,6 +35,15 @@ const Nav = styled.nav`
     animation: none;
     opacity: 1;
     transform: translateY(0) rotateZ(0deg) !important;
+  }
+`;
+
+const ContactSvg = styled.img`
+  width: 34px;
+  margin: 0 8px 0 0;
+  @media (min-width: 700px) {
+    width: 53px;
+    margin: 0 12px 0 0;
   }
 `;
 
@@ -333,7 +343,7 @@ class NavBar extends Component {
         nombre: "✍️ Blog"
       },
       {
-        nombre: "🤝 Contact"
+        nombre: " Contact"
       }
     ];
 
@@ -350,7 +360,7 @@ class NavBar extends Component {
 
       if (
         this.props.location.pathname ===
-        `/${smallMenuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]}`
+        `/${smallMenuContent.nombre.toLowerCase().match(/.?\s(\w+)$/)[1]}`
       ) {
         activeClass = "activeLink";
       } else if (
@@ -365,12 +375,15 @@ class NavBar extends Component {
           <a
             aria-label={`go to ${smallMenuContent.nombre} page`}
             key={i}
+            style={{ display: "flex", alignItems: "center" }}
             href={
-              "/" +
-              smallMenuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
+              "/" + smallMenuContent.nombre.toLowerCase().match(/.?\s(\w+)$/)[1]
             }
             className={"flyingLink " + activeClass}
           >
+            {smallMenuContent.nombre === " Contact" && (
+              <ContactSvg src={`${contactSVG}`} alt="contact symbol" />
+            )}
             {smallMenuContent.nombre}
           </a>
         </li>
@@ -408,9 +421,7 @@ class NavBar extends Component {
         <React.Fragment key={i}>
           <Route
             exact
-            path={
-              "/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
-            }
+            path={"/" + menuContent.nombre.toLowerCase().match(/.?\s(\w+)$/)[1]}
             component={ActiveBar}
           />
           <Route exact path={"/"} render={() => <ActiveBar />} />
@@ -418,7 +429,7 @@ class NavBar extends Component {
       ) : (
         <Route
           exact={false}
-          path={"/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]}
+          path={"/" + menuContent.nombre.toLowerCase().match(/.?\s(\w+)$/)[1]}
           component={ActiveBar}
         />
       );
@@ -427,9 +438,7 @@ class NavBar extends Component {
         <React.Fragment key={i}>
           <a
             aria-label={`go to ${menuContent.nombre} page`}
-            href={
-              "/" + menuContent.nombre.toLowerCase().match(/.{1}\s(\w+)$/)[1]
-            }
+            href={"/" + menuContent.nombre.toLowerCase().match(/.?\s(\w+)$/)[1]}
             className="enlace"
           >
             {menuContent.nombre} <br />
