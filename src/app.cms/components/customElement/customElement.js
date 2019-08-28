@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import addSuffixToCustomClasses from "../../../services/addSuffixtoCustomClasses";
+import showdown from "showdown";
 
 //react map
 /*
@@ -39,6 +40,14 @@ class CustomElement extends Component {
     this.props.sendWordToJSXHandler(HTMLContent);
   };
 
+  MarkDownCheckHandler = () => {
+    let MarkDownContent = this.state.customElementContent;
+    let converter = new showdown.Converter();
+    let HTMLContent = converter.makeHtml(MarkDownContent);
+    HTMLContent = addSuffixToCustomClasses(HTMLContent, this.props.project.url);
+    this.props.sendWordToJSXHandler(HTMLContent);
+  };
+
   inputTextHTMLHandler = e => {
     this.props.onProjectChange();
 
@@ -61,6 +70,9 @@ class CustomElement extends Component {
           />
           <button className="cmsBtn" onClick={this.HMTLCheckHandler}>
             Check HTML
+          </button>
+          <button className="cmsBtn" onClick={this.MarkDownCheckHandler}>
+            Check MarkDown
           </button>
         </div>
       </div>
