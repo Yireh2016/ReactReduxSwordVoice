@@ -21,6 +21,18 @@ const Article = styled.article`
   }
 `;
 
+const Avatar = styled.div`
+  @media (max-width: 1050px) {
+    width: px;
+    height: 35px;
+  }
+
+  @media (max-width: 700px) {
+    width: 35px;
+    height: 35px;
+  }
+`;
+
 class SummaryCard extends React.Component {
   constructor(props) {
     super(props);
@@ -154,8 +166,8 @@ class SummaryCard extends React.Component {
             <div
               id={`${this.props.id}` + "authorImgCard"}
               style={{
-                width: "50px",
-                height: "50px",
+                width: `${this.props.cardH / 6}px`,
+                height: `${this.props.cardH / 6}px`,
                 borderRadius: "100%",
                 backgroundSize: "cover",
                 backgroundPosition: "center",

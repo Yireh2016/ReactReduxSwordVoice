@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
 //services
-import dbDateToNormalDate from "../../../../../services/dbDateToNormalDate";
 
 // cardW: PropTypes.number.isRequired,
 // cardH: PropTypes.number.isRequired,
