@@ -21,6 +21,10 @@ const Form = styled.div`
     margin-top: 20px;
   }
 
+  @media (max-width: 1050px) {
+    margin: 10vh 0 0 0;
+  }
+
   @media (max-width: 700px) {
     box-sizing: border-box;
     width: 300px;

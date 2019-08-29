@@ -42,6 +42,7 @@ const LeftAside = styled.div`
   width: calc(7 * 100% / 12);
 
   @media (max-width: 1050px) {
+    justify-content: normal;
     width: calc(12 * 100% / 12);
     overflow: hidden;
     height: calc(100vh - 148px);
@@ -85,12 +86,13 @@ const RightAside = styled.div`
     height: auto;
     bottom: 0px;
     padding: 15px 0;
-    background: rgba(0, 23, 31, 0.7);
+    background: rgba(23, 43, 51, 0.5);
   }
 
   @media (max-width: 700px) {
     position: static;
     justify-content: center;
+    background: rgb(23, 43, 51);
   }
 `;
 
@@ -143,6 +145,34 @@ const BackgroundCont = styled.div`
     }
   }
 `;
+
+const Call2ActionBtnCont = styled.div`
+  margin-top: 20px;
+`;
+
+const Button = styled.button`
+  min-width: 90px;
+  background: #00171f;
+  background: var(--blueDark);
+  border: 1px solid #f95f0b;
+  border: 1px solid var(--orange);
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  text-decoration: none;
+  color: white;
+  font-size: 0.6rem;
+  padding: 10px 30px;
+  border-radius: 8px;
+
+  :hover {
+    color: #00171f;
+    background-color: #fff;
+    cursor: pointer;
+  }
+`;
+
 const ContactUs = ({ setDialog }) => {
   const [animation, setAnimation] = useState(false);
 
@@ -223,6 +253,11 @@ const ContactUs = ({ setDialog }) => {
             <SocialNetCont id="SocialNetCont">
               <SocialNet id="SocialNet" />
             </SocialNetCont>
+            <Call2ActionBtnCont>
+              <a href="/blog" rel="go to Blog page">
+                <Button>Blog</Button>
+              </a>
+            </Call2ActionBtnCont>
           </RightAside>
         </MainLayout>
       </NavBarLayout>
