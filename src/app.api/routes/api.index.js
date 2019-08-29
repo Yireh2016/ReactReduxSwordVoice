@@ -27,6 +27,7 @@ import {
   getMoreCommentsCtrl,
   getMoreResponsesCtrl,
   getMorePostsCtrl,
+  getMoreSimilarPostsCtrl,
   setCommentCtrl,
   setReplyCtrl,
   updateCommentClaps,
@@ -84,6 +85,8 @@ routerAPI.post("/login", guestAPI, loginCtrl);
 routerAPI.post("/sendUserTempImage", guestAPI, sendUserTempImageCtrl);
 
 routerAPI.post("/sendContactForm", guestAPI, sendContactFormCtrl);
+
+routerAPI.post("/getMoreSimilarPosts/", guestAPI, getMoreSimilarPostsCtrl);
 
 //////////////////////////////////////
 //////////////////////////////////////

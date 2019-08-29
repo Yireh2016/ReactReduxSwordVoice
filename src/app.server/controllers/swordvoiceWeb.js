@@ -111,12 +111,8 @@ const renderWithPreloadedState = (req, res, store) => {
 const swordvoiceWeb = async (req, res) => {
   let articleModel = mongoose.model("Article");
 
-  console.log("swordvoiceWeb INICIO");
-
   const routerPromise = () =>
     new Promise((resolve, reject) => {
-      console.log(" routerPromise EJECUTANDOSE", req.url);
-
       if (req.url.match("/blog/post/")) {
         const RESPONSES_LIMIT = 3;
         const COMMENT_LIMIT = 5;
@@ -125,7 +121,7 @@ const swordvoiceWeb = async (req, res) => {
         articleModel
           .findOne({ url: `${url}` })
           .select(
-            "_id date html title description keywords author socialCount comments isPublished"
+            "_id date html title description keywords author socialCount url comments isPublished"
           )
           .populate({
             path: "author",
@@ -178,8 +174,10 @@ const swordvoiceWeb = async (req, res) => {
                 title,
                 description,
                 keywords,
-                socialCount
+                socialCount,
+                url
               } = completeArticle;
+
               const id = completeArticle._id;
 
               const article = {
@@ -187,6 +185,7 @@ const swordvoiceWeb = async (req, res) => {
                 title,
                 html,
                 socialCount,
+                url,
                 comments: commentsArr,
                 commentsCount,
                 author: author.userFirstName + " " + author.userLastName,
@@ -195,9 +194,8 @@ const swordvoiceWeb = async (req, res) => {
                 categories: keywords,
                 avatar: author.userAvatar
               };
-              store.dispatch({ type: "SET_ARTICLE", payload: article });
 
-              console.log("ARTICLE FOUND");
+              store.dispatch({ type: "SET_ARTICLE", payload: article });
 
               console.log("SEARCHING SIMILAR ARTICLES");
 
@@ -205,90 +203,107 @@ const swordvoiceWeb = async (req, res) => {
               keywords.forEach(keyword => {
                 searchStr = `${searchStr}${keyword} `;
               });
-              searchSimilarArticles(
-                articleModel,
-                searchStr,
-                arr => {
-                  const filterArr =
-                    arr.length > 1
-                      ? arr.filter(article => article.url !== url)
-                      : arr;
-
-                  console.log("filterArr", filterArr);
-                  store.dispatch({
-                    type: "SET_SIMILAR_ARTICLES",
-                    payload: filterArr
-                  });
-                },
-                err => {
-                  reject(err);
-                }
-              );
 
               articleModel
-                .find({ isPublished: true })
-                .countDocuments((err, count) => {
+                .find({
+                  $and: [
+                    {
+                      _id: { $ne: id },
+                      $text: { $search: `${searchStr}` }
+                    },
+                    { isPublished: true }
+                  ]
+                })
+                .countDocuments((err, similCount) => {
+                  if (err) {
+                    console.log("err", err); //TODO erase
+                    errFn(err); //FIXME errFn not exist
+                    return;
+                  }
                   store.dispatch({
-                    type: "SET_ARTICLES_COUNT",
-                    payload: count
+                    type: "SET_SIMILAR_ARTICLES_COUNT",
+                    payload: similCount
                   });
-                  getPopularPosts(
-                    articleModel,
-                    "views",
-                    count,
-                    0,
-                    posts => {
-                      let postMinimumData = [];
-                      for (let i = 0; i < posts.length; i++) {
-                        postMinimumData[i] = {
-                          url: posts[i].url,
-                          postImg:
-                            posts[i].thumbnail &&
-                            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
-                          postGradient:
-                            posts[i].thumbnail &&
-                            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
-                          title: posts[i].title,
-                          summaryTextHtml: paragraphService(
-                            posts[i].description
-                          ),
-                          author:
-                            `${posts[i].author.userFirstName} ` +
-                            `${posts[i].author.userLastName}`,
-                          avatar: posts[i].author.userAvatar,
-                          date: dbDateToNormalDate(posts[i].date),
-                          keywords: keywordsToArr(posts[i].keywords[0])
-                        };
-                      }
 
+                  searchSimilarArticles(
+                    articleModel,
+                    { id, count: 0 },
+                    searchStr,
+                    arr => {
                       store.dispatch({
-                        type: "SET_POPULAR_ARR",
-                        payload: postMinimumData
+                        type: "SET_SIMILAR_ARTICLES",
+                        payload: arr
                       });
-                      resolve();
+
+                      //Getting popular Articles
+                      articleModel
+                        .find({ isPublished: true })
+                        .countDocuments((err, count) => {
+                          store.dispatch({
+                            type: "SET_ARTICLES_COUNT",
+                            payload: count
+                          });
+                          getPopularPosts(
+                            articleModel,
+                            "views",
+                            count,
+                            0,
+                            posts => {
+                              let postMinimumData = [];
+                              for (let i = 0; i < posts.length; i++) {
+                                postMinimumData[i] = {
+                                  url: posts[i].url,
+                                  postImg:
+                                    posts[i].thumbnail &&
+                                    `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
+                                  postGradient:
+                                    posts[i].thumbnail &&
+                                    `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
+                                  title: posts[i].title,
+                                  summaryTextHtml: paragraphService(
+                                    posts[i].description
+                                  ),
+                                  author:
+                                    `${posts[i].author.userFirstName} ` +
+                                    `${posts[i].author.userLastName}`,
+                                  avatar: posts[i].author.userAvatar,
+                                  date: dbDateToNormalDate(posts[i].date),
+                                  keywords: keywordsToArr(posts[i].keywords[0])
+                                };
+                              }
+
+                              store.dispatch({
+                                type: "SET_POPULAR_ARR",
+                                payload: postMinimumData
+                              });
+                              resolve();
+                            },
+                            err => {
+                              console.log("error en blog ", err);
+                              reject(err);
+                            }
+                          );
+                        })
+                        .catch(err => {
+                          console.log("error en blog ", err);
+                          reject(err);
+                        });
                     },
                     err => {
-                      console.log("error en blog ", err);
                       reject(err);
                     }
                   );
-                })
-                .catch(err => {
-                  console.log("error en blog ", err);
-                  reject(err);
                 });
             } else {
               console.log(" ARTICLE NOT FOUND");
               store.dispatch({ type: "DEFAULT_ARTICLE" });
-              res.redirect("/notFound");
+              res.redirect("/notFound"); //FIXME it must be reject
             }
           })
           .catch(err => {
             console.log("error on finding article", err);
           });
       } else if (req.url.match("/blog")) {
-        console.log("entrando a /BLOG");
-
         articleModel
           .find({ isPublished: true })
           .countDocuments((err, count) => {
@@ -388,15 +403,11 @@ const swordvoiceWeb = async (req, res) => {
 
   const userLoggedInPromise = () =>
     new Promise(resolve => {
-      console.log("EJECUTANDO userLoggedInPromise ");
-
       if (req.signedCookies.sessionID) {
         const tokenData = readToken(req.signedCookies.sessionID, {
           encryptKey: `${process.env.ENCRYPTKEY}`,
           encryptAlgorithm: "aes-256-cbc"
         });
-
-        console.log("Checkiing token ", tokenData);
 
         const userName = tokenData.data.userName;
         const usernameID = tokenData.data.id;
@@ -410,7 +421,6 @@ const swordvoiceWeb = async (req, res) => {
         );
         resolve();
       } else {
-        console.log("USER NOT LOGGUED IN ");
         store.dispatch({ type: "DEFAULT" });
         resolve("");
       }
@@ -421,12 +431,9 @@ const swordvoiceWeb = async (req, res) => {
 
     //preparing the ssr redux data for state management on server side
     await routerPromise();
-    console.log("end routerPromise");
     await userLoggedInPromise();
-    console.log("end userLoggedInPromise");
 
     renderWithPreloadedState(req, res, store);
-    console.log("end renderWithPreloadedState");
   } catch (err) {
     console.log("errors on promises", err);
   }

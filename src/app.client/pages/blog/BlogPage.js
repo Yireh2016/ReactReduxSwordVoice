@@ -193,9 +193,9 @@ const styles = {
       }
     },
     layout: {
-      margin: "5vmin 0",
+      margin: "5vmin 0 0 0",
       borderRadius: "8px",
-      height: "calc(100vh - 20vmin - 112px)",
+      height: "calc(100vh - 26vmin - 112px)",
       "@media (max-width: 1050px)": {
         height: "auto",
         margin: "0",

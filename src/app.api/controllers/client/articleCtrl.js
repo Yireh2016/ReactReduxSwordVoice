@@ -125,14 +125,10 @@ export const getMorePostsCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(${process.env.CDN_URL}/articles/${posts[i].url}/${
-              posts[i].thumbnail.name
-            })`,
+            `url(${process.env.CDN_URL}/articles/${posts[i].url}/${posts[i].thumbnail.name})`,
           postGradient:
             posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%)`,
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
           summaryTextHtml: paragraphService(posts[i].description),
           author:
@@ -384,14 +380,10 @@ export const filterPopularCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
-              posts[i].thumbnail.name
-            })`,
+            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
           postGradient:
             posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%)`,
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
           summaryTextHtml: paragraphService(posts[i].description),
           author:
@@ -423,7 +415,33 @@ export const searchArticleCtrl = (req, res) => {
     res.status(200).send({ status: "OK", searchArr: arr });
   };
 
-  searchSimilarArticles(articleModel, searchValue, successHandler, errHandler);
+  searchSimilarArticles(
+    articleModel,
+    0,
+    searchValue,
+    successHandler,
+    errHandler
+  );
+};
+
+export const getMoreSimilarPostsCtrl = (req, res) => {
+  const { searchStr, articlesShown } = req.body;
+
+  const successHandler = similArr => {
+    res.status(200).send({ similArr, status: "OK" });
+  };
+
+  const errHandler = err => {
+    res.status(404).send(err);
+  };
+
+  searchSimilarArticles(
+    articleModel,
+    articlesShown,
+    searchStr,
+    successHandler,
+    errHandler
+  );
 };
 
 export const searchLastArticlesCtrl = (req, res) => {
@@ -504,14 +522,10 @@ export const advancedSearchDbCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
-              posts[i].thumbnail.name
-            })`,
+            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
           postGradient:
             posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%)`,
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
           summaryTextHtml: paragraphService(posts[i].description),
           author:

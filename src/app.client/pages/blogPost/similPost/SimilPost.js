@@ -6,6 +6,11 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 
 //components
 import PostCard from "../../../components/postCard/PostCard";
+import blogReducer from "../../../../app.redux.store/store/reducer/blogReducer";
+import Loading from "../../../components/loading/loading";
+
+//api Calls
+import apiCtrl from "../../../../apiCalls/generic/apiCtrl";
 
 const SimilPostLay = styled.div`
   padding: 15px;
@@ -26,7 +31,7 @@ const Aside = styled.aside`
   border-radius: 15px;
   margin: 20px 0 0 0;
   padding: 20px 0;
-  background-color: #00171f;
+  background-color: hsla(195, 100%, 9%, 1);
   position: sticky;
   top: 45px;
 
@@ -87,15 +92,51 @@ const Simil = styled.div`
 
   @media (max-width: 1050px) {
     flex-direction: row;
+
+    > div:last-child {
+      padding: 5px 10px 5px 10px;
+    }
   }
 `;
 
 const PostCardLay = styled.div`
   display: flex;
   justify-content: center;
+
+  @media (max-width: 1050px) {
+    align-items: center;
+  }
 `;
-const SimilPost = ({ asideTitle, device, article }) => {
+
+const MorePosts = styled.div`
+  box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
+  border: 2px solid coral;
+  border-radius: 8px;
+  padding: ${props => (props.noPadding ? "0 20px 0" : "15px 30px 20px 15px")};
+  text-align: center;
+  box-sizing: border-box;
+  background: #00171f;
+  color: #00171f;
+  color: coral;
+  font-weight: bold;
+  :hover {
+    cursor: pointer;
+  }
+
+  @media (max-width: 1050px) {
+    height: 54px;
+  }
+`;
+
+const SimilPost = ({
+  asideTitle,
+  device,
+  article,
+  blog,
+  setSimilarArticles
+}) => {
   const [similarPostsWidth, setSimilarPostsWidth] = useState(341);
+  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
     let similarPostsWidth;
@@ -110,8 +151,68 @@ const SimilPost = ({ asideTitle, device, article }) => {
     setSimilarPostsWidth(similarPostsWidth);
   }, [device]);
 
-  const similarPostArray = article.similarPosts;
+  const getSimilHandler = response => {
+    console.log("getSimilHandler response", response); //TODO erase
+    console.log(
+      "getSimilHandler response.data.similArr",
+      response.data.similArr
+    ); //TODO erase
+
+    setSimilarArticles([...article.similarPosts, ...response.data.similArr]);
+
+    setShowLoading(false);
+  };
+
+  const errorGettingSimil = err => {
+    //trigger dialog FIXME
+
+    console.log("errorGettingSimil err", err);
+    setShowLoading(false);
+  };
+
+  const MoreSimilPostsHandler = () => {
+    console.log("giveme more posts"); //TODO: erase
+    setShowLoading(true);
+    //api call
+
+    let searchStr = `${article.title} `;
+    article.categories.forEach(keyword => {
+      searchStr = `${searchStr}${keyword} `;
+    });
+    const data = {
+      searchStr,
+      articlesShown: { id: article.id, count: article.similarPosts.length }
+    };
+
+    const moreSimilarObj = {
+      url: `/api/getMoreSimilarPosts`,
+      method: "post",
+      data
+    };
+    apiCtrl(moreSimilarObj, getSimilHandler, errorGettingSimil);
+  };
+
+  let similarPostArray = article.similarPosts; //
+  // if (similarPostArray.length < blog.articlesCount) {
+  if (similarPostArray.length < article.similarPostsCount) {
+    //FIXME compare with simil total count
+    similarPostArray = [...similarPostArray, "moreBtn"];
+  }
   const similarPostsJSX = similarPostArray.map((post, i) => {
+    if (post === "moreBtn") {
+      return (
+        <PostCardLay key={i} className="popularPost-article">
+          <MorePosts
+            noPadding={showLoading}
+            onClick={MoreSimilPostsHandler}
+            id="MoreSimilPosts"
+          >
+            {showLoading ? <Loading></Loading> : "More..."}
+          </MorePosts>
+        </PostCardLay>
+      );
+    }
+
     let avatar;
     if (typeof post.avatar === "object") {
       avatar = JSON.stringify(post.avatar);
@@ -158,11 +259,22 @@ const SimilPost = ({ asideTitle, device, article }) => {
   );
 };
 
-const mapStateToProps2 = state => {
+const mapActionsToProps2 = dispatch => {
   return {
-    article: state.article,
-    device: state.resize.device
+    setSimilarArticles: similarPosts =>
+      dispatch({ type: "SET_SIMILAR_ARTICLES", payload: similarPosts })
   };
 };
 
-export default connect(mapStateToProps2)(SimilPost);
+const mapStateToProps2 = state => {
+  return {
+    article: state.article,
+    device: state.resize.device,
+    blog: state.blog
+  };
+};
+
+export default connect(
+  mapStateToProps2,
+  mapActionsToProps2
+)(SimilPost);

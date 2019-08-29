@@ -5,9 +5,11 @@ const initialState = {
   author: "",
   title: "",
   description: "",
+  url: "",
   keywords: "",
   commentsCount: 0,
   similarPosts: [],
+  similarPostsCount: 0,
   comments: [
     {
       _id: "",
@@ -75,6 +77,11 @@ const article = (state = initialState, action) => {
 
     case "SET_SIMILAR_ARTICLES": {
       newState.similarPosts = action.payload;
+      break;
+    }
+
+    case "SET_SIMILAR_ARTICLES_COUNT": {
+      newState.similarPostsCount = action.payload;
       break;
     }
 

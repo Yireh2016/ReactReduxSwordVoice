@@ -33,21 +33,23 @@ const FooterCont = styled.footer`
   }
 `;
 
-const Cont = styled.div`
-  margin-top: 20px;
-
+const LogoCont = styled.div`
   @media (max-width: 1050px) {
     display: none;
   }
+`;
+
+const Cont = styled.div`
+  margin-top: 20px;
 `;
 
 const Footer = () => {
   return (
     <FooterLay>
       <FooterCont>
-        <Cont>
+        <LogoCont>
           <Logo style={{ top: "100px" }} logoWidth="20vw" />
-        </Cont>
+        </LogoCont>
         <Cont>
           <Call2Action text="Blog" link="/blog" />
         </Cont>

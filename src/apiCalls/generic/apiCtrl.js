@@ -27,8 +27,6 @@ const apiCtrl = async ({ url, data, method, config }, success, error) => {
       }
     }
   } catch (err) {
-
-
     error(err);
     return;
   }
