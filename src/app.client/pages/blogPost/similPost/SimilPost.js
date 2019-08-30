@@ -152,12 +152,6 @@ const SimilPost = ({
   }, [device]);
 
   const getSimilHandler = response => {
-    console.log("getSimilHandler response", response); //TODO erase
-    console.log(
-      "getSimilHandler response.data.similArr",
-      response.data.similArr
-    ); //TODO erase
-
     setSimilarArticles([...article.similarPosts, ...response.data.similArr]);
 
     setShowLoading(false);
@@ -171,7 +165,6 @@ const SimilPost = ({
   };
 
   const MoreSimilPostsHandler = () => {
-    console.log("giveme more posts"); //TODO: erase
     setShowLoading(true);
     //api call
 

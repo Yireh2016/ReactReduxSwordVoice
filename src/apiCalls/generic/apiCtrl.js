@@ -1,6 +1,10 @@
 import { apiGet, apiPost, apiPut } from "./apiCalls";
 
-const apiCtrl = async ({ url, data, method, config }, success, error) => {
+const apiCtrl = async (
+  { url, data, method = "get", config },
+  success,
+  error
+) => {
   let response;
 
   const isOnline = navigator.onLine;

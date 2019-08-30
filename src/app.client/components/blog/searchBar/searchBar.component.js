@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 //css
 import "./searchBar.css";
+import { connect } from "react-redux";
 
 const SearchBarCont = styled.div`
   border: ${props =>
@@ -34,9 +35,11 @@ class SearchBar extends React.Component {
   searchHandler = e => {
     const { value } = e.target;
     this.setState({ searchValue: value });
+    this.props.setSearchValue(value);
   };
 
   keyCapture = e => {
+    //enter
     const { keyCode } = e;
 
     if (keyCode === 13) {
@@ -44,6 +47,7 @@ class SearchBar extends React.Component {
       return;
     }
     if (keyCode === 8 && this.state.searchValue === "") {
+      //backspace
       console.log("reset ");
       this.props.onReset();
     }
@@ -99,4 +103,19 @@ class SearchBar extends React.Component {
     );
   }
 }
-export default SearchBar;
+
+const mapActionsToProps = dispatch => {
+  return {
+    setSearchValue: value =>
+      dispatch({ type: "SET_SEARCH_VALUE", payload: value })
+  };
+};
+
+const mapStateToProps = () => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(SearchBar);

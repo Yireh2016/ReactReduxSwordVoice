@@ -44,7 +44,6 @@ import triggerDialog from "../../services/triggerDialog";
 
 //apiCalls
 import getMorePosts from "../../../apiCalls/getMorePosts";
-import searchArticle from "../../apiCalls/searchArticle";
 import searchLastArticles from "../../apiCalls/searchLastArticles";
 import advancedSearchDb from "../../apiCalls/advancedSearchDb";
 import apiCtrl from "../../../apiCalls/generic/apiCtrl";
@@ -84,7 +83,7 @@ const RecentPostCont = styled.section`
   transition: transform 1.5s ease;
 
   transform: ${props => {
-    if (props.scrollTop > window.innerHeight)
+    if (props.scrollTop > window.outerHeight)
       return props.delta < 0 ? "translateY(71px)" : "translateY(0)";
 
     return "translateY(0)";
@@ -435,22 +434,6 @@ class BlogPage extends React.Component {
     }, 1.5 * 1000);
   }
 
-  // componentDidUpdate() {
-  //   console.log("this.asidePostsRef.current", this.asidePostsRef.current);
-
-  //   if (!this.asidePostsRef.current) {
-  //     return;
-  //   }
-  //   const popularPostH = this.asidePostsRef.current.clientHeight;
-
-  //   console.log("componentDidUpdate popularPostH", popularPostH); //TODO erase
-  //   this.setState(prevState => {
-  //     if (prevState.popPostLoadingH !== popularPostH) {
-  //       return { popPostLoadingH: popularPostH };
-  //     }
-  //   });
-  // }
-
   MorePostsHandler = async () => {
     console.log("click more posts");
 
@@ -469,6 +452,46 @@ class BlogPage extends React.Component {
       this.props.setArticlesArr(articlesArr);
     }
     this.setState({ isLoadingPosts: false });
+  };
+
+  SearchMorePostsHandler = async () => {
+    console.log("click search more posts");
+
+    this.setState({ isLoadingPosts: true });
+
+    const successSearch = response => {
+      const arr = response.data.searchArr;
+      this.props.setSearchArr([...this.props.blog.searchArticles, ...arr]);
+      this.setState({ isLoadingPosts: false });
+    };
+
+    const errorSearch = err => {
+      console.log("error finding articles", err);
+      this.setState({ isLoadingPosts: false });
+    };
+
+    apiCtrl(
+      {
+        url: `api/searchArticle?searchValue=${this.props.blog.searchValue}&count=${this.props.blog.searchArticles.length}`
+      },
+      successSearch,
+      errorSearch
+    );
+
+    // const getMorePostsRes = await getMorePosts(
+    //   this.props.blog.articlesCount,
+    //   this.props.blog.articlesArr.length
+    // );
+
+    // console.log("getMorePostsRes", getMorePostsRes);
+    // if (getMorePostsRes.status === "OK") {
+    //   let articlesArr = [
+    //     ...this.props.blog.articlesArr,
+    //     ...getMorePostsRes.articles
+    //   ];
+    //   this.props.setArticlesArr(articlesArr);
+    // }
+    // this.setState({ isLoadingPosts: false });
   };
 
   onFilterIconClick = async filter => {
@@ -626,33 +649,39 @@ class BlogPage extends React.Component {
 
   onSearch = async value => {
     console.log("onSearch value ", value);
-    const searchArticleRes = await searchArticle(value);
 
-    if (searchArticleRes.statusText === "OK") {
-      this.props.setArticlesCount(searchArticleRes.searchArr.length);
-      this.props.setArticlesArr([
-        this.props.blog.articlesArr[0],
-        ...searchArticleRes.searchArr
-      ]);
-      return;
-    }
+    const successSearch = response => {
+      const arr = response.data.searchArr;
+      this.props.setSearchArr(arr);
+      this.props.setSearchCount(response.data.searchCount);
+    };
 
-    console.log("error finding articles", searchArticleRes.statusText);
+    const errorSearch = err => {
+      console.log("error finding articles", err);
+    };
+
+    const searchObj = {
+      url: `api/searchArticle?searchValue=${value}&count=${this.props.blog.searchCount}`
+    };
+    apiCtrl(searchObj, successSearch, errorSearch);
   };
 
   onSearchBarReset = async () => {
-    const searchLastArticlesRes = await searchLastArticles();
+    this.props.setSearchCount(0);
+    this.props.setSearchArr([]);
 
-    if (searchLastArticlesRes.statusText === "OK") {
-      this.props.setArticlesCount(searchLastArticlesRes.articlesTotalCount);
-      this.props.setArticlesArr(searchLastArticlesRes.articlesArr);
-      return;
-    }
+    // const searchLastArticlesRes = await searchLastArticles();
 
-    console.log(
-      "error finding last articles",
-      searchLastArticlesRes.statusText
-    );
+    // if (searchLastArticlesRes.statusText === "OK") {
+    //   this.props.setSearchCount(0);
+    //   this.props.setSearchArr([]);
+    //   return;
+    // }
+
+    // console.log(
+    //   "error finding last articles",
+    //   searchLastArticlesRes.statusText
+    // );
   };
 
   onAdvancedSearchClick = () => {
@@ -685,9 +714,10 @@ class BlogPage extends React.Component {
   };
   render() {
     const { mainPostH, searchTranslateX } = this.state;
-    let { articlesArr, popularArticlesArr } = this.props.blog;
+    let { articlesArr, popularArticlesArr, searchArticles } = this.props.blog;
     let popPostsArray;
     let recentPostsArray;
+
     let newPostArray;
     if (articlesArr.length === 0) {
       articlesArr = [
@@ -984,6 +1014,66 @@ class BlogPage extends React.Component {
           })
         : null;
 
+    // const searchPostCards = null;
+
+    const searchPostCards =
+      searchArticles.length > 0
+        ? searchArticles.map((post, i) => {
+            const {
+              title,
+              postGradient,
+              keywords,
+              author,
+              date,
+              url,
+              summaryTextHtml
+            } = post;
+
+            let postImg = {
+              backgroundImage: post.postImg.replace(
+                `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                `${post.postImg
+                  .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                  .replace(".", "_tablet.")}`
+              ),
+              "@media (max-width:700px)": {
+                backgroundImage: post.postImg.replace(
+                  `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
+                  `${post.postImg
+                    .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
+                    .replace(".", "_mobile.")}`
+                )
+              }
+            };
+
+            let avatar;
+            if (typeof post.avatar === "object") {
+              avatar = JSON.stringify(post.avatar);
+            } else if (typeof post.avatar === "string") {
+              avatar = post.avatar;
+            }
+
+            // console.log("postH", postH);
+            return (
+              <RecentPostCardCont key={i}>
+                <PostCard
+                  id={`PostCard${i}`}
+                  postH={parseInt(mainPostH) * 0.8}
+                  hasSummary={true}
+                  title={title}
+                  postImg={postImg}
+                  postGradient={postGradient}
+                  keywords={keywords}
+                  author={author}
+                  date={date}
+                  url={`/blog/post/${url}`}
+                  avatar={avatar}
+                  summaryTextHtml={summaryTextHtml}
+                />
+              </RecentPostCardCont>
+            );
+          })
+        : null;
     const lastPost =
       newPostArray.length > 0
         ? newPostArray.map((post, i) => {
@@ -1220,30 +1310,57 @@ class BlogPage extends React.Component {
             </div>
           </RecentPostCont>
 
-          <section
-            id="recentPostContainer"
-            style={{
-              display: "flex",
-              flexDirection: "column"
-            }}
-          >
-            <div id="recentPostLayout" style={styles.recentPostLayout}>
-              {recentPostCards}
-            </div>
+          {this.props.blog.searchCount === 0 ? (
+            <section
+              id="recentPostContainer"
+              style={{
+                display: "flex",
+                flexDirection: "column"
+              }}
+            >
+              <div id="recentPostLayout" style={styles.recentPostLayout}>
+                {recentPostCards}
+              </div>
 
-            {this.props.blog.articlesCount >
-              this.props.blog.articlesArr.length && (
-              <MorePostsCont>
-                <MorePosts
-                  onClick={this.MorePostsHandler}
-                  id="MorePosts"
-                  noPadding={this.state.isLoadingPosts}
-                >
-                  {this.state.isLoadingPosts ? <Loading /> : "More Posts..."}
-                </MorePosts>
-              </MorePostsCont>
-            )}
-          </section>
+              {this.props.blog.articlesCount >
+                this.props.blog.articlesArr.length && (
+                <MorePostsCont>
+                  <MorePosts
+                    onClick={this.MorePostsHandler}
+                    id="MorePosts"
+                    noPadding={this.state.isLoadingPosts}
+                  >
+                    {this.state.isLoadingPosts ? <Loading /> : "More Posts..."}
+                  </MorePosts>
+                </MorePostsCont>
+              )}
+            </section>
+          ) : (
+            <section
+              id="searchtPostContainer"
+              style={{
+                display: "flex",
+                flexDirection: "column"
+              }}
+            >
+              <div id="searchPostLayout" style={styles.recentPostLayout}>
+                {searchPostCards}
+              </div>
+
+              {this.props.blog.searchCount >
+                this.props.blog.searchArticles.length && (
+                <MorePostsCont>
+                  <MorePosts
+                    onClick={this.SearchMorePostsHandler}
+                    id="MoreSearchPosts"
+                    noPadding={this.state.isLoadingPosts}
+                  >
+                    {this.state.isLoadingPosts ? <Loading /> : "More Posts..."}
+                  </MorePosts>
+                </MorePostsCont>
+              )}
+            </section>
+          )}
         </TwoColumnAside>
       </React.Fragment>
     );
@@ -1264,7 +1381,11 @@ const mapDispachToProps = dispatch => {
       dispatch({ type: "SET_ARTICLES_COUNT", payload: count }),
     setPopularArr: arr => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
     setFilter: filter =>
-      dispatch({ type: "SET_POPULAR_FILTER", payload: filter })
+      dispatch({ type: "SET_POPULAR_FILTER", payload: filter }),
+    setSearchArr: arr =>
+      dispatch({ type: "SET_SEARCH_ARTICLES", payload: arr }),
+    setSearchCount: count =>
+      dispatch({ type: "SET_SEARCH_COUNT", payload: count })
   };
 };
 

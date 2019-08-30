@@ -17,6 +17,9 @@ import getPopularPosts from "../../../app.server/controllers/queries/getPopularP
 import searchLastArticlesQuery from "../../../common/queries/searchLastArticlesQuery";
 import searchSimilarArticles from "../../../common/queries/searchSimilarArticles";
 
+//redux store
+import { store } from "../../../app.redux.store/store/configStore";
+
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");
 
@@ -405,19 +408,29 @@ export const filterPopularCtrl = (req, res) => {
 };
 
 export const searchArticleCtrl = (req, res) => {
-  const { searchValue } = req.query;
+  const { searchValue, count } = req.query;
   const errHandler = err => {
     console.log("searchArticleCtrl err", err);
     res.status(404).json(err);
   };
 
   const successHandler = arr => {
-    res.status(200).send({ status: "OK", searchArr: arr });
+    articleModel
+      .find({ $text: { $search: `${searchValue}` } })
+      .countDocuments((err, searchCount) => {
+        if (err) {
+          console.log("err", err); //TODO erase
+          errFn(err); //FIXME errFn not exist
+          return;
+        }
+
+        res.status(200).send({ status: "OK", searchArr: arr, searchCount });
+      });
   };
 
   searchSimilarArticles(
     articleModel,
-    0,
+    { count: parseInt(count) },
     searchValue,
     successHandler,
     errHandler

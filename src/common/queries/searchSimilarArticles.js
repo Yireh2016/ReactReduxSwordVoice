@@ -9,15 +9,19 @@ const searchSimilarArticles = (
   successFn,
   errFn
 ) => {
-  const query = {
-    $and: [
-      {
-        _id: { $ne: articlesShown.id },
+  const query = articlesShown.id
+    ? {
+        $and: [
+          {
+            _id: { $ne: articlesShown.id },
+            $text: { $search: `${searchValue}` }
+          },
+          { isPublished: true }
+        ]
+      }
+    : {
         $text: { $search: `${searchValue}` }
-      },
-      { isPublished: true }
-    ]
-  };
+      };
 
   const options = {
     score: { $meta: "textScore" }
@@ -31,7 +35,7 @@ const searchSimilarArticles = (
     })
     .sort({ score: { $meta: "textScore" } })
     .skip(articlesShown.count)
-    .limit(3)
+    .limit(3) // FIXME change it to 7
     .exec()
     .then(posts => {
       console.log("similar posts limited", posts);
