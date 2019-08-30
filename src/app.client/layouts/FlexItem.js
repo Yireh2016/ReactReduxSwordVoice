@@ -38,8 +38,7 @@ const Item = styled.div`
     }
   }};
 
-  @media (min-width: 700px) {
-    margin: 20px;
+  @media (max-width: 700px) {
     padding: 0px;
   }
 `;

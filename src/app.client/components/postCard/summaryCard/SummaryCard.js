@@ -21,18 +21,6 @@ const Article = styled.article`
   }
 `;
 
-const Avatar = styled.div`
-  @media (max-width: 1050px) {
-    width: px;
-    height: 35px;
-  }
-
-  @media (max-width: 700px) {
-    width: 35px;
-    height: 35px;
-  }
-`;
-
 class SummaryCard extends React.Component {
   constructor(props) {
     super(props);
@@ -106,7 +94,7 @@ class SummaryCard extends React.Component {
         >
           🕮 Summary
         </h2>
-        <section
+        <div
           data-simplebar
           id={`${this.props.id}` + "summaryContent"}
           style={
@@ -122,7 +110,7 @@ class SummaryCard extends React.Component {
           }
         >
           <Article>{ReactHtmlParser(summaryTextHtml)}</Article>
-        </section>
+        </div>
         <section
           id={`${this.props.id}` + "cardFooter"}
           style={{

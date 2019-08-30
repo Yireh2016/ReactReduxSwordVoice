@@ -401,6 +401,7 @@ class BlogPage extends React.Component {
         break;
 
       case "phone":
+        asidePostW = 11;
         postH = (windowWidth * 1) / 1.028;
         break;
 

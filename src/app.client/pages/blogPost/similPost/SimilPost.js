@@ -6,7 +6,6 @@ import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to us
 
 //components
 import PostCard from "../../../components/postCard/PostCard";
-import blogReducer from "../../../../app.redux.store/store/reducer/blogReducer";
 import Loading from "../../../components/loading/loading";
 
 //api Calls

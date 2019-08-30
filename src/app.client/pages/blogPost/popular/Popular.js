@@ -138,7 +138,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
       }
 
       default: {
-        const PostWidth = ((window.outerWidth * 12) / 12) * 0.65;
+        const PostWidth = ((window.outerWidth * 12) / 12) * 0.8;
 
         setPopWidth(PostWidth * blog.popularArticlesArr.length);
 
