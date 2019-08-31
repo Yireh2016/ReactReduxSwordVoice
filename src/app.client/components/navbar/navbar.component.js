@@ -658,12 +658,7 @@ class NavBar extends Component {
               id="menu-desplegable"
               style={{ transform: this.state.menuVisible }}
             >
-              <div
-                onClick={() => {
-                  this.handleClick();
-                }}
-                className="desplegable-equis"
-              >
+              <div onClick={this.handleClick} className="desplegable-equis">
                 <svg viewBox="0 0 64 64" fill="none">
                   <rect
                     width="45"
@@ -738,7 +733,10 @@ class NavBar extends Component {
                         className="avatarMenu"
                         onClick={this.onAvatarClick}
                         style={{
-                          backgroundImage: `url('${this.props.loggedUserAvatar}`
+                          backgroundImage: `url('${this.props.loggedUserAvatar.replace(
+                            "_big",
+                            "_small"
+                          )}`
                         }}
                       />
                       <div className="desplegable-login">

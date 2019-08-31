@@ -35,10 +35,10 @@ server.use(passport.initialize());
 //routes
 server.use("/api", routerAPI);
 server.get("/cms*", cms);
-server.get("/", (req, res) => {
-  res.redirect("/home");
+server.get("/", swordvoiceWeb);
+server.get("/home", (req, res) => {
+  res.redirect("/");
 });
-server.get("/home", swordvoiceWeb);
 server.get("/about", swordvoiceWeb);
 server.get("/contact", swordvoiceWeb);
 server.get("/courses", swordvoiceWeb);
