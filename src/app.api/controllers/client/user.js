@@ -3,6 +3,7 @@ import passport from "passport";
 import axios from "axios";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import uuid from "uuid/v1";
 
 //apiCalls
 import uploadAvatar from "../../../apiCalls/uploadAvatar";
@@ -12,6 +13,7 @@ import {
   deleteCookie
 } from "../../services/serverCookieManager";
 import { readToken } from "../../services/tokenHandler";
+import sendUserVerificationCode from "../../services/sendUserVerificationCode";
 
 let usersModel = mongoose.model("User");
 
@@ -38,7 +40,6 @@ export const signUpCtrl = async (req, res) => {
   }
   //en caso de que no se suba avatar ninguno almaceno un buffer vacio en la DB
 
-  console.log("all required fields are CORRECT");
   let uploadAvatarRes;
   if (userData.userAvatar) {
     uploadAvatarRes = await uploadAvatar(
@@ -54,7 +55,14 @@ export const signUpCtrl = async (req, res) => {
     userData.userAvatar = "";
   }
 
-  userData = { ...userData, _id: mongoose.Types.ObjectId() };
+  const userVerificationCode = uuid();
+
+  userData = {
+    ...userData,
+    _id: mongoose.Types.ObjectId(),
+    userVerificationCode
+  };
+
   let user = new usersModel(userData);
 
   user.setPassword(userData.userPassword);
@@ -68,6 +76,11 @@ export const signUpCtrl = async (req, res) => {
         message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
       });
     } else {
+      sendUserVerificationCode(userVerificationCode, {
+        firstName: userData.userFirstName,
+        email: userData.userEmail
+      });
+
       try {
         await sessionCookie(req, res, {
           userName: savedUser.userName,
@@ -75,6 +88,7 @@ export const signUpCtrl = async (req, res) => {
           userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
           userType: savedUser.userType
         });
+
         const responseUserData = {
           id: savedUser._id,
           userName: savedUser.userName,
@@ -191,9 +205,7 @@ export const sendUserTempImageCtrl = (req, res) => {
     .post(`${process.env.CDN_URL}/cdn/sendUserImage`, data)
     .then(sendRes => {
       if (sendRes.status === 200) {
-        res
-          .status(200)
-          .json({ status: "OK", filename: sendRes.data.filename });
+        res.status(200).json({ status: "OK", filename: sendRes.data.filename });
       }
     })
     .catch(err => {
@@ -207,8 +219,8 @@ export const signUpEmailConfirmCtrl = (req, res) => {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     let testAccount = {
-      user: "noreply@swordvoice.com",
-      pass: "mcalvetti1111Qqqqq"
+      user: "jainer@swordvoice.com",
+      pass: "J0MCalv3tt5."
     };
 
     // create reusable transporter object using the default SMTP transport
@@ -241,7 +253,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
     });
 
     let info = await transporter.sendMail({
-      from: '"Swordvoice" <noreply@swordvoice.com>', // sender address
+      from: '"Swordvoice" <jainer@swordvoice.com>', // sender address
       to: "jainer.calvetti@gmail.com", // list of receivers
       subject: "Hello ✔", // Subject line
       text: "Hello world?", // plain text body

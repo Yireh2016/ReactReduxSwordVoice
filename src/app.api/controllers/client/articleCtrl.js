@@ -18,7 +18,6 @@ import searchLastArticlesQuery from "../../../common/queries/searchLastArticlesQ
 import searchSimilarArticles from "../../../common/queries/searchSimilarArticles";
 
 //redux store
-import { store } from "../../../app.redux.store/store/configStore";
 
 const articleModel = mongoose.model("Article");
 const userModel = mongoose.model("User");

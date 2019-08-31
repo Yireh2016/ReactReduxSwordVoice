@@ -509,6 +509,7 @@ class Dashboard extends Component {
                       backgroundSize: "cover",
                       borderRadius: "100%"
                     }}
+                    alt="User Avatar"
                   />
                 </div>
               </div>
