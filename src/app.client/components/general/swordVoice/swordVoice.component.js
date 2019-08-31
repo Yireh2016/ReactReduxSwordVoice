@@ -3,7 +3,7 @@ import React from "react";
 //css
 import "./swordVoice.css";
 
-const SwordVoice = props => (
+const SwordVoice = ({ delay }) => (
   <svg
     className="swordVoice"
     viewBox="0 0 1123 226"
@@ -22,7 +22,7 @@ const SwordVoice = props => (
     <g clipPath="url(#clip-s)">
       <path
         style={{
-          animation: `animS 0.2s linear forwards ${props.delay}s`
+          animation: `animS 0.2s linear forwards ${delay}s`
         }}
         id="S"
         d="M89.5 84.5005C89.5 84.5005 112 37.9071 102 30.5001C92 23.093 -15 54.5 42.5 93.4996C100 132.499 95.2904 121.035 102 133C114.998 156.179 96 163 92 171C88 179 13.5 210.5 13.5 162L16.5 120.5"
@@ -32,7 +32,7 @@ const SwordVoice = props => (
       <path
         id="w"
         style={{
-          animation: `animW 0.2s linear forwards ${props.delay + 0.2}s`
+          animation: `animW 0.2s linear forwards ${delay + 0.2}s`
         }}
         d="M162 59L171 191.5L226.5 49L209.5 214L249.5 104.5L291.5 49"
         strokeWidth="22"
@@ -42,7 +42,7 @@ const SwordVoice = props => (
 
       <path
         style={{
-          animation: `animO 0.2s linear forwards ${props.delay + 0.2 * 2}s`
+          animation: `animO 0.2s linear forwards ${delay + 0.2 * 2}s`
         }}
         id="o1"
         d="M356.5 83C395.501 121.491 382.505 141.666 343.5 177C317.62 192.185 307.177 192.572 301 168.5C301.814 122.792 312.19 104.877 340.5 80.5C368.505 68.6171 392.5 68.5 392.5 68.5"
@@ -52,16 +52,14 @@ const SwordVoice = props => (
       <g id="r">
         <path
           style={{
-            animation: `animR1 0.1s linear forwards ${props.delay + 0.2 * 3}s`
+            animation: `animR1 0.1s linear forwards ${delay + 0.2 * 3}s`
           }}
           d="M448.5 47.5C425.5 111.5 421 215.5 421 215.5"
           strokeWidth="22"
         />
         <path
           style={{
-            animation: `animR2 0.1s linear forwards ${props.delay +
-              0.2 * 3 +
-              0.1}s`
+            animation: `animR2 0.1s linear forwards ${delay + 0.2 * 3 + 0.1}s`
           }}
           d="M425 127C449.288 91.017 466.233 71.8886 491.5 48L472.5 118.5"
           strokeWidth="22"
@@ -73,7 +71,7 @@ const SwordVoice = props => (
       <g id="d">
         <path
           style={{
-            animation: `animD1 0.1s linear forwards ${props.delay + 0.2 * 4}s`
+            animation: `animD1 0.1s linear forwards ${delay + 0.2 * 4}s`
           }}
           // animation: animD1 0.1s linear forwards 3.8s;
           d="M585 0C585 56.5 576.091 143.159 561.5 212.5"
@@ -82,9 +80,7 @@ const SwordVoice = props => (
 
         <path
           style={{
-            animation: `animD2 0.1s linear forwards ${props.delay +
-              0.2 * 4 +
-              0.1}s`
+            animation: `animD2 0.1s linear forwards ${delay + 0.2 * 4 + 0.1}s`
           }}
           d="M598 168.5C536.739 192.172 513.868 194.009 512 158.5C525.483 102.816 548.389 92.1852 602.5 91"
           strokeWidth="24"
@@ -94,7 +90,7 @@ const SwordVoice = props => (
       <path
         id="V"
         style={{
-          animation: `animV 0.2s linear forwards ${props.delay + 0.2 * 5}s`
+          animation: `animV 0.2s linear forwards ${delay + 0.2 * 5}s`
         }}
         d="M634.5 22C634.5 93 631.5 114 644 201L669 108C681.993 69.9098 690.88 49.9016 725.5 30"
         strokeWidth="23"
@@ -102,7 +98,7 @@ const SwordVoice = props => (
       <path
         id="o2"
         style={{
-          animation: `animO 0.2s linear forwards ${props.delay + 0.2 * 6}s`
+          animation: `animO 0.2s linear forwards ${delay + 0.2 * 6}s`
         }}
         d="M781.5 84.5C820.501 122.991 807.505 143.166 768.5 178.5C742.62 193.685 732.177 194.072 726 170C726.814 124.292 737.19 106.377 765.5 82C793.505 70.1171 817.5 70 817.5 70"
         strokeWidth="26"
@@ -112,7 +108,7 @@ const SwordVoice = props => (
         id="i"
         d="M863 64L841.5 210.5"
         style={{
-          animation: `animI 0.2s linear forwards ${props.delay + 0.2 * 7}s`
+          animation: `animI 0.2s linear forwards ${delay + 0.2 * 7}s`
         }}
         strokeWidth="22"
       />
@@ -120,7 +116,7 @@ const SwordVoice = props => (
       <path
         id="c"
         style={{
-          animation: `animC 0.2s linear forwards ${props.delay + 0.2 * 8}s`
+          animation: `animC 0.2s linear forwards ${delay + 0.2 * 8}s`
         }}
         d="M987.5 43L967 106.5C952.905 75.8568 941.249 77.9013 914 113.5C904 141.5 902.023 153.904 911 177.5C929.067 186.78 938.393 188.622 954 180L990.5 137"
         strokeWidth="22"
@@ -130,7 +126,7 @@ const SwordVoice = props => (
       <g id="e">
         <line
           style={{
-            animation: `animE1 0.05s linear forwards ${props.delay + 0.2 * 9}s`
+            animation: `animE1 0.05s linear forwards ${delay + 0.2 * 9}s`
           }}
           x1="1010.77"
           y1="133.753"
@@ -140,18 +136,14 @@ const SwordVoice = props => (
         />
         <path
           style={{
-            animation: `animE2 0.08s linear forwards ${props.delay +
-              0.2 * 9 +
-              0.05}s`
+            animation: `animE2 0.08s linear forwards ${delay + 0.2 * 9 + 0.05}s`
           }}
           d="M1039.52 122.921L1113.5 96.0005"
           strokeWidth="15"
         />
         <path
           style={{
-            animation: `animE3 0.07s linear forwards ${props.delay +
-              0.2 * 9 +
-              0.13}s`
+            animation: `animE3 0.07s linear forwards ${delay + 0.2 * 9 + 0.13}s`
           }}
           d="M1106.5 96.0006C1081.75 61.3369 1062.7 68.9269 1039 123C1034.47 147.289 1034.17 159.535 1039 178C1051.73 192.161 1060.59 191.061 1078.5 178L1108.5 147"
           strokeWidth="28"
@@ -162,8 +154,7 @@ const SwordVoice = props => (
 
       <line
         style={{
-          animation: `animPunto 0.02s linear forwards ${props.delay +
-            0.2 * 11}s`
+          animation: `animPunto 0.02s linear forwards ${delay + 0.2 * 11}s`
         }}
         id="punto"
         x1="861.262"
