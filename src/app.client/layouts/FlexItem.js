@@ -39,7 +39,7 @@ const Item = styled.div`
   }};
 
   @media (max-width: 700px) {
-    padding: 0px;
+    padding: 10px;
   }
 `;
 
