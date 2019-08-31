@@ -51,7 +51,7 @@ class NavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      menuVisible: null,
+      menuVisible: "translateX(100%)",
       menuIsOpaque: null,
       navBarMarginTop: "20",
       navBarBackgroundOnScroll: "transparent",
@@ -116,10 +116,10 @@ class NavBar extends Component {
     }
   };
 
-  handleClick() {
+  handleClick = () => {
     if (this.state.menuVisible === "translateX(0)") {
       this.setState({
-        menuVisible: null,
+        menuVisible: "translateX(100%)",
         tempUnmount: false
       });
 
@@ -129,7 +129,7 @@ class NavBar extends Component {
       tempUnmount: true,
       menuVisible: "translateX(0)"
     });
-  }
+  };
 
   logoClickHandler() {
     window.location.href = "./home";
@@ -335,7 +335,6 @@ class NavBar extends Component {
       }
     }
 
-    let isVisible = this.state.menuVisible;
     const menu = [
       {
         nombre: "🏠 Home"
@@ -608,7 +607,7 @@ class NavBar extends Component {
 
           <div id="menu-smallest" className="grid col-5">
             <svg
-              onClick={() => this.handleClick()}
+              onClick={this.handleClick}
               id="hamburger"
               className="enlace"
               width="46"
@@ -655,7 +654,10 @@ class NavBar extends Component {
           </div>
 
           {this.state.endOfAnimation && (
-            <div id="menu-desplegable" style={{ transform: isVisible }}>
+            <div
+              id="menu-desplegable"
+              style={{ transform: this.state.menuVisible }}
+            >
               <div
                 onClick={() => {
                   this.handleClick();
