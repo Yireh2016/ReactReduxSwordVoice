@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   display: inline-block;
-  position: relative;
 `;
 
 const Container = styled.div`
@@ -29,7 +28,6 @@ const Container = styled.div`
   /* justify-content: center; */
 `;
 const DropDown = styled.div`
-  position: absolute;
   top: 37px;
   left: 0;
 
@@ -103,6 +101,7 @@ const MultiBtn = ({ options, clickHandler }) => {
   //handlers
 
   const dropOtionHandler = value => {
+    clickHandler(value);
     setOption(value);
     setShowDropDown(false);
   };

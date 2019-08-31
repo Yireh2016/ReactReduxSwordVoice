@@ -186,7 +186,7 @@ aside h2 {
     font-size: 1.4rem;
   }
   .summaryTextScroll > div:nth-child(2) {
-    height: auto !important;
+    height: initial !important;
   }
   .summaryTextBlogPost {
     font-size: calc(1.3rem * 0.8);
@@ -218,7 +218,7 @@ aside h2 {
     margin-top: -14.3px;
   }
   .blogPostTitleText {
-    height: auto;
+    height: initial;
   }
   .blogPostTitleText h1 {
     letter-spacing: 3.7px;

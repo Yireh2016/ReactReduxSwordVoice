@@ -11,7 +11,7 @@ const FooterLay = styled.footer`
   position: relative;
 
   @media (max-width: 1050px) {
-    height: auto;
+    height: initial;
   }
 `;
 const FooterCont = styled.footer`

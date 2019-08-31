@@ -497,16 +497,17 @@ class Dashboard extends Component {
                   Welcome <span>{this.props.loggedUserName}</span>
                 </p>
                 <div>
-                  <div
+                  <img
                     className="dashAvatarImg"
+                    src={
+                      this.props.loggedUserAvatar
+                        ? `${this.props.loggedUserAvatar}`
+                        : "none"
+                    }
                     style={{
                       backgroundPosition: "center center",
                       backgroundSize: "cover",
-                      borderRadius: "100%",
-
-                      backgroundImage: this.props.loggedUserAvatar
-                        ? `url('${this.props.loggedUserAvatar}`
-                        : "none"
+                      borderRadius: "100%"
                     }}
                   />
                 </div>

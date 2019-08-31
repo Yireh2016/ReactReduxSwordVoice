@@ -296,7 +296,7 @@
 
   .interestsCont input {
     width: auto;
-    height: auto;
+    height: initial;
   }
   .controlButtons {
     bottom: calc(-50px - 3vh);

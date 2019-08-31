@@ -193,7 +193,7 @@
     font-size: 5.5vw;
   }
   .newPost {
-    height: auto;
+    height: initial;
     background-image: none;
   }
   .newPostTitleCont {
@@ -239,7 +239,7 @@
     margin-top: 1em;
   }
   .footerBlogLayoutContainer {
-    height: auto;
+    height: initial;
   }
   .recentPostLayoutContainer,
   .recentPostContainer {
@@ -316,7 +316,7 @@
   }
   .newPost {
     margin-top: -14.4px;
-    height: auto;
+    height: initial;
   }
   .newPostTitleCont {
     border-radius: 15vw 0 0 0;

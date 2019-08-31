@@ -51,7 +51,7 @@ const LeftAside = styled.div`
   @media (max-width: 700px) {
     justify-content: normal;
     overflow: hidden;
-    height: auto;
+    height: initial;
     margin: -3vh 0 0 0;
   }
 `;
@@ -83,7 +83,7 @@ const RightAside = styled.div`
   @media (max-width: 1050px) {
     width: calc(12 * 100% / 12);
     position: fixed;
-    height: auto;
+    height: initial;
     bottom: 0px;
     padding: 15px 0;
     background: rgba(23, 43, 51, 0.5);
@@ -128,7 +128,7 @@ const BackgroundCont = styled.div`
 
   @media (max-width: 1050px) {
     left: -1vw;
-    height: auto;
+    height: initial;
     img {
       width: auto;
       height: calc(100vh - 82px);

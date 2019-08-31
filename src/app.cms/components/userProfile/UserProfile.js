@@ -36,7 +36,7 @@ const UserProfileView = styled.div`
 
   @media (max-width: 700px) {
     display: block;
-    height: auto;
+    height: initial;
   }
 `;
 
@@ -46,7 +46,7 @@ const FormLayout = styled.div`
   height: calc(100% - 40px);
 
   @media (max-width: 700px) {
-    height: auto;
+    height: initial;
     padding: 0;
   }
 `;

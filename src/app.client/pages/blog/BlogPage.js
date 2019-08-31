@@ -163,7 +163,7 @@ const styles = {
   footer: {
     layout: {
       "@media (max-width: 1050px)": {
-        display: "none"
+        paddingBottom: "20px"
       }
     }
   },
@@ -288,17 +288,24 @@ const Icon = styled.span`
 `;
 
 const AsidePostsCont = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   white-space: normal;
   overflow-x: hidden;
+
+  .simplebar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   > div {
     margin-bottom: 40px;
   }
 
   @media (max-width: 1050px) {
+    .simplebar-content {
+      display: block;
+    }
+
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
@@ -872,30 +879,7 @@ class BlogPage extends React.Component {
         <div id="asideContainer" style={{ position: "sticky", top: "5vmin" }}>
           <div id="asideLayout" style={styles.popularPostLayout}>
             <section>
-              <div
-                style={[
-                  styles.layout.fullCenter,
-                  styles.layout.flex,
-                  styles.layout.flexColumn,
-                  styles.footer.layout
-                ]}
-              >
-                <Call2Action
-                  className="call2ActionBlog"
-                  text="Courses"
-                  link="https://udemy.com"
-                  target="blank"
-                />
-                <FooterApp
-                  estilos="appear footer-blog "
-                  size="redesSociales-blog"
-                />
-              </div>
-
-              <div
-                // data-simplebar
-                style={[styles.aside.layout, styles.layout.flexColumn]}
-              >
+              <div style={[styles.aside.layout, styles.layout.flexColumn]}>
                 <h3 style={styles.aside.title}>Popular Posts</h3>
 
                 <FilterLayout>
@@ -949,6 +933,26 @@ class BlogPage extends React.Component {
                     {asidePosts}
                   </AsidePostsCont>
                 )}
+              </div>
+
+              <div
+                style={[
+                  styles.layout.fullCenter,
+                  styles.layout.flex,
+                  styles.layout.flexColumn,
+                  styles.footer.layout
+                ]}
+              >
+                <Call2Action
+                  className="call2ActionBlog"
+                  text="Courses"
+                  link="https://udemy.com"
+                  target="blank"
+                />
+                <FooterApp
+                  estilos="appear footer-blog "
+                  size="redesSociales-blog"
+                />
               </div>
             </section>
           </div>

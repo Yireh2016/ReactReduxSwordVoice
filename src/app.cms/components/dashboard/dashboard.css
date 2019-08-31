@@ -10,7 +10,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
+  min-height: 100vh;
   /* transform: translateX(-100%); */
   transition: all ease 500ms;
   background-color: #1a2225;
@@ -160,30 +160,9 @@
   .mainToogleMenu {
     opacity: 1;
   }
-  /* .dashAvatarImg {
-    height: 50px;
-    width: 50px;
+  .dashMainOpaque {
+    display: none;
   }
-
-  .dashCreatePost button,
-  .dashLogOut button {
-    padding: 10px;
-    border-radius: 10px;
-    font-size: 0.6rem;
-  }
-
-  .dashMenu {
-    flex-grow: 1;
-    padding: 20px 10px;
-    text-align: start;
-  }
-  .dashMenu p {
-    font-size: 0.6rem;
-  }
-
-  .dashMenu img {
-    width: 15%;
-  } */
 }
 
 @media (max-width: 700px) {
@@ -192,8 +171,5 @@
   }
   .dashMain {
     overflow-y: scroll;
-  }
-  .dashMainOpaque {
-    display: none;
   }
 }

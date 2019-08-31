@@ -41,10 +41,6 @@ const Nav = styled.nav`
 const ContactSvg = styled.img`
   width: 34px;
   margin: 0 8px 0 0;
-  @media (min-width: 700px) {
-    width: 53px;
-    margin: 0 12px 0 0;
-  }
 `;
 
 class NavBar extends Component {
@@ -729,15 +725,13 @@ class NavBar extends Component {
                 <div className="grid col-6-md col-6-sm avatarMenuLayout">
                   {this.props.isUserLoggedIn && (
                     <div className="avatarMenuContainer">
-                      <div
+                      <img
                         className="avatarMenu"
                         onClick={this.onAvatarClick}
-                        style={{
-                          backgroundImage: `url('${this.props.loggedUserAvatar.replace(
-                            "_big",
-                            "_small"
-                          )}`
-                        }}
+                        src={`${this.props.loggedUserAvatar.replace(
+                          "_big",
+                          "_small"
+                        )}`}
                       />
                       <div className="desplegable-login">
                         <p>
