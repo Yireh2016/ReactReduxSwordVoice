@@ -14,6 +14,7 @@ import UploadImage from "./uploadImage";
 import blobToBase64 from "../../../../../services/blobToBase64";
 import UserManageForm from "../../../../layouts/UserManageForm";
 //components
+import Loading from "../../../loading/loading";
 //api calls
 
 const Layout = styled.div`
@@ -64,7 +65,8 @@ class SignUpForm extends Component {
       animControl2: undefined,
       animControl3: undefined,
       formPage: 1,
-      layoutH: 0
+      layoutH: 0,
+      isSubmitLoading: false
     };
     this.formLayoutRef = React.createRef();
   }
@@ -493,36 +495,29 @@ class SignUpForm extends Component {
       //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
       // const sessionID = uuid();
       // data = { ...data, userSessionId: sessionID };
+
+      this.setState({
+        isSubmitLoading: true
+      });
       axios
         .post("/api/signup", data)
         .then(this.handleErrors) //en caso de error se emite con este handler para que el cacth lo tome
         .then(res => {
           if (res.status === 200) {
-            //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
-
-            const userData = res.data;
-
-            console.log("userAvatar on signupform", userData.userAvatar);
-
-            this.props.onLogIn({
-              //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
-
-              userName: userData.userName,
-              userID: userData.id,
-              userType: userData.userType,
-              userAvatar: userData.userAvatar,
-              userFullName: `${userFirstName} ${userLastName}`
+            this.setState({
+              isSubmitLoading: false
             });
             triggerDialog(
               {
                 title: "Way to Go!! 😁",
-                body: `Welcome to our Comunity ${userName}`,
-                auto: true
+                body: `We've sent you a validation email; Please, check your inbox or SPAM email folder. Did we mentioned you to check your SPAM folder already?... oh!!! sorry 😅`
               },
               () => {
                 this.props.onCancelClick();
               }
             );
+
+            //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
           } else {
             triggerDialog({
               title: "Ups 😅",
@@ -597,7 +592,7 @@ class SignUpForm extends Component {
                 onClick={this.onSubmitClick}
                 type="button"
               >
-                Submit
+                {!this.state.isSubmitLoading ? "Submit" : <Loading></Loading>}
               </button>
             ) : (
               <button

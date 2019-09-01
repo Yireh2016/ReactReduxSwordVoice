@@ -199,7 +199,7 @@ style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding
 valign="top">
 <a href="https://www.facebook.com/SwordVoice/" 
 target="_blank"><img alt="Facebook" 
-width="15" src="https://cdn.swordvoice.com/templates/facebook.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/facebook.svg" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Facebook" width="32"/></a></td>
 <td 
 style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 

@@ -49,7 +49,6 @@ export const signUpCtrl = async (req, res) => {
   }
 
   if (uploadAvatarRes && uploadAvatarRes.status === "OK") {
-    console.log("uploadAvatarRes.avatarURL", uploadAvatarRes.avatarURL);
     userData.userAvatar = uploadAvatarRes.avatarURL;
   } else {
     userData.userAvatar = "";
@@ -76,31 +75,45 @@ export const signUpCtrl = async (req, res) => {
         message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
       });
     } else {
-      sendUserVerificationCode(userVerificationCode, {
-        firstName: userData.userFirstName,
-        email: userData.userEmail
-      });
-
       try {
-        await sessionCookie(req, res, {
-          userName: savedUser.userName,
-          id: savedUser._id,
-          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
-          userType: savedUser.userType
+        await sendUserVerificationCode(userVerificationCode, {
+          firstName: userData.userFirstName,
+          email: userData.userEmail
         });
 
-        const responseUserData = {
-          id: savedUser._id,
-          userName: savedUser.userName,
-          userType: savedUser.userType,
-          userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
-          userAvatar: savedUser.userAvatar
-        };
-        console.log("sending responseUserData signup[] ", responseUserData);
-        res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
-      } catch (err) {
-        console.log("err on user catch on login", err);
+        res.status(200).json({
+          code: 200,
+          message: `Verification email sent`
+        });
+      } catch (error) {
+        res.status(404).json({
+          code: 404,
+          message: `Error sending email ${error}`
+        });
       }
+
+      //TODO this code create and send the cookie session
+
+      // try {
+      //   await sessionCookie(req, res, {
+      //     userName: savedUser.userName,
+      //     id: savedUser._id,
+      //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+      //     userType: savedUser.userType
+      //   });
+
+      //   const responseUserData = {
+      //     id: savedUser._id,
+      //     userName: savedUser.userName,
+      //     userType: savedUser.userType,
+      //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+      //     userAvatar: savedUser.userAvatar
+      //   };
+      //   console.log("sending responseUserData signup[] ", responseUserData);
+      //   res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
+      // } catch (err) {
+      //   console.log("err on user catch on login", err);
+      // }
     }
   });
 };
