@@ -518,6 +518,36 @@ class SignUpForm extends Component {
             );
 
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
+
+
+            
+            // const userData = res.data;
+
+            // console.log("userAvatar on signupform", userData.userAvatar);
+
+            // this.props.onLogIn({
+            //   //se modifica el STORE enviando los datos de autenticacion y se despacha la accion de login para desbloquear los sectores que solo un usuario autorizado puede visitar
+
+            //   userName: userData.userName,
+            //   userID: userData.id,
+            //   userType: userData.userType,
+            //   userAvatar: userData.userAvatar,
+            //   userFullName: `${userFirstName} ${userLastName}`
+            // });
+            // triggerDialog(
+            //   {
+            //     title: "Way to Go!! 😁",
+            //     body: `Welcome to our Comunity ${userName}`,
+            //     auto: true
+            //   },
+            //   () => {
+            //     this.props.onCancelClick();
+            //   }
+            // );
+
+
+
+
           } else {
             triggerDialog({
               title: "Ups 😅",

@@ -1,6 +1,8 @@
 export default (code, userFirstName) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
 
+  const webURL = process.env.WEB_URL;
+
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -172,8 +174,8 @@ role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 
 <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; line-height: 16px; color: #555555;">
 <p style="font-size: 18px; line-height: 21px; margin: 0;">Hello <span class="username"><strong>${userFirstName}</strong></span>,</p>
 <p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;">Thank you for joining our online community. Before we start please <a href="https://www.swordvoice.com/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Click Here</a> or the link below for confirm your email address:</p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"><br/><a href="https://www.swordvoice.com/api/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://www.swordvoice.com/api/emailVerification?id=${code}</a></p>
+<p style="font-size: 18px; line-height: 21px; margin: 0;">Thank you for joining our online community. Before we start please <a href="${webURL}/api/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Click Here</a> or the link below for confirm your email address:</p>
+<p style="font-size: 18px; line-height: 21px; margin: 0;"><br/><a href="${webURL}/api/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://www.swordvoice.com/api/emailVerification?id=${code}</a></p>
 <p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
 <p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
 <p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>

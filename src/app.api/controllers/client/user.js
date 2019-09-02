@@ -15,6 +15,9 @@ import {
 import { readToken } from "../../services/tokenHandler";
 import sendUserVerificationCode from "../../services/sendUserVerificationCode";
 
+//queries
+import verifyUserEmail from "../../queries/verifyUserEmail";
+
 let usersModel = mongoose.model("User");
 
 export const signUpCtrl = async (req, res) => {
@@ -285,4 +288,61 @@ export const signUpEmailConfirmCtrl = (req, res) => {
     console.log("error sending mail", err);
     res.status(404).json(err);
   });
+};
+
+export const emailVerificationCtrl = (req, res) => {
+  const { id } = req.query;
+
+  const success = user => {
+    if (user.length === 0) {
+      errFn(`User verification time expired`);
+      return;
+    }
+
+    if (user[0].userEmailVerified) {
+      emailVerified(user);
+      return;
+    }
+
+    user[0].userEmailVerified = true;
+
+    user[0].save((err, newUser) => {
+      if (err) {
+        errFn(`Email not verified error: ${err}`);
+        return;
+      }
+
+      emailVerified(newUser);
+    });
+  };
+
+  const errFn = msg => {
+    res.status(401).send(msg);
+  };
+
+  const emailVerified = async newUser => {
+    try {
+      await sessionCookie(req, res, {
+        userName: newUser.userName,
+        id: newUser._id,
+        userFullName: `${newUser.userFirstName} ${newUser.userLastName}`,
+        userType: newUser.userType,
+        userAvatar: newUser.userAvatar
+      });
+    } catch (err) {
+      console.log("err on user catch on login", err);
+      errFn(`Email not verified error: ${err}`);
+      return;
+    }
+
+    res.redirect(process.env.WEB_URL).json({
+      _id: newUser._id,
+      userAvatar: newUser.userAvatar,
+      userName: newUser.userName,
+      userType: newUser.userType,
+      userFullName: `${newUser.userFirstName} ${newUser.userLastName}`
+    });
+  };
+
+  verifyUserEmail(usersModel, id, success, errFn);
 };

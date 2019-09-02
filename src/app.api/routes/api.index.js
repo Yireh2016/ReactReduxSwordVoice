@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import {
   signUpCtrl,
   signUpEmailConfirmCtrl,
+  emailVerificationCtrl,
   loginCtrl,
   logoutCtrl,
   autoLogin,
@@ -97,6 +98,8 @@ routerAPI.post("/getMoreSimilarPosts/", guestAPI, getMoreSimilarPostsCtrl);
 //////////////////////////////////////
 
 routerAPI.get("/logout", guestAPI, logoutCtrl);
+
+routerAPI.get("/emailVerification", emailVerificationCtrl);
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
