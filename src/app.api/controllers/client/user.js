@@ -300,7 +300,7 @@ export const emailVerificationCtrl = (req, res) => {
     }
 
     if (user[0].userEmailVerified) {
-      emailVerified(user);
+      errFn(`Email already verified`);
       return;
     }
 
