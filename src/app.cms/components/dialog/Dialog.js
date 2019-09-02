@@ -1,13 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import showdown from "showdown";
+import ReactHtmlParser from "react-html-parser";
 
 const Container = styled.div`
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
   height: 100vh;
   width: 100%;
-  z-index: 2;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,8 +17,17 @@ const Container = styled.div`
 
 const Layout = styled.div`
   background-color: aliceblue;
-  padding: 15px;
+  padding: 30px 35px;
+  box-sizing: border-box;
   border-radius: 5px;
+  width: 50%;
+
+  @media (max-width: 1050px) {
+    width: 70%;
+  }
+  @media (max-width: 700px) {
+    width: 100%;
+  }
 `;
 
 const Title = styled.h2`
@@ -51,11 +62,19 @@ const Button = styled.button`
   }
 `;
 const Dialog = ({ title, body, status, showDialog }) => {
+  let converter = new showdown.Converter();
+
+  const bodyHTMLContent = converter.makeHtml(body);
+  const bodyJsx = ReactHtmlParser(bodyHTMLContent);
+  console.log("body", body); //TODO erase
+  console.log("bodyHTMLContent", bodyHTMLContent); //TODO erase
+  console.log("bodyJsx", bodyJsx); //TODO erase
+
   return (
     <Container id="dialogCont">
       <Layout id="dialogLayout">
         <Title id="dialogTitle"> {title}</Title>
-        <p id="dialogBody"> {body}</p>
+        <div id="dialogBody"> {bodyJsx}</div>
         <Control id="dialogCtrlCont">
           <Button
             className="cmsBtn"

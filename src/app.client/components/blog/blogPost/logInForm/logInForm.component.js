@@ -11,6 +11,9 @@ import Logo from "../../../general/logo.component";
 import { connect } from "react-redux";
 import UserManageForm from "../../../../layouts/UserManageForm";
 
+//services
+import triggerDialog from "../../../../services/triggerDialog";
+
 const LogoContainer = styled.div`
   display: flex;
   flex-grow: 1;
@@ -145,12 +148,23 @@ class LogInForm extends Component {
           }
         })
         .catch(err => {
-          alert(`There was an error status:  ${err}`);
+          triggerDialog({
+            title: "Ups 😅 Something's wrong",
+            body: `${err.response.data}`
+          });
+
+          // alert(`There was an error status:  ${err.data}`);
         });
 
       return;
     }
-    alert("Please, fill all the required values");
+
+    triggerDialog({
+      title: "Ups 😅 Something's wrong",
+      body: `Please, fill all the required values`
+    });
+
+    // alert("Please, fill all the required values");
   };
 
   onScrollformLayout = e => {

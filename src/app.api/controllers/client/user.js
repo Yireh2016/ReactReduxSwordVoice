@@ -123,25 +123,33 @@ export const signUpCtrl = async (req, res) => {
 
 export const loginCtrl = (req, res) => {
   const userData = req.body;
-  console.log("userData", userData);
 
   if (!userData.userName || !userData.userPassword) {
-    res.status(400).json({
-      message: "All fields required"
-    });
+    res.status(401).json("All fields required");
     return;
   }
 
   passport.authenticate("local", async (err, user, info) => {
     if (err) {
-      res.status(404).json(err);
+      res.status(404).json(`${err.response.data}`);
       return;
     }
     console.log(`on login: \n err ${err}
                 info ${info}\n
                 user ${user}`);
     if (user && !user.isUserActive) {
-      res.status(401).json("user is not active");
+      res
+        .status(401)
+        .json(
+          `Your Account is **Not Active** because it is unsubscribe from our service. Please, Contact Us [Here](${process.env.WEB_URL}/contact) if you want to activate it again`
+        );
+      return;
+    } else if (user && !user.userEmailVerified) {
+      res
+        .status(401)
+        .json(
+          "User Email is **Not Verified** yet, Please check your email's inbox or **SPAM** folder and follow the instructions"
+        );
       return;
     }
     if (user) {
@@ -167,7 +175,7 @@ export const loginCtrl = (req, res) => {
       });
     } else {
       console.log("dio un 401", info);
-      res.status(401).json(info);
+      res.status(401).json(info.message);
     }
   })(req, res);
 };

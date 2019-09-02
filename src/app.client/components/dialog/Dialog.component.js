@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import showdown from "showdown";
+import ReactHtmlParser from "react-html-parser";
 
 const Container = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
   background-color: rgba(0, 0, 0, 0.5);
   height: 100vh;
   width: 100%;
@@ -16,15 +16,17 @@ const Container = styled.div`
 `;
 
 const Layout = styled.div`
-  width: 50%;
   background-color: aliceblue;
-  padding: 15px;
+  padding: 30px 35px;
+  box-sizing: border-box;
   border-radius: 5px;
+  width: 50%;
+
   @media (max-width: 1050px) {
-    width: 75%;
+    width: 70%;
   }
   @media (max-width: 700px) {
-    width: 1000%;
+    width: 100%;
   }
 `;
 
@@ -53,31 +55,35 @@ const Button = styled.button`
   color: #fff;
   transition: all ease 300ms;
   justify-content: center;
-
   :hover {
     color: #00171f;
     background-color: #fff;
     cursor: pointer;
   }
 `;
-const Dialog = ({ title, body, status = false, showDialog }) => {
+const Dialog = ({ title, body, status, showDialog }) => {
+  let converter = new showdown.Converter();
+
+  const bodyHTMLContent = converter.makeHtml(body);
+  const bodyJsx = ReactHtmlParser(bodyHTMLContent);
+  console.log("body", body); //TODO erase
+  console.log("bodyHTMLContent", bodyHTMLContent); //TODO erase
+  console.log("bodyJsx", bodyJsx); //TODO erase
+
   return (
     <Container id="dialogCont">
       <Layout id="dialogLayout">
         <Title id="dialogTitle"> {title}</Title>
-        <p id="dialogBody"> {body}</p>
+        <div id="dialogBody"> {bodyJsx}</div>
         <Control id="dialogCtrlCont">
-          {!status && (
-            <Button
-              className="cmsBtn"
-              onClick={e => {
-                e.stopPropagation();
-                showDialog(false);
-              }}
-            >
-              Ok
-            </Button>
-          )}
+          <Button
+            className="cmsBtn"
+            onClick={() => {
+              showDialog(false);
+            }}
+          >
+            Ok
+          </Button>
         </Control>
       </Layout>
     </Container>
