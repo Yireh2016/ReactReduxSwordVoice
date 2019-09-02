@@ -333,7 +333,6 @@ class BlogPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isDeviceResult: "pc",
       isLoading: true, // true,
       isLoadingPosts: false, // true,
       isFilterLoading: false,
@@ -386,7 +385,7 @@ class BlogPage extends React.Component {
   }
 
   setPostDimensions = () => {
-    const isDeviceResult = isDevice();
+    const isDeviceResult = this.props.resize.device;
     let postH;
     let asidePostW = 9;
 
@@ -793,7 +792,7 @@ class BlogPage extends React.Component {
             logoWidth="20vw"
           />
 
-          {this.state.isDeviceResult !== "pc" && (
+          {this.props.resize.device === "pc" && (
             <React.Fragment>
               <Call2Action
                 className="call2ActionBlog"
@@ -934,7 +933,8 @@ class BlogPage extends React.Component {
                   </AsidePostsCont>
                 )}
               </div>
-
+            </section>
+            {this.props.resize.device !== "pc" && (
               <div
                 style={[
                   styles.layout.fullCenter,
@@ -954,7 +954,7 @@ class BlogPage extends React.Component {
                   size="redesSociales-blog"
                 />
               </div>
-            </section>
+            )}
           </div>
         </div>
       </React.Fragment>
@@ -1375,7 +1375,8 @@ class BlogPage extends React.Component {
 const mapStateToProps2 = state => {
   return {
     blog: state.blog,
-    scroll: state.scroll
+    scroll: state.scroll,
+    resize: state.resize
   };
 };
 const mapDispachToProps = dispatch => {
