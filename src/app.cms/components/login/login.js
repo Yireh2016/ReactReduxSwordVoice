@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { withCookies } from "react-cookie";
-import { guestCookie } from "../../../app.client/services/cookieManager";
+
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
@@ -41,7 +40,7 @@ class Login extends Component {
       .catch(err => {
         if (err) {
           console.log(`Error al buscar el usuario por Session ID`, err);
-          guestCookie(this.props);
+          // guestCookie(this.props);
         }
       });
     return;
@@ -143,4 +142,4 @@ const Login2 = connect(
   mapDispachToProps
 )(Login);
 
-export default withCookies(Login2);
+export default Login2;

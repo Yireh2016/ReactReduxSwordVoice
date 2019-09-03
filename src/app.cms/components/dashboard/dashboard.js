@@ -1,6 +1,5 @@
 import React, { Component, lazy, Suspense } from "react";
 import { withRouter, Redirect, Route, Switch } from "react-router-dom";
-import { withCookies } from "react-cookie";
 import { connect } from "react-redux";
 import axios from "axios";
 import Helmet from "react-helmet";
@@ -680,4 +679,4 @@ const Dashboard2 = connect(
   mapDispachToProps
 )(withRouter(Dashboard));
 
-export default withCookies(Dashboard2);
+export default Dashboard2;

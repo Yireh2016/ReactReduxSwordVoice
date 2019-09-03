@@ -1,7 +1,6 @@
 //modules
 import React from "react";
 import { render } from "react-dom";
-import { CookiesProvider } from "react-cookie";
 import "raf/polyfill";
 import "@babel/polyfill"; //para que axios funcione en ie11
 import { BrowserRouter as Router } from "react-router-dom";
@@ -39,12 +38,10 @@ export const store = createStore(
 );
 
 render(
-  <CookiesProvider>
-    <Provider store={store}>
-      <Router>
-        <App />
-      </Router>
-    </Provider>
-  </CookiesProvider>,
+  <Provider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );

@@ -5,7 +5,6 @@ import path from "path";
 import { ConnectedRouter } from "connected-react-router";
 import { renderToString } from "react-dom/server";
 import { StaticRouter as Router } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
 import { StyleRoot } from "radium";
 import { ChunkExtractor } from "@loadable/server";
 import { ServerStyleSheet } from "styled-components";
@@ -36,19 +35,15 @@ const renderTemplate = (req, store) => {
   let styleTags2;
   try {
     let html2 = sheet.collectStyles(
-      <CookiesProvider cookies={req.universalCookies}>
-        <Provider store={store}>
-          <ConnectedRouter history={history}>
-            <Router location={req.url} context={context}>
-              <StyleRoot
-                radiumConfig={{ userAgent: req.headers["user-agent"] }}
-              >
-                <App />
-              </StyleRoot>
-            </Router>
-          </ConnectedRouter>
-        </Provider>
-      </CookiesProvider>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Router location={req.url} context={context}>
+            <StyleRoot radiumConfig={{ userAgent: req.headers["user-agent"] }}>
+              <App />
+            </StyleRoot>
+          </Router>
+        </ConnectedRouter>
+      </Provider>
     );
     renderToString(html2);
     styleTags2 = sheet.getStyleTags();
@@ -65,17 +60,15 @@ const renderTemplate = (req, store) => {
   const extractor = new ChunkExtractor({ statsFile });
   // Wrap your application using "collectChunks"
   const jsx = extractor.collectChunks(
-    <CookiesProvider cookies={req.universalCookies}>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <Router location={req.url} context={context}>
-            <StyleRoot radiumConfig={{ userAgent: req.headers["user-agent"] }}>
-              <App />
-            </StyleRoot>
-          </Router>
-        </ConnectedRouter>
-      </Provider>
-    </CookiesProvider>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Router location={req.url} context={context}>
+          <StyleRoot radiumConfig={{ userAgent: req.headers["user-agent"] }}>
+            <App />
+          </StyleRoot>
+        </Router>
+      </ConnectedRouter>
+    </Provider>
   );
 
   const html = renderToString(jsx);
