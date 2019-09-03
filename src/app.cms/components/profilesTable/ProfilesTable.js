@@ -11,7 +11,7 @@ import SearchBar from "../../../app.client/components/blog/searchBar/searchBar.c
 
 const Layout = styled.div``;
 
-const ProfilesTable = ({ setUserProfile, history }) => {
+const ProfilesTable = ({ setUserProfile, history, device }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -120,10 +120,13 @@ const ProfilesTable = ({ setUserProfile, history }) => {
 
   return (
     <Layout className="reactTableLay">
-      <SearchBar />
       <ReactTable
         filterable
-        style={{ border: "none", padding: "0 10vmin" }}
+        style={
+          device === "phone"
+            ? { border: "none", padding: "0 3vmin" }
+            : { border: "none", padding: "0 10vmin" }
+        }
         data={users}
         columns={columns}
         className="-striped -highlight"
@@ -134,7 +137,9 @@ const ProfilesTable = ({ setUserProfile, history }) => {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    device: state.resize.device
+  };
 };
 const mapDispachToProps = dispatch => {
   return {

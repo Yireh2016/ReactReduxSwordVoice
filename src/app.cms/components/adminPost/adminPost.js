@@ -291,7 +291,11 @@ class AdminPost extends Component {
       return (
         <div className="reactTableLay">
           <ReactTable
-            style={{ padding: "10vmin" }}
+            style={
+              this.props.device === "phone"
+                ? { padding: "3vmin" }
+                : { padding: "10vmin" }
+            }
             data={articleData}
             columns={columns}
             className="-striped -highlight"
@@ -321,7 +325,8 @@ const mapStateToProps = state => {
     summary: state.postCreation.summary,
     login: state.login,
     project: state.postCreation.project,
-    files: state.postCreation.files
+    files: state.postCreation.files,
+    device: state.resize.device
   };
 };
 const mapDispachToProps = dispach => {

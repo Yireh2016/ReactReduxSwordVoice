@@ -99,6 +99,10 @@ class Dashboard extends Component {
 
     const device = isDevice();
     this.props.setDevice(device);
+    window.addEventListener("resize", () => {
+      const device = isDevice();
+      this.props.setDevice(device);
+    });
   }
 
   toogleClickHandler = () => {
