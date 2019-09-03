@@ -1,7 +1,6 @@
 //modules
 import React, { Component } from "react";
 import axios from "axios";
-import { withCookies } from "react-cookie";
 import styled from "styled-components";
 
 //css
@@ -497,9 +496,7 @@ const mapDispachToProps = dispatch => {
     onLogIn: payload => dispatch({ type: "LOGGED_IN", payload: payload })
   };
 };
-
-const LogInForm2 = connect(
+export default connect(
   mapStateToProps,
   mapDispachToProps
 )(LogInForm);
-export default withCookies(LogInForm2);

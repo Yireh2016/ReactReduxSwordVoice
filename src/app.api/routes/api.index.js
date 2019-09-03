@@ -61,7 +61,7 @@ function authAPI(req, res, next) {
 }
 
 function guestAPI(req, res, next) {
-  if (req.cookies.guestID) {
+  if (req.signedCookies.guestID) {
     return next();
   }
 
@@ -259,7 +259,7 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
   );
 });
 
-routerAPI.put("/updatePasswd", guestAPI, updatePasswdCtrl);
+routerAPI.put("/updatePasswd", updatePasswdCtrl);
 
 //add comments
 routerAPI.put("/setComment", authAPI, setCommentCtrl);

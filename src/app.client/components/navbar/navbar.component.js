@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route, withRouter } from "react-router-dom";
-import { withCookies } from "react-cookie";
 import styled from "styled-components";
 //css
 import "./navbar.css";
@@ -22,7 +21,7 @@ import apiCtrl from "../../../apiCalls/generic/apiCtrl";
 
 //services
 import isDevice from "../../../services/isDevice";
-import { guestCookie } from "../../../app.client/services/cookieManager";
+
 import triggerDialog from "../../services/triggerDialog";
 
 const Nav = styled.nav`
@@ -61,14 +60,6 @@ class NavBar extends Component {
       deltaScroll: 0,
       smallestLogoW: "24vw"
     };
-
-    if (
-      typeof window !== "undefined" &&
-      window.document &&
-      window.document.createElement
-    ) {
-      guestCookie(props);
-    }
   }
 
   componentDidMount() {
@@ -824,4 +815,4 @@ const NavBar2 = connect(
 )(NavBar);
 const NavBar3 = withRouter(NavBar2);
 
-export default withCookies(NavBar3);
+export default NavBar3;

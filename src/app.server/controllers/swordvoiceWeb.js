@@ -27,6 +27,7 @@ import { updateArticleAvatars } from "../../services/updateArticleAvatars";
 //queries
 import getPopularPosts from "./queries/getPopularPosts";
 import searchSimilarArticles from "../../common/queries/searchSimilarArticles";
+import { guestCookie } from "../../app.api/services/serverCookieManager";
 
 const renderTemplate = (req, store) => {
   const sheet = new ServerStyleSheet();
@@ -111,8 +112,12 @@ const renderWithPreloadedState = (req, res, store) => {
 const swordvoiceWeb = async (req, res) => {
   let articleModel = mongoose.model("Article");
 
-  const routerPromise = () =>
-    new Promise((resolve, reject) => {
+  const routerPromise = () => {
+    if (!req.signedCookies.guestID) {
+      guestCookie(req, res);
+    }
+
+    return new Promise((resolve, reject) => {
       if (req.url.match("/blog/post/")) {
         const RESPONSES_LIMIT = 3;
         const COMMENT_LIMIT = 5;
@@ -400,6 +405,7 @@ const swordvoiceWeb = async (req, res) => {
         resolve();
       }
     });
+  };
 
   const userLoggedInPromise = () =>
     new Promise(resolve => {

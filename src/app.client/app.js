@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import loadable from "@loadable/component";
 import Helmet from "react-helmet";
-// import { withCookies } from "react-cookie";
 import "./app.css";
 import "./index.css";
 import favicon from "../assets/favicon2-16x16.png";

@@ -1,4 +1,5 @@
 import { createToken } from "./tokenHandler";
+import uuid from "uuid/v1";
 
 export const sessionCookie = async (req, res, user) => {
   console.log("creating token");

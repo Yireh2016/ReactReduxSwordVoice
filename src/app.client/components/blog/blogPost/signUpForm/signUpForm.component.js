@@ -4,7 +4,6 @@ import styled from "styled-components";
 import axios from "axios";
 import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import { connect } from "react-redux";
-import { withCookies } from "react-cookie";
 //services
 import triggerDialog from "../../../../services/triggerDialog";
 
@@ -492,10 +491,6 @@ class SignUpForm extends Component {
         userAvatar
       };
 
-      //se crea una cookie de session para para salvar el usuario y mantener la sesion activa
-      // const sessionID = uuid();
-      // data = { ...data, userSessionId: sessionID };
-
       this.setState({
         isSubmitLoading: true
       });
@@ -519,8 +514,6 @@ class SignUpForm extends Component {
 
             //si la respuesta es positiva se verifica si el usuario subio imagen al browser y se procede a subirla
 
-
-            
             // const userData = res.data;
 
             // console.log("userAvatar on signupform", userData.userAvatar);
@@ -544,10 +537,6 @@ class SignUpForm extends Component {
             //     this.props.onCancelClick();
             //   }
             // );
-
-
-
-
           } else {
             triggerDialog({
               title: "Ups 😅",
@@ -1381,11 +1370,9 @@ const mapDispachToProps = dispach => {
   };
 };
 
-const SignUpForm2 = connect(
+export default connect(
   mapStateToProps,
   mapDispachToProps
 )(SignUpForm);
-
-export default withCookies(SignUpForm2);
 
 // export default SignUpForm;

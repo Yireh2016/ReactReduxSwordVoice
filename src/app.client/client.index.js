@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import "@babel/polyfill"; //para que axios funcione en ie11
 import "raf/polyfill";
-import { CookiesProvider } from "react-cookie";
 import { ConnectedRouter } from "connected-react-router";
 import { StyleRoot } from "radium";
 import { loadableReady } from "@loadable/component";
@@ -22,22 +21,20 @@ import { store, history } from "../app.redux.store/store/configStore";
 loadableReady(() => {
   const root = document.getElementById("main");
   hydrate(
-    <CookiesProvider>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          {/* <Router history={history}> */}
-          <Router>
-            <ScrollToTop>
-              <StyleRoot>
-                <ErrorBoundary>
-                  <App />
-                </ErrorBoundary>
-              </StyleRoot>
-            </ScrollToTop>
-          </Router>
-        </ConnectedRouter>
-      </Provider>
-    </CookiesProvider>,
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        {/* <Router history={history}> */}
+        <Router>
+          <ScrollToTop>
+            <StyleRoot>
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
+            </StyleRoot>
+          </ScrollToTop>
+        </Router>
+      </ConnectedRouter>
+    </Provider>,
     document.getElementById("root"),
     root
   );
