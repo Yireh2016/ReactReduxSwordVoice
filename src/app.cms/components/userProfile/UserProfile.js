@@ -103,6 +103,11 @@ const RowLayout = styled.div`
   > div:first-child {
     margin-top: 0;
   }
+
+  @media (max-width: 700px) {
+    justify-content: initial;
+    height: initial;
+  }
 `;
 
 const InputTextLayout = styled.div`
@@ -894,16 +899,12 @@ const UserProfile = ({
         console.log("err on catch", err);
         triggerDialog({
           title: "Error",
-          body: `There was an error: ${
-            sendAvatarRes.status
-          } err.response.data.message: ${err.response.data.message} `,
+          body: `There was an error: ${sendAvatarRes.status} err.response.data.message: ${err.response.data.message} `,
           status: "ERR"
         });
 
         return;
       }
-
-     
 
       if (sendAvatarRes.status === "OK") {
         userProfile.userAvatar = sendAvatarRes.avatarURL;
@@ -1003,7 +1004,7 @@ const UserProfile = ({
             <Avatar
               img={userAvatar}
               id="avatar"
-              onClick={() => {
+              onClick={e => {
                 inputFile.current.click();
               }}
             >
@@ -1011,7 +1012,8 @@ const UserProfile = ({
                 id="avatarEditBtn"
                 src={edit}
                 alt="Edit avatar"
-                onClick={() => {
+                onClick={e => {
+                  e.stopPropagation();
                   inputFile.current.click();
                 }}
               />

@@ -88,7 +88,6 @@ const renderTemplate = (req, store) => {
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
   console.log("RENDERING preloadedState to send to templeta preloadedState");
-  console.log("popuar arr", preloadedState.blog.popularArticlesArr);
 
   const { body, scriptTags, linkTags, styleTags } = renderTemplate(req, store);
   res.send(

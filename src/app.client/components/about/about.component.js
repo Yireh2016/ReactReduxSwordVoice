@@ -179,7 +179,7 @@ class About extends React.Component {
       return;
     }
 
-    if (scrollTop < (maxScroll * 3.7) / 4) {
+    if (scrollTop < (maxScroll * 3.5) / 4) {
       this.aboutThumbnail !== 2 &&
         this.setState({
           aboutThumbnail: 2
@@ -219,7 +219,7 @@ class About extends React.Component {
           "<h2>💻 What Is SwordVoice?</h2><p><strong>Swordvoice.com</strong> has being designed to be an <strong>Online Community</strong> of professionals, amateurs, self-taught and enthusiats web and mobile app developers, UI/UX designers and tech adicts that want to be up to date about the latest technologies, programing languages and paradigms, coding practices, FrontEnd and BackEnd frameworks and libraries, news, and trends.  <a aria-label='go to blog page' href='/blog'>Go and check our blog.</a></p>"
       },
       {
-        HTML: `<h2><img width="45px" src="${teacher}" alt="teacher emoji"/> What SwordVoice has to offer?</h2><p>SwordVoice offer blog articles, tutorials, courses and a variety of social media interaction options for the community to be in touch. If you want to be an active writer, editor, tutorial or courses creator, do not hesitate and <a aria-label='go to our blog' href='/contact'>Contact Us</a> and <strong>Let Your SwordVoice be Heard!!!</strong></p>`
+        HTML: `<h2><img width="45px" src="${teacher}" alt="teacher emoji"/> What SwordVoice has to offer?</h2><p>Joining in will have you regular notifications on news, articles, tutorials and how's to; You will have access to a lot of free educational content, courses and a variety of social media interaction options for the community to be in touch. If you have any question <a aria-label='go to our blog' href='/contact'>Contact Us</a>. Join in Today and <strong>Let Your SwordVoice be Heard!!!</strong></p>`
       }
     ];
 
