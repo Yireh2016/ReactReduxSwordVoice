@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const sendNoReplyEmail = (html, email, attachments) => {
+const sendNoReplyEmail = (html, subject, email, attachments) => {
   return new Promise((resolve, reject) => {
     // async..await is not allowed in global scope, must use a wrapper
     async function main() {
@@ -8,7 +8,7 @@ const sendNoReplyEmail = (html, email, attachments) => {
       // Only needed if you don't have a real mail account for testing
       let testAccount = {
         user: "noreply@swordvoice.com",
-        pass: "n0r3plyQq@."
+        pass: process.env.NOREPLYPWD
       };
 
       // create reusable transporter object using the default SMTP transport
@@ -33,7 +33,7 @@ const sendNoReplyEmail = (html, email, attachments) => {
       let info = await transporter.sendMail({
         from: '"Swordvoice" <noreply@swordvoice.com>', // sender address
         to: `${email}`, // list of receivers
-        subject: "Welcome ✔", // Subject line
+        subject: `${subject}`, // Subject line
         html: `${html}`, // html body
         attachments
       });

@@ -7,6 +7,10 @@ import {
   signUpCtrl,
   signUpEmailConfirmCtrl,
   emailVerificationCtrl,
+  recoveryPasswdCtrl,
+  recoveryUsernameCtrl,
+  passwordRecoverCtrl,
+  updatePasswdCtrl,
   loginCtrl,
   logoutCtrl,
   autoLogin,
@@ -100,6 +104,10 @@ routerAPI.post("/getMoreSimilarPosts/", guestAPI, getMoreSimilarPostsCtrl);
 routerAPI.get("/logout", guestAPI, logoutCtrl);
 
 routerAPI.get("/emailVerification", emailVerificationCtrl);
+routerAPI.get("/passwordRecover", passwordRecoverCtrl);
+
+routerAPI.get("/recoveryPasswd", guestAPI, recoveryPasswdCtrl);
+routerAPI.get("/recoveryUsername", guestAPI, recoveryUsernameCtrl);
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
@@ -250,6 +258,8 @@ routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
     }
   );
 });
+
+routerAPI.put("/updatePasswd", guestAPI, updatePasswdCtrl);
 
 //add comments
 routerAPI.put("/setComment", authAPI, setCommentCtrl);

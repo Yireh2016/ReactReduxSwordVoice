@@ -25,6 +25,7 @@ import ContactUs from "./pages/contactUs/ContactUs";
 
 const Home = loadable(() => import("./components/home/home.component"));
 const About = loadable(() => import("./components/about/about.component"));
+
 // const BlogArticle = loadable(() =>
 //   import("./components/blog/blogPost/blogPost.component")
 // );
@@ -32,6 +33,11 @@ const About = loadable(() => import("./components/about/about.component"));
 const BlogArticle = loadable(() => import("./pages/blogPost/BlogPost"));
 
 const BlogPage = loadable(() => import("./pages/blog/BlogPage"));
+
+const PasswdRecoveryForm = loadable(() =>
+  import("./pages/passwdRecovery/PasswdRecovery")
+);
+
 // const ContactUs = loadable(() => import("./pages/contactUs/ContactUs"));
 
 const Courses = loadable(() => import("./pages/courses/Courses"));
@@ -84,6 +90,11 @@ class App extends Component {
             exact
             path="/courses"
             render={() => <Courses cookies={this.props.cookies} />}
+          />
+          <Route
+            exact
+            path="/passwdRecoveryForm"
+            render={() => <PasswdRecoveryForm cookies={this.props.cookies} />}
           />
           {/* <Route
           exact

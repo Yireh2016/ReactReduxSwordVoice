@@ -15,8 +15,14 @@ import {
 import { readToken } from "../../services/tokenHandler";
 import sendUserVerificationCode from "../../services/sendUserVerificationCode";
 
+import emailHintConverter from "../../services/emailHintConverter";
+
 //queries
 import verifyUserEmail from "../../queries/verifyUserEmail";
+import sendNoReplyEmail from "../../services/sendNoReplyEmail";
+
+//Email templates
+import passwdRecoveryTemplate from "../../templates/passwdRecoveryTemplate";
 
 let usersModel = mongoose.model("User");
 
@@ -353,4 +359,150 @@ export const emailVerificationCtrl = (req, res) => {
   };
 
   verifyUserEmail(usersModel, id, success, errFn);
+};
+
+export const recoveryPasswdCtrl = (req, res) => {
+  const { email } = req.query;
+
+  usersModel
+    .find({ userEmail: email })
+    .exec()
+    .then(user => {
+      if (user.length === 0) {
+        res.status(401).send("Email not found");
+        return;
+      }
+
+      user[0].userPasswdRecoverDate = new Date();
+
+      user[0].save((err, newUser) => {
+        if (err) {
+          res.status(401).send(err);
+          return;
+        }
+        console.log("newUser", newUser); //TODO:erase
+        sendNoReplyEmail(
+          passwdRecoveryTemplate(newUser._id, newUser.userFirstName),
+          "SwordVoice Password Recovery ✔",
+          email
+        );
+        res.status(200).send({ status: "OK", user });
+      });
+    })
+    .catch(err => {
+      res.status(401).send(err);
+    });
+};
+
+export const recoveryUsernameCtrl = (req, res) => {
+  const { userName } = req.query;
+
+  usersModel
+    .find({ userName })
+    .exec()
+    .then(user => {
+      if (user.length === 0) {
+        res.status(401).send("User not found");
+        return;
+      }
+
+      const emailHint = emailHintConverter(user[0].userEmail);
+
+      res.status(200).send({ status: "OK", emailHint });
+    })
+    .catch(err => {
+      res.status(401).send(err);
+    });
+};
+
+export const passwordRecoverCtrl = (req, res) => {
+  const { id } = req.query;
+
+  usersModel
+    .find({ _id: id })
+    .exec()
+    .then(user => {
+      if (user.length === 0) {
+        res.status(401).send("User not found");
+        return;
+      }
+
+      const newDate = new Date();
+      const diff = Math.abs(newDate - user[0].userPasswdRecoverDate);
+      console.log("diff", diff);
+      if (diff > 86400000) {
+        res.status(401).send("Password Recovery Link Expired.");
+        return;
+      }
+
+      console.log(" passwd recovery form sent");
+
+      res.redirect(`${process.env.WEB_URL}/passwdRecoveryForm?id=${id}`);
+    })
+    .catch(err => {
+      res.status(401).send(err);
+    });
+};
+
+export const updatePasswdCtrl = (req, res) => {
+  const { passwd, id } = req.body;
+
+  usersModel.find({ _id: id }).exec((err, user) => {
+    if (err) {
+      res.status(401).send(err);
+      return;
+    }
+    const passwdRecoveryDate = user[0].userPasswdRecoverDate;
+
+    if (passwdRecoveryDate === "") {
+      res.status(401).send({
+        status: "ERR",
+        message: `Your Email Link is outdated, click [Here](${process.env.WEB_URL}) and recover your credentials in the Login area`
+      });
+      return;
+    }
+
+    const newDate = new Date();
+    const diff = Math.abs(newDate - passwdRecoveryDate);
+
+    console.log("diff", diff);
+    if (diff > 86400000) {
+      res
+        .status(401)
+        .send({ status: "ERR", message: "Password Recovery Link Expired." });
+      return;
+    }
+
+    user[0].setPassword(passwd);
+
+    user[0].userPasswdRecoverDate = "";
+
+    user[0].save(async (err, savedUser) => {
+      if (err) {
+        console.log(
+          `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+        );
+        res.status(400).json({
+          status: "ERR",
+          message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+        });
+      } else {
+        try {
+          // await sessionCookie(req, res, {
+          //   userName: savedUser.userName,
+          //   id: savedUser._id,
+          //   userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+          //   userType: savedUser.userType
+          // });
+
+          res.status(200).send({
+            status: "OK",
+            message: "Your password was successfully changed"
+          }); //user ID is returned to use it later for avatar upload
+        } catch (err) {
+          console.log("err on user catch on login", err);
+        }
+      }
+    });
+  });
 };

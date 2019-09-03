@@ -9,6 +9,7 @@ const userSchema = new Schema({
   userEmail: { type: String, unique: true, required: true },
   userEmailVerified: { type: Boolean, default: false },
   userVerificationCode: { type: String },
+  userPasswdRecoverDate: { type: Date },
   userCountry: { type: String, required: true },
   userBirthDate: { type: Date, required: true },
   userGender: { type: String, required: true },

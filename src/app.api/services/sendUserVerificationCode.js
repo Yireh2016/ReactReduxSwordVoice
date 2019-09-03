@@ -5,7 +5,7 @@ const sendUserVerificationCode = async (code, user) => {
   const html = verifyEmailTemplate(code, user.firstName);
 
   try {
-    return await sendNoReplyEmail(html, user.email);
+    return await sendNoReplyEmail(html, "Welcome ✔", user.email);
   } catch (err) {
     return err;
   }

@@ -1,9 +1,11 @@
-export default (code, userFirstName) => {
+export default (id, firstName) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
 
   const webURL = process.env.WEB_URL;
 
   return `
+  
+
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
@@ -18,19 +20,11 @@ export default (code, userFirstName) => {
 <!--[if !mso]><!-->
 <!--<![endif]-->
 <style type="text/css">
-
-@import url('https://fonts.googleapis.com/css?family=Work+Sans&display=swap');
 		body {
 			margin: 0;
 			padding: 0;
 		}
-		p{
-			font-family:"Work Sans", sans-serif
-		}
 
-		.username{
-			color:#F95F0B
-		}
 		table,
 		td,
 		tr {
@@ -129,8 +123,7 @@ export default (code, userFirstName) => {
 </head>
 <body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #FFFFFF;">
 <!--[if IE]><div class="ie-browser"><![endif]-->
-<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" 
-role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;" valign="top" width="100%">
+<table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" class="nl-container" role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF; width: 100%;" valign="top" width="100%">
 <tbody>
 <tr style="vertical-align: top;" valign="top">
 <td style="word-break: break-word; vertical-align: top;" valign="top">
@@ -145,45 +138,21 @@ role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 
 <!--[if (!mso)&(!IE)]><!-->
 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
 <!--<![endif]-->
-<div align="center" class="img-container center autowidth fullwidth">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="" align="center"><![endif]--><img align="center" alt="Image" border="0" class="center autowidth fullwidth" src="https://cdn.swordvoice.com/templates/confirmEmail.svg" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 500px; display: block;" title="Image" width="500"/>
-<!--[if mso]></td></tr></table><![endif]-->
-</div>
-<!--[if (!mso)&(!IE)]><!-->
-</div>
-<!--<![endif]-->
-</div>
-</div>
-<!--[if (mso)|(IE)]></td></tr></table><![endif]-->
-<!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
-</div>
-</div>
-</div>
-<div style="background-color:transparent;">
-<div class="block-grid" style="Margin: 0 auto; min-width: 320px; max-width: 500px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
-<div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
-<!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:transparent;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:500px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
-<!--[if (mso)|(IE)]><td align="center" width="500" style="background-color:transparent;width:500px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:5px; padding-bottom:5px;"><![endif]-->
-<div class="col num12" style="min-width: 320px; max-width: 500px; display: table-cell; vertical-align: top; width: 500px;">
-<div style="width:100% !important;">
-<!--[if (!mso)&(!IE)]><!-->
-<div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
-<!--<![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
-<div style="color:#555555;font-family:'Work Sans';line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; line-height: 16px; color: #555555;">
-<p style="font-size: 18px; line-height: 21px; margin: 0;">Hello <span class="username"><strong>${userFirstName}</strong></span>,</p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;">Thank you for joining our online community. Before we start please <a href="${webURL}/api/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Click Here</a> or the link below for confirm your email address:</p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"><br/>
+<div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
+<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
+<p style="font-size: 14px; line-height: 16px; margin: 0;">Hello <strong>${firstName}</strong>,</p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"> </p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;">If you want to <strong>change your password</strong> please <a href="${webURL}/api/passwordRecover?id=${id}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Click Here</a> or the link bellow and follow the instructions:</p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"><br/>
 
-<a href="${webURL}/api/emailVerification?id=${code}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://www.swordvoice.com/api/emailVerification?id=${code}</a>
+<a href="${webURL}/api/passwordRecover?id=${id}" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://www.swordvoice.com/api/passwordRecover?id=${id}</a>
 
 </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"> </p>
-<p style="font-size: 18px; line-height: 21px; margin: 0;"><strong>Please do not reply to this automated message. For any additional info you need, <a href="http://www.swordvoice.com/contact" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Contact Us Here</a>  or follow us on our social media bellow:</strong></p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"> </p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"> <strong>Note</strong>: This link will be available 24 hours.</p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"> </p>
+<p style="font-size: 14px; line-height: 16px; margin: 0;"><strong>Please do not reply to this automated message. For any additional info you need, <a href="http://www.swordvoice.com/contact" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Contact Us Here</a>  or follow us on our social media bellow:</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
@@ -193,6 +162,7 @@ role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 
 <td style="word-break: break-word; vertical-align: top; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;" valign="top">
 <table activate="activate" align="center" alignment="alignment" cellpadding="0" cellspacing="0" class="social_table" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: undefined; mso-table-tspace: 0; mso-table-rspace: 0; mso-table-bspace: 0; mso-table-lspace: 0;" to="to" valign="top">
 <tbody>
+
 <tr align="center" style="vertical-align: top; display: inline-block; text-align: center;" valign="top">
 <td style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 
 valign="top">
@@ -223,6 +193,7 @@ target="_blank"><img alt="YouTube"
  width="32" src="https://cdn.swordvoice.com/templates/youtube.svg" 
  style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="YouTube" width="32"/></a></td>
 </tr>
+
 </tbody>
 </table>
 </td>
@@ -230,15 +201,15 @@ target="_blank"><img alt="YouTube"
 </tbody>
 </table>
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
-<div style="color:#555555;font-family:'Work Sans';line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; line-height: 16px; color: #555555;">
-<p style="font-size: 18px; line-height: 16px; text-align: left; margin: 0;"><span style="font-size: 14px;">We’ve sent you this email because you or someone in your behalf used your email address for signing up for our system; if you do not approve this action, skip this communication.</span></p>
+<div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
+<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
+<p style="font-size: 14px; line-height: 14px; text-align: left; margin: 0;"><span style="font-size: 12px;">We’ve sent you this email because you or someone in your behalf used your email address for signing up onto our system, if you do not approve this action please skip this communication.</span></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Arial, sans-serif"><![endif]-->
-<div style="color:#555555;font-family:'Work Sans';line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 14px; line-height: 16px; color: #555555;">
+<div style="color:#555555;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
+<div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 14px; color: #555555;">
 <p style="font-size: 14px; line-height: 16px; text-align: center; margin: 0;">© 2019 SwordVoice.com. All rights reserved.</p>
 </div>
 </div>
@@ -261,6 +232,7 @@ target="_blank"><img alt="YouTube"
 <!--[if (IE)]></div><![endif]-->
 </body>
 </html>
+
 
 `;
 };

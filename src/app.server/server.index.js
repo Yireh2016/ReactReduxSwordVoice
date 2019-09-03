@@ -40,6 +40,7 @@ server.get("/home", (req, res) => {
   res.redirect("/");
 });
 server.get("/about", swordvoiceWeb);
+server.get("/passwdRecoveryForm", swordvoiceWeb);
 server.get("/contact", swordvoiceWeb);
 server.get("/courses", swordvoiceWeb);
 server.get("/portfolio", swordvoiceWeb);
