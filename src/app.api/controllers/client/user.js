@@ -380,7 +380,6 @@ export const recoveryPasswdCtrl = (req, res) => {
           res.status(401).send(err);
           return;
         }
-        console.log("newUser", newUser); //TODO:erase
         sendNoReplyEmail(
           passwdRecoveryTemplate(newUser._id, newUser.userFirstName),
           "SwordVoice Password Recovery ✔",

@@ -418,7 +418,6 @@ export const searchArticleCtrl = (req, res) => {
       .find({ $text: { $search: `${searchValue}` } })
       .countDocuments((err, searchCount) => {
         if (err) {
-          console.log("err", err); //TODO erase
           errFn(err); //FIXME errFn not exist
           return;
         }

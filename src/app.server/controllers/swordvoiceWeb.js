@@ -88,6 +88,7 @@ const renderTemplate = (req, store) => {
 const renderWithPreloadedState = (req, res, store) => {
   let preloadedState = store.getState();
   console.log("RENDERING preloadedState to send to templeta preloadedState");
+  console.log("popuar arr", preloadedState.blog.popularArticlesArr);
 
   const { body, scriptTags, linkTags, styleTags } = renderTemplate(req, store);
   res.send(
@@ -214,7 +215,6 @@ const swordvoiceWeb = async (req, res) => {
                 })
                 .countDocuments((err, similCount) => {
                   if (err) {
-                    console.log("err", err); //TODO erase
                     errFn(err); //FIXME errFn not exist
                     return;
                   }
@@ -310,7 +310,6 @@ const swordvoiceWeb = async (req, res) => {
               reject(err);
               return;
             }
-            console.log("articles count", count);
             store.dispatch({ type: "SET_ARTICLES_COUNT", payload: count });
             articleModel
               .find({ isPublished: true })
@@ -345,8 +344,7 @@ const swordvoiceWeb = async (req, res) => {
                   type: "ARTICLES_ARR",
                   payload: postMinimumData
                 });
-              })
-              .then(() => {
+
                 getPopularPosts(
                   articleModel,
                   "views",

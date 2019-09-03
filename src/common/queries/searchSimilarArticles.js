@@ -35,7 +35,7 @@ const searchSimilarArticles = (
     })
     .sort({ score: { $meta: "textScore" } })
     .skip(articlesShown.count)
-    .limit(3) // FIXME change it to 7
+    .limit(7) // FIXME change it to 7
     .exec()
     .then(posts => {
       console.log("similar posts limited", posts);

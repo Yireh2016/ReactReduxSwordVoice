@@ -245,7 +245,6 @@ class LogInForm extends Component {
     const {
       target: { value, name }
     } = e;
-    console.log(`name ${name} value ${value}`); //TODO erase
     this.setState({ [name]: value });
   };
 
@@ -310,7 +309,6 @@ class LogInForm extends Component {
     };
 
     const errFn = err => {
-      console.log(err); //TODO erase
     };
     const userName = this.state.recoveryUser;
     apiCtrl(

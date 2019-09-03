@@ -67,9 +67,7 @@ const Dialog = ({ title, body, status, showDialog }) => {
 
   const bodyHTMLContent = converter.makeHtml(body);
   const bodyJsx = ReactHtmlParser(bodyHTMLContent);
-  console.log("body", body); //TODO erase
-  console.log("bodyHTMLContent", bodyHTMLContent); //TODO erase
-  console.log("bodyJsx", bodyJsx); //TODO erase
+
 
   return (
     <Container id="dialogCont">

@@ -35,7 +35,6 @@ const Container = styled.div`
 const PasswdRecovery = ({ query, isDialog }) => {
   const onSubmit = (valid, dataObj) => {
     return new Promise((resolve, reject) => {
-      console.log("onSubmit", dataObj.passwd); //TODO erase
       if (valid) {
         apiCtrl(
           {
