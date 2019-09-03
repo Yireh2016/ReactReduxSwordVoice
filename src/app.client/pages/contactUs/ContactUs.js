@@ -24,9 +24,8 @@ const MainLayout = styled.div`
   margin-top: 100px;
 
   transform-origin: top left;
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 
-  transform: ${props => props.animation && "rotate(0deg) !important"};
   transition: transform ease 1000ms;
 `;
 
