@@ -203,7 +203,7 @@ class About extends React.Component {
   render() {
     const avatarArr = [
       <Avatar image={avatarImg} />,
-      <img src={svAvatar} alt="swordvoice avatar" />,
+      <img style={{ width: "100%" }} src={svAvatar} alt="swordvoice avatar" />,
       <CodersAvatar />
     ];
     const HTMLdata = [
@@ -385,7 +385,7 @@ class About extends React.Component {
                 link="/blog"
               />
               <FooterApp
-                estilos=" appear col-12 container grid footer-about center-flex"
+                estilos=" appear col-12  grid footer-about center-flex"
                 size="footer-about-size"
                 pathStyle="footer-about-path"
               />
