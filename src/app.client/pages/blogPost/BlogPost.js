@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Helmet from "react-helmet";
 import { connect } from "react-redux";
 
@@ -7,6 +7,7 @@ import BlogPostLayout from "./blogPostLayout/BlogPostLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
 
 //components
+import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
 import Article from "./article/Article";
 import { Ad1, Ad2 } from "./ads/ArticleAds";
 import SimilPost from "./similPost/SimilPost";
@@ -15,6 +16,35 @@ import Comments from "./comments/Comments";
 import Popular from "./popular/Popular";
 
 const BlogPost = ({ title, summary }) => {
+  const [isLoadingLogo, setIsLoadingLogo] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingLogo(false);
+    }, 1.5 * 1000);
+  }, []);
+
+  if (isLoadingLogo) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100vw",
+          height: "100vh",
+          zIndex: "100",
+          backgroundColor: "white",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <LoadingLogo />
+      </div>
+    );
+  }
+
   return (
     <React.Fragment>
       <Helmet>
