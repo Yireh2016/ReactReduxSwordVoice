@@ -7,7 +7,6 @@ import { withRouter } from "react-router-dom";
 
 //apiCalls
 import getUsers from "../../apiCalls/getUsers";
-import SearchBar from "../../../app.client/components/blog/searchBar/searchBar.component";
 
 const Layout = styled.div``;
 

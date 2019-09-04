@@ -106,6 +106,7 @@ class Dashboard extends Component {
   }
 
   toogleClickHandler = () => {
+    console.log("toogleClickHandler clicked");
     this.setState(prevState => {
       return { isMenu: !prevState.isMenu };
     });
@@ -205,16 +206,22 @@ class Dashboard extends Component {
   };
 
   linkBtnHandler = (history, link) => {
-    this.setState({
-      isMenu: false
-    });
+    console.log("this.props.project.hasChanged", this.props.project.hasChanged); //TODO erase
+
     if (window.location.pathname === `/cms/${link}`) {
+      console.log("window.location.pathname", window.location.pathname); //TODO erase
+
       return;
     }
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
+
+      console.log("pushing history for routing: ", link); //TODO erase
       history.push(`/cms/${link}`);
+      this.setState({
+        isMenu: false
+      });
     } else {
       this.setState({
         showExitModal: { show: true, url: `/cms/${link}` }
@@ -354,6 +361,7 @@ class Dashboard extends Component {
   };
 
   render() {
+    console.log("dashboard rendering"); //TODO erase
     if (this.props.isUserLoggedIn) {
       const CreatePostBtn = withRouter(({ history }) => {
         return (
@@ -394,6 +402,7 @@ class Dashboard extends Component {
         return (
           <li
             onClick={async () => {
+              console.log("Profile btn clicked"); //TODO erase
               const getUserRes = await getUserFromId(this.props.userId);
               if (getUserRes.status === "OK") {
                 this.props.setUserProfile(getUserRes.data);
@@ -612,11 +621,15 @@ class Dashboard extends Component {
                   <Route
                     exact
                     path="/cms/userProfile/"
-                    render={() => (
-                      <Suspense fallback={<Loading fullscreen={true} />}>
-                        <UserProfile />
-                      </Suspense>
-                    )}
+                    render={() => {
+                      console.log("rendering /cms/userProfile/"); //TODO erase
+
+                      return (
+                        <Suspense fallback={<Loading fullscreen={true} />}>
+                          <UserProfile />
+                        </Suspense>
+                      );
+                    }}
                   />
                   <Route
                     exact
@@ -681,6 +694,6 @@ const mapDispachToProps = dispatch => {
 const Dashboard2 = connect(
   mapStateToProps,
   mapDispachToProps
-)(withRouter(Dashboard));
+)(Dashboard);
 
-export default Dashboard2;
+export default withRouter(Dashboard2);
