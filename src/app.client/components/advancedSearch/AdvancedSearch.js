@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Container = styled.form`
+const Container = styled.div`
   padding: 15px;
+  width: 100%;
 `;
 const Label = styled.h4`
   font-family: "work sans", sans-serif;
@@ -21,6 +22,8 @@ const Input = styled.input`
   font-family: "Work sans", sans-serif;
   color: hsla(207, 90%, 43%, 1);
   transition: all ease 500ms;
+  width: calc(100% - 30px);
+
   :focus,
   :active {
     outline: none;
@@ -32,8 +35,15 @@ const BtnCont = styled.div`
   justify-content: center;
   align-items: center;
   margin: 15px 0 0 0;
+  button,
+  input {
+    margin: 0 0 0 25px;
+    :first-child {
+      margin: 0;
+    }
+  }
 `;
-const Button = styled.button`
+const Button = styled.input`
   min-height: 30px;
   border-radius: 7px;
   font-weight: bold;
@@ -58,6 +68,7 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
   const [author, setAuthor] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [text, setText] = useState("");
 
   const inputChange = e => {
     const { value, name } = e.target;
@@ -65,6 +76,10 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
     switch (name) {
       case "author":
         setAuthor(value);
+        break;
+
+      case "text":
+        setText(value);
         break;
 
       case "dateTo":
@@ -80,8 +95,30 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
     }
   };
 
+  const keyUpHandler = e => {
+    //enter
+    const { keyCode } = e;
+
+    if (keyCode === 13) {
+      onSearch({ text, author, dateFrom, dateTo });
+    }
+  };
+
   return (
-    <Container onSubmit={onSearch}>
+    <Container>
+      <label>
+        <Label>Text</Label>
+        <div>
+          <Input
+            type="search"
+            name="text"
+            htmlFor="text"
+            value={text}
+            onChange={inputChange}
+            onKeyUp={keyUpHandler}
+          />
+        </div>
+      </label>
       <label>
         <Label>Author</Label>
         <div>
@@ -91,6 +128,7 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
             htmlFor="author"
             value={author}
             onChange={inputChange}
+            onKeyUp={keyUpHandler}
           />
         </div>
       </label>
@@ -116,17 +154,14 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
         </div>
       </label>
       <BtnCont>
+        <Button type="button" cancel={true} onClick={onCancel} value="Cancel" />
         <Button
-          type="submit"
+          type="button"
+          value="Search"
           onClick={() => {
-            onSearch(author, dateFrom, dateTo);
+            onSearch({ text, author, dateFrom, dateTo });
           }}
-        >
-          Search
-        </Button>
-        <Button type="button" cancel={true} onClick={onCancel}>
-          Cancel
-        </Button>
+        />
       </BtnCont>
     </Container>
   );

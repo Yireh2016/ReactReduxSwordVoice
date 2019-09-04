@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const advancedSearchDb = (author, dateFrom, dateTo) => {
+const advancedSearchDb = ({ text, author, dateFrom, dateTo }) => {
   return axios
     .get(
-      `api/advancedSearchDb?author=${author}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+      `api/advancedSearchDb?text=${text}&author=${author}&dateFrom=${dateFrom}&dateTo=${dateTo}`
     )
     .then(res => {
       if (res.statusText === "OK") {

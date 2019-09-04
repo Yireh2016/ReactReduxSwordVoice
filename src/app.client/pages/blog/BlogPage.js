@@ -38,7 +38,6 @@ import Loading from "../../components/loading/loading";
 import Modal from "../../components/modal/modal";
 
 //services
-import isDevice from "../../../services/isDevice";
 import NewPostLayout from "./newPostLayout/NewPostLayout";
 import triggerDialog from "../../services/triggerDialog";
 
@@ -698,12 +697,13 @@ class BlogPage extends React.Component {
       };
     });
   };
-  advancedSearchHandler = async (author, dateFrom, dateTo) => {
-    const advancedSearchDbRes = await advancedSearchDb(
+  advancedSearchHandler = async ({ text, author, dateFrom, dateTo }) => {
+    const advancedSearchDbRes = await advancedSearchDb({
+      text,
       author,
       dateFrom,
       dateTo
-    );
+    });
 
     if (advancedSearchDbRes.statusText === "OK") {
       this.props.setArticlesArr([
@@ -1221,7 +1221,7 @@ class BlogPage extends React.Component {
                 {
                   display: "none",
                   position: "absolute",
-                  top: "100%",
+                  top: "calc(100% - 2vh)",
                   display: "none",
                   position: "absolute",
                   left: "50%",

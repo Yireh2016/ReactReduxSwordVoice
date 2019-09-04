@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Item = styled.div`
   white-space: normal;
   display: inline-block;
-  padding: 20px;
+  padding: 30px 0 0 0;
   box-sizing: border-box;
   width: ${props => {
     switch (props.size) {
@@ -38,8 +38,14 @@ const Item = styled.div`
     }
   }};
 
-  @media (max-width: 700px) {
+  :first-child {
+    padding: 0;
+  }
+  @media (max-width: 1050px) {
     padding: 10px;
+    :first-child {
+      padding: 10px;
+    }
   }
 `;
 

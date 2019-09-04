@@ -468,7 +468,7 @@ export const searchLastArticlesCtrl = (req, res) => {
 };
 
 export const advancedSearchDbCtrl = (req, res) => {
-  let { author, dateFrom, dateTo } = req.query;
+  let { text, author, dateFrom, dateTo } = req.query;
 
   if (!dateTo) {
     dateTo = new Date();
@@ -509,13 +509,38 @@ export const advancedSearchDbCtrl = (req, res) => {
     };
   }
 
+  let query;
+  if (text) {
+    query = {
+      $and: [
+        {
+          $text: { $search: `${text}` }
+        },
+        { isPublished: true },
+        {
+          date: {
+            $gt: dateFrom,
+            $lt: dateTo
+          }
+        }
+      ]
+    };
+  } else {
+    query = {
+      $and: [
+        { isPublished: true },
+        {
+          date: {
+            $gt: dateFrom,
+            $lt: dateTo
+          }
+        }
+      ]
+    };
+  }
+
   articleModel
-    .find({
-      date: {
-        $gt: dateFrom,
-        $lt: dateTo
-      }
-    })
+    .find(query)
     .sort({ date: "descending" })
     .select("url thumbnail title date keywords description")
     .populate(populateObj)

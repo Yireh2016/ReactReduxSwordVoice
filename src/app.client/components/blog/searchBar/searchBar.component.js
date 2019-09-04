@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./searchBar.css";
 import { connect } from "react-redux";
 
-const SearchBarCont = styled.form`
+const SearchBarCont = styled.div`
   border: ${props =>
     props.isFocus ? "1px #0387b7 solid" : "1px transparent solid"};
   @media (max-width: 700px) {
