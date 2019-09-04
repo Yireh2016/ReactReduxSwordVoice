@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./searchBar.css";
 import { connect } from "react-redux";
 
-const SearchBarCont = styled.div`
+const SearchBarCont = styled.form`
   border: ${props =>
     props.isFocus ? "1px #0387b7 solid" : "1px transparent solid"};
   @media (max-width: 700px) {
@@ -66,6 +66,7 @@ class SearchBar extends React.Component {
   render() {
     return (
       <SearchBarCont
+        action={this.searchHandler}
         onFocus={this.onFocus}
         onBlur={this.onFocus}
         onKeyUp={this.keyCapture}
@@ -92,7 +93,7 @@ class SearchBar extends React.Component {
             />
           </svg>
           <input
-            type="text"
+            type="search"
             placeholder="Search"
             value={this.state.searchValue}
             onChange={this.searchHandler}
