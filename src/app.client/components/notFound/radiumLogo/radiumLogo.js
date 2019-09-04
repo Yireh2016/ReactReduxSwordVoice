@@ -1,5 +1,4 @@
 import React from "react";
-import Radium from "radium";
 
 const RadiumLogo = props => {
   return (
@@ -147,4 +146,4 @@ const RadiumLogo = props => {
   );
 };
 
-export default Radium(RadiumLogo);
+export default RadiumLogo;

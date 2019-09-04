@@ -1,5 +1,7 @@
 import React from "react";
-import Radium from "radium";
+import styled from "styled-components";
+import { createGlobalStyle } from "styled-components";
+
 //components
 import FooterApp from "../footer/footer.component";
 import RadiumLogo from "./radiumLogo/radiumLogo";
@@ -8,86 +10,123 @@ import RadiumLogo from "./radiumLogo/radiumLogo";
 import "./notFound.css";
 import Equis from "./equis/equis";
 
-const NotFound = () => {
-  const orange = "#f95f0b";
-  const flexCenterStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-around"
-  };
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin:0;
+  }
+`;
 
-  const fontFamily = {
-    fontFamily: "Work Sans"
-  };
+const Layout = styled.div`
+  background: linear-gradient(180deg, #00171f 77.83%, #0088ba 98.84%);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  @media (max-width: 700px) {
+    height: initial;
+    min-height: 100vh;
+  }
+`;
 
-  const styles = {
-    RadiumLogo: {
-      width: "10vw",
-      "@media (max-width: 1050px)": {
-        width: "25vw"
-      }
-    },
-    NotFoundType: {
-      textAlign: "center",
-      fontSize: "120px",
-      "@media (max-width: 1050px)": {
-        fontSize: "10vh"
-      },
-      "@media (max-width: 700px)": {
-        fontSize: "10vh"
-      }
-    },
-    iconsFooter: {
-      width: "20vh",
-      "@media (max-width: 1050px)": {
-        width: "10vh"
-      },
-      "@media (max-width: 700px)": {
-        width: "10vh"
-      }
+const EquiCont = styled.div`
+  cursor: pointer;
+`;
+
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  color: #f95f0b;
+`;
+const Text = styled.h2`
+  font-family: "Work Sans", sans-serif;
+
+  text-align: center;
+  font-size: 120px;
+  margin: 0;
+
+  @media (max-width: 1050px) {
+    font-size: 10vh;
+  }
+  span {
+    color: white;
+  }
+`;
+
+const Text404 = styled.h2`
+  font-family: "Work Sans", sans-serif;
+
+  text-align: center;
+  font-size: calc(120px * 14 / 12);
+  margin: 0;
+
+  @media (max-width: 1050px) {
+    margin: 0;
+  }
+  span {
+    color: white;
+  }
+`;
+
+const FooterContainer = styled.div`
+  svg {
+    width: 20vh;
+    @media (max-width: 1050px) {
+      width: 10vh;
     }
-  };
 
+    @media (max-width: 700px) {
+      width: 10vh;
+    }
+  }
+`;
+
+const LogoContainer = styled.div`
+  div {
+    width: 10vw;
+    @media (max-width: 1050px) {
+      width: 25vw;
+    }
+  }
+`;
+
+const NotFound = () => {
   return (
-    <div
-      style={{
-        background: "linear-gradient(180deg, #00171F 77.83%, #0088BA 98.84%)",
-        height: "100vh",
-        ...flexCenterStyle
-      }}
-    >
-      <RadiumLogo style={styles.RadiumLogo} />
-      <div
-        style={{
-          color: orange,
-          ...flexCenterStyle
-        }}
-      >
-        <h2 style={{ ...styles.NotFoundType, ...fontFamily }}>404</h2>
-        <h2 style={{ ...styles.NotFoundType, ...fontFamily }}>
-          Not <span style={{ color: "white" }}>Found</span>
-        </h2>
-      </div>
-      <div>
-        <FooterApp id="notFoundPage" iconsStyles={styles.iconsFooter} />
-      </div>
-      <div
-        style={{
-          position: "fixed",
-          top: "5%",
-          right: "5%",
-          width: "5vmax"
-        }}
-      >
-        <Equis
-          onClick={() => {
-            window.location.href = "/home";
-          }}
-        />
-      </div>
-    </div>
+    <React.Fragment>
+      <GlobalStyle></GlobalStyle>
+      <Layout id="Layout">
+        <a href="/home">
+          <LogoContainer id="LogoContainer">
+            <RadiumLogo id="RadiumLogo" />
+          </LogoContainer>
+        </a>
+
+        <TextContainer id="TextContainer">
+          <Text404 id="Text404">404</Text404>
+          <Text id="TextNot">
+            Not <span style={{ color: "white" }}>Found</span>
+          </Text>
+        </TextContainer>
+        <FooterContainer id="FooterContainer">
+          <FooterApp id="notFoundPage" />
+        </FooterContainer>
+        <a href="/home">
+          <EquiCont
+            style={{
+              position: "fixed",
+              top: "5%",
+              right: "5%",
+              width: "5vmax"
+            }}
+          >
+            <Equis id="Equis" />
+          </EquiCont>
+        </a>
+      </Layout>
+    </React.Fragment>
   );
 };
 
-export default Radium(NotFound);
+export default NotFound;

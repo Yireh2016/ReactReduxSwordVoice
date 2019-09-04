@@ -1,24 +1,34 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
+import { ServerStyleSheet } from "styled-components";
 import NotFound from "../../app.client/components/notFound/notFound2";
-import { StyleRoot } from "radium";
 
 import notFoundtemplate from "../templates/notFoundtemplate";
 
-const renderTemplate = req => {
-  const appString = renderToString(
-    <StyleRoot radiumConfig={{ userAgent: req.headers["user-agent"] }}>
-      <NotFound />
-    </StyleRoot>
-  );
-  return appString;
+const renderTemplate = () => {
+  const sheet = new ServerStyleSheet();
+
+  try {
+    var html = renderToString(sheet.collectStyles(<NotFound></NotFound>));
+    var styleTags = sheet.getStyleTags(); // or sheet.getStyleElement();
+  } catch (error) {
+    // handle error
+    console.error(error); //TODO erase
+  } finally {
+    sheet.seal();
+  }
+
+  return { html, styleTags };
 };
 
 const notFoundCtrl = (req, res) => {
+  const renderObj = renderTemplate();
+
   res.status(404).send(
     notFoundtemplate({
-      body: renderTemplate(req),
-      title: "Not Found"
+      body: renderObj.html,
+      styleTags: renderObj.styleTags,
+      title: "SwordVoice.com | Not Found"
     })
   );
 };
