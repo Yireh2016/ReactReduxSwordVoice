@@ -795,9 +795,12 @@ class BlogPage extends React.Component {
           {this.props.resize.device === "pc" && (
             <React.Fragment>
               <Call2Action
+                link={false}
                 className="call2ActionBlog"
-                text="Courses"
-                link="https://udemy.com"
+                text="Sign Up"
+                onClick={() => {
+                  this.props.showSignUp(true);
+                }}
               />
               <FooterApp
                 id="blogPage2"
@@ -945,9 +948,11 @@ class BlogPage extends React.Component {
               >
                 <Call2Action
                   className="call2ActionBlog"
-                  text="Courses"
-                  link="https://udemy.com"
-                  target="blank"
+                  link={false}
+                  text="Sign Up"
+                  onClick={() => {
+                    this.props.showSignUp(true);
+                  }}
                 />
                 <FooterApp
                   estilos="appear footer-blog "
@@ -1391,7 +1396,8 @@ const mapDispachToProps = dispatch => {
     setSearchArr: arr =>
       dispatch({ type: "SET_SEARCH_ARTICLES", payload: arr }),
     setSearchCount: count =>
-      dispatch({ type: "SET_SEARCH_COUNT", payload: count })
+      dispatch({ type: "SET_SEARCH_COUNT", payload: count }),
+    showSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
   };
 };
 
