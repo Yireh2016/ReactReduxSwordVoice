@@ -151,24 +151,6 @@ class LogInForm extends Component {
   }
 
   onSuccessLogIn = userData => {
-    //Redux: hacer este metodo en el componente LogInForm
-
-    // if (userData.userAvatar === "") {
-    //   //si no existe avatar
-    //   this.props.onLogIn({
-    //     userAvatar: undefined,
-    //     userName: userData.userName,
-    //     userID: userData._id,
-    //     userType: userData.userType,
-    //     userFullName: userData.userFullName
-    //   });
-    //   return;
-    // }
-
-    // let imgBytes = new Uint8Array(userData.userAvatar.buffer.data);
-    // imgBlob = new Blob([imgBytes], {
-    //   type: "image/jpeg"
-    // });
     this.props.onLogIn({
       userAvatar: userData.userAvatar,
       userName: userData.userName,
@@ -308,8 +290,7 @@ class LogInForm extends Component {
       this.setState({ emailHint: response.data.emailHint });
     };
 
-    const errFn = err => {
-    };
+    const errFn = err => {};
     const userName = this.state.recoveryUser;
     apiCtrl(
       { url: `/api/recoveryUsername?userName=${userName}` },
@@ -327,6 +308,14 @@ class LogInForm extends Component {
     this.sendRecoveryEmail();
   };
 
+  keyUpHandler = e => {
+    //enter
+    const { keyCode } = e;
+
+    if (keyCode === 13) {
+      this.tryLogIn();
+    }
+  };
   render() {
     let controlButtons = (
       <React.Fragment>
@@ -435,7 +424,12 @@ class LogInForm extends Component {
             id="logInPage"
             className={`fila signUpPage1 col-12 ${this.state.animControl1} `}
           >
-            <form id="logInForm" className="logInForm">
+            <form
+              id="logInForm"
+              className="logInForm"
+              onSubmit={this.tryLogIn}
+              action={this.tryLogIn}
+            >
               <LogoContainer>
                 <Logo className="col-8 logInLogo col-5-sm" />
               </LogoContainer>
@@ -465,6 +459,7 @@ class LogInForm extends Component {
                     value={this.state.userPassword}
                     onBlur={this.handleOnBlur}
                     onChange={this.handleFormInputChange}
+                    onKeyUp={this.keyUpHandler}
                   />
                 </label>
                 <RecoverCont>
