@@ -38,16 +38,6 @@ const NoLandscape = ({
       const { showLogIn, showSignUp } = state.logInStatus;
       const { ableWarning } = state.responsiveDialog;
 
-      console.log(
-        `\n\nshowLogIn ${showLogIn} showSignUp ${showSignUp}  ableWarning ${ableWarning} =>`,
-        showLogIn || showSignUp || ableWarning
-      );
-      console.log(
-        `windowHeight/ windowWidth <= 1.2 ${windowHeight / windowWidth} =>`,
-        windowHeight / windowWidth <= 1.2,
-        "\n\n"
-      );
-
       if (
         (showLogIn || showSignUp || !ableWarning) &&
         windowHeight / windowWidth <= 1.2

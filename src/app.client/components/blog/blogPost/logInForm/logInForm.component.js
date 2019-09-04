@@ -428,7 +428,6 @@ class LogInForm extends Component {
               id="logInForm"
               className="logInForm"
               onSubmit={this.tryLogIn}
-              action={this.tryLogIn}
             >
               <LogoContainer>
                 <Logo className="col-8 logInLogo col-5-sm" />

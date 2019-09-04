@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+const Container = styled.form`
   padding: 15px;
 `;
 const Label = styled.h4`
@@ -81,12 +81,12 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
   };
 
   return (
-    <Container>
+    <Container onSubmit={onSearch}>
       <label>
         <Label>Author</Label>
         <div>
           <Input
-            type="text"
+            type="search"
             name="author"
             htmlFor="author"
             value={author}
@@ -117,13 +117,14 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
       </label>
       <BtnCont>
         <Button
+          type="submit"
           onClick={() => {
             onSearch(author, dateFrom, dateTo);
           }}
         >
           Search
         </Button>
-        <Button cancel={true} onClick={onCancel}>
+        <Button type="button" cancel={true} onClick={onCancel}>
           Cancel
         </Button>
       </BtnCont>

@@ -129,6 +129,11 @@ aside h2 {
   border-radius: 4px;
 }
 
+.blogArticle pre {
+  padding: 3vmin;
+  overflow-x: scroll;
+}
+
 .blogArticle code {
   white-space: pre-wrap;
 }

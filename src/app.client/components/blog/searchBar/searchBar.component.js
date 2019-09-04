@@ -66,7 +66,6 @@ class SearchBar extends React.Component {
   render() {
     return (
       <SearchBarCont
-        action={this.searchHandler}
         onFocus={this.onFocus}
         onBlur={this.onFocus}
         onKeyUp={this.keyCapture}

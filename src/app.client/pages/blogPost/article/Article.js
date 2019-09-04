@@ -61,8 +61,9 @@ const ArticleCont = styled.article`
   pre {
     background: #ff7f507a;
     border: 1px solid coral;
-    padding: 5px;
+    padding: 3vmin;
     border-radius: 5px;
+    overflow-x: scroll;
   }
 
   p > code {
