@@ -15,6 +15,8 @@ import LoadingBtn from "../loading/loadingBtn";
 //api calls
 import searchEmail from "../../apiCalls/searchEmail";
 import loginUser from "../../apiCalls/loginUser";
+import sendUserProfile from "../../apiCalls/sendUserProfile";
+import uploadAvatar from "../../../apiCalls/uploadAvatar";
 
 //validations
 import validateInterest from "./validations/validateInterest";
@@ -25,8 +27,6 @@ import validateEmail from "./validations/validateEmail";
 //services
 import blobToBase64 from "../../../services/blobToBase64";
 import isBrowser from "../../../services/isBrowser";
-import sendUserProfile from "../../apiCalls/sendUserProfile";
-import uploadAvatar from "../../../apiCalls/uploadAvatar";
 import triggerDialog from "../../controllers/triggerDialog";
 
 const UserProfileView = styled.div`
@@ -928,7 +928,7 @@ const UserProfile = ({
     if (sendUserRes.status === "OK") {
       triggerDialog({
         title: "Success",
-        body: "Your profile has been saved",
+        body: sendUserRes.message,
         status: "OK"
       }); //'Success','Your profile has been saved','OK'
       setCancelMessage("Back");

@@ -15,6 +15,8 @@ const triggerDialog = (
       setDialog({ title, body, show: false, status: false });
       callback && callback();
     }, time);
+  } else {
+    callback && callback();
   }
 };
 

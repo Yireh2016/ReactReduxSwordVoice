@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import verifyEmailOnEdition from "../../services/verifyEmailOnEdition";
+import uuid from "uuid/v1";
 
 let userModel = mongoose.model("User");
 
@@ -6,8 +8,11 @@ export const updateUserCtrl = (req, res) => {
   const userName = req.params.userName;
   let data = req.body;
   userModel.find({ userName }, function(err, user) {
+    let emailChanged = false;
+
     if (err) {
       console.log(err);
+      res.status(404).send(err);
     } else {
       user[0].userFirstName =
         user[0].userFirstName !== data.userFirstName
@@ -18,11 +23,6 @@ export const updateUserCtrl = (req, res) => {
         user[0].userLastName !== data.userLastName
           ? data.userLastName
           : user[0].userLastName;
-
-      user[0].userEmail =
-        user[0].userEmail !== data.userEmail
-          ? data.userEmail
-          : user[0].userEmail;
 
       user[0].userCountry =
         user[0].userCountry !== data.userCountry
@@ -65,12 +65,39 @@ export const updateUserCtrl = (req, res) => {
         ? data.userAvatar
         : user[0].userAvatar;
 
+      if (user[0].userEmail !== data.userEmail) {
+        user[0].userEmail = data.userEmail;
+        emailChanged = true;
+
+        user[0].userEmailVerified = false;
+        user[0].userVerificationCode = uuid();
+      }
+
       data.userPassword && user[0].setPassword(user[0].userPassword);
 
-      user[0].save((err, user) => {
+      user[0].save(async (err, user) => {
         if (err) {
           console.log(err);
           res.status(404).send(err);
+
+          return;
+        }
+        if (emailChanged) {
+          console.log("emailChanged", emailChanged); //TODO erase
+          try {
+            await verifyEmailOnEdition(user.userVerificationCode, {
+              firstName: user.userFirstName,
+              email: user.userEmail
+            });
+
+            res
+              .status(200)
+              .send(
+                "User Profile Updated. We've Sent you an email to verify your new email address Note:Check your **SPAM** folder."
+              );
+          } catch (error) {
+            res.status(404).send(error);
+          }
 
           return;
         }
