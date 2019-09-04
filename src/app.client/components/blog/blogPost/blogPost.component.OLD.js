@@ -22,14 +22,9 @@ import LogInForm from "./logInForm/logInForm.component";
 import SocialBar from "../../socialBar/SocialBar";
 import PostCard from "../../../components/postCard/PostCard";
 import Loading from "../../loading/loading";
-//imagenes
-import newPostImg from "../../../assets/img/blog/newPost.jpg";
-import fondoImg from "../../../assets/img/blog/fondoBlog.jpg";
-import avatarImg from "../../../assets/img/general/avatar.jpg";
 
 //services
 import keywordsToArr from "../../../../services/keywordsToArr";
-import isDevice from "../../../../services/isDevice";
 import countingHTMLwords from "../../../services/countingHTMLwords";
 //apiCalls
 import getNewComments from "../../../../apiCalls/getNewComments";

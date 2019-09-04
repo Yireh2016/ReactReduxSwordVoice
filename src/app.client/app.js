@@ -8,14 +8,6 @@ import favicon from "../assets/favicon2-16x16.png";
 
 //pages
 
-// import Home from "./components/home/home.component";
-// import About from "./components/about/about.component";
-// import Portolio from "./components/portfolio/portfolio.component";
-// import BlogArticle from "./components/blog/blogPost/blogPost.component";
-// import NotFound from "./components/notFound/notFound2";
-// import BlogPage from "./pages/blog/BlogPage";
-// import Courses from "./pages/courses/Courses";
-// components
 import NoLandscape from "./layouts/NoLandscape";
 //pages
 import ContactUs from "./pages/contactUs/ContactUs";
@@ -24,10 +16,6 @@ import ContactUs from "./pages/contactUs/ContactUs";
 
 const Home = loadable(() => import("./components/home/home.component"));
 const About = loadable(() => import("./components/about/about.component"));
-
-// const BlogArticle = loadable(() =>
-//   import("./components/blog/blogPost/blogPost.component")
-// );
 
 const BlogArticle = loadable(() => import("./pages/blogPost/BlogPost"));
 

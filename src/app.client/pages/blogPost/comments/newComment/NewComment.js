@@ -6,9 +6,7 @@ import { connect } from "react-redux";
 import { esquinaChat, check } from "../../../../assets/svgIcons/SvgIcons"; //"../../../../assets/svgIcons/SvgIcons";
 import apiSetComment from "../../../../apiCalls/apiSetComment";
 
-const Container = styled.div`
-  margin: 50px 0;
-`;
+const Container = styled.div``;
 
 const Header = styled.p`
   line-height: 1.18 !important;
