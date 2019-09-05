@@ -14,20 +14,9 @@ import blobToBase64 from "../../../../../services/blobToBase64";
 import UserManageForm from "../../../../layouts/UserManageForm";
 //components
 import Loading from "../../../loading/loading";
+import MonthlyInput from "../../../../../common/components/monthlyInput/MonthlyInput";
 //api calls
 
-const Layout = styled.div`
-  @media (max-width: 700px) {
-    overflow-y: scroll;
-    display: block;
-  }
-`;
-
-const FormCard = styled.div`
-  @media (max-width: 700px) {
-    height: ${props => `${props.layoutH}px !important`};
-  }
-`;
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
@@ -99,6 +88,13 @@ class SignUpForm extends Component {
       return {
         userOtherInterests: array
       };
+    });
+  };
+
+  setFinalDate = date => {
+    this.setState({
+      userBirthDateIsValid: true,
+      userBirthDate: date
     });
   };
 
@@ -1155,7 +1151,7 @@ class SignUpForm extends Component {
                   </div>
 
                   <div className="personalData">
-                    <label>
+                    {/* <label style={{ display: "none" }}>
                       <span id="signUpuseruserBirthDate">Birth Date</span>{" "}
                       <br />
                       <input
@@ -1168,7 +1164,11 @@ class SignUpForm extends Component {
                         onChange={this.handleFormInputChange}
                         onBlur={this.handleOnBlur}
                       />
-                    </label>
+                    </label> */}
+                    <span id="signUpuseruserBirthDate">Birth Date</span>
+                    <MonthlyInput
+                      setFinalDate={this.setFinalDate}
+                    ></MonthlyInput>
 
                     <label>
                       <span id="signUpuseruserGender">Gender</span> <br />

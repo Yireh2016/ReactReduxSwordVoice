@@ -11,6 +11,7 @@ import { check } from "../../assets/SvgIcons";
 //components
 import CountrySelect from "../countryInput/CountryInput";
 import LoadingBtn from "../loading/loadingBtn";
+import MonthlyDate from "../../../common/components/monthlyInput/MonthlyInput";
 
 //api calls
 import searchEmail from "../../apiCalls/searchEmail";
@@ -581,8 +582,8 @@ const UserProfile = ({
     userGender
   } = userProfile;
 
-  userBirthDate = userBirthDate.match(/\d{4}-\d{2}-\d{2}/);
-  userBirthDate = userBirthDate[0];
+  // userBirthDate = userBirthDate.match(/\d{4}-\d{2}-\d{2}/);
+  // userBirthDate = userBirthDate[0];
 
   const checkboxHandler = (e, isChecked) => {
     const { value, name } = e.target;
@@ -605,6 +606,17 @@ const UserProfile = ({
 
     setUserProfile(newUserProfile);
     setProfileChanged(true);
+  };
+
+  const setFinalDate = date => {
+    let newUserProfile = userProfile;
+    setIsBirthDate(date);
+    setIsBirthDateValid(true);
+
+    setProfileChanged(true);
+
+    newUserProfile.userBirthDate = date;
+    setUserProfile(newUserProfile);
   };
 
   const interests = interestArray.map((value, index) => {
@@ -716,20 +728,20 @@ const UserProfile = ({
 
         break;
 
-      case "userBirthDate":
-        if (value) {
-          setProfileChanged(true);
-          newUserProfile.userBirthDate = value;
-          setUserProfile(newUserProfile);
-        }
+      // case "userBirthDate":
+      //   if (value) {
+      //     setProfileChanged(true);
+      //     newUserProfile.userBirthDate = value;
+      //     setUserProfile(newUserProfile);
+      //   }
 
-        if (value === " ") {
-          setIsBirthDateValid(false);
-          setProfileChanged(false);
-          return;
-        }
-        setIsBirthDateValid(true);
-        break;
+      //   if (value === " ") {
+      //     setIsBirthDateValid(false);
+      //     setProfileChanged(false);
+      //     return;
+      //   }
+      //   setIsBirthDateValid(true);
+      //   break;
 
       case "userGender":
         setProfileChanged(true);
@@ -1339,8 +1351,12 @@ const UserProfile = ({
                   <InputLabel width="calc(100% / 2)">
                     <span>Birth Date</span>
                     <InputLayout id="GenderInputLayout">
-                      <Input
-                        style={{ padding: "0 0 0 40px", width: "auto" }}
+                      {/* <Input
+                        style={{
+                          padding: "0 0 0 40px",
+                          width: "auto",
+                          display: "none"
+                        }}
                         type="date"
                         value={userBirthDate}
                         name="userBirthDate"
@@ -1349,15 +1365,19 @@ const UserProfile = ({
                         onChange={e => {
                           inputChangeHandler(e);
                         }}
-                      />
-                      <EditBtn
+                      /> */}
+                      <MonthlyDate
+                        actualDate={userProfile.userBirthDate}
+                        setFinalDate={setFinalDate}
+                      ></MonthlyDate>
+                      {/* <EditBtn
                         id="BirthDateEditBtn"
                         src={edit}
                         alt="Edit BirthDate"
                         onClick={() => {
                           setIsBirthDate(!isBirthDate);
                         }}
-                      />
+                      /> */}
                     </InputLayout>
 
                     <FormatWarning
