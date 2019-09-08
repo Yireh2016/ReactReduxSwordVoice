@@ -303,6 +303,10 @@ export const updatePostCtrl = (req, res) => {
 
             break;
           }
+          default: {
+            res.status(200).send("ok");
+            break;
+          }
         }
       });
     })
