@@ -542,7 +542,6 @@ class CreatePost extends Component {
         dataToUpdate
       )
       .then(() => {
-        console.log("updatePost finished"); // TODO erase
         axios
           .post(`${process.env.CDN_URL}/cdn/deleteFiles/`, {
             url: dataToUpdate.url,
@@ -552,7 +551,6 @@ class CreatePost extends Component {
             console.log("files erased");
           });
 
-        console.log("dialogObj", dialogObj); //TODO erase
         this.props.setDialog(dialogObj);
 
         if (editionType !== "save") {

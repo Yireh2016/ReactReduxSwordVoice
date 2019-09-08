@@ -13,7 +13,6 @@ const renderTemplate = () => {
     var styleTags = sheet.getStyleTags(); // or sheet.getStyleElement();
   } catch (error) {
     // handle error
-    console.error(error); //TODO erase
   } finally {
     sheet.seal();
   }

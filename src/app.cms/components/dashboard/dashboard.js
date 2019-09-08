@@ -206,18 +206,13 @@ class Dashboard extends Component {
   };
 
   linkBtnHandler = (history, link) => {
-    console.log("this.props.project.hasChanged", this.props.project.hasChanged); //TODO erase
-
     if (window.location.pathname === `/cms/${link}`) {
-      console.log("window.location.pathname", window.location.pathname); //TODO erase
-
       return;
     }
     if (!this.props.project.hasChanged) {
       //ojo con state ispostsaved eliminar
       //si no hay cambios ve a adminpost
 
-      console.log("pushing history for routing: ", link); //TODO erase
       history.push(`/cms/${link}`);
       this.setState({
         isMenu: false
@@ -361,7 +356,6 @@ class Dashboard extends Component {
   };
 
   render() {
-    console.log("dashboard rendering"); //TODO erase
     if (this.props.isUserLoggedIn) {
       const CreatePostBtn = withRouter(({ history }) => {
         return (
@@ -402,7 +396,6 @@ class Dashboard extends Component {
         return (
           <li
             onClick={async () => {
-              console.log("Profile btn clicked"); //TODO erase
               const getUserRes = await getUserFromId(this.props.userId);
               if (getUserRes.status === "OK") {
                 this.props.setUserProfile(getUserRes.data);
@@ -622,8 +615,6 @@ class Dashboard extends Component {
                     exact
                     path="/cms/userProfile/"
                     render={() => {
-                      console.log("rendering /cms/userProfile/"); //TODO erase
-
                       return (
                         <Suspense fallback={<Loading fullscreen={true} />}>
                           <UserProfile />

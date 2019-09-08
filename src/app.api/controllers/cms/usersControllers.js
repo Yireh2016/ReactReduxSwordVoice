@@ -83,7 +83,6 @@ export const updateUserCtrl = (req, res) => {
           return;
         }
         if (emailChanged) {
-          console.log("emailChanged", emailChanged); //TODO erase
           try {
             await verifyEmailOnEdition(user.userVerificationCode, {
               firstName: user.userFirstName,

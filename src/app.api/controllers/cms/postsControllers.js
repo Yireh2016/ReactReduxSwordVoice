@@ -274,8 +274,6 @@ export const updatePostCtrl = (req, res) => {
 
         switch (editionType) {
           case "unpublish": {
-            console.log("Unpublishing");
-
             try {
               await removeSiteMap({
                 url: `${process.env.WEB_URL}/blog/post/${article[0].url}`
@@ -284,16 +282,12 @@ export const updatePostCtrl = (req, res) => {
               res.status(200).send("Unpublishing ready");
             } catch (error) {
               res.status(200).send(error);
-              console.log("error", error); //TODO erase
             }
-
-            console.log("Unpublishing ready");
 
             break;
           }
 
           case "publish": {
-            console.log("publishing");
             try {
               await addToSiteMap({
                 url: `${article[0].url}`,
@@ -304,10 +298,8 @@ export const updatePostCtrl = (req, res) => {
               });
               res.status(200).send("publish ready");
             } catch (error) {
-              console.log("error", error); //TODO erase
               res.status(200).send(error);
             }
-            console.log("publish ready"); //TODO erase
 
             break;
           }
@@ -345,11 +337,9 @@ export const addToSiteMapCtrl = (req, res) => {
   siteModel
     .find()
     .then(site => {
-      console.log("site[0].urls", site[0].sitemap.urls); //TODO erase
       site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl];
       site[0].save((err, newSite) => {
         if (err) {
-          console.log("err", err); //TODO erase
           res.status(404).send(err);
           return;
         }
@@ -360,7 +350,6 @@ export const addToSiteMapCtrl = (req, res) => {
       });
     })
     .catch(err => {
-      console.log("err", err); //TODO erase
       res.status(404).send(err);
     });
 };
@@ -384,7 +373,6 @@ export const removeSiteMapCtrl = (req, res) => {
 
       site[0].save((err, newSite) => {
         if (err) {
-          console.log("err", err); //TODO erase
           res.status(404).send(err);
           return;
         }
@@ -395,7 +383,6 @@ export const removeSiteMapCtrl = (req, res) => {
       });
     })
     .catch(err => {
-      console.log("err", err); //TODO erase
       res.status(404).send(err);
     });
 };
@@ -435,7 +422,6 @@ export const createSiteMapCtrl = (req, res) => {
         siteInstance.sitemap.urls = urlArr;
         siteInstance.save((err, newSite) => {
           if (err) {
-            console.log("err", err); //TODO erase
             res.status(404).send(err);
             return;
           }
@@ -452,7 +438,6 @@ export const createSiteMapCtrl = (req, res) => {
       res.status(200).send(sitemap.toXML());
     })
     .catch(err => {
-      console.log("err", err); //TODO erase
       res.status(404).send(err);
     });
 };

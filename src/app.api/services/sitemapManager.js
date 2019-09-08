@@ -25,7 +25,6 @@ export const removeSiteMap = ({ url }) => {
 
         site[0].save((err, newSite) => {
           if (err) {
-            console.log("err", err); //TODO erase
             reject(err);
             return;
           }
@@ -34,7 +33,6 @@ export const removeSiteMap = ({ url }) => {
         });
       })
       .catch(err => {
-        console.log("err", err); //TODO erase
         reject(err);
       });
   });
@@ -82,7 +80,6 @@ export const addToSiteMap = ({ url, date }) => {
           siteInstance.sitemap.urls = urlArr;
           siteInstance.save(err => {
             if (err) {
-              console.log("err", err); //TODO erase
               reject(err);
               return;
             }
@@ -102,7 +99,6 @@ export const addToSiteMap = ({ url, date }) => {
         site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl];
         site[0].save(err => {
           if (err) {
-            console.log("err", err); //TODO erase
             reject(err);
             return;
           }
@@ -111,7 +107,6 @@ export const addToSiteMap = ({ url, date }) => {
         });
       })
       .catch(err => {
-        console.log("err", err); //TODO erase
         reject(err);
       });
   });

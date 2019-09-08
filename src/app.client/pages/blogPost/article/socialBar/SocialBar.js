@@ -215,13 +215,10 @@ const SocialBar = ({
   } = article.socialCount.share;
 
   const shareBtnOnClose = () => {
-    console.log("shareBtn OnClose "); //TODO erase
     setShowSocial(false);
   };
 
   const totalCountHandler = count => {
-    console.log("total count on DB", count); //TODO erase
-
     setShareCount(count);
   };
 
