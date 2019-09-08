@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { HashLink as Link } from "react-router-hash-link";
 
+//components
+import ShareBtn from "./shareBtn/ShareBtn";
+
 //assets
 import {
   claps as claps2,
@@ -18,6 +21,59 @@ import updateSocialCount from "../../../../apiCalls/updateSocialCount";
 //services
 import countingHTMLwords from "../../../../services/countingHTMLwords";
 
+const BarContainer = styled.div`
+  display: inline-block;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.09);
+  border-radius: 5px;
+  padding: 15px 15px 0 15px;
+  margin: 15px 0 0 0;
+  box-sizing: border-box;
+`;
+const BarLayout = styled.div`
+  display: flex;
+  padding: 15px;
+`;
+const SocialItem = styled.div`
+  margin: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  @media (max-width: 700px) {
+    margin: 0;
+  }
+`;
+const Icon = styled.span`
+  display: flex;
+  transform: ${props =>
+    props.rotate === "true" ? "rotate(180deg)" : "rotate(0deg)"};
+
+  #clapsIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  &:active #clapsIcon {
+    transform: scale(1.2);
+  }
+  svg {
+    height: 20px;
+    width: 20px;
+    fill: #ff9575;
+    margin: 0 8px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+const Counter = styled.span`
+  color: #004059;
+  font-weight: bold;
+  font-size: 0.7rem;
+  user-select: none;
+`;
+
 const SocialBar = ({
   socialCount,
   addClapsCount,
@@ -27,6 +83,7 @@ const SocialBar = ({
 }) => {
   const [clapsAdder, setClapsAdder] = useState(0);
   const [clapsTimer, setClapsTimer] = useState();
+  const [showSocial, setShowSocial] = useState(false);
   useEffect(() => {
     const timerExpires = (countingHTMLwords(article.html) * 60 * 1000 * 2) / 3;
 
@@ -42,58 +99,6 @@ const SocialBar = ({
       }
     }, timerExpires);
   }, []);
-  const BarContainer = styled.div`
-    display: inline-block;
-    background: #ffffff;
-    border: 0.5px solid rgba(0, 0, 0, 0.12);
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.09);
-    border-radius: 5px;
-    padding: 15px 15px 0 15px;
-    margin: 15px 0 0 0;
-    box-sizing: border-box;
-  `;
-  const BarLayout = styled.div`
-    display: flex;
-    padding: 15px;
-  `;
-  const SocialItem = styled.div`
-    margin: 0 8px;
-    display: inline-flex;
-    align-items: center;
-    @media (max-width: 700px) {
-      margin: 0;
-    }
-  `;
-  const Icon = styled.span`
-    display: flex;
-    transform: ${props =>
-      props.rotate === "true" ? "rotate(180deg)" : "rotate(0deg)"};
-
-    #clapsIcon {
-      width: 50px;
-      height: 50px;
-    }
-
-    &:active #clapsIcon {
-      transform: scale(1.2);
-    }
-    svg {
-      height: 20px;
-      width: 20px;
-      fill: #ff9575;
-      margin: 0 8px;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  `;
-  const Counter = styled.span`
-    color: #004059;
-    font-weight: bold;
-    font-size: 0.7rem;
-    user-select: none;
-  `;
 
   const clapsAdderHandler = () => {
     if (clapsTimer) {
@@ -148,7 +153,7 @@ const SocialBar = ({
     <Icon
       id="share"
       onClick={() => {
-        setShareCount();
+        setShowSocial(true);
       }}
     >
       {share2}
@@ -176,7 +181,7 @@ const SocialBar = ({
     },
     {
       icon: share,
-      count: socialCount.share
+      count: socialCount.share.total
     },
     {
       icon: views,
@@ -199,10 +204,57 @@ const SocialBar = ({
       </SocialItem>
     );
   });
+
+  const {
+    linkedIn,
+    email,
+    copyLink,
+    whatsapp,
+    facebook,
+    twitter
+  } = article.socialCount.share;
+
+  const shareBtnOnClose = () => {
+    console.log("shareBtn OnClose "); //TODO erase
+    setShowSocial(false);
+  };
+
+  const totalCountHandler = count => {
+    console.log("total count on DB", count); //TODO erase
+
+    setShareCount(count);
+  };
+
+  let hashtagsArr = [];
+  article.categories.map(category => {
+    category = category.replace(" ", "");
+    hashtagsArr.push(`${category}`);
+  });
   return (
-    <BarContainer id="barContainer">
-      <BarLayout id="barLayout">{socialItemsMap}</BarLayout>
-    </BarContainer>
+    <React.Fragment>
+      {showSocial && (
+        <ShareBtn
+          linkedIn={linkedIn}
+          email={email}
+          copyLink={copyLink}
+          whatsapp={whatsapp}
+          facebook={facebook}
+          twitter={twitter}
+          onClose={shareBtnOnClose}
+          totalCount={totalCountHandler}
+          postData={{
+            // url: `${process.env.WEB_URL + "/blog/post/" + article.url}`,
+            url: `${"https://swordvoice.com" + "/blog/post/" + article.url}`,
+            title: article.title,
+            emailSubject: article.title,
+            hashtag: hashtagsArr
+          }}
+        ></ShareBtn>
+      )}
+      <BarContainer id="barContainer">
+        <BarLayout id="barLayout">{socialItemsMap}</BarLayout>
+      </BarContainer>
+    </React.Fragment>
   );
 };
 

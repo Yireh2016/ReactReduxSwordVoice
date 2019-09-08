@@ -1,5 +1,6 @@
 export default ({
   body,
+  twitterTags,
   scriptTags,
   linkTags,
   styleTags,
@@ -37,6 +38,8 @@ export default ({
       <!--http-equiv Tags-->
       <meta http-equiv="Content-Style-Type" content="text/css">
       <meta http-equiv="Content-Script-Type" content="text/javascript">
+
+      ${twitterTags}
 
 
 

@@ -73,12 +73,13 @@ const Footer = styled.footer`
 
   grid-row-start: 2;
   grid-row-end: 3;
+
   @media (max-width: 1050px) {
     grid-column-start: 1;
     grid-column-end: 2;
 
-    grid-row-start: 7;
-    grid-row-end: 8;
+    grid-row-start: 6;
+    grid-row-end: 7;
   }
 `;
 
@@ -104,12 +105,13 @@ const PopularPostsCont = styled.section`
 
   grid-row-start: 5;
   grid-row-end: 6;
+
   @media (max-width: 1050px) {
     grid-column-start: 1;
     grid-column-end: 2;
 
-    grid-row-start: 6;
-    grid-row-end: 7;
+    grid-row-start: 7;
+    grid-row-end: 8;
   }
 `;
 

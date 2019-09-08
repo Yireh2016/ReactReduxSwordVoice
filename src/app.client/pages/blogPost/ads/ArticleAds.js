@@ -15,6 +15,8 @@ const Ad1Cont = styled.div`
 `;
 
 const Ad2Cont = styled.div`
+  display: none;
+
   margin-top: 2vh;
   display: flex;
   height: 26vh;

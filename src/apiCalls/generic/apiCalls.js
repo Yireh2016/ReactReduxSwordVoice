@@ -48,3 +48,16 @@ export const apiPut = (url, data, config) => {
       });
   });
 };
+
+export const apiDelete = (url, data, config) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(url, data, config)
+      .then(res => {
+        successFn(res, resolve);
+      })
+      .catch(err => {
+        errorFn(err, reject);
+      });
+  });
+};

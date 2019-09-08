@@ -30,7 +30,14 @@ const articleSchema = new Schema({
   isPublished: { type: Boolean, default: false },
   socialCount: {
     claps: { type: Number, default: 0 },
-    share: { type: Number, default: 0 },
+    share: {
+      total: { type: Number, default: 0 },
+      twitter: { type: Number, default: 0 },
+      facebbok: { type: Number, default: 0 },
+      copyLink: { type: Number, default: 0 },
+      email: { type: Number, default: 0 },
+      linkedIn: { type: Number, default: 0 }
+    },
     comments: { type: Number, default: 0 },
     views: { type: Number, default: 0 }
   }

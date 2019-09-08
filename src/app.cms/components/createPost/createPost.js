@@ -481,6 +481,7 @@ class CreatePost extends Component {
           status: "OK",
           show: true
         };
+
         break;
 
       case "program":
@@ -527,6 +528,7 @@ class CreatePost extends Component {
           status: "OK",
           show: true
         };
+
         break;
 
       default:
@@ -535,9 +537,12 @@ class CreatePost extends Component {
 
     //debo almacenar el id del autor
     axios
-      .put(`/api/updatePost/${this.props.project.name}`, dataToUpdate)
+      .put(
+        `/api/updatePost?projectName=${this.props.project.name}&editionType=${editionType}`,
+        dataToUpdate
+      )
       .then(() => {
-
+        console.log("updatePost finished"); // TODO erase
         axios
           .post(`${process.env.CDN_URL}/cdn/deleteFiles/`, {
             url: dataToUpdate.url,
@@ -546,6 +551,8 @@ class CreatePost extends Component {
           .then(() => {
             console.log("files erased");
           });
+
+        console.log("dialogObj", dialogObj); //TODO erase
         this.props.setDialog(dialogObj);
 
         if (editionType !== "save") {

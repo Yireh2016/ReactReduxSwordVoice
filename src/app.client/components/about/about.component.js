@@ -350,11 +350,22 @@ class About extends React.Component {
                   {/* //    display: flex;
     flex-direction: row;
     justify-content: center; */}
-                  <Call2Action
-                    className="call2action-med col-0 col-0-sm"
-                    text="Blog"
-                    link="/blog"
-                  />
+
+                  {this.props.isLoggedIn ? (
+                    <Call2Action
+                      className="call2action-med col-0 col-0-sm"
+                      text="Blog"
+                      link="/blog"
+                    />
+                  ) : (
+                    <Call2Action
+                      className="call2action-med col-0 col-0-sm"
+                      text="Sign Up"
+                      onClick={() => {
+                        this.props.setShowSignUp(true);
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </AboutText>
@@ -363,11 +374,22 @@ class About extends React.Component {
             </div>
 
             <section className="col-2 grid asidePC col-0-md col-0-sm">
-              <Call2Action
-                className="call2action-about call2actionAside "
-                text="Blog"
-                link="/blog"
-              />
+              {this.props.isLoggedIn ? (
+                <Call2Action
+                  className="call2action-about call2actionAside"
+                  text="Blog"
+                  link="/blog"
+                />
+              ) : (
+                <Call2Action
+                  className="call2action-about call2actionAside"
+                  text="Sign Up"
+                  onClick={() => {
+                    this.props.setShowSignUp(true);
+                  }}
+                />
+              )}
+
               <FooterApp
                 estilos=" appear container asideRedes"
                 size="footer-about-pcSize"
@@ -379,11 +401,22 @@ class About extends React.Component {
           <section className="footerContainer-about col-0-md col-0">
             <div className="footerElements-about">
               {/*boton de accion y redes sociales*/}
-              <Call2Action
-                className="call2action-about"
-                text="Blog"
-                link="/blog"
-              />
+              {this.props.isLoggedIn ? (
+                <Call2Action
+                  className="call2action-about"
+                  text="Blog"
+                  link="/blog"
+                />
+              ) : (
+                <Call2Action
+                  className="call2action-about"
+                  text="Sign Up"
+                  onClick={() => {
+                    this.props.setShowSignUp(true);
+                  }}
+                />
+              )}
+
               <FooterApp
                 estilos=" appear col-12  grid footer-about center-flex"
                 size="footer-about-size"
@@ -409,8 +442,18 @@ class About extends React.Component {
 
 const stateToProps = state => {
   return {
-    device: state.resize.device
+    device: state.resize.device,
+    isLoggedIn: state.logInStatus.isUserLoggedIn
   };
 };
 
-export default connect(stateToProps)(About);
+const actionsToProps = dispatch => {
+  return {
+    setShowSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
+  };
+};
+
+export default connect(
+  stateToProps,
+  actionsToProps
+)(About);

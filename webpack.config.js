@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const fs = require("fs"); // to check if the file exists
 
 //plugins
+const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const TerserJSPlugin = require("terser-webpack-plugin");
@@ -36,9 +37,36 @@ module.exports = env => {
     return prev;
   }, {});
 
-  // const dotenv = require('dotenv');
+  const optionsRobotTxt = {
+    policy: [
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+        disallow: ["/cms"],
+        crawlDelay: 2
+      },
+      {
+        userAgent: "Twitterbot",
+        Disallow: "*",
+        allow: "/blog/post/",
+        crawlDelay: 2
+      },
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: "/cms",
+        crawlDelay: 10
+      }
+    ],
+    sitemap: "http://swordvoice.com/sitemap.xml",
+    host: "http://swordvoice.com"
+  };
+
   var isProduction = process.env.NODE_ENV === "production";
-  var productionPluginDefine = [new webpack.DefinePlugin(envKeys)];
+  var productionPluginDefine = [
+    new webpack.DefinePlugin(envKeys),
+    new RobotstxtPlugin(optionsRobotTxt)
+  ];
 
   var clientLoaders = isProduction
     ? productionPluginDefine.concat([

@@ -4,6 +4,8 @@ import NavBar from "../navbar/navbar.component";
 import is from "is_js";
 import Helmet from "react-helmet";
 import styled, { keyframes } from "styled-components";
+
+import { connect } from "react-redux";
 //imagenes
 import imgFondo from "../../assets/img/home/creative1280.jpg";
 import imgFondoMed from "../../assets/img/home/creative760.jpg";
@@ -324,11 +326,21 @@ class Home extends Component {
         </BouncerContainer>
         <Slogan>Let Your SwordVoice be Heard!!! </Slogan>
         {/*Boton de accion y footer*/}
-        <Call2Action
-          className="call2Action-home appear"
-          text="Blog"
-          link="/blog"
-        />
+        {this.props.isLoggedIn ? (
+          <Call2Action
+            className="call2Action-home appear"
+            text="Blog"
+            link="/blog"
+          />
+        ) : (
+          <Call2Action
+            className="call2Action-home appear"
+            text="Sign Up"
+            onClick={() => {
+              this.props.setShowSignUp(true);
+            }}
+          />
+        )}
         <FooterApp
           id="homePage"
           estilos="appear footer"
@@ -339,4 +351,18 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapState = state => {
+  return {
+    isLoggedIn: state.logInStatus.isUserLoggedIn
+  };
+};
+
+const mapActions = dispatch => {
+  return {
+    setShowSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
+  };
+};
+export default connect(
+  mapState,
+  mapActions
+)(Home);

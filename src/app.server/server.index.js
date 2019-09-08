@@ -12,6 +12,7 @@ import "../app.api/config/passport"; //modulo debe estar importado despues de lo
 
 //controllers
 import swordvoiceWeb from "../app.server/controllers/swordvoiceWeb";
+import sitemapCtrl from "../app.server/controllers/sitemapCtrl";
 import notFoundCtrl from "../app.server/controllers/notFoundCtrl";
 import cms from "../app.server/controllers/cms";
 import checkProgramPost from "./controllers/checkProgramPost";
@@ -33,6 +34,7 @@ server.use(express.static("dist/assets"));
 server.use(passport.initialize());
 
 //routes
+server.get("/sitemap.xml", sitemapCtrl);
 server.use("/api", routerAPI);
 server.get("/cms*", cms);
 server.get("/", swordvoiceWeb);

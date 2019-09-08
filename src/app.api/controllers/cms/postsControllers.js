@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import fs from "fs";
 import axios from "axios";
+import { createSitemap } from "sitemap";
 
+import { removeSiteMap, addToSiteMap } from "../../services/sitemapManager";
 // var fs = require('fs');
 // var dir = './tmp';
 
@@ -10,6 +12,8 @@ import axios from "axios";
 // }
 
 let articleModel = mongoose.model("Article");
+
+let siteModel = mongoose.model("Site");
 
 export const createPostCtrl = (req, res) => {
   const projectData = req.body;
@@ -42,9 +46,7 @@ export const addClassToPostCtrl = (req, res) => {
 
   axios
     .post(
-      `${
-        process.env.CDN_URL
-      }/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
+      `${process.env.CDN_URL}/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
     )
     .then(apiRes => {
       if (apiRes.status === 200) {
@@ -149,14 +151,10 @@ export const getPostCtrl = (req, res) => {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(http:/cdn.swordvoice.com/articles/${posts[i].url}/${
-              posts[i].thumbnail.name
-            })`,
+            `url(http:/cdn.swordvoice.com/articles/${posts[i].url}/${posts[i].thumbnail.name})`,
           postGradient:
             posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-              posts[i].thumbnail.color
-            } 73.79%)`,
+            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           projectName: posts[i].projectName,
           isPublished: posts[i].isPublished,
           title: posts[i].title,
@@ -202,13 +200,16 @@ export const getArticleCtrl = (req, res) => {
     });
 };
 export const updatePostCtrl = (req, res) => {
-  const projectName = req.params.projectName;
+  const { projectName, editionType } = req.query;
   const data = req.body;
 
-  articleModel.find({ projectName: projectName }).exec(function(err, article) {
-    if (err) {
-      console.log(err);
-    } else {
+  console.log(
+    `projectName ${projectName} \n editionType ${editionType}  \n data ${data}`
+  );
+
+  articleModel
+    .find({ projectName })
+    .then(article => {
       let editionHistoryArr;
       if (data.editionHistory) {
         editionHistoryArr = [...article[0].editionHistory, data.editionHistory];
@@ -265,10 +266,58 @@ export const updatePostCtrl = (req, res) => {
       article[0].isPublished =
         isPublished === undefined ? article[0].isPublished : isPublished;
 
-      article[0].save();
-      res.json(200);
-    }
-  });
+      article[0].save(async err => {
+        if (err) {
+          res.status(401).send(err);
+          return;
+        }
+
+        switch (editionType) {
+          case "unpublish": {
+            console.log("Unpublishing");
+
+            try {
+              await removeSiteMap({
+                url: `${process.env.WEB_URL}/blog/post/${article[0].url}`
+              });
+
+              res.status(200).send("Unpublishing ready");
+            } catch (error) {
+              res.status(200).send(error);
+              console.log("error", error); //TODO erase
+            }
+
+            console.log("Unpublishing ready");
+
+            break;
+          }
+
+          case "publish": {
+            console.log("publishing");
+            try {
+              await addToSiteMap({
+                url: `${article[0].url}`,
+                date:
+                  article[0].date
+                    .toISOString()
+                    .match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) + "+00:00"
+              });
+              res.status(200).send("publish ready");
+            } catch (error) {
+              console.log("error", error); //TODO erase
+              res.status(200).send(error);
+            }
+            console.log("publish ready"); //TODO erase
+
+            break;
+          }
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(401).send(err);
+    });
 };
 
 export const deletePostCtrl = (req, res) => {
@@ -280,5 +329,130 @@ export const deletePostCtrl = (req, res) => {
         return;
       }
       res.json(204, { message: "Post removed" });
+    });
+};
+
+export const addToSiteMapCtrl = (req, res) => {
+  const { date, url } = req.body;
+
+  const newUrl = {
+    url: `${process.env.WEB_URL}/blog/post/${url}`,
+    changefreq: "monthly",
+    priority: 0.64,
+    lastmod: date
+  };
+
+  siteModel
+    .find()
+    .then(site => {
+      console.log("site[0].urls", site[0].sitemap.urls); //TODO erase
+      site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl];
+      site[0].save((err, newSite) => {
+        if (err) {
+          console.log("err", err); //TODO erase
+          res.status(404).send(err);
+          return;
+        }
+
+        const sitemap = createSitemap(newSite.sitemap);
+
+        res.status(200).send(sitemap.toXML());
+      });
+    })
+    .catch(err => {
+      console.log("err", err); //TODO erase
+      res.status(404).send(err);
+    });
+};
+export const removeSiteMapCtrl = (req, res) => {
+  const { url } = req.body;
+
+  siteModel
+    .find()
+    .then(site => {
+      const urlsArr = site[0].sitemap.urls;
+      console.log("urlsArr", urlsArr);
+
+      //`${process.env.WEB_URL}/blog/post/${url}`
+      const urlsFilterArr = urlsArr.filter(link => {
+        return link.url !== `${process.env.WEB_URL}/blog/post/${url}`;
+      });
+
+      console.log("urlsFilterArr", urlsFilterArr);
+
+      site[0].sitemap.urls = urlsFilterArr;
+
+      site[0].save((err, newSite) => {
+        if (err) {
+          console.log("err", err); //TODO erase
+          res.status(404).send(err);
+          return;
+        }
+
+        const sitemap = createSitemap(newSite.sitemap);
+
+        res.status(200).send(sitemap.toXML());
+      });
+    })
+    .catch(err => {
+      console.log("err", err); //TODO erase
+      res.status(404).send(err);
+    });
+};
+
+export const createSiteMapCtrl = (req, res) => {
+  const urlArr = [
+    {
+      url: `${process.env.WEB_URL}`,
+      changefreq: "monthly",
+      priority: 1,
+      lastmod: "2019-09-07T14:09:33+00:00"
+    },
+    {
+      url: `${process.env.WEB_URL}/about`,
+      changefreq: "monthly",
+      priority: 0.8,
+      lastmod: "2019-09-07T14:09:33+00:00"
+    },
+    {
+      url: `${process.env.WEB_URL}/blog`,
+      changefreq: "monthly",
+      priority: 0.8,
+      lastmod: "2019-09-07T14:09:33+00:00"
+    },
+    {
+      url: `${process.env.WEB_URL}/contact`,
+      changefreq: "monthly",
+      priority: 0.8,
+      lastmod: "2019-09-07T14:09:33+00:00"
+    }
+  ];
+  siteModel
+    .find()
+    .then(site => {
+      if (site.length === 0) {
+        const siteInstance = new siteModel();
+        siteInstance.sitemap.urls = urlArr;
+        siteInstance.save((err, newSite) => {
+          if (err) {
+            console.log("err", err); //TODO erase
+            res.status(404).send(err);
+            return;
+          }
+
+          const sitemap = createSitemap(newSite.sitemap);
+
+          res.status(200).send(sitemap.toXML());
+        });
+        return;
+      }
+
+      const sitemap = createSitemap(site[0].sitemap);
+
+      res.status(200).send(sitemap.toXML());
+    })
+    .catch(err => {
+      console.log("err", err); //TODO erase
+      res.status(404).send(err);
     });
 };

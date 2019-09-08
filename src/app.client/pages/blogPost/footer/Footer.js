@@ -1,14 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 //components
-import Logo from "../../../components/general/logo.component";
 import FooterApp from "../../../components/footer/footer.component";
 import Call2Action from "../../../components/general/call2action.component";
 
+//assets
+import svAvatar from "../../../assets/svgIcons/aboutTeclado.svg";
+
 const FooterLay = styled.footer`
-  height: calc(100vh - 94px);
-  position: relative;
+  ${"" /* height: calc(100vh - 94px); */}
+  position: sticky;
+  top: 100px;
 
   @media (max-width: 1050px) {
     height: initial;
@@ -34,24 +38,36 @@ const FooterCont = styled.footer`
 `;
 
 const LogoCont = styled.div`
-  @media (max-width: 1050px) {
+  ${"" /* @media (max-width: 1050px) {
     display: none;
-  }
+  } */}
 `;
 
 const Cont = styled.div`
   margin-top: 20px;
 `;
 
-const Footer = () => {
+const Footer = ({ isLoggedIn, setSignUp }) => {
   return (
     <FooterLay>
       <FooterCont>
         <LogoCont>
-          <Logo style={{ top: "100px" }} logoWidth="20vw" />
+          <div style={{ top: "100px" }}>
+            <img src={svAvatar} alt="SwordVoice Avatar" />
+          </div>
+          {/* <Logo style={{ top: "100px" }} logoWidth="20vw" /> */}
         </LogoCont>
         <Cont>
-          <Call2Action text="Blog" link="/blog" />
+          {isLoggedIn ? (
+            <Call2Action text="Blog" link="/blog" />
+          ) : (
+            <Call2Action
+              text="Sign Up"
+              onClick={() => {
+                setSignUp(true);
+              }}
+            />
+          )}
         </Cont>
         <FooterApp
           id="blogpostPage"
@@ -63,4 +79,18 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+const mapState = state => {
+  return {
+    isLoggedIn: state.logInStatus.isUserLoggedIn
+  };
+};
+
+const mapActions = dispatch => {
+  return {
+    setSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
+  };
+};
+export default connect(
+  mapState,
+  mapActions
+)(Footer);

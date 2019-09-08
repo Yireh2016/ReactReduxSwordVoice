@@ -56,9 +56,9 @@ const BlogPost = ({ title, summary }) => {
         <BlogPostLayout
           article={<Article></Article>}
           ad1={<Ad1 />}
-          ad2={<Ad2 />}
+          ad2={<Footer></Footer>}
           similPost={<SimilPost asideTitle="Similar Posts" />}
-          footer={<Footer></Footer>}
+          footer={<Ad2 />}
           comments={<Comments></Comments>}
           popPosts={<Popular></Popular>}
         />

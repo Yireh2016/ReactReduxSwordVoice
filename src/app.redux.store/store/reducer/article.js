@@ -10,6 +10,7 @@ const initialState = {
   commentsCount: 0,
   similarPosts: [],
   similarPostsCount: 0,
+  thumbnail: "",
   comments: [
     {
       _id: "",
@@ -25,7 +26,14 @@ const initialState = {
   ],
   socialCount: {
     claps: 0,
-    share: 0,
+    share: {
+      total: 0,
+      twitter: 0,
+      facebbok: 0,
+      copyLink: 0,
+      email: 0,
+      linkedIn: 0
+    },
     comments: 0,
     views: 0
   }
@@ -63,7 +71,7 @@ const article = (state = initialState, action) => {
     }
 
     case "SET_SHARE_COUNT": {
-      newState.socialCount.share = action.payload;
+      newState.socialCount.share.total = action.payload;
       break;
     }
     case "SET_COMMENTS_COUNT": {

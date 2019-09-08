@@ -25,7 +25,10 @@ import {
   getClassFromPostCtrl,
   getPostCtrl,
   updatePostCtrl,
-  getArticleCtrl
+  getArticleCtrl,
+  addToSiteMapCtrl,
+  removeSiteMapCtrl,
+  createSiteMapCtrl
 } from "../controllers/cms/postsControllers";
 import {
   socialCtrl,
@@ -81,8 +84,11 @@ function guestAPI(req, res, next) {
 //se usa en: signUpForm
 routerAPI.post("/signup", guestAPI, signUpCtrl);
 
+routerAPI.post("/createSiteMap", createSiteMapCtrl); //FIXME erase
+
 routerAPI.post("/signUpEmailConfirm", signUpEmailConfirmCtrl);
 
+routerAPI.post("/addToSiteMap", authAPI, addToSiteMapCtrl); //FIXME add authAPI
 // hacer Login
 //se usa en: logInForm
 routerAPI.post("/login", guestAPI, loginCtrl);
@@ -207,6 +213,8 @@ routerAPI.get("/advancedSearchDb/", guestAPI, advancedSearchDbCtrl);
 // Eliminar usuario unico
 //se usa en contact y deberia usarse en PROFILE
 //para eliminar usuario de la DB
+
+routerAPI.delete("/removeSiteMap", authAPI, removeSiteMapCtrl);
 routerAPI.delete("/users/:userId", authAPI, (req, res) => {
   usersModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
     if (err) {
@@ -320,7 +328,7 @@ routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.put("/updatePost/:projectName", authAPI, updatePostCtrl);
+routerAPI.put("/updatePost", authAPI, updatePostCtrl);
 routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
 
 //////////////////////////////////////

@@ -38,7 +38,6 @@ const searchSimilarArticles = (
     .limit(7) // FIXME change it to 7
     .exec()
     .then(posts => {
-      console.log("similar posts limited", posts);
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {

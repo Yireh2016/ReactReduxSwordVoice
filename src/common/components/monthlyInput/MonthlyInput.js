@@ -166,18 +166,20 @@ const MonthlyInput = ({ setFinalDate, actualDate }) => {
 
   useEffect(() => {
     if (actualDate) {
-      console.log("actualDate", actualDate); //TODO erase
       const date = new Date(actualDate);
 
-      console.log("date", date); //TODO erase
-      console.log("date.getFullYear()", date.getFullYear()); //TODO erase
-      console.log("months[date.getMonth()]", months[date.getMonth()]); //TODO erase
       setYearChanged(true);
       setYear(parseInt(date.getFullYear()));
       setMonth(months[date.getMonth()]);
       setIsValid(true);
     }
   }, []);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     !timerVal && setIsControl(false);
+  //   }, 1.5 * 1000);
+  // }, [isControl]);
 
   var months = [
     "Jan",
@@ -255,7 +257,7 @@ const MonthlyInput = ({ setFinalDate, actualDate }) => {
         </Container>
         <Btn
           id="Btn"
-          onClick={() => {
+          onClick={e => {
             setIsControl(!isControl);
           }}
         >

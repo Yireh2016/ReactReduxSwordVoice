@@ -8,6 +8,7 @@ import Helmet from "react-helmet";
 
 //assets
 import blogBackground from "../../assets/img/blog/fondoBlog.jpg"; //'src\app.client\assets\img\blog\fondoBlog.jpg'
+import svAvatar from "../../assets/svgIcons/aboutTeclado.svg";
 
 //assets
 import {
@@ -43,7 +44,6 @@ import triggerDialog from "../../services/triggerDialog";
 
 //apiCalls
 import getMorePosts from "../../../apiCalls/getMorePosts";
-import searchLastArticles from "../../apiCalls/searchLastArticles";
 import advancedSearchDb from "../../apiCalls/advancedSearchDb";
 import apiCtrl from "../../../apiCalls/generic/apiCtrl";
 
@@ -99,6 +99,9 @@ const RecentPostCont = styled.section`
   h2 {
     font-weight: normal;
     color: #f95f0b;
+    @media (max-width: 700px) {
+      margin: 0 0 0 8px;
+    }
   }
 `;
 
@@ -407,7 +410,7 @@ class BlogPage extends React.Component {
 
       case "phone":
         asidePostW = 11;
-        postH = (windowWidth * 1) / 1.028;
+        postH = (windowWidth * 0.9) / 1.028;
         break;
 
       default:
@@ -786,22 +789,22 @@ class BlogPage extends React.Component {
     const footerBlog = (
       <footer className=" col-12 ">
         <div className="footerBlogContainer">
-          <Logo
-            className="footerBlogLogo "
-            style={{ top: "100px" }}
-            logoWidth="20vw"
-          />
+          <div className="footerBlogLogo" style={{ top: "100px" }}>
+            <img src={svAvatar} alt="SwordVoice Avatar" />
+          </div>
 
           {this.props.resize.device === "pc" && (
             <React.Fragment>
-              <Call2Action
-                link={false}
-                className="call2ActionBlog"
-                text="Sign Up"
-                onClick={() => {
-                  this.props.showSignUp(true);
-                }}
-              />
+              {!this.props.isLoggedIn && (
+                <Call2Action
+                  link={false}
+                  className="call2ActionBlog"
+                  text="Sign Up"
+                  onClick={() => {
+                    this.props.showSignUp(true);
+                  }}
+                />
+              )}
               <FooterApp
                 id="blogPage2"
                 estilos="appear footer-blog "
@@ -946,14 +949,19 @@ class BlogPage extends React.Component {
                   styles.footer.layout
                 ]}
               >
-                <Call2Action
-                  className="call2ActionBlog"
-                  link={false}
-                  text="Sign Up"
-                  onClick={() => {
-                    this.props.showSignUp(true);
-                  }}
-                />
+                <div style={{ top: "100px" }}>
+                  <img src={svAvatar} alt="SwordVoice Avatar" />
+                </div>
+                {!this.props.isLoggedIn && (
+                  <Call2Action
+                    className="call2ActionBlog"
+                    link={false}
+                    text="Sign Up"
+                    onClick={() => {
+                      this.props.showSignUp(true);
+                    }}
+                  />
+                )}
                 <FooterApp
                   estilos="appear footer-blog "
                   size="redesSociales-blog"
@@ -1084,7 +1092,8 @@ class BlogPage extends React.Component {
             );
           })
         : null;
-    const lastPost =
+
+    const lastPostPC =
       newPostArray.length > 0
         ? newPostArray.map((post, i) => {
             let postImg = {
@@ -1185,7 +1194,7 @@ class BlogPage extends React.Component {
                 }
               ]}
             >
-              {lastPost}
+              {lastPostPC}
             </div>
 
             <div
@@ -1193,26 +1202,47 @@ class BlogPage extends React.Component {
                 { display: "none" },
                 {
                   "@media (max-width: 1050px)": {
-                    display: "block"
+                    display: "block",
+                    height: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
                   }
                 }
               ]}
             >
               {newPostArray.length > 0 && (
-                <NewPostLayout size={this.state.lastPostW}>
-                  <Post
+                <div style={{ margin: "0 0 18vh 0" }}>
+                  <PostCard
                     id="latest"
                     title={newPostArray[0].title}
-                    backgroundURL={newPostArray[0].postImg}
+                    postH={mainPostH}
+                    postImg={newPostArray[0].postImg}
                     postGradient={newPostArray[0].postGradient}
+                    url={`/blog/post/${newPostArray[0].url}`}
+                    hasSummary={true}
                     keywords={newPostArray[0].keywords}
                     author={newPostArray[0].author}
                     date={newPostArray[0].date}
-                    link={`/blog/post/${newPostArray[0].url}`}
                     avatar={newPostArray[0].avatar}
                     summaryTextHtml={newPostArray[0].summaryTextHtml}
                   />
-                </NewPostLayout>
+
+                  {/* <NewPostLayout size={this.state.lastPostW}>
+                    <Post
+                      id="latest"
+                      title={newPostArray[0].title}
+                      backgroundURL={newPostArray[0].postImg}
+                      postGradient={newPostArray[0].postGradient}
+                      keywords={newPostArray[0].keywords}
+                      author={newPostArray[0].author}
+                      date={newPostArray[0].date}
+                      link={`/blog/post/${newPostArray[0].url}`}
+                      avatar={newPostArray[0].avatar}
+                      summaryTextHtml={newPostArray[0].summaryTextHtml}
+                    />
+                  </NewPostLayout> */}
+                </div>
               )}
             </div>
 
@@ -1381,7 +1411,8 @@ const mapStateToProps2 = state => {
   return {
     blog: state.blog,
     scroll: state.scroll,
-    resize: state.resize
+    resize: state.resize,
+    isLoggedIn: state.logInStatus.isUserLoggedIn
   };
 };
 const mapDispachToProps = dispatch => {

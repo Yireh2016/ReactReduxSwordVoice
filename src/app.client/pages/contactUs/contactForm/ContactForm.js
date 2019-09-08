@@ -51,7 +51,6 @@ const Button = styled.button`
   text-decoration: none;
   color: white;
   font-size: 0.6rem;
-  padding: 10px 30px;
   border-radius: 8px;
 
   :hover {
@@ -62,6 +61,7 @@ const Button = styled.button`
 
   @media (max-width: 1050px) {
     margin-top: 40px;
+    font-size: 20px;
   }
 
   > div {

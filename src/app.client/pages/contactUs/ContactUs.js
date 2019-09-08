@@ -170,9 +170,13 @@ const Button = styled.button`
     background-color: #fff;
     cursor: pointer;
   }
+
+  @media (max-width: 1050px) {
+    font-size: 20px;
+  }
 `;
 
-const ContactUs = ({ setDialog }) => {
+const ContactUs = ({ setDialog, setSignUp, isLoggedIn }) => {
   const [animation, setAnimation] = useState(false);
 
   useEffect(() => {
@@ -253,9 +257,19 @@ const ContactUs = ({ setDialog }) => {
               <SocialNet id="SocialNet" />
             </SocialNetCont>
             <Call2ActionBtnCont>
-              <a href="/blog" rel="go to Blog page">
-                <Button>Blog</Button>
-              </a>
+              {isLoggedIn ? (
+                <a href="/blog" rel="go to Blog page">
+                  <Button>Blog</Button>
+                </a>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setSignUp(true);
+                  }}
+                >
+                  Sign Up
+                </Button>
+              )}
             </Call2ActionBtnCont>
           </RightAside>
         </MainLayout>
@@ -264,14 +278,17 @@ const ContactUs = ({ setDialog }) => {
   );
 };
 
-const stateToProps = () => {
-  return {};
+const stateToProps = state => {
+  return {
+    isLoggedIn: state.logInStatus.isUserLoggedIn
+  };
 };
 const actionsToProps = dispatch => {
   return {
     setDialog: dialogObj => {
       dispatch({ type: "SET_DIALOG", payload: dialogObj });
-    }
+    },
+    setSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
   };
 };
 export default connect(

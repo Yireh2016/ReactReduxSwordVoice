@@ -85,14 +85,26 @@ const renderTemplate = (req, store) => {
   return { body: html, scriptTags, linkTags, styleTags };
 };
 
-const renderWithPreloadedState = (req, res, store) => {
+const renderWithPreloadedState = (req, res, store, isTwitterTags) => {
   let preloadedState = store.getState();
+  let twitterTags = "";
+
+  if (isTwitterTags) {
+    twitterTags = `<meta name="twitter:card" content="summary_large_image" />
+   <meta name="twitter:site" content="@SwordVoice_1" />
+   <meta name="twitter:creator" content="@Jainer_Munoz" />
+   <meta property="og:url" content='${process.env.WEB_URL}/blog/post/${preloadedState.article.url}' />
+   <meta property="og:title" content='${preloadedState.article.title}'/>
+   <meta property="og:description" content='${preloadedState.article.title}' />
+   <meta property="og:image" content='${preloadedState.article.thumbnail}' />`;
+  }
   console.log("RENDERING preloadedState to send to templeta preloadedState");
 
   const { body, scriptTags, linkTags, styleTags } = renderTemplate(req, store);
   res.send(
     template({
       body,
+      twitterTags,
       scriptTags,
       linkTags,
       styleTags,
@@ -119,7 +131,7 @@ const swordvoiceWeb = async (req, res) => {
         articleModel
           .findOne({ url: `${url}` })
           .select(
-            "_id date html title description keywords author socialCount url comments isPublished"
+            "_id date html title description keywords author socialCount url comments isPublished thumbnail"
           )
           .populate({
             path: "author",
@@ -173,7 +185,8 @@ const swordvoiceWeb = async (req, res) => {
                 description,
                 keywords,
                 socialCount,
-                url
+                url,
+                thumbnail
               } = completeArticle;
 
               const id = completeArticle._id;
@@ -189,8 +202,9 @@ const swordvoiceWeb = async (req, res) => {
                 author: author.userFirstName + " " + author.userLastName,
                 summary: description,
                 date: dbDateToNormalDate(date),
-                categories: keywords,
-                avatar: author.userAvatar
+                categories: keywordsToArr(keywords),
+                avatar: author.userAvatar,
+                thumbnail: `${process.env.CDN_URL}/articles/${url}/${thumbnail.name}`
               };
 
               store.dispatch({ type: "SET_ARTICLE", payload: article });
@@ -429,7 +443,12 @@ const swordvoiceWeb = async (req, res) => {
     await routerPromise();
     await userLoggedInPromise();
 
-    renderWithPreloadedState(req, res, store);
+    if (req.url.match("/blog/post/")) {
+      const isTwitterTags = true;
+      renderWithPreloadedState(req, res, store, isTwitterTags);
+    } else {
+      renderWithPreloadedState(req, res, store);
+    }
   } catch (err) {
     console.log("errors on promises", err);
   }
