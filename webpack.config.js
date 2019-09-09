@@ -52,6 +52,12 @@ module.exports = env => {
         crawlDelay: 2
       },
       {
+        userAgent: "Facebot",
+        Disallow: "*",
+        allow: "/blog/post/",
+        crawlDelay: 2
+      },
+      {
         userAgent: "*",
         allow: "/",
         disallow: "/cms",
