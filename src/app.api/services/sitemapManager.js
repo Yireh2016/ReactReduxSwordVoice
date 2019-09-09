@@ -23,7 +23,7 @@ export const removeSiteMap = ({ url }) => {
 
         site[0].sitemap.urls = urlsFilterArr;
 
-        site[0].save((err, newSite) => {
+        site[0].save(err => {
           if (err) {
             reject(err);
             return;

@@ -111,6 +111,18 @@ const RecentPostCardCont = styled.div`
     margin: 0;
   }
 `;
+
+const LastPostCont = styled.div`
+  display: "block";
+
+  @media (max-width: 1050px) {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
 const styles = {
   tablet: {
     "@media (max-width: 150px)": {
@@ -1184,51 +1196,28 @@ class BlogPage extends React.Component {
               { width: "50vw" }
             ]}
           >
-            <div
-              style={[
-                { display: "block" },
-                {
-                  "@media (max-width: 1050px)": {
-                    display: "none"
-                  }
-                }
-              ]}
-            >
-              {lastPostPC}
-            </div>
+            {this.props.resize.device === "pc" ? (
+              <LastPostCont>{lastPostPC}</LastPostCont>
+            ) : (
+              <LastPostCont>
+                {newPostArray.length > 0 && (
+                  <div style={{ margin: "0 0 18vh 0" }}>
+                    <PostCard
+                      id="latest"
+                      title={newPostArray[0].title}
+                      postH={mainPostH}
+                      postImg={newPostArray[0].postImg}
+                      postGradient={newPostArray[0].postGradient}
+                      url={`/blog/post/${newPostArray[0].url}`}
+                      hasSummary={true}
+                      keywords={newPostArray[0].keywords}
+                      author={newPostArray[0].author}
+                      date={newPostArray[0].date}
+                      avatar={newPostArray[0].avatar}
+                      summaryTextHtml={newPostArray[0].summaryTextHtml}
+                    />
 
-            <div
-              style={[
-                { display: "none" },
-                {
-                  "@media (max-width: 1050px)": {
-                    display: "block",
-                    height: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }
-                }
-              ]}
-            >
-              {newPostArray.length > 0 && (
-                <div style={{ margin: "0 0 18vh 0" }}>
-                  <PostCard
-                    id="latest"
-                    title={newPostArray[0].title}
-                    postH={mainPostH}
-                    postImg={newPostArray[0].postImg}
-                    postGradient={newPostArray[0].postGradient}
-                    url={`/blog/post/${newPostArray[0].url}`}
-                    hasSummary={true}
-                    keywords={newPostArray[0].keywords}
-                    author={newPostArray[0].author}
-                    date={newPostArray[0].date}
-                    avatar={newPostArray[0].avatar}
-                    summaryTextHtml={newPostArray[0].summaryTextHtml}
-                  />
-
-                  {/* <NewPostLayout size={this.state.lastPostW}>
+                    {/* <NewPostLayout size={this.state.lastPostW}>
                     <Post
                       id="latest"
                       title={newPostArray[0].title}
@@ -1242,9 +1231,10 @@ class BlogPage extends React.Component {
                       summaryTextHtml={newPostArray[0].summaryTextHtml}
                     />
                   </NewPostLayout> */}
-                </div>
-              )}
-            </div>
+                  </div>
+                )}
+              </LastPostCont>
+            )}
 
             <div
               style={[
