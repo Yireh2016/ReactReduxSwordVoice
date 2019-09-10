@@ -673,7 +673,17 @@ class BlogPage extends React.Component {
 
     const successSearch = response => {
       const arr = response.data.searchArr;
-      this.props.setSearchArr(arr);
+
+      console.log("arr", arr);
+      console.log(
+        "this.props.blog.searchArticles",
+        this.props.blog.searchArticles
+      );
+      console.log("...arr, ...this.props.blog.searchArticles", [
+        ...arr,
+        ...this.props.blog.searchArticles
+      ]);
+      this.props.setSearchArr([...arr, ...this.props.blog.searchArticles]);
       this.props.setSearchCount(response.data.searchCount);
     };
 

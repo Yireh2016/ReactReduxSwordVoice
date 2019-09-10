@@ -10,6 +10,7 @@ const searchSimilarArticles = (
   errFn
 ) => {
   console.log("searchValue", searchValue); //TODO rm
+  console.log("articlesShown", articlesShown); //TODO rm
   const query = {
     isPublished: true,
     $text: { $search: `${searchValue}` }
