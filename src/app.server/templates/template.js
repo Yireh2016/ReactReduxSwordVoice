@@ -1,12 +1,13 @@
 export default ({
   body,
-  twitterTags,
+  blogMetaTags,
   scriptTags,
   linkTags,
   styleTags,
   initialState,
   seoID,
-  ogTags
+  ogTags,
+  preloadedState
 }) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
@@ -25,6 +26,8 @@ export default ({
       <meta name="copyright" content="SwordVoice">
       <meta name="reply-to" content="support@swordvoice.com">
       <meta name="distribution" content="global">
+
+      
       
     
     
@@ -40,8 +43,21 @@ export default ({
       <meta http-equiv="Content-Style-Type" content="text/css">
       <meta http-equiv="Content-Script-Type" content="text/javascript">
 
-      ${twitterTags}
+  
+
+      <!--Open Graph-->
+      <meta property="og:locale" content="en_US" />
+     
       ${ogTags}
+
+      <!--Twitter-->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@SwordVoice_1" />
+      <meta name="twitter:creator" content="@Jainer_Munoz" />
+      
+      <!--Article Tags-->
+      ${blogMetaTags}
+      
 
 
 
@@ -49,6 +65,10 @@ export default ({
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
         <base href="/">
+        <link
+        rel="canonical"
+        href=${process.env.WEB_URL}/blog/post/${preloadedState.article.url}
+       />
         ${linkTags}
         ${styleTags}
         

@@ -14,6 +14,7 @@ import { store, history } from "../../app.redux.store/store/configStore";
 //components
 import App from "../../app.client/app";
 //assets
+import svAvatar from "../../app.client/assets/svgIcons/aboutTeclado.svg";
 import template from "../templates/template";
 import dbDateToNormalDate from "../../services/dbDateToNormalDate";
 import successOnFindingUserAndDistpach from "../services/actions/successOnFindingUserAndDistpach";
@@ -85,11 +86,82 @@ const renderTemplate = (req, store) => {
   return { body: html, scriptTags, linkTags, styleTags };
 };
 
-const renderWithPreloadedState = (req, res, store, isTwitterTags) => {
+const renderWithPreloadedState = (req, res, store, isBlogPost) => {
   let preloadedState = store.getState();
-  let twitterTags = "";
 
-  if (isTwitterTags) {
+  let siteTitle = "";
+  let siteDesc = "";
+
+  switch (req.url) {
+    case "/":
+      siteTitle =
+        "Fullstack Web & Mobile App Developers and UI/UX Designers Online Community";
+      siteDesc = `SwordVoice.com · Online Community of Fullstack Web & Mobile App Developers and UI/UX
+        Designers. Join Us and Let Your SwordVoice be Heard!!!`;
+      break;
+
+    case "/home":
+      siteTitle =
+        "Fullstack Web & Mobile App Developers and UI/UX Designers Online Community";
+      siteDesc = `SwordVoice.com · Online Community of Fullstack Web & Mobile App Developers and UI/UX
+        Designers. Join Us and Let Your SwordVoice be Heard!!!`;
+      break;
+
+    case "/about":
+      siteTitle =
+        "About Us · Fullstack Web & Mobile App Developers and UI/UX designers Online Community.";
+      siteDesc = `
+        We are an Online Community of Web and Mobile developers and UI/UX designers. 
+        Come and Check our Blog, Tutorials and Courses.
+        `;
+      break;
+
+    case "/blog":
+      siteTitle = "Blog · News, Tuturials and How to&apos;s.";
+      siteDesc =
+        "SwordVoice&apos;s blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to&apos;s, tutorials and more. Hurry up and Join our Community";
+      break;
+
+    case "/contact":
+      siteTitle = "Contact Us Dude";
+      siteDesc = `Send your Questions, Suggestions, Feedback or whatever you want to tell and we will hit you back in no time. Hey, don&apos;t forget to follow us on Social Media`;
+      break;
+  }
+
+  let ogTags = `
+  <meta property="og:title" content='${
+    isBlogPost ? preloadedState.article.title : siteTitle
+  } '/>
+  
+  <meta property="og:description" content='${
+    isBlogPost ? preloadedState.article.summary : siteDesc
+  }' />
+  <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
+  <meta property="og:image" content='${
+    isBlogPost
+      ? preloadedState.article.thumbnail
+      : `${process.env.WEB_URL}` + svAvatar
+  }' />
+  <meta property="og:url" content=${
+    isBlogPost
+      ? `${process.env.WEB_URL}blog/post/${preloadedState.article.url}`
+      : `${process.env.WEB_URL}/${req.url}}`
+  } />
+
+    <meta property="og:site_name" content="SwordVoice.com" />
+ 
+    <meta property="og:image:secure_url" content='${
+      isBlogPost
+        ? preloadedState.article.thumbnail
+        : `${process.env.WEB_URL}` + svAvatar
+    }' />
+    <meta property="og:image:width" content="486" />
+    <meta property="og:image:height" content="500" />
+    `;
+
+  let blogMetaTags = "";
+
+  if (isBlogPost) {
     const keywordsMeta = preloadedState.article.categories.map(category => {
       return `<meta  property="article:tag" content=${category}></meta>`;
     }); // {keywordsMeta}
@@ -107,41 +179,12 @@ const renderWithPreloadedState = (req, res, store, isTwitterTags) => {
 
     dateMeta = new Date(dateMeta);
 
-    twitterTags = `<meta name="twitter:card" content="summary_large_image" />
-   <meta name="twitter:site" content="@SwordVoice_1" />
-   <meta name="twitter:creator" content="@Jainer_Munoz" />
-   <meta property="og:url" content='${process.env.WEB_URL}/blog/post/${
-      preloadedState.article.url
-    }' />
-   <meta property="og:title" content='${preloadedState.article.title}'/>
-   <meta property="og:description" content='${preloadedState.article.title}' />
-   <meta property="og:image" content='${preloadedState.article.thumbnail}' />
-   
-   ${keywordsTags}
-   <link
-   rel="canonical"
-   href=${process.env.WEB_URL}/blog/post/${preloadedState.article.url}
- />
- <meta property="og:locale" content="en_US" />
- <meta property="og:type" content="article" />
- <meta property="og:title" content='${preloadedState.article.title} '/>
- <meta property="og:description" content='${preloadedState.article.summary}' />
- <meta
-   property="og:url"
-   content='${process.env.WEB_URL}/blog/post/${preloadedState.article.url}'
- />
- <meta property="og:site_name" content="SwordVoice.com" />
-
- <meta
-   property="article:published_time"
-   content=${dateMeta.toISOString()}
- />
- <meta property="og:image" content='${preloadedState.article.avatar}' />
- <meta property="og:image:secure_url" content='${
-   preloadedState.article.avatar
- }' />
- <meta property="og:image:width" content="486" />
- <meta property="og:image:height" content="500" />
+    blogMetaTags = `   
+    ${keywordsTags}
+    <meta
+    property="article:published_time"
+    content=${dateMeta.toISOString()}
+  />  
  
  `;
   }
@@ -151,10 +194,12 @@ const renderWithPreloadedState = (req, res, store, isTwitterTags) => {
   res.send(
     template({
       body,
-      twitterTags,
+      ogTags,
+      blogMetaTags,
       scriptTags,
       linkTags,
       styleTags,
+      preloadedState,
       initialState: safeStringify(preloadedState),
       seoID: process.env.SEO_ID
     })
@@ -491,8 +536,8 @@ const swordvoiceWeb = async (req, res) => {
     await userLoggedInPromise();
 
     if (req.url.match("/blog/post/")) {
-      const isTwitterTags = true;
-      renderWithPreloadedState(req, res, store, isTwitterTags);
+      const isBlogPost = true;
+      renderWithPreloadedState(req, res, store, isBlogPost);
     } else {
       renderWithPreloadedState(req, res, store);
     }
