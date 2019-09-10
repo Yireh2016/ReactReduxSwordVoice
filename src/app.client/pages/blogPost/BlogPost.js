@@ -15,7 +15,7 @@ import Footer from "./footer/Footer";
 import Comments from "./comments/Comments";
 import Popular from "./popular/Popular";
 
-const BlogPost = ({ title, summary }) => {
+const BlogPost = ({ title, summary, url, categories, date, avatar }) => {
   const [isLoadingLogo, setIsLoadingLogo] = useState(true);
 
   useEffect(() => {
@@ -45,11 +45,47 @@ const BlogPost = ({ title, summary }) => {
     );
   }
 
+  const keywordsMeta = categories.map((category, i) => {
+    return <meta key={i} property="article:tag" content={category}></meta>;
+  });
+
+  const newDate = date.replace("th", "");
+
+  let dateMeta = newDate.match(/\w+(\s)/)[0] + "," + newDate.match(/\d,.*/);
+
+  dateMeta = new Date(dateMeta);
+
   return (
     <React.Fragment>
       <Helmet>
         <title>{title}</title>
         <meta name="Description" content={summary} />
+
+        <link
+          rel="canonical"
+          href={`${process.env.WEB_URL}/blog/post/${url}`}
+        />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={summary} />
+        <meta
+          property="og:url"
+          content={`${process.env.WEB_URL}/blog/post/${url}`}
+        />
+        <meta property="og:site_name" content="SwordVoice.com" />
+        {keywordsMeta}
+        <meta
+          property="article:published_time"
+          content={dateMeta.toISOString()}
+        />
+        <meta property="og:image" content={avatar} />
+        <meta
+          property="og:image:secure_url"
+          content={`${process.env.WEB_URL}/blog/post/${url}`}
+        />
+        <meta property="og:image:width" content="486" />
+        <meta property="og:image:height" content="500" />
       </Helmet>
 
       <NavBarLayout>
@@ -68,8 +104,8 @@ const BlogPost = ({ title, summary }) => {
 };
 
 const mapStateToProps = state => {
-  const { title, summary } = state.article;
-  return { title, summary };
+  const { title, summary, url, categories, date, avatar } = state.article;
+  return { title, summary, url, categories, date, avatar };
 };
 
 const mapActionsToProps = () => {
