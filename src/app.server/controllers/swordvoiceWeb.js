@@ -90,13 +90,60 @@ const renderWithPreloadedState = (req, res, store, isTwitterTags) => {
   let twitterTags = "";
 
   if (isTwitterTags) {
+    const keywordsMeta = preloadedState.article.categories.map(category => {
+      return `<meta  property="article:tag" content=${category}></meta>`;
+    }); // {keywordsMeta}
+
+    let keywordsTags = "";
+    for (let i = 0; i < keywordsMeta.length; i++) {
+      const keyword = keywordsMeta[i];
+
+      keywordsTags = keywordsTags + `\n${keyword}`;
+    }
+
+    const newDate = preloadedState.article.date.replace("th", "");
+
+    let dateMeta = newDate.match(/\w+(\s)/)[0] + "," + newDate.match(/\d,.*/);
+
+    dateMeta = new Date(dateMeta);
+
     twitterTags = `<meta name="twitter:card" content="summary_large_image" />
    <meta name="twitter:site" content="@SwordVoice_1" />
    <meta name="twitter:creator" content="@Jainer_Munoz" />
-   <meta property="og:url" content='${process.env.WEB_URL}/blog/post/${preloadedState.article.url}' />
+   <meta property="og:url" content='${process.env.WEB_URL}/blog/post/${
+      preloadedState.article.url
+    }' />
    <meta property="og:title" content='${preloadedState.article.title}'/>
    <meta property="og:description" content='${preloadedState.article.title}' />
-   <meta property="og:image" content='${preloadedState.article.thumbnail}' />`;
+   <meta property="og:image" content='${preloadedState.article.thumbnail}' />
+   
+   ${keywordsTags}
+   <link
+   rel="canonical"
+   href=${process.env.WEB_URL}/blog/post/${preloadedState.article.url}
+ />
+ <meta property="og:locale" content="en_US" />
+ <meta property="og:type" content="article" />
+ <meta property="og:title" content='${preloadedState.article.title} '/>
+ <meta property="og:description" content='${preloadedState.article.summary}' />
+ <meta
+   property="og:url"
+   content='${process.env.WEB_URL}/blog/post/${preloadedState.article.url}'
+ />
+ <meta property="og:site_name" content="SwordVoice.com" />
+
+ <meta
+   property="article:published_time"
+   content=${dateMeta.toISOString()}
+ />
+ <meta property="og:image" content='${preloadedState.article.avatar}' />
+ <meta property="og:image:secure_url" content='${
+   preloadedState.article.avatar
+ }' />
+ <meta property="og:image:width" content="486" />
+ <meta property="og:image:height" content="500" />
+ 
+ `;
   }
   console.log("RENDERING preloadedState to send to templeta preloadedState");
 

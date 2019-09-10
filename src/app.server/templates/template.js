@@ -5,7 +5,8 @@ export default ({
   linkTags,
   styleTags,
   initialState,
-  seoID
+  seoID,
+  ogTags
 }) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
@@ -40,6 +41,7 @@ export default ({
       <meta http-equiv="Content-Script-Type" content="text/javascript">
 
       ${twitterTags}
+      ${ogTags}
 
 
 
