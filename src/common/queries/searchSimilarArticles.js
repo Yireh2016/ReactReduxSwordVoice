@@ -9,19 +9,11 @@ const searchSimilarArticles = (
   successFn,
   errFn
 ) => {
-  const query = articlesShown.id
-    ? {
-        $and: [
-          {
-            _id: { $ne: articlesShown.id },
-            $text: { $search: `${searchValue}` }
-          },
-          { isPublished: true }
-        ]
-      }
-    : {
-        $text: { $search: `${searchValue}` }
-      };
+  console.log("searchValue", searchValue); //TODO rm
+  const query = {
+    isPublished: true,
+    $text: { $search: `${searchValue}` }
+  };
 
   const options = {
     score: { $meta: "textScore" }
@@ -37,7 +29,18 @@ const searchSimilarArticles = (
     .skip(articlesShown.count)
     .limit(7) // FIXME change it to 7
     .exec()
-    .then(posts => {
+    .then(queryPosts => {
+      let posts;
+      if (queryPosts.length > 1 && articlesShown.id) {
+        posts = queryPosts.filter(post => {
+          return post._id !== articlesShown.id;
+        });
+
+        console.log("filtered simmilar posts", posts); //TODO erase
+      } else {
+        posts = queryPosts;
+      }
+
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {

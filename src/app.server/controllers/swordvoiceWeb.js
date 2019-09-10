@@ -304,7 +304,8 @@ const swordvoiceWeb = async (req, res) => {
               console.log("SEARCHING SIMILAR ARTICLES");
 
               let searchStr = `${title} `;
-              keywords.forEach(keyword => {
+              let keyArr = keywordsToArr(keywords);
+              keyArr.forEach(keyword => {
                 searchStr = `${searchStr}${keyword} `;
               });
 
