@@ -80,10 +80,7 @@ const BlogPost = ({ title, summary, url, categories, date, avatar }) => {
           content={dateMeta.toISOString()}
         />
         <meta property="og:image" content={avatar} />
-        <meta
-          property="og:image:secure_url"
-          content={`${process.env.WEB_URL}/blog/post/${url}`}
-        />
+        <meta property="og:image:secure_url" content={avatar} />
         <meta property="og:image:width" content="486" />
         <meta property="og:image:height" content="500" />
       </Helmet>
