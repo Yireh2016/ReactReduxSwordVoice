@@ -9,7 +9,7 @@ import { StyleRoot } from "radium";
 import { ChunkExtractor } from "@loadable/server";
 import { ServerStyleSheet } from "styled-components";
 import removeMd from "remove-markdown";
-
+import he from "he";
 //store
 import { store, history } from "../../app.redux.store/store/configStore";
 //components
@@ -117,14 +117,14 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
       break;
 
     case "/blog":
-      siteTitle = "Blog · News, Tutorials and How to&apos;s.";
+      siteTitle = "Blog · News, Tutorials and How to's.";
       siteDesc =
-        "SwordVoice&apos;s blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to&apos;s, tutorials and more. Hurry up and Join our Community";
+        "SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to's, tutorials and more. Hurry up and Join our Community";
       break;
 
     case "/contact":
       siteTitle = "Contact Us Dude";
-      siteDesc = `Send your Questions, Suggestions, Feedback or whatever you want to tell and we will hit you back in no time. Hey, don&apos;t forget to follow us on Social Media`;
+      siteDesc = `Send your Questions, Suggestions, Feedback or whatever you want to tell and we will hit you back in no time. Hey, don't forget to follow us on Social Media`;
       break;
   }
 
@@ -148,7 +148,9 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
     isBlogPost ? preloadedState.article.title : siteTitle
   } '/>
   <meta property="og:description" content='${
-    isBlogPost ? removeMd(preloadedState.article.summary) : siteDesc
+    isBlogPost
+      ? he.encode(removeMd(preloadedState.article.summary))
+      : he.encode(siteDesc)
   }' />
   <meta property="og:image" content='${
     isBlogPost
