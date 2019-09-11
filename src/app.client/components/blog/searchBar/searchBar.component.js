@@ -34,6 +34,9 @@ class SearchBar extends React.Component {
   searchHandler = e => {
     const { value } = e.target;
     this.props.setSearchValue(value);
+    if (value === "") {
+      this.props.onReset();
+    }
   };
 
   keyCapture = e => {

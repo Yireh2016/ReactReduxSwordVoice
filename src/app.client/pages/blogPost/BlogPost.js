@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Helmet from "react-helmet";
 import { connect } from "react-redux";
+import removeMD from "remove-markdown";
 
 //lsyout
 import BlogPostLayout from "./blogPostLayout/BlogPostLayout";
@@ -49,7 +50,7 @@ const BlogPost = ({ title, summary }) => {
     <React.Fragment>
       <Helmet>
         <title>{title}</title>
-        <meta name="Description" content={summary} />
+        <meta name="Description" content={removeMD(summary)} />
       </Helmet>
 
       <NavBarLayout>

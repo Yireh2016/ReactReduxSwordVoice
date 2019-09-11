@@ -27,16 +27,12 @@ const searchLastArticlesQuery = (articleModel, successFn, errFn) => {
               url: posts[i].url,
               postImg:
                 posts[i].thumbnail &&
-                `url(${process.env.CDN_URL}/articles//${posts[i].url}/${
-                  posts[i].thumbnail.name
-                })`,
+                `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
               postGradient:
                 posts[i].thumbnail &&
-                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                  posts[i].thumbnail.color
-                } 73.79%)`,
+                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
               title: posts[i].title,
-              summaryTextHtml: paragraphService(posts[i].description),
+              summaryTextHtml: posts[i].description,
               author:
                 `${posts[i].author.userFirstName} ` +
                 `${posts[i].author.userLastName}`,

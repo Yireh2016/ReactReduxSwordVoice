@@ -132,7 +132,7 @@ export const getMorePostsCtrl = (req, res) => {
             posts[i].thumbnail &&
             `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
-          summaryTextHtml: paragraphService(posts[i].description),
+          summaryTextHtml: posts[i].description,
           author:
             `${posts[i].author.userFirstName} ` +
             `${posts[i].author.userLastName}`,
@@ -387,7 +387,7 @@ export const filterPopularCtrl = (req, res) => {
             posts[i].thumbnail &&
             `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
-          summaryTextHtml: paragraphService(posts[i].description),
+          summaryTextHtml: posts[i].description,
           author:
             `${posts[i].author.userFirstName} ` +
             `${posts[i].author.userLastName}`,
@@ -563,7 +563,7 @@ export const advancedSearchDbCtrl = (req, res) => {
             posts[i].thumbnail &&
             `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
           title: posts[i].title,
-          summaryTextHtml: paragraphService(posts[i].description),
+          summaryTextHtml: posts[i].description,
           author:
             `${posts[i].author.userFirstName} ` +
             `${posts[i].author.userLastName}`,

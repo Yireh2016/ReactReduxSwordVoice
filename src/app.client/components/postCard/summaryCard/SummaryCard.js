@@ -3,6 +3,7 @@ import "simplebar";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import ReactHtmlParser from "react-html-parser";
+import showdown from "showdown";
 //services
 
 // cardW: PropTypes.number.isRequired,
@@ -46,6 +47,10 @@ class SummaryCard extends React.Component {
       style,
       summaryTextHtml
     } = this.props;
+
+    let converter = new showdown.Converter();
+
+    const summaryHTMLContent = converter.makeHtml(summaryTextHtml);
 
     const keywordsMap =
       keywords &&
@@ -109,7 +114,7 @@ class SummaryCard extends React.Component {
             // styles.paragraph
           }
         >
-          <Article>{ReactHtmlParser(summaryTextHtml)}</Article>
+          <Article>{ReactHtmlParser(summaryHTMLContent)}</Article>
         </div>
         <section
           id={`${this.props.id}` + "cardFooter"}

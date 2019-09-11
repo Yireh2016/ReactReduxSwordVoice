@@ -8,6 +8,7 @@ import { StaticRouter as Router } from "react-router-dom";
 import { StyleRoot } from "radium";
 import { ChunkExtractor } from "@loadable/server";
 import { ServerStyleSheet } from "styled-components";
+import removeMd from "remove-markdown";
 
 //store
 import { store, history } from "../../app.redux.store/store/configStore";
@@ -18,7 +19,6 @@ import svAvatar from "../../app.client/assets/svgIcons/aboutTeclado.svg";
 import template from "../templates/template";
 import dbDateToNormalDate from "../../services/dbDateToNormalDate";
 import successOnFindingUserAndDistpach from "../services/actions/successOnFindingUserAndDistpach";
-import paragraphService from "../../services/paragraphService";
 import keywordsToArr from "../../services/keywordsToArr";
 
 //services
@@ -134,7 +134,7 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
   } '/>
   
   <meta property="og:description" content='${
-    isBlogPost ? preloadedState.article.summary : siteDesc
+    isBlogPost ? removeMd(preloadedState.article.summary) : siteDesc
   }' />
   <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
   <meta property="og:image" content='${
@@ -364,9 +364,7 @@ const swordvoiceWeb = async (req, res) => {
                                     posts[i].thumbnail &&
                                     `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
                                   title: posts[i].title,
-                                  summaryTextHtml: paragraphService(
-                                    posts[i].description
-                                  ),
+                                  summaryTextHtml: posts[i].description,
                                   author:
                                     `${posts[i].author.userFirstName} ` +
                                     `${posts[i].author.userLastName}`,
@@ -436,7 +434,7 @@ const swordvoiceWeb = async (req, res) => {
                       posts[i].thumbnail &&
                       `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
                     title: posts[i].title,
-                    summaryTextHtml: paragraphService(posts[i].description),
+                    summaryTextHtml: posts[i].description,
                     author:
                       `${posts[i].author.userFirstName} ` +
                       `${posts[i].author.userLastName}`,
@@ -468,7 +466,7 @@ const swordvoiceWeb = async (req, res) => {
                           posts[i].thumbnail &&
                           `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
                         title: posts[i].title,
-                        summaryTextHtml: paragraphService(posts[i].description),
+                        summaryTextHtml: posts[i].description,
                         author:
                           `${posts[i].author.userFirstName} ` +
                           `${posts[i].author.userLastName}`,

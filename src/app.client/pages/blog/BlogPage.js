@@ -27,14 +27,14 @@ import FlexItem from "../../layouts/FlexItem";
 import AdvancedSearch from "../../components/advancedSearch/AdvancedSearch";
 import SummaryCard from "./postCard/summaryCard/SummaryCard";
 import TwoColumnAside from "../../layouts/TwoColumnAside";
-import Logo from "../../components/general/logo.component";
+// import Logo from "../../components/general/logo.component";
 import Call2Action from "../../components/general/call2action.component";
 import FooterApp from "../../components/footer/footer.component";
 import SearchBar from "../../components/blog/searchBar/searchBar.component";
 import ScrollMouse from "../../components/scrollMouse/ScrollMouse";
 import LoadingLogo from "../../components/loadingLogo/LoadingLogo";
 import PostCard from "../../components/postCard/PostCard";
-import Post from "../../components/post/Post";
+// import Post from "../../components/post/Post";
 import Loading from "../../components/loading/loading";
 import Modal from "../../components/modal/modal";
 
@@ -860,27 +860,26 @@ class BlogPage extends React.Component {
                 </FlexItem>
               );
             }
+
+            const postH = this.asidePostsRef.current
+              ? (this.asidePostsRef.current.clientWidth * 0.8) / 1.028
+              : 0;
+
             return (
-              <FlexItem key={i} size={size}>
-                <Post
-                  id={i}
-                  size="md"
-                  title={title}
-                  backgroundURL={postImg.replace(
-                    `${postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
-                    `${postImg
-                      .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-                      .replace(".", "_mobile.")}`
-                  )}
-                  postGradient={postGradient}
-                  keywords={keywords}
-                  author={author}
-                  date={date}
-                  link={`/blog/post/${url}`}
-                  avatar={avatar}
-                  summaryTextHtml={summaryTextHtml}
-                />
-              </FlexItem>
+              <PostCard
+                key={i}
+                postH={postH}
+                hasSummary={true}
+                title={title}
+                postImg={postImg}
+                postGradient={postGradient}
+                keywords={keywords}
+                author={author}
+                date={date}
+                url={`/blog/post/${url}`}
+                avatar={avatar}
+                summaryTextHtml={summaryTextHtml}
+              />
             );
           })
         : null;
