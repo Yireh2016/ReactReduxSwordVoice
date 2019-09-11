@@ -117,7 +117,7 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
       break;
 
     case "/blog":
-      siteTitle = "Blog · News, Tuturials and How to&apos;s.";
+      siteTitle = "Blog · News, Tutorials and How to&apos;s.";
       siteDesc =
         "SwordVoice&apos;s blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to&apos;s, tutorials and more. Hurry up and Join our Community";
       break;

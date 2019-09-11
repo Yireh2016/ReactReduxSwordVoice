@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 const Container = styled.div`
   padding: 15px;
@@ -64,7 +65,7 @@ const Button = styled.input`
   }
 `;
 
-const AdvancedSearch = ({ onCancel, onSearch }) => {
+const AdvancedSearch = ({ onCancel, onSearch, setSearchValue }) => {
   const [author, setAuthor] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
@@ -160,6 +161,7 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
           value="Search"
           onClick={() => {
             onSearch({ text, author, dateFrom, dateTo });
+            setSearchValue(text);
           }}
         />
       </BtnCont>
@@ -167,4 +169,18 @@ const AdvancedSearch = ({ onCancel, onSearch }) => {
   );
 };
 
-export default AdvancedSearch;
+const mapActionsToProps = dispatch => {
+  return {
+    setSearchValue: value =>
+      dispatch({ type: "SET_SEARCH_VALUE", payload: value })
+  };
+};
+
+const mapStateToProps = () => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(AdvancedSearch);

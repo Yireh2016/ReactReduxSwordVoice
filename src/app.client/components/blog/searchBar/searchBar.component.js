@@ -27,14 +27,12 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchValue: "",
       isFocus: false
     };
   }
 
   searchHandler = e => {
     const { value } = e.target;
-    this.setState({ searchValue: value });
     this.props.setSearchValue(value);
   };
 
@@ -43,10 +41,10 @@ class SearchBar extends React.Component {
     const { keyCode } = e;
 
     if (keyCode === 13) {
-      this.props.onSearch(this.state.searchValue);
+      this.props.onSearch(this.props.blog.searchValue);
       return;
     }
-    if (keyCode === 8 && this.state.searchValue === "") {
+    if (keyCode === 8 && this.props.blog.searchValue === "") {
       //backspace
       console.log("reset ");
       this.props.onReset();
@@ -54,7 +52,7 @@ class SearchBar extends React.Component {
   };
 
   onFocus = () => {
-    if (this.state.searchValue) {
+    if (this.props.blog.searchValue) {
       this.setState({ isFocus: true });
       return;
     }
@@ -94,7 +92,7 @@ class SearchBar extends React.Component {
           <input
             type="search"
             placeholder="Search"
-            value={this.state.searchValue}
+            value={this.props.blog.searchValue}
             onChange={this.searchHandler}
           />
           <span onClick={this.props.onAdvancedClick}>Advanced</span>
@@ -111,8 +109,10 @@ const mapActionsToProps = dispatch => {
   };
 };
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = state => {
+  return {
+    blog: state.blog
+  };
 };
 
 export default connect(

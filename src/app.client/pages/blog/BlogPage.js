@@ -355,7 +355,7 @@ class BlogPage extends React.Component {
       mainPostH: 0,
       lastPostW: 0,
       searchTranslateX: "70%",
-      searchValue: "",
+      searchMode: false,
 
       recentPostsArray: [
         {
@@ -498,21 +498,6 @@ class BlogPage extends React.Component {
       successSearch,
       errorSearch
     );
-
-    // const getMorePostsRes = await getMorePosts(
-    //   this.props.blog.articlesCount,
-    //   this.props.blog.articlesArr.length
-    // );
-
-    // console.log("getMorePostsRes", getMorePostsRes);
-    // if (getMorePostsRes.status === "OK") {
-    //   let articlesArr = [
-    //     ...this.props.blog.articlesArr,
-    //     ...getMorePostsRes.articles
-    //   ];
-    //   this.props.setArticlesArr(articlesArr);
-    // }
-    // this.setState({ isLoadingPosts: false });
   };
 
   onFilterIconClick = async filter => {
@@ -674,15 +659,7 @@ class BlogPage extends React.Component {
     const successSearch = response => {
       const arr = response.data.searchArr;
 
-      console.log("arr", arr);
-      console.log(
-        "this.props.blog.searchArticles",
-        this.props.blog.searchArticles
-      );
-      console.log("...arr, ...this.props.blog.searchArticles", [
-        ...arr,
-        ...this.props.blog.searchArticles
-      ]);
+      response.data.searchCount > 0 && this.setState({ searchMode: true });
       this.props.setSearchArr([...arr, ...this.props.blog.searchArticles]);
       this.props.setSearchCount(response.data.searchCount);
     };
@@ -698,6 +675,7 @@ class BlogPage extends React.Component {
   };
 
   onSearchBarReset = async () => {
+    this.setState({ searchMode: false });
     this.props.setSearchCount(0);
     this.props.setSearchArr([]);
 
@@ -731,12 +709,14 @@ class BlogPage extends React.Component {
     });
 
     if (advancedSearchDbRes.statusText === "OK") {
-      this.props.setArticlesArr([
-        this.props.blog.articlesArr[0],
-        ...advancedSearchDbRes.advancedArr
-      ]);
-
-      this.props.setArticlesCount(advancedSearchDbRes.advancedCount);
+      // this.props.setArticlesArr([this.props.blog.articlesArr[0]]);
+      this.props.setSearchArr(advancedSearchDbRes.advancedArr);
+      // this.props.setArticlesCount(advancedSearchDbRes.advancedCount);
+      this.props.setSearchCount(advancedSearchDbRes.advancedCount);
+      this.setState({
+        searchMode: true
+      });
+      // setSearchCount
 
       this.onAdvancedSearchClick();
       return;
@@ -1148,7 +1128,7 @@ class BlogPage extends React.Component {
     return (
       <React.Fragment>
         <Helmet>
-          <title>Blog &#183; News, Tuturials and How to's.</title>
+          <title>Blog &#183; News, Tutorials and How to's.</title>
           <meta
             name="Description"
             content="SwordVoice's blog | Read about the latest news on Web Development, UI/UX, e-commerce, Web Design, How to's, tutorials and more. Hurry up and Join our Community"
@@ -1330,7 +1310,7 @@ class BlogPage extends React.Component {
               id="recentPostTitleText"
               // style={styles.recentPostTitleContainer.title}
             >
-              Recent Posts
+              {this.state.searchMode ? "Search Results" : "Recent Posts"}
             </h2>
             <div
               style={{
