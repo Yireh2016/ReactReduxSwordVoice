@@ -25,7 +25,7 @@ import FlexItem from "../../layouts/FlexItem";
 
 //components
 import AdvancedSearch from "../../components/advancedSearch/AdvancedSearch";
-import SummaryCard from "./postCard/summaryCard/SummaryCard";
+import SummaryCard from "../../components/postCard/summaryCard/SummaryCard";
 import TwoColumnAside from "../../layouts/TwoColumnAside";
 // import Logo from "../../components/general/logo.component";
 import Call2Action from "../../components/general/call2action.component";
@@ -39,7 +39,6 @@ import Loading from "../../components/loading/loading";
 import Modal from "../../components/modal/modal";
 
 //services
-import NewPostLayout from "./newPostLayout/NewPostLayout";
 import triggerDialog from "../../services/triggerDialog";
 
 //apiCalls
