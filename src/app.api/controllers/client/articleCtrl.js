@@ -573,7 +573,6 @@ export const advancedSearchDbCtrl = (req, res) => {
         };
       }
 
-      console.log("articles", postMinimumData);
       res.status(200).send({ advancedArr: postMinimumData });
     });
 };

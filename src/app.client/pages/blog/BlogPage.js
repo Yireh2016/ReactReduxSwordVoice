@@ -78,7 +78,13 @@ const RecentPostCont = styled.section`
   background-color: white;
   z-index: 4;
   justify-content: space-around;
-  padding: 15px 0;
+  padding: ${props => {
+    if (props.scrollTop > window.outerHeight)
+      return props.delta < 0 ? "30px 0 15px 0" : "15px 0";
+
+    return "15px 0";
+  }};
+
   transition: transform 1.5s ease;
 
   transform: ${props => {
