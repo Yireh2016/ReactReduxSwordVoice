@@ -129,24 +129,24 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
   }
 
   let ogTags = `
-  <meta property="og:title" content='${
-    isBlogPost ? preloadedState.article.title : siteTitle
-  } '/>
-  
-  <meta property="og:description" content='${
-    isBlogPost ? removeMd(preloadedState.article.summary) : siteDesc
-  }' />
-  <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
-  <meta property="og:image" content='${
-    isBlogPost
-      ? preloadedState.article.thumbnail
-      : `${process.env.WEB_URL}` + svAvatar
-  }' />
   <meta property="og:url" content=${
     isBlogPost
       ? `${process.env.WEB_URL}blog/post/${preloadedState.article.url}`
       : `${process.env.WEB_URL}/${req.url}}`
   } />
+  <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
+  <meta property="og:title" content='${
+    isBlogPost ? preloadedState.article.title : siteTitle
+  } '/>
+  <meta property="og:description" content='${
+    isBlogPost ? removeMd(preloadedState.article.summary) : siteDesc
+  }' />
+  <meta property="og:image" content='${
+    isBlogPost
+      ? preloadedState.article.thumbnail
+      : `${process.env.WEB_URL}` + svAvatar
+  }' />
+  <meta property="fb:app_id" content='${process.env.FB_APPID}'/>
 
     <meta property="og:site_name" content="SwordVoice.com" />
  
