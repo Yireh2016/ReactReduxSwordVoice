@@ -48,7 +48,7 @@ server.get("/courses", swordvoiceWeb);
 server.get("/portfolio", swordvoiceWeb);
 server.get("/newBlog", swordvoiceWeb);
 server.get("/blog", swordvoiceWeb);
-server.get("/blog/post*", swordvoiceWeb);
+server.get("/blog/post/*", swordvoiceWeb);
 server.get("*", notFoundCtrl);
 
 checkProgramPost(1); //every minute

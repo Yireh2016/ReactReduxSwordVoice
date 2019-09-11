@@ -235,11 +235,12 @@ const swordvoiceWeb = async (req, res) => {
     }
 
     return new Promise((resolve, reject) => {
-      if (req.url.match("/blog/post/")) {
+      console.log("req._parsedUrl.pathname", req._parsedUrl.pathname); //TODO rm
+      if (req._parsedUrl.pathname.match("/blog/post/")) {
         const RESPONSES_LIMIT = 3;
         const COMMENT_LIMIT = 5;
 
-        const url = req.url.replace("/blog/post/", "");
+        const url = req._parsedUrl.pathname.replace("/blog/post/", "");
         articleModel
           .findOne({ url: `${url}` })
           .select(
@@ -425,7 +426,7 @@ const swordvoiceWeb = async (req, res) => {
           .catch(err => {
             console.log("error on finding article", err);
           });
-      } else if (req.url.match("/blog")) {
+      } else if (req._parsedUrl.pathname.match("/blog")) {
         articleModel
           .find({ isPublished: true })
           .countDocuments((err, count) => {
