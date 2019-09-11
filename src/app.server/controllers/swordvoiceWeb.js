@@ -128,6 +128,16 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
       break;
   }
 
+  let imageType;
+
+  if (isBlogPost) {
+    imageType = preloadedState.article.thumbnail;
+    imageType = imageType.match(/.*\.(.*)/)[1];
+  } else {
+    imageType = process.env.WEB_URL + svAvatar;
+    imageType = imageType.match(/.*\.(.*)/)[1];
+  }
+
   let ogTags = `
   <meta property="og:url" content=${
     isBlogPost
@@ -155,8 +165,10 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
         ? preloadedState.article.thumbnail
         : `${process.env.WEB_URL}` + svAvatar
     }' />
-    <meta property="og:image:width" content="486" />
-    <meta property="og:image:height" content="500" />
+    
+    <meta property="og:image:type" content="image/${imageType}" />
+    <meta property="og:image:width" content="534" />
+    <meta property="og:image:height" content="520" />
     `;
 
   let blogMetaTags = "";
