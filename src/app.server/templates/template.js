@@ -65,10 +65,7 @@ export default ({
         <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
         <base href="/">
-        <link
-        rel="canonical"
-        href=${process.env.WEB_URL}/blog/post/${preloadedState.article.url}
-       />
+      
         ${linkTags}
         ${styleTags}
         

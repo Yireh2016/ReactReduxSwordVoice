@@ -36,8 +36,6 @@ const searchSimilarArticles = (
         posts = queryPosts.filter(post => {
           return post._id !== articlesShown.id;
         });
-
-        console.log("filtered simmilar posts", posts); //TODO erase
       } else {
         posts = queryPosts;
       }

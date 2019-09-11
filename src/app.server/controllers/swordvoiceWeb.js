@@ -138,12 +138,11 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
     imageType = imageType.match(/.*\.(.*)/)[1];
   }
 
+  console.log("process.env.WEB_URL", process.env.WEB_URL); //TODO rm
+  console.log("{req.url", req.url); //TODO rm
+
   let ogTags = `
-  <meta property="og:url" content=${
-    isBlogPost
-      ? `${process.env.WEB_URL}blog/post/${preloadedState.article.url}`
-      : `${process.env.WEB_URL}/${req.url}}`
-  } />
+  <meta property="og:url" content='${process.env.WEB_URL}${req.url}' />
   <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
   <meta property="og:title" content='${
     isBlogPost ? preloadedState.article.title : siteTitle
@@ -169,6 +168,13 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
     <meta property="og:image:type" content="image/${imageType}" />
     <meta property="og:image:width" content="534" />
     <meta property="og:image:height" content="520" />
+
+    <link
+    rel="canonical"
+    href='${process.env.WEB_URL}${req.url}'
+   />
+
+
     `;
 
   let blogMetaTags = "";
