@@ -178,6 +178,7 @@ const ContactForm = ({ onSubmit }) => {
     }
     setIsLoading(false);
   };
+
   const handleFormInputChange = event => {
     const {
       target: { name, value }

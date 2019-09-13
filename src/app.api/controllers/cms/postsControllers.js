@@ -350,6 +350,7 @@ export const addToSiteMapCtrl = (req, res) => {
 
         const sitemap = createSitemap(newSite.sitemap);
 
+        res.header("Content-Type", "application/xml");
         res.status(200).send(sitemap.toXML());
       });
     })
@@ -383,6 +384,7 @@ export const removeSiteMapCtrl = (req, res) => {
 
         const sitemap = createSitemap(newSite.sitemap);
 
+        res.header("Content-Type", "application/xml");
         res.status(200).send(sitemap.toXML());
       });
     })
@@ -432,6 +434,7 @@ export const createSiteMapCtrl = (req, res) => {
 
           const sitemap = createSitemap(newSite.sitemap);
 
+          res.header("Content-Type", "application/xml");
           res.status(200).send(sitemap.toXML());
         });
         return;
@@ -439,6 +442,7 @@ export const createSiteMapCtrl = (req, res) => {
 
       const sitemap = createSitemap(site[0].sitemap);
 
+      res.header("Content-Type", "application/xml");
       res.status(200).send(sitemap.toXML());
     })
     .catch(err => {

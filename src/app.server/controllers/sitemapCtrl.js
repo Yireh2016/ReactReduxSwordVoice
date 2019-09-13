@@ -14,6 +14,7 @@ const sitemapCtrl = (req, res) => {
       console.log("sitemap", site[0].sitemap);
       const sitemapCreated = createSitemap(site[0].sitemap);
 
+      res.header("Content-Type", "application/xml");
       res.status(200).send(sitemapCreated.toXML());
     })
     .catch(() => {
@@ -22,15 +23,3 @@ const sitemapCtrl = (req, res) => {
 };
 
 export default sitemapCtrl;
-
-/*function(req, res) {
-  try {
-    const xml = sitemap.toXML()
-    res.header('Content-Type', 'application/xml');
-    res.send( xml );
-  } catch (e) {
-    console.error(e)
-    res.status(500).end()
-  }
-  });
-}*/
