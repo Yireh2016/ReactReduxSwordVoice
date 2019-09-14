@@ -4,7 +4,6 @@ const sendContactForm = form => {
   return axios
     .post(`api/sendContactForm`, form)
     .then(res => {
-      console.log("sendContactForm res", res);
       return { status: "OK", message: res.data.message };
     })
     .catch(err => {
