@@ -865,20 +865,22 @@ class BlogPage extends React.Component {
               : 0;
 
             return (
-              <PostCard
-                key={i}
-                postH={postH}
-                hasSummary={true}
-                title={title}
-                postImg={postImg}
-                postGradient={postGradient}
-                keywords={keywords}
-                author={author}
-                date={date}
-                url={`/blog/post/${url}`}
-                avatar={avatar}
-                summaryTextHtml={summaryTextHtml}
-              />
+              <FlexItem key={i} size={size}>
+                <PostCard
+                  id={`PopPostCard${i}`}
+                  postH={postH}
+                  hasSummary={true}
+                  title={title}
+                  postImg={postImg}
+                  postGradient={postGradient}
+                  keywords={keywords}
+                  author={author}
+                  date={date}
+                  url={`/blog/post/${url}`}
+                  avatar={avatar}
+                  summaryTextHtml={summaryTextHtml}
+                />{" "}
+              </FlexItem>
             );
           })
         : null;

@@ -323,7 +323,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
 
   const asidePosts =
     popPostsArray.length > 0
-      ? popPostsArray.map((post, i, arr) => {
+      ? popPostsArray.map((post, i) => {
           // const arrLen = arr.length;
           const {
             title,
@@ -365,6 +365,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
             );
           }
           const showLoading = isLoadingPopularPosts;
+          console.log(`PopPostCard${i}`); //TODO rm
           return (
             <FlexItem key={i}>
               <PostCard
