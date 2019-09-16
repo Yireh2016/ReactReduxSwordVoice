@@ -254,7 +254,7 @@ h3 {
 /*############################################333*/
 
 .style-7::-webkit-scrollbar {
-  width: 2px;
+  width: 8px;
   height: 2px;
 }
 .style-7::-webkit-scrollbar-button {

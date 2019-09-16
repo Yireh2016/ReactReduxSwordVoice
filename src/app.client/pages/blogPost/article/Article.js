@@ -21,6 +21,7 @@ const ArticleCont = styled.article`
   }
   h2 {
     font-size: 1.8rem;
+    margin: 30px 0 15px 0;
   }
 
   figure img,

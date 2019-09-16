@@ -36,6 +36,7 @@ const CommentsCont = styled.div`
   }
   h2 {
     font-size: 1.8rem;
+    margin: 30px 0 30px 0;
   }
 
   figure img,

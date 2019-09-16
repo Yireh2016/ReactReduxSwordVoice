@@ -176,38 +176,38 @@ class CreatePost extends Component {
     return true;
   }
   componentDidUpdate() {
-    // smoothscroll.polyfill();
-    // if (window.localStorage.getItem("postElTop") === "addElement") {
-    //   const el = this.editionAreaRef.current;
-    //   el &&
-    //     el.scroll({
-    //       top: el.scrollHeight,
-    //       left: 0,
-    //       behavior: "instant"
-    //     });
-    //   return;
-    // }
-    // if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
-    //   const el = this.editionAreaRef.current;
-    //   el &&
-    //     el.scroll({
-    //       top: parseInt(window.localStorage.getItem("postElTop")) - 10,
-    //       left: 0,
-    //       behavior: "instant"
-    //     });
-    // }
-    // if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
-    //   const strArr = window.localStorage
-    //     .getItem("postElTop")
-    //     .match(/postElement.*/g);
-    //   const el = this.editionAreaRef.current;
-    //   el &&
-    //     el.scroll({
-    //       top: parseInt(window.localStorage.getItem(strArr)) - 10,
-    //       left: 0,
-    //       behavior: "smooth"
-    //     });
-    // }
+    smoothscroll.polyfill();
+    if (window.localStorage.getItem("postElTop") === "addElement") {
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: el.scrollHeight,
+          left: 0,
+          behavior: "instant"
+        });
+      return;
+    }
+    if (!isNaN(parseInt(window.localStorage.getItem("postElTop")))) {
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: parseInt(window.localStorage.getItem("postElTop")) - 10,
+          left: 0,
+          behavior: "instant"
+        });
+    }
+    if (window.localStorage.getItem("postElTop").match(/postElement.*/g)) {
+      const strArr = window.localStorage
+        .getItem("postElTop")
+        .match(/postElement.*/g);
+      const el = this.editionAreaRef.current;
+      el &&
+        el.scroll({
+          top: parseInt(window.localStorage.getItem(strArr)) - 10,
+          left: 0,
+          behavior: "smooth"
+        });
+    }
   }
 
   leavePageHandler = e => {
