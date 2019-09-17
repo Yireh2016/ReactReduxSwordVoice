@@ -168,21 +168,21 @@ export default (id, firstName) => {
 valign="top">
 <a href="https://twitter.com/SwordVoice_1" 
 target="_blank"><img alt="Twitter" 
-width="32" src="https://cdn.swordvoice.com/templates/twitter.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/twitter.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Twitter" width="32"/></a></td>
 <td 
 style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 
 valign="top">
 <a href="https://www.facebook.com/SwordVoice/" 
 target="_blank"><img alt="Facebook" 
-width="32" src="https://cdn.swordvoice.com/templates/facebook.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/facebook.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Facebook" width="32"/></a></td>
 <td 
 style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 
 valign="top">
 <a href="https://www.instagram.com/swordvoice_official/" 
 target="_blank"><img alt="Instagram" 
-width="32" src="https://cdn.swordvoice.com/templates/instagram.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/instagram.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Instagram" width="32"/></a></td>
 
 <td 
@@ -190,7 +190,7 @@ style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding
 valign="top">
 <a href="https://www.youtube.com/channel/UCle-HTb2TPvcVk0AaljQyOQ" 
 target="_blank"><img alt="YouTube"
- width="32" src="https://cdn.swordvoice.com/templates/youtube.svg" 
+ width="32" src="https://cdn.swordvoice.com/templates/youtube.png" 
  style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="YouTube" width="32"/></a></td>
 </tr>
 

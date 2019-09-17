@@ -146,7 +146,7 @@ role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 
 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
 <!--<![endif]-->
 <div align="center" class="img-container center autowidth fullwidth">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="" align="center"><![endif]--><img align="center" alt="Image" border="0" class="center autowidth fullwidth" src="https://cdn.swordvoice.com/templates/confirmEmail.svg" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 500px; display: block;" title="Image" width="500"/>
+<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="" align="center"><![endif]--><img align="center" alt="Image" border="0" class="center autowidth fullwidth" src="https://cdn.swordvoice.com/templates/confirmEmail.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 500px; display: block;" title="Image" width="500"/>
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 <!--[if (!mso)&(!IE)]><!-->
@@ -198,21 +198,21 @@ role="presentation" style="table-layout: fixed; vertical-align: top; min-width: 
 valign="top">
 <a href="https://twitter.com/SwordVoice_1" 
 target="_blank"><img alt="Twitter" 
-width="32" src="https://cdn.swordvoice.com/templates/twitter.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/twitter.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Twitter" width="32"/></a></td>
 <td 
 style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 
 valign="top">
 <a href="https://www.facebook.com/SwordVoice/" 
 target="_blank"><img alt="Facebook" 
-width="32" src="https://cdn.swordvoice.com/templates/facebook.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/facebook.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Facebook" width="32"/></a></td>
 <td 
 style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding-right: 3px; padding-left: 3px;" 
 valign="top">
 <a href="https://www.instagram.com/swordvoice_official/" 
 target="_blank"><img alt="Instagram" 
-width="32" src="https://cdn.swordvoice.com/templates/instagram.svg" 
+width="32" src="https://cdn.swordvoice.com/templates/instagram.png" 
 style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="Instagram" width="32"/></a></td>
 
 <td 
@@ -220,7 +220,7 @@ style="word-break: break-word; vertical-align: top; padding-bottom: 5px; padding
 valign="top">
 <a href="https://www.youtube.com/channel/UCle-HTb2TPvcVk0AaljQyOQ" 
 target="_blank"><img alt="YouTube"
- width="32" src="https://cdn.swordvoice.com/templates/youtube.svg" 
+ width="32" src="https://cdn.swordvoice.com/templates/youtube.png" 
  style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: none; display: block;" title="YouTube" width="32"/></a></td>
 </tr>
 </tbody>
