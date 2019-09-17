@@ -47,7 +47,10 @@ import {
   advancedSearchDbCtrl
 } from "../controllers/client/articleCtrl";
 
-import { sendContactFormCtrl } from "../controllers/visitor/visitorCtrl";
+import {
+  sendContactFormCtrl,
+  emailNewsVerificationCtrl
+} from "../controllers/visitor/visitorCtrl";
 
 import { updateUserCtrl } from "../controllers/cms/usersControllers";
 
@@ -111,6 +114,8 @@ routerAPI.get("/logout", guestAPI, logoutCtrl);
 
 routerAPI.get("/emailVerification", emailVerificationCtrl);
 routerAPI.get("/passwordRecover", passwordRecoverCtrl);
+
+routerAPI.get("/emailNewsVerification", emailNewsVerificationCtrl);
 
 routerAPI.get("/recoveryPasswd", guestAPI, recoveryPasswdCtrl);
 routerAPI.get("/recoveryUsername", guestAPI, recoveryUsernameCtrl);
