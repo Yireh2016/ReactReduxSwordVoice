@@ -1246,6 +1246,13 @@ class BlogPage extends React.Component {
                 {
                   "@media (max-width: 1050px)": {
                     display: "block"
+                  },
+                  "@media (max-width: 700px)": {
+                    position: "absolute",
+                    bottom: "0",
+                    left: "50%",
+                    top: "initial",
+                    transform: "translateX( -50% )"
                   }
                 }
               ]}

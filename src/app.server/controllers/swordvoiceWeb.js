@@ -345,6 +345,10 @@ const swordvoiceWeb = async (req, res) => {
                     errFn(err); //FIXME errFn not exist
                     return;
                   }
+
+                  if (similCount === 0) {
+                    similCount = 1;
+                  }
                   store.dispatch({
                     type: "SET_SIMILAR_ARTICLES_COUNT",
                     payload: similCount
@@ -355,9 +359,15 @@ const swordvoiceWeb = async (req, res) => {
                     { id, count: 0 },
                     searchStr,
                     arr => {
+                      let similarArticlesArr;
+                      if (arr.length > 1) {
+                        similarArticlesArr = arr.splice(1);
+                      } else {
+                        similarArticlesArr = arr;
+                      }
                       store.dispatch({
                         type: "SET_SIMILAR_ARTICLES",
-                        payload: arr
+                        payload: similarArticlesArr
                       });
 
                       //Getting popular Articles
