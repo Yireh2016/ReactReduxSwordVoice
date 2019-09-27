@@ -74,16 +74,24 @@
 .blogArticle {
   padding: 20px 50px 20px 133px;
 }
+
+.blogArticle {
+  padding: 20px 50px 20px 133px;
+}
+
 .blogArticle h1,
 .blogArticle h2 {
   color: #f95f0b;
   color: var(--orange);
 }
-.blogArticle h2,
-aside h2 {
+
+.blogArticle h2 {
   font-size: 1.8rem;
+  margin: 30px 0 15px 0;
 }
-.blogArticle figure img {
+
+.blogArticle figure img,
+.blogArticle img {
   width: 100%;
 }
 .blogArticle figure figcaption {
@@ -96,31 +104,55 @@ aside h2 {
   line-height: 1.58;
   letter-spacing: -0.003em;
   color: black;
+}
 
-  /*	font-size: 1rem;
-	line-height: 1.6rem;*/
+.blogArticle a {
+  color: #2e9ac2;
 }
 
 .blogArticle blockquote {
   border-left: 8px solid rgba(255, 127, 80, 0.580392);
 }
-@media (max-width: 1050px) {
-  .blogArticleContainer {
-    margin-top: 134px;
-  }
 
-  .blogArticle {
-    padding-left: 50px;
-  }
+.blogArticle blockquote p {
+  margin-left: 15px;
+}
+.blogArticle > code,
+.blogArticle p > code,
+.blogArticle pre > code {
+  line-height: 2;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.blogArticle pre {
+  background: #ff7f507a;
+  border: 1px solid coral;
+  padding: 3vmin;
+  border-radius: 5px;
+  overflow-x: scroll;
+}
+
+.blogArticle p > code {
+  background: #ff7f507a;
+  border: 1px solid coral;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.blogArticle hr {
+  border-top: 3px solid rgba(255, 127, 80, 0.5);
+  margin-top: 1rem;
+}
+
+@media (max-width: 1050px) {
+  .blogarticlepadding-left: 50px;
   .blogArticle p {
     font-size: 1.3rem;
   }
 }
-@media (max-width: 700px) {
-  .blogArticleContainer {
-    margin-top: 28vw;
-  }
 
+@media (max-width: 700px) {
   .blogArticle {
     padding: 12px 14px;
   }
@@ -133,5 +165,8 @@ aside h2 {
   }
   .blogArticle figure {
     margin: 0;
+  }
+  .blogArticle blockquote {
+    margin: 0 0 0 10px;
   }
 }

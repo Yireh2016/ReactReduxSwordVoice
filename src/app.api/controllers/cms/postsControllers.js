@@ -126,11 +126,11 @@ export const getPostCtrl = (req, res) => {
       (err, post) => {
         if (err) {
           console.log("err", err);
-          res.json(err);
+          res.status(401).json(err);
           return;
         }
 
-        res.json(post);
+        res.status(200).json(post);
       }
     );
     return;
@@ -138,7 +138,6 @@ export const getPostCtrl = (req, res) => {
 
   articleModel
     .find()
-    .select()
     .limit(7)
     .skip(skip)
     .populate("author")
@@ -147,11 +146,11 @@ export const getPostCtrl = (req, res) => {
     .then(posts => {
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
-        postMinimumData[i] = {
+        const post = {
           url: posts[i].url,
           postImg:
             posts[i].thumbnail &&
-            `url(http:/cdn.swordvoice.com/articles/${posts[i].url}/${posts[i].thumbnail.name})`,
+            `url(${process.env.CDN_URL}/articles/${posts[i].url}/${posts[i].thumbnail.name})`,
           postGradient:
             posts[i].thumbnail &&
             `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
@@ -168,13 +167,15 @@ export const getPostCtrl = (req, res) => {
           editionHistory: posts[i].editionHistory,
           keywords: posts[i].keywords[0]
         };
+
+        postMinimumData.push(post);
       }
-      res.json(postMinimumData);
+      res.status(200).json(postMinimumData);
     })
     .catch(err => {
       if (err) {
         console.log("err", err);
-        res.json(err);
+        res.status(401).json(err);
         return;
       }
     });
@@ -202,10 +203,6 @@ export const getArticleCtrl = (req, res) => {
 export const updatePostCtrl = (req, res) => {
   const { projectName, editionType } = req.query;
   const data = req.body;
-
-  console.log(
-    `projectName ${projectName} \n editionType ${editionType}  \n data ${data}`
-  );
 
   articleModel
     .find({ projectName })
@@ -236,6 +233,8 @@ export const updatePostCtrl = (req, res) => {
       article[0].keywords = keywords ? keywords : article[0].keywords;
 
       article[0].html = html ? html : article[0].html;
+
+      //This code remove all html tag for a clear content
 
       if (html) {
         const content = html.replace(

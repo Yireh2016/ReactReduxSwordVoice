@@ -3,7 +3,7 @@ import Helmet from "react-helmet";
 import { connect } from "react-redux";
 import removeMD from "remove-markdown";
 
-//lsyout
+//layout
 import BlogPostLayout from "./blogPostLayout/BlogPostLayout";
 import NavBarLayout from "../../layouts/NavBarLayout";
 
