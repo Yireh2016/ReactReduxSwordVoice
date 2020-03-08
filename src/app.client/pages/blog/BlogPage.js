@@ -96,7 +96,7 @@ const RecentPostCont = styled.section`
   @media (max-width: 1050px) {
     flex-wrap: wrap;
     position: relative;
-    transform: "translateY(0)";
+    transform: translateY(0);
   }
   @media (max-width: 700px) {
     flex-direction: column;
@@ -118,7 +118,7 @@ const RecentPostCardCont = styled.div`
 `;
 
 const LastPostCont = styled.div`
-  display: "block";
+  display: block;
 
   @media (max-width: 1050px) {
     height: 100vh;

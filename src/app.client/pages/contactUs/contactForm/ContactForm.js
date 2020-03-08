@@ -19,7 +19,7 @@ const Form = styled.div`
   }
   label {
     margin-top: 20px;
-    width: 100#;
+    width: 100px;
   }
 
   @media (max-width: 1050px) {

@@ -108,7 +108,7 @@ const SocialNetCont = styled.div`
   height: 90%;
 
   @media (max-width: 1050px) {
-    heigth: auto;
+    height: auto;
   }
 
   @media (max-width: 700px) {

@@ -316,6 +316,7 @@ export const updatePostCtrl = (req, res) => {
 };
 
 export const deletePostCtrl = (req, res) => {
+  console.log("req.params.projectName", req.params.projectName);
   articleModel
     .findOneAndDelete({ projectName: req.params.projectName })
     .exec(err => {

@@ -11,7 +11,7 @@ const SearchBarCont = styled.div`
     border: 1px #0387b7 solid;
   }
   border-radius: 10px;
-  padding-bottom: 0px 5px;
+  padding: 0px 5px;
   overflow: hidden;
 `;
 

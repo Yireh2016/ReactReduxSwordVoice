@@ -235,7 +235,6 @@ const swordvoiceWeb = async (req, res) => {
     }
 
     return new Promise((resolve, reject) => {
-      console.log("req._parsedUrl.pathname", req._parsedUrl.pathname); //TODO rm
       if (req._parsedUrl.pathname.match("/blog/post/")) {
         const RESPONSES_LIMIT = 3;
         const COMMENT_LIMIT = 5;

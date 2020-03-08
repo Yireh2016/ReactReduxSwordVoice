@@ -91,7 +91,7 @@ routerAPI.post("/createSiteMap", createSiteMapCtrl); //FIXME erase
 
 routerAPI.post("/signUpEmailConfirm", signUpEmailConfirmCtrl);
 
-routerAPI.post("/addToSiteMap", authAPI, addToSiteMapCtrl); //FIXME add authAPI
+routerAPI.post("/addToSiteMap", authAPI, addToSiteMapCtrl);
 // hacer Login
 //se usa en: logInForm
 routerAPI.post("/login", guestAPI, loginCtrl);
