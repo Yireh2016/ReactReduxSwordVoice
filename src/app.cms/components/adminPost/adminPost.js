@@ -20,7 +20,12 @@ import dbDateToDatetime from "../../../services/dbDateToDatetime";
 class AdminPost extends Component {
   constructor(props) {
     super(props);
-    this.state = { isDataFetched: false, posts: {}, showDeleteModal: false };
+    this.state = {
+      isDataFetched: false,
+      posts: {},
+      showDeleteModal: false,
+      deletionProjectName: ""
+    };
   }
   dataFetched = posts => {
     this.setState({ isDataFetched: true, posts: posts });
@@ -87,11 +92,14 @@ class AdminPost extends Component {
       });
   };
   deletePostConfirmation = name => {
+    console.log("name from deletePostConfirmation", name);
+
     const getPostsFromDb = this.getPostsFromDb;
     this.setState({ isDataFetched: false });
     axios
       .delete(`/api/deletePost/${name}`)
       .then(res => {
+        console.log("res from deletePostConfirmation", res);
         if (res.status === 204) {
           getPostsFromDb();
         }
@@ -101,7 +109,10 @@ class AdminPost extends Component {
       });
   };
   onDeleteClick = (e, props) => {
-    this.setState({ showDeleteModal: true });
+    this.setState({
+      showDeleteModal: true,
+      deletionProjectName: props.original.projectName
+    });
   };
 
   onEditClick = (e, props) => {
@@ -114,7 +125,11 @@ class AdminPost extends Component {
   };
   deleteAndCancel = deletePost => {
     if (deletePost) {
-      this.deletePostConfirmation(this.props.project.name);
+      console.log(
+        "from deleteAndCancel  this.state.deletionProjectName",
+        this.state.deletionProjectName
+      );
+      this.deletePostConfirmation(this.state.deletionProjectName);
     }
 
     this.setState({ showDeleteModal: false });
@@ -157,7 +172,6 @@ class AdminPost extends Component {
         accessor: "isPublished",
         maxWidth: 400,
         Cell: props => {
-          console.log("isPublished", props.value);
           return (
             <div className="tableColumnElement">
               {props.value && `${props.value}`}
@@ -252,7 +266,6 @@ class AdminPost extends Component {
                 props.value
               )}`
             : ""; //datetime OJO
-          console.log("datetime", date);
           return (
             <div className="talbeColumnElement" title={date}>
               {date}
@@ -342,8 +355,5 @@ const mapDispachToProps = dispach => {
   };
 };
 
-const AdminPost2 = connect(
-  mapStateToProps,
-  mapDispachToProps
-)(AdminPost);
+const AdminPost2 = connect(mapStateToProps, mapDispachToProps)(AdminPost);
 export default withRouter(AdminPost2);
