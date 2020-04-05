@@ -12,7 +12,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 var nodeExternals = require("webpack-node-externals");
 
-module.exports = env => {
+module.exports = (env) => {
   console.log("webpack env", env);
   // Get the root path (assuming your webpack config is in the root of your project!)
   const currentPath = path.join(__dirname);
@@ -43,40 +43,40 @@ module.exports = env => {
         userAgent: "Googlebot",
         allow: "/",
         disallow: ["/cms"],
-        crawlDelay: 2
+        crawlDelay: 2,
       },
       {
         userAgent: "Twitterbot",
         Disallow: "*",
         allow: "/blog/post/",
-        crawlDelay: 2
+        crawlDelay: 2,
       },
       {
         userAgent: "Facebot",
         Disallow: "*",
         allow: "/blog/post/",
-        crawlDelay: 2
+        crawlDelay: 2,
       },
       {
         userAgent: "*",
         allow: "/",
         disallow: "/cms",
-        crawlDelay: 10
-      }
+        crawlDelay: 10,
+      },
     ],
     sitemap: "http://swordvoice.com/sitemap.xml",
-    host: "http://swordvoice.com"
+    host: "http://swordvoice.com",
   };
 
   var isProduction = process.env.NODE_ENV === "production";
   var productionPluginDefine = [
     new webpack.DefinePlugin(envKeys),
-    new RobotstxtPlugin(optionsRobotTxt)
+    new RobotstxtPlugin(optionsRobotTxt),
   ];
 
   var clientLoaders = isProduction
     ? productionPluginDefine.concat([
-        new webpack.optimize.OccurrenceOrderPlugin()
+        new webpack.optimize.OccurrenceOrderPlugin(),
       ])
     : productionPluginDefine;
 
@@ -90,7 +90,7 @@ module.exports = env => {
         path: path.join(__dirname, "server"),
         filename: "server.js",
         libraryTarget: "commonjs2",
-        publicPath: "/"
+        publicPath: "/",
       },
       target: "node",
       node: {
@@ -99,25 +99,25 @@ module.exports = env => {
         process: false,
         Buffer: false,
         __filename: false,
-        __dirname: false
+        __dirname: false,
       },
       externals: nodeExternals(),
       optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
       },
       plugins: clientLoaders.concat([
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
           filename: !isProduction ? "[name].css" : "[name].[hash].css",
-          chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css"
-        })
+          chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css",
+        }),
       ]),
       module: {
         rules: [
           {
             test: /\.js$/,
-            use: "babel-loader"
+            use: "babel-loader",
           },
           {
             test: /\.css$/,
@@ -125,38 +125,38 @@ module.exports = env => {
               {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
-                  hmr: process.env.NODE_ENV === "development"
-                }
+                  hmr: process.env.NODE_ENV === "development",
+                },
               },
-              "css-loader"
-            ]
+              "css-loader",
+            ],
           },
           {
             test: /\.(jpe?g|png|gif|svg|ico)$/i,
             use: [
               {
                 loader: "file-loader",
-                options: { emitFile: false }
-              }
-            ]
-          }
-        ]
-      }
+                options: { emitFile: false },
+              },
+            ],
+          },
+        ],
+      },
     },
 
     /////////////////
     ////////CLIENT WEBPACK
     ////////////////////
     {
-      entry: "./src/app.client/client.index.js",
+      entry: ["./src/app.client/client.index.js"],
       output: {
         path: path.join(__dirname, "dist/assets"),
         publicPath: "/",
-        filename: "bundle.js"
+        filename: "bundle.js",
       },
       devtool: "eval",
       optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
       },
       plugins: clientLoaders.concat([
         new LoadablePlugin(),
@@ -164,8 +164,8 @@ module.exports = env => {
           // Options similar to the same options in webpackOptions.output
           // both options are optional
           filename: !isProduction ? "[name].css" : "[name].[hash].css",
-          chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css"
-        })
+          chunkFilename: !isProduction ? "[id].css" : "[id].[hash].css",
+        }),
       ]),
       // externals: nodeExternals(),
       module: {
@@ -173,7 +173,7 @@ module.exports = env => {
           {
             test: /\.js$/,
             exclude: /node_modules/,
-            use: "babel-loader"
+            use: "babel-loader",
           },
           {
             test: /\.css$/,
@@ -181,48 +181,48 @@ module.exports = env => {
               {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
-                  hmr: process.env.NODE_ENV === "development"
-                }
+                  hmr: process.env.NODE_ENV === "development",
+                },
               },
-              "css-loader"
-            ]
+              "css-loader",
+            ],
           },
           {
             test: /\.(jpe?g|png|gif|svg|ico)$/i,
             use: [
               {
-                loader: "file-loader"
-              }
-            ]
-          }
-        ]
+                loader: "file-loader",
+              },
+            ],
+          },
+        ],
       },
       resolve: {
-        extensions: [".js", ".jsx"]
-      }
+        extensions: [".js", ".jsx"],
+      },
     },
     /////////////////
     ////////CMS  WEBPACK
     ////////////////////
     {
-      entry: "./src/app.cms/cms.index.js",
+      entry: ["./src/app.cms/cms.index.js"],
       output: {
         path: path.join(__dirname, "dist/assets/cms"),
         publicPath: "/cms/",
         filename: "[name].bundleCMS.js",
-        chunkFilename: "[name].bundleCMS.js"
+        chunkFilename: "[name].bundleCMS.js",
       },
       devtool: "eval",
       optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
       },
       plugins: clientLoaders.concat([
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
           filename: "[name].css",
-          chunkFilename: "[id].css"
-        })
+          chunkFilename: "[id].css",
+        }),
       ]),
       // externals: nodeExternals(),
       module: {
@@ -230,7 +230,7 @@ module.exports = env => {
           {
             test: /\.js$/,
             exclude: /node_modules/,
-            use: "babel-loader"
+            use: "babel-loader",
           },
           {
             test: /\.css$/,
@@ -238,25 +238,25 @@ module.exports = env => {
               {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
-                  hmr: process.env.NODE_ENV === "development"
-                }
+                  hmr: process.env.NODE_ENV === "development",
+                },
               },
-              "css-loader"
-            ]
+              "css-loader",
+            ],
           },
           {
             test: /\.(jpe?g|png|gif|svg|ico)$/i,
             use: [
               {
-                loader: "file-loader"
-              }
-            ]
-          }
-        ]
+                loader: "file-loader",
+              },
+            ],
+          },
+        ],
       },
       resolve: {
-        extensions: [".js", ".jsx"]
-      }
-    }
+        extensions: [".js", ".jsx"],
+      },
+    },
   ];
 };
