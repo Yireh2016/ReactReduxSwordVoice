@@ -21,10 +21,10 @@ export const createPostCtrl = (req, res) => {
 
   axios
     .post(`${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`)
-    .then(result => {
+    .then((result) => {
       console.log("respuesta correcta del post", result);
 
-      article.save(err => {
+      article.save((err) => {
         if (err) {
           console.log(`hubo error creando articulo ${err}`);
           res.json(400, { code: 400, message: `there was an error: ${err}` });
@@ -35,7 +35,7 @@ export const createPostCtrl = (req, res) => {
         }
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("err en create post", err.message);
       res.status(401).send(err.message);
     });
@@ -48,12 +48,12 @@ export const addClassToPostCtrl = (req, res) => {
     .post(
       `${process.env.CDN_URL}/cdn/addClass?url=${url}&filename=${filename}&classes=${classes}`
     )
-    .then(apiRes => {
+    .then((apiRes) => {
       if (apiRes.status === 200) {
         res.status(200).send("Classes Added");
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log("error on addClass", err);
     });
 };
@@ -76,7 +76,7 @@ export const getClassFromPostCtrl = (req, res) => {
 
   axios
     .get(`${process.env.CDN_URL}/cdn/getClasses/${url}`)
-    .then(apiRes => {
+    .then((apiRes) => {
       if (apiRes.status === 404) {
         return;
       }
@@ -84,7 +84,7 @@ export const getClassFromPostCtrl = (req, res) => {
         res.status(200).send(apiRes.data);
         // res.status(200).send(data);
 
-        fs.access(path, fs.F_OK, err => {
+        fs.access(path, fs.F_OK, (err) => {
           if (err) {
             console.log("file do not exist", err);
             res.status(404).send();
@@ -95,7 +95,7 @@ export const getClassFromPostCtrl = (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(`error getting classes ${err}`);
     });
 };
@@ -135,7 +135,6 @@ export const getPostCtrl = (req, res) => {
     );
     return;
   }
-
   articleModel
     .find()
     .limit(7)
@@ -143,7 +142,7 @@ export const getPostCtrl = (req, res) => {
     .populate("author")
     .sort({ _id: "descending" })
     .exec()
-    .then(posts => {
+    .then((posts) => {
       let postMinimumData = [];
       for (let i = 0; i < posts.length; i++) {
         const post = {
@@ -165,14 +164,15 @@ export const getPostCtrl = (req, res) => {
           date: posts[i].date,
           programDate: posts[i].programDate,
           editionHistory: posts[i].editionHistory,
-          keywords: posts[i].keywords[0]
+          keywords: posts[i].keywords[0],
         };
 
         postMinimumData.push(post);
       }
+
       res.status(200).json(postMinimumData);
     })
-    .catch(err => {
+    .catch((err) => {
       if (err) {
         console.log("err", err);
         res.status(401).json(err);
@@ -189,10 +189,10 @@ export const getArticleCtrl = (req, res) => {
     .select()
     .populate("author")
     .exec()
-    .then(article => {
+    .then((article) => {
       res.json(article);
     })
-    .catch(err => {
+    .catch((err) => {
       if (err) {
         console.log("err", err);
         res.json(err);
@@ -206,7 +206,7 @@ export const updatePostCtrl = (req, res) => {
 
   articleModel
     .find({ projectName })
-    .then(article => {
+    .then((article) => {
       let editionHistoryArr;
       if (data.editionHistory) {
         editionHistoryArr = [...article[0].editionHistory, data.editionHistory];
@@ -225,7 +225,7 @@ export const updatePostCtrl = (req, res) => {
         thumbnail,
         programDate,
         date,
-        isPublished
+        isPublished,
       } = data;
 
       article[0].elements = elements ? elements : article[0].elements;
@@ -265,7 +265,7 @@ export const updatePostCtrl = (req, res) => {
       article[0].isPublished =
         isPublished === undefined ? article[0].isPublished : isPublished;
 
-      article[0].save(async err => {
+      article[0].save(async (err) => {
         if (err) {
           res.status(401).send(err);
           return;
@@ -275,7 +275,7 @@ export const updatePostCtrl = (req, res) => {
           case "unpublish": {
             try {
               await removeSiteMap({
-                url: `${process.env.WEB_URL}/blog/post/${article[0].url}`
+                url: `${process.env.WEB_URL}/blog/post/${article[0].url}`,
               });
 
               res.status(200).send("Unpublishing ready");
@@ -293,7 +293,7 @@ export const updatePostCtrl = (req, res) => {
                 date:
                   article[0].date
                     .toISOString()
-                    .match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) + "+00:00"
+                    .match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) + "+00:00",
               });
               res.status(200).send("publish ready");
             } catch (error) {
@@ -309,7 +309,7 @@ export const updatePostCtrl = (req, res) => {
         }
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(401).send(err);
     });
@@ -319,7 +319,7 @@ export const deletePostCtrl = (req, res) => {
   console.log("req.params.projectName", req.params.projectName);
   articleModel
     .findOneAndDelete({ projectName: req.params.projectName })
-    .exec(err => {
+    .exec((err) => {
       if (err) {
         res.json(404, err);
         return;
@@ -335,12 +335,12 @@ export const addToSiteMapCtrl = (req, res) => {
     url: `${process.env.WEB_URL}/blog/post/${url}`,
     changefreq: "monthly",
     priority: 0.64,
-    lastmod: date
+    lastmod: date,
   };
 
   siteModel
     .find()
-    .then(site => {
+    .then((site) => {
       site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl];
       site[0].save((err, newSite) => {
         if (err) {
@@ -354,7 +354,7 @@ export const addToSiteMapCtrl = (req, res) => {
         res.status(200).send(sitemap.toXML());
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(404).send(err);
     });
 };
@@ -363,12 +363,12 @@ export const removeSiteMapCtrl = (req, res) => {
 
   siteModel
     .find()
-    .then(site => {
+    .then((site) => {
       const urlsArr = site[0].sitemap.urls;
       console.log("urlsArr", urlsArr);
 
       //`${process.env.WEB_URL}/blog/post/${url}`
-      const urlsFilterArr = urlsArr.filter(link => {
+      const urlsFilterArr = urlsArr.filter((link) => {
         return link.url !== `${process.env.WEB_URL}/blog/post/${url}`;
       });
 
@@ -388,7 +388,7 @@ export const removeSiteMapCtrl = (req, res) => {
         res.status(200).send(sitemap.toXML());
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(404).send(err);
     });
 };
@@ -399,30 +399,30 @@ export const createSiteMapCtrl = (req, res) => {
       url: `${process.env.WEB_URL}`,
       changefreq: "monthly",
       priority: 1,
-      lastmod: "2019-09-07T14:09:33+00:00"
+      lastmod: "2019-09-07T14:09:33+00:00",
     },
     {
       url: `${process.env.WEB_URL}/about`,
       changefreq: "monthly",
       priority: 0.8,
-      lastmod: "2019-09-07T14:09:33+00:00"
+      lastmod: "2019-09-07T14:09:33+00:00",
     },
     {
       url: `${process.env.WEB_URL}/blog`,
       changefreq: "monthly",
       priority: 0.8,
-      lastmod: "2019-09-07T14:09:33+00:00"
+      lastmod: "2019-09-07T14:09:33+00:00",
     },
     {
       url: `${process.env.WEB_URL}/contact`,
       changefreq: "monthly",
       priority: 0.8,
-      lastmod: "2019-09-07T14:09:33+00:00"
-    }
+      lastmod: "2019-09-07T14:09:33+00:00",
+    },
   ];
   siteModel
     .find()
-    .then(site => {
+    .then((site) => {
       if (site.length === 0) {
         const siteInstance = new siteModel();
         siteInstance.sitemap.urls = urlArr;
@@ -445,7 +445,7 @@ export const createSiteMapCtrl = (req, res) => {
       res.header("Content-Type", "application/xml");
       res.status(200).send(sitemap.toXML());
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(404).send(err);
     });
 };

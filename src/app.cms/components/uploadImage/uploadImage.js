@@ -11,14 +11,15 @@ import compressImage from "../../../services/compressImage";
 class UploadImage extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-
-    // };
+    this.state = {
+      showUploadBtn: false,
+    };
     this.inputFile = React.createRef();
     this.options = [0.5, 0.6, 0.7, 0.8, 0.9, 1];
   }
 
-  handleImgUpload = files => {
+  handleImgUpload = (files) => {
+    this.setState({ showUploadBtn: true });
     this.props.originalImageSaver(files[0]);
     compressImage(
       files,
@@ -29,40 +30,54 @@ class UploadImage extends Component {
     );
   };
 
+  onSelectFile = (e) => {
+    this.inputFile.current.click();
+  };
+
   render() {
     const options = this.options.map((opt, i) => {
       return <option key={i} value={opt}>{`${opt}`}</option>;
     });
+
+    const uploadBtn = this.state.showUploadBtn ? (
+      <button
+        className="cmsBtn"
+        onClick={this.props.uploadingToServerHandler}
+        type="button"
+        style={{ "margin-left": "15px" }}
+      >
+        Upload Image
+      </button>
+    ) : null;
     return (
       <div>
         <input
           ref={this.inputFile}
           style={{
-            display: "none"
+            display: "none",
           }}
           type="file"
           name="avatar"
           id="avatar"
           accept="image/*"
-          onChange={e => {
+          onChange={(e) => {
             this.handleImgUpload(e.target.files);
           }}
         />
 
-        <button
-          onClick={() => {
-            this.inputFile.current.click();
-          }}
-          className="cmsBtn "
-        >
-          Select file
-        </button>
+        <div style={{ display: "flex", margin: "15px" }}>
+          <button onClick={this.onSelectFile} className="cmsBtn ">
+            Select file
+          </button>
+          {uploadBtn}
+        </div>
+
         {isBrowser() !== "edge" && (
           <div
             style={{
               display: "flex",
               flexDirection: "row",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
             <label className="padding--small">
@@ -81,7 +96,7 @@ class UploadImage extends Component {
               className="padding--small"
               style={{
                 display: "flex",
-                alignItems: "center"
+                alignItems: "center",
               }}
             >
               Image Width

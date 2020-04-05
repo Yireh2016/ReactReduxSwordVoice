@@ -10,7 +10,7 @@ import uploadAvatar from "../../../apiCalls/uploadAvatar";
 //services
 import {
   sessionCookie,
-  deleteCookie
+  deleteCookie,
 } from "../../services/serverCookieManager";
 import { readToken } from "../../services/tokenHandler";
 import sendUserVerificationCode from "../../services/sendUserVerificationCode";
@@ -43,7 +43,7 @@ export const signUpCtrl = async (req, res) => {
     !userData.userGender
   ) {
     res.status(400).json({
-      message: "All fields required"
+      message: "All fields required",
     });
     return;
   }
@@ -68,7 +68,7 @@ export const signUpCtrl = async (req, res) => {
   userData = {
     ...userData,
     _id: mongoose.Types.ObjectId(),
-    userVerificationCode
+    userVerificationCode,
   };
 
   let user = new usersModel(userData);
@@ -81,23 +81,23 @@ export const signUpCtrl = async (req, res) => {
       );
       res.status(400).json({
         code: 400,
-        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`,
       });
     } else {
       try {
         await sendUserVerificationCode(userVerificationCode, {
           firstName: userData.userFirstName,
-          email: userData.userEmail
+          email: userData.userEmail,
         });
 
         res.status(200).json({
           code: 200,
-          message: `Verification email sent`
+          message: `Verification email sent`,
         });
       } catch (error) {
         res.status(404).json({
           code: 404,
-          message: `Error sending email ${error}`
+          message: `Error sending email ${error}`,
         });
       }
 
@@ -166,7 +166,7 @@ export const loginCtrl = (req, res) => {
           id: user._id,
           userFullName: `${user.userFirstName} ${user.userLastName}`,
           userType: user.userType,
-          userAvatar: user.userAvatar
+          userAvatar: user.userAvatar,
         });
       } catch (err) {
         console.log("err on user catch on login", err);
@@ -177,7 +177,7 @@ export const loginCtrl = (req, res) => {
         userAvatar: user.userAvatar,
         userName: user.userName,
         userType: user.userType,
-        userFullName: `${user.userFirstName} ${user.userLastName}`
+        userFullName: `${user.userFirstName} ${user.userLastName}`,
       });
     } else {
       console.log("dio un 401", info);
@@ -197,14 +197,14 @@ export const autoLogin = (req, res) => {
 
     const tokenData = readToken(token, {
       encryptKey: process.env.ENCRYPTKEY,
-      encryptAlgorithm: "aes-256-cbc"
+      encryptAlgorithm: "aes-256-cbc",
     });
 
     const id = tokenData.data.id;
     usersModel
       .find({ _id: id })
       .select("userAvatar userName _id userType userFirstName userLastName")
-      .exec(function(err, data) {
+      .exec(function (err, data) {
         if (err) {
           res.status(501).json(`thre was an error: ${err}`);
           return;
@@ -233,12 +233,12 @@ export const sendUserTempImageCtrl = (req, res) => {
 
   axios
     .post(`${process.env.CDN_URL}/cdn/sendUserImage`, data)
-    .then(sendRes => {
+    .then((sendRes) => {
       if (sendRes.status === 200) {
         res.status(200).json({ status: "OK", filename: sendRes.data.filename });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(404).json({ status: err });
     });
 };
@@ -250,7 +250,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
     // Only needed if you don't have a real mail account for testing
     let testAccount = {
       user: "jainer@swordvoice.com",
-      pass: "J0MCalv3tt5."
+      pass: "J0MCalv3tt5.",
     };
 
     // create reusable transporter object using the default SMTP transport
@@ -260,19 +260,19 @@ export const signUpEmailConfirmCtrl = (req, res) => {
       // secure: false, // true for 465, false for other ports
       auth: {
         user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass // generated ethereal password
+        pass: testAccount.pass, // generated ethereal password
       },
       tls: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
       },
       requireTLS: true,
       debug: true,
-      logger: true
+      logger: true,
     });
 
     // send mail with defined transport object
 
-    transporter.verify(function(error) {
+    transporter.verify(function (error) {
       if (error) {
         console.log(error);
         res.status(404).json(error);
@@ -287,7 +287,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
       to: "jainer.calvetti@gmail.com", // list of receivers
       subject: "Hello ✔", // Subject line
       text: "Hello world?", // plain text body
-      html: "<b>Hello world? from noreply  nodemailer</b>" // html body
+      html: "<b>Hello world? from noreply  nodemailer</b>", // html body
     });
 
     console.log("Message sent: %s", info.messageId);
@@ -298,7 +298,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   }
 
-  main().catch(err => {
+  main().catch((err) => {
     console.log("error sending mail", err);
     res.status(404).json(err);
   });
@@ -307,7 +307,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
 export const emailVerificationCtrl = (req, res) => {
   const { id } = req.query;
 
-  const success = user => {
+  const success = (user) => {
     if (user.length === 0) {
       errFn(`User verification time expired`);
       return;
@@ -330,18 +330,18 @@ export const emailVerificationCtrl = (req, res) => {
     });
   };
 
-  const errFn = msg => {
+  const errFn = (msg) => {
     res.status(401).send(msg);
   };
 
-  const emailVerified = async newUser => {
+  const emailVerified = async (newUser) => {
     try {
       await sessionCookie(req, res, {
         userName: newUser.userName,
         id: newUser._id,
         userFullName: `${newUser.userFirstName} ${newUser.userLastName}`,
         userType: newUser.userType,
-        userAvatar: newUser.userAvatar
+        userAvatar: newUser.userAvatar,
       });
     } catch (err) {
       console.log("err on user catch on login", err);
@@ -354,7 +354,7 @@ export const emailVerificationCtrl = (req, res) => {
       userAvatar: newUser.userAvatar,
       userName: newUser.userName,
       userType: newUser.userType,
-      userFullName: `${newUser.userFirstName} ${newUser.userLastName}`
+      userFullName: `${newUser.userFirstName} ${newUser.userLastName}`,
     });
   };
 
@@ -367,7 +367,7 @@ export const recoveryPasswdCtrl = (req, res) => {
   usersModel
     .find({ userEmail: email })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user.length === 0) {
         res.status(401).send("Email not found");
         return;
@@ -388,7 +388,7 @@ export const recoveryPasswdCtrl = (req, res) => {
         res.status(200).send({ status: "OK", user });
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(401).send(err);
     });
 };
@@ -399,7 +399,7 @@ export const recoveryUsernameCtrl = (req, res) => {
   usersModel
     .find({ userName })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user.length === 0) {
         res.status(401).send("User not found");
         return;
@@ -409,7 +409,7 @@ export const recoveryUsernameCtrl = (req, res) => {
 
       res.status(200).send({ status: "OK", emailHint });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(401).send(err);
     });
 };
@@ -420,7 +420,7 @@ export const passwordRecoverCtrl = (req, res) => {
   usersModel
     .find({ _id: id })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user.length === 0) {
         res.status(401).send("User not found");
         return;
@@ -438,7 +438,7 @@ export const passwordRecoverCtrl = (req, res) => {
 
       res.redirect(`${process.env.WEB_URL}/passwdRecoveryForm?id=${id}`);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(401).send(err);
     });
 };
@@ -456,7 +456,7 @@ export const updatePasswdCtrl = (req, res) => {
     if (passwdRecoveryDate === "") {
       res.status(401).send({
         status: "ERR",
-        message: `Your Email Link is outdated, click [Here](${process.env.WEB_URL}) and recover your credentials in the Login area`
+        message: `Your Email Link is outdated, click [Here](${process.env.WEB_URL}) and recover your credentials in the Login area`,
       });
       return;
     }
@@ -483,7 +483,7 @@ export const updatePasswdCtrl = (req, res) => {
         );
         res.status(400).json({
           status: "ERR",
-          message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+          message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`,
         });
       } else {
         try {
@@ -496,7 +496,7 @@ export const updatePasswdCtrl = (req, res) => {
 
           res.status(200).send({
             status: "OK",
-            message: "Your password was successfully changed"
+            message: "Your password was successfully changed",
           }); //user ID is returned to use it later for avatar upload
         } catch (err) {
           console.log("err on user catch on login", err);

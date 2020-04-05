@@ -14,11 +14,15 @@ class App extends Component {
 
     return (
       <Switch>
-        <Route exact path="/cms" render={() => <Login />} />
+        <Route
+          exact
+          path="/cms"
+          render={() => <Login loadingScreen={<Loading fullscreen={true} />} />}
+        />
         <Route
           exact
           path="/cms/preview"
-          render={props => <Preview props={props} />}
+          render={(props) => <Preview props={props} />}
         />
         <Route
           path="/cms/*"

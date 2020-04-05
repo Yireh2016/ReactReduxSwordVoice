@@ -18,28 +18,28 @@ class ThumbNailEditor extends Component {
     this.state = {
       isImageUploaded: false,
       imagePreview: this.props.thumbnail
-        ? `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${
-            this.props.thumbnail.name
-          })`
+        ? `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${this.props.thumbnail.name})`
         : null,
       uploadMessage: "Upload Thunbnail",
       imgW: 200,
       imgQuality: 0.6,
       imageFile: null,
-      compressedImg: null
+      compressedImg: null,
     };
+
+    this.imageUploaderInput = React.createRef();
   }
 
-  imageUploadErr = err => {
+  imageUploadErr = (err) => {
     this.setState(() => {
       return {
         imagePreview: undefined,
-        uploadMessage: `${err}`
+        uploadMessage: `${err}`,
       };
     });
   };
 
-  imageUpload = image => {
+  imageUpload = (image) => {
     image.name = "thumb-" + image.name;
 
     this.props.onProjectChange();
@@ -48,7 +48,7 @@ class ThumbNailEditor extends Component {
     this.setState({
       imagePreview: `url(${URL.createObjectURL(image)})`,
       isImageUploaded: true,
-      compressedImg: image
+      compressedImg: image,
     });
     alert("file Uploaded successfully");
   };
@@ -62,38 +62,34 @@ class ThumbNailEditor extends Component {
     const dataToUploadFromFile = {
       file: file,
       name: this.props.thumbnail.name,
-      url: this.props.project.url
+      url: this.props.project.url,
     };
 
     const successUpload = (fileNamesArr, filename) => {
       console.log("successUpload fileNamesArr", fileNamesArr);
 
-      fileNamesArr = fileNamesArr.filter(el => {
+      fileNamesArr = fileNamesArr.filter((el) => {
         return !el.match(/thumb-.*/g);
       });
       fileNamesArr.push(filename);
 
-
       this.props.onAddDeleteFile(fileNamesArr);
       this.setState({
-        imagePreview: `url(${process.env.CDN_URL}/articles/${
-          this.props.project.url
-        }/${filename})`
+        imagePreview: `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${filename})`,
       });
     };
 
     let fileNamesArr = this.props.fileNames;
 
-    blobToBase64(this.state.compressedImg, base64Obj => {
+    blobToBase64(this.state.compressedImg, (base64Obj) => {
       uploadPostImage(
         base64Obj.url,
         this.props.project.url,
         this.props.thumbnail.name,
-        res => {
-
+        (res) => {
           successUpload(fileNamesArr, dataToUploadFromFile.name);
         },
-        err => {
+        (err) => {
           console.log("An error has ocurred during image Upload", err);
         },
         true
@@ -101,16 +97,16 @@ class ThumbNailEditor extends Component {
     });
   };
 
-  originalImageSaver = image => {
+  originalImageSaver = (image) => {
     this.setState({ imageFile: image });
   };
-  imgPropertiesHandler = e => {
+  imgPropertiesHandler = (e) => {
     const {
-      target: { name, value }
+      target: { name, value },
     } = e;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
 
     if (name === "imgQuality" && this.state.imageFile) {
@@ -123,7 +119,7 @@ class ThumbNailEditor extends Component {
       );
     }
   };
-  imgWidthHandler = e => {
+  imgWidthHandler = (e) => {
     const value = e.target.value;
     this.state.imageFile &&
       compressImage(
@@ -148,56 +144,48 @@ class ThumbNailEditor extends Component {
           width: "60%",
           overflowY: "scroll",
           padding: "20px",
-          boxSizing: "border-box"
+          boxSizing: "border-box",
         }}
       >
-        <React.Fragment>
-          <div>
-            <UploadImage
-              imageUpload={this.imageUpload}
-              imageUploadErr={this.imageUploadErr}
-              imgPropertiesHandler={this.imgPropertiesHandler}
-              imgWidthHandler={this.imgWidthHandler}
-              originalImageSaver={this.originalImageSaver}
-              uploadMessage={this.state.uploadMessage}
-              imgQuality={this.state.imgQuality}
-              imgW={this.state.imgW}
-              compressedImg={this.state.compressedImg}
-            />
+        <div>
+          <div style={{ display: "flex" }}>
             <SketchPicker
               color={this.state.thumbnailColor}
               onChangeComplete={this.colorHandler}
             />
+            <div style={{ "margin-left": "15px" }}>
+              {this.state.imagePreview && (
+                <PostCard
+                  title={this.props.seo.title}
+                  postH={300}
+                  postImg={this.state.imagePreview}
+                  postGradient={
+                    this.props.thumbnail &&
+                    `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${this.props.thumbnail.color} 73.79%)`
+                  }
+                />
+              )}
+            </div>
           </div>
-        </React.Fragment>
-
-        <button
-          className="cmsBtn"
-          onClick={this.uploadingToServerHandler}
-          type="button"
-        >
-          Upload Image
-        </button>
-        <StyleRoot>
-          {this.state.imagePreview && (
-            <PostCard
-              title={this.props.seo.title}
-              postH={300}
-              postImg={this.state.imagePreview}
-              postGradient={
-                this.props.thumbnail &&
-                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                  this.props.thumbnail.color
-                } 73.79%)`
-              }
-            />
-          )}
-        </StyleRoot>
+          <UploadImage
+            ref={this.imageUploaderInput}
+            uploadingToServerHandler={this.uploadingToServerHandler}
+            imageUpload={this.imageUpload}
+            imageUploadErr={this.imageUploadErr}
+            imgPropertiesHandler={this.imgPropertiesHandler}
+            imgWidthHandler={this.imgWidthHandler}
+            originalImageSaver={this.originalImageSaver}
+            uploadMessage={this.state.uploadMessage}
+            imgQuality={this.state.imgQuality}
+            imgW={this.state.imgW}
+            compressedImg={this.state.compressedImg}
+          />
+        </div>
       </div>
     );
   }
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     elements: state.postCreation.elements,
     seo: state.postCreation.seo,
@@ -207,24 +195,21 @@ const mapStateToProps = state => {
     fileNames: state.postCreation.files,
     date: state.postCreation.date,
     postCreation: state.postCreation,
-    thumbnail: state.postCreation.thumbnail
+    thumbnail: state.postCreation.thumbnail,
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = (dispach) => {
   return {
-    onThumbnailChange: payload => {
+    onThumbnailChange: (payload) => {
       dispach({ type: "THUMBNAIL_CHANGE", payload: payload });
     },
-    setThumbnailColor: color => {
+    setThumbnailColor: (color) => {
       dispach({ type: "THUMBNAIL_COLOR", payload: color });
     },
-    onAddDeleteFile: payload =>
+    onAddDeleteFile: (payload) =>
       dispach({ type: "ADD_DELETE_FILE", payload: payload }),
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
+    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(ThumbNailEditor);
+export default connect(mapStateToProps, mapDispachToProps)(ThumbNailEditor);

@@ -19,36 +19,42 @@ class Login extends Component {
     super(props);
     this.state = {
       userName: undefined,
-      userPassword: undefined
+      userPassword: undefined,
+      showLoading: false,
     };
   }
 
   componentDidMount() {
+    this.setState({
+      showLoading: true,
+    });
     axios(`/api/searchSessionID/`)
-      .then(res => {
+      .then((res) => {
         if (res.status === 200) {
           const data = {
             userAvatar: res.data.userAvatar,
             userName: res.data.userName,
             userID: res.data._id,
             userType: res.data.userType,
-            userFullName: `${res.data.userFirstName} ${res.data.userLastName}`
+            userFullName: `${res.data.userFirstName} ${res.data.userLastName}`,
           };
           this.props.onLogIn(data);
         }
+        this.setState({ showLoading: false });
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) {
           console.log(`Error al buscar el usuario por Session ID`, err);
           // guestCookie(this.props);
         }
+        this.setState({ showLoading: false });
       });
     return;
   }
 
-  handleFormInputChange = event => {
+  handleFormInputChange = (event) => {
     const {
-      target: { name, value }
+      target: { name, value },
     } = event;
 
     this.setState({ [name]: value });
@@ -69,7 +75,7 @@ class Login extends Component {
           title: "Way to Go!! 😁",
           body: `Welcome Back ${userName}`,
           auto: true,
-          time: 3000
+          time: 3000,
         });
 
         const data = {
@@ -77,7 +83,7 @@ class Login extends Component {
           userName: loginRes.data.userName,
           userID: loginRes.data._id,
           userType: loginRes.data.userType,
-          userFullName: loginRes.data.userFullName
+          userFullName: loginRes.data.userFullName,
         };
         this.props.onLogIn(data);
         return;
@@ -89,13 +95,17 @@ class Login extends Component {
 
     triggerDialog({
       title: "Ups 😅",
-      body: "Please, fill all the required values"
+      body: "Please, fill all the required values",
     });
   };
 
   render() {
     if (this.props.isUserLoggedIn) {
       return <Redirect to="/cms/dashboard" />;
+    }
+
+    if (this.state.showLoading) {
+      return this.props.loadingScreen;
     }
     return (
       <div className="loginLayout">
@@ -124,22 +134,19 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     isUserLoggedIn: state.login.isUserLoggedIn,
-    isDialog: state.dialog.show
+    isDialog: state.dialog.show,
   };
 };
-const mapDispachToProps = dispach => {
+const mapDispachToProps = (dispach) => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
+    onLogIn: (payload) => dispach({ type: "LOGGED_IN", payload: payload }),
   };
 };
 
-const Login2 = connect(
-  mapStateToProps,
-  mapDispachToProps
-)(Login);
+const Login2 = connect(mapStateToProps, mapDispachToProps)(Login);
 
 export default Login2;
