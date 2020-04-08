@@ -1,11 +1,11 @@
 const validateNames = value => {
   if (value && value.match(/^[a-zA-Zñáéíóú]+$/g)) {
-    return true;
+    return true
   }
   if (value.match(/^$/)) {
-    return " ";
+    return ' '
   }
-  return false;
-};
+  return false
+}
 
-export default validateNames;
+export default validateNames

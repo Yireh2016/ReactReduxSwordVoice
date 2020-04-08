@@ -1,6 +1,6 @@
-import Compressor from "compressorjs";
+import Compressor from 'compressorjs'
 //services
-import isBrowser from "./isBrowser";
+import isBrowser from './isBrowser'
 
 const compressImage = (
   files,
@@ -9,31 +9,31 @@ const compressImage = (
   imageUploadCB,
   imageUploadErrCB
 ) => {
-  let Uploadfunction = imageUploadCB;
-  let imageUploadErr = imageUploadErrCB;
-  const browser = isBrowser();
-  const shouldCompress = browser === "ie" || browser === "edge" ? false : true;
+  let Uploadfunction = imageUploadCB
+  let imageUploadErr = imageUploadErrCB
+  const browser = isBrowser()
+  const shouldCompress = browser === 'ie' || browser === 'edge' ? false : true
 
-  const image = files[0] ? files[0] : files;
+  const image = files[0] ? files[0] : files
   if (shouldCompress) {
     new Compressor(image, {
       quality: imgQuality,
       width: imgW,
-      mimeType: "jpg",
+      mimeType: 'jpg',
       convertSize: 200000,
       success(result) {
-        Uploadfunction(result);
+        Uploadfunction(result)
       },
       error(err) {
-        console.log("error", err);
-        imageUploadErr(err);
+        console.log('error', err)
+        imageUploadErr(err)
 
-        return;
+        return
       }
-    });
+    })
   } else {
-    Uploadfunction(files[0]);
+    Uploadfunction(files[0])
   }
-};
+}
 
-export default compressImage;
+export default compressImage

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const uploadAvatar = (userName, base64) => {
   return axios
@@ -6,15 +6,15 @@ const uploadAvatar = (userName, base64) => {
       base64
     })
     .then(res => {
-      console.log("uploadAvatar res.data", res.data);
-      console.log("uploadAvatar res", res);
-      return { status: "OK", avatarURL: res.data.avatarURL };
+      console.log('uploadAvatar res.data', res.data)
+      console.log('uploadAvatar res', res)
+      return {status: 'OK', avatarURL: res.data.avatarURL}
     })
     .catch(err => {
-      console.log("err on uploadAvatar", err.data);
+      console.log('err on uploadAvatar', err.data)
 
-      return { status: err };
-    });
-};
+      return {status: err}
+    })
+}
 
-export default uploadAvatar;
+export default uploadAvatar

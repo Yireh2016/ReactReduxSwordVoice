@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { connect } from "react-redux";
+import React, {useState} from 'react'
+import styled from 'styled-components'
+import axios from 'axios'
+import {connect} from 'react-redux'
 
 //assets
-import { check, equis } from "../../../assets/svgIcons/SvgIcons";
+import {check, equis} from '../../../assets/svgIcons/SvgIcons'
 
 const ReplyCard = styled.div`
   padding: 15px 30px 20px 15px;
@@ -14,7 +14,7 @@ const ReplyCard = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 100%;
-`;
+`
 
 const AvatarCont = styled.div`
   width: 50px;
@@ -23,7 +23,7 @@ const AvatarCont = styled.div`
     margin: 0 10px 0 0;
     width: 35px;
   }
-`;
+`
 
 const Avatar = styled.div`
   width: 50px;
@@ -35,13 +35,13 @@ const Avatar = styled.div`
   border-radius: 100%;
   background-size: cover;
   background-position: center center;
-`;
+`
 
 const ReplyCont = styled.div`
   display: flex;
   flex-direction: column;
   width: 92%;
-`;
+`
 
 const UserInfo = styled.div`
   margin: 10px 0 10px 0;
@@ -50,7 +50,7 @@ const UserInfo = styled.div`
   }
   display: flex;
   flex-direction: column;
-`;
+`
 
 const UserName = styled.span`
   color: var(--orange);
@@ -59,14 +59,14 @@ const UserName = styled.span`
     font-size: 14px;
   }
   font-weight: bold;
-`;
+`
 const ReplyDate = styled.span`
   color: var(--blueDark);
   font-size: 12px;
   font-weight: 300;
 
   margin: 0 0 0 5px;
-`;
+`
 
 const Text = styled.textarea`
   font-weight: normal;
@@ -79,7 +79,7 @@ const Text = styled.textarea`
     font-size: 14px;
     padding: 7px;
   }
-`;
+`
 
 const IconLayot = styled.div`
   display: flex;
@@ -88,7 +88,7 @@ const IconLayot = styled.div`
   svg:hover {
     cursor: pointer;
   }
-`;
+`
 
 const Icon1 = styled.div`
   svg {
@@ -96,7 +96,7 @@ const Icon1 = styled.div`
     width: 25px;
     margin: 10px;
   }
-`;
+`
 
 const Icon2 = styled.div`
   svg {
@@ -104,7 +104,7 @@ const Icon2 = styled.div`
     width: 20px;
     margin: 10px;
   }
-`;
+`
 
 const ReplyEditor = ({
   setReplyEditor,
@@ -116,29 +116,29 @@ const ReplyEditor = ({
   comments,
   userID
 }) => {
-  const [responseText, setResponseText] = useState("");
+  const [responseText, setResponseText] = useState('')
 
   const responseHandler = e => {
-    setResponseText(e.target.value);
-  };
+    setResponseText(e.target.value)
+  }
 
   const sendReplyHandler = () => {
-    if (responseText === "") {
-      return;
+    if (responseText === '') {
+      return
     }
     axios
       .put(
         `api/setReply`,
-        { message: responseText, userName, title, index, userID },
+        {message: responseText, userName, title, index, userID},
         {
           headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json'
           }
         }
       )
       .then(res => {
-        if (res.data.message === "ok") {
-          let responses;
+        if (res.data.message === 'ok') {
+          let responses
           let replyToPush = {
             _id: res.data.id,
             userName: userName,
@@ -146,30 +146,30 @@ const ReplyEditor = ({
             message: responseText,
             date: new Date(),
             likes: 0
-          };
+          }
           comments.forEach((comment, i) => {
             if (i === index) {
-              responses = comment.responses;
+              responses = comment.responses
 
               if (responses) {
-                responses = [replyToPush, ...responses];
+                responses = [replyToPush, ...responses]
               } else {
-                responses = [replyToPush];
+                responses = [replyToPush]
               }
 
-              console.log("responses on set reply", responses);
+              console.log('responses on set reply', responses)
             }
-          });
-          comments[index].responses = responses;
-          setGlobalComments(comments);
-          setReplyEditor(false);
-          setResponseText("");
+          })
+          comments[index].responses = responses
+          setGlobalComments(comments)
+          setReplyEditor(false)
+          setResponseText('')
         }
       })
       .catch(err => {
-        console.log("err on setReply", err);
-      });
-  };
+        console.log('err on setReply', err)
+      })
+  }
 
   return (
     // <ReplyCardLayout>
@@ -191,8 +191,8 @@ const ReplyEditor = ({
           <Icon1 onClick={sendReplyHandler}>{check}</Icon1>
           <Icon2
             onClick={() => {
-              setReplyEditor(false);
-              setResponseText("");
+              setReplyEditor(false)
+              setResponseText('')
             }}
           >
             {equis}
@@ -201,8 +201,8 @@ const ReplyEditor = ({
       </ReplyCont>
     </ReplyCard>
     // </ReplyCardLayout>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
   return {
@@ -211,17 +211,14 @@ const mapStateToProps = state => {
     userID: state.logInStatus.loggedUserID,
     title: state.article.title,
     comments: state.article.comments
-  };
-};
+  }
+}
 const mapDispachToProps = dispatch => {
   return {
     //acciones
     setGlobalComments: comments =>
-      dispatch({ type: "SET_COMMENTS", payload: comments })
-  };
-};
+      dispatch({type: 'SET_COMMENTS', payload: comments})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(ReplyEditor);
+export default connect(mapStateToProps, mapDispachToProps)(ReplyEditor)

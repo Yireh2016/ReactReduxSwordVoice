@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
+import styled from 'styled-components'
 
 const InputContainer = styled.div`
   position: relative;
-`;
+`
 
 const Placeholder = styled.span`
   position: absolute;
@@ -14,49 +14,49 @@ const Placeholder = styled.span`
   font-size: ${props => {
     return props.isFocus
       ? `calc( ${props.placeholderStyle.fontSize} * 2 / 3)`
-      : `${props.placeholderStyle.fontSize}`;
+      : `${props.placeholderStyle.fontSize}`
   }};
 
   color: ${props => {
     return props.isFocus
       ? `${props.placeholderStyle.colorOnFocus}`
-      : `${props.placeholderStyle.color}`;
+      : `${props.placeholderStyle.color}`
   }};
 
   font-weight: ${props => {
-    return props.isFocus ? `bold` : `normal`;
+    return props.isFocus ? `bold` : `normal`
   }};
 
   transform: ${props => {
-    return props.isFocus ? "translateY(-100%)" : "translateY(0)";
+    return props.isFocus ? 'translateY(-100%)' : 'translateY(0)'
   }};
   left: ${props => {
-    return props.isFocus ? "5px" : "10px";
+    return props.isFocus ? '5px' : '10px'
   }};
-`;
+`
 
 const Input = styled.input`
   border-right: ${props => {
-    const { valid } = props;
-    let result;
+    const {valid} = props
+    let result
 
     switch (valid) {
       case true: {
-        result = "5px solid #4caf50";
-        break;
+        result = '5px solid #4caf50'
+        break
       }
 
       case false: {
-        result = "5px solid #e91e63";
-        break;
+        result = '5px solid #e91e63'
+        break
       }
 
       default: {
-        result = "5px solid transparent";
-        break;
+        result = '5px solid transparent'
+        break
       }
     }
-    return result;
+    return result
   }};
   border-radius: 0 5px 5px 0;
 
@@ -67,36 +67,36 @@ const Input = styled.input`
   @media (max-width: 700px) {
     width: 100%;
   }
-`;
+`
 
 const Textarea = styled.textarea`
   border-right: ${props => {
-    const { valid } = props;
-    let result;
+    const {valid} = props
+    let result
 
     switch (valid) {
       case true: {
-        result = "5px solid #4caf50";
-        break;
+        result = '5px solid #4caf50'
+        break
       }
 
       case false: {
-        result = "5px solid #e91e63";
-        break;
+        result = '5px solid #e91e63'
+        break
       }
 
       default: {
-        result = "5px solid transparent";
-        break;
+        result = '5px solid transparent'
+        break
       }
     }
-    return result;
+    return result
   }};
-  font-family: "Work Sans", monospace;
+  font-family: 'Work Sans', monospace;
   :focus {
     outline: none;
   }
-`;
+`
 
 const InputPlaceholder = ({
   type,
@@ -109,39 +109,39 @@ const InputPlaceholder = ({
   valid,
   setAbleWarning
 }) => {
-  const [isFocus, setisFocus] = useState(false);
-  const [isInputFilled, setisInputFilled] = useState(false);
-  const inputRef = React.createRef();
+  const [isFocus, setisFocus] = useState(false)
+  const [isInputFilled, setisInputFilled] = useState(false)
+  const inputRef = React.createRef()
 
   const onInputChange = e => {
-    const event = e;
-    const { value } = event.target;
+    const event = e
+    const {value} = event.target
     if (value) {
-      setisInputFilled(true);
+      setisInputFilled(true)
     } else {
-      setisInputFilled(false);
+      setisInputFilled(false)
     }
 
-    onChange(event);
-  };
+    onChange(event)
+  }
 
   const focusPlaceholder = () => {
-    setAbleWarning(false);
-    setisFocus(true);
-  };
+    setAbleWarning(false)
+    setisFocus(true)
+  }
 
   const unfocusPlaceholder = () => {
-    setAbleWarning(true);
+    setAbleWarning(true)
 
     if (!isInputFilled) {
-      setisFocus(false);
+      setisFocus(false)
     }
-  };
+  }
 
   const placeholderClick = () => {
-    inputRef.current.focus();
-    focusPlaceholder();
-  };
+    inputRef.current.focus()
+    focusPlaceholder()
+  }
 
   return (
     <InputContainer>
@@ -152,9 +152,9 @@ const InputPlaceholder = ({
       >
         {placeholder}
       </Placeholder>
-      {type === "textarea" ? (
+      {type === 'textarea' ? (
         <Textarea
-          className="style-7"
+          className='style-7'
           ref={inputRef}
           name={name}
           onChange={onInputChange}
@@ -178,23 +178,20 @@ const InputPlaceholder = ({
         />
       )}
     </InputContainer>
-  );
-};
+  )
+}
 
 const mapStateToProps = () => {
-  return {};
-};
+  return {}
+}
 
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
     setAbleWarning: isAble =>
-      dispach({ type: "SET_ABLE_WARNING", payload: isAble })
-  };
-};
+      dispach({type: 'SET_ABLE_WARNING', payload: isAble})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(InputPlaceholder);
+export default connect(mapStateToProps, mapDispachToProps)(InputPlaceholder)

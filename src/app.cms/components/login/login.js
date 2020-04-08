@@ -1,26 +1,26 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
 
-import { Redirect } from "react-router-dom";
-import axios from "axios";
-import { connect } from "react-redux";
+import {Redirect} from 'react-router-dom'
+import axios from 'axios'
+import {connect} from 'react-redux'
 
 //assets
-import "./login.css";
+import './login.css'
 
 //apiCalls
-import loginUser from "../../apiCalls/loginUser";
+import loginUser from '../../apiCalls/loginUser'
 
 //services
-import triggerDialog from "../../controllers/triggerDialog";
-import Dialog from "../dialog/Dialog";
+import triggerDialog from '../../controllers/triggerDialog'
+import Dialog from '../dialog/Dialog'
 
 class Login extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       userName: undefined,
       userPassword: undefined
-    };
+    }
   }
 
   componentDidMount() {
@@ -33,44 +33,44 @@ class Login extends Component {
             userID: res.data._id,
             userType: res.data.userType,
             userFullName: `${res.data.userFirstName} ${res.data.userLastName}`
-          };
-          this.props.onLogIn(data);
+          }
+          this.props.onLogIn(data)
         }
       })
       .catch(err => {
         if (err) {
-          console.log(`Error al buscar el usuario por Session ID`, err);
+          console.log(`Error al buscar el usuario por Session ID`, err)
           // guestCookie(this.props);
         }
-      });
-    return;
+      })
+    return
   }
 
   handleFormInputChange = event => {
     const {
-      target: { name, value }
-    } = event;
+      target: {name, value}
+    } = event
 
-    this.setState({ [name]: value });
-  };
+    this.setState({[name]: value})
+  }
 
   loginClickHandler = async () => {
-    const { userName, userPassword } = this.state;
+    const {userName, userPassword} = this.state
 
     if (userName && userPassword) {
       try {
-        var loginRes = await loginUser(userName, userPassword);
+        var loginRes = await loginUser(userName, userPassword)
       } catch (error) {
-        triggerDialog({ title: "Error 🤬", body: err.response.data.message });
+        triggerDialog({title: 'Error 🤬', body: err.response.data.message})
       }
 
-      if (loginRes.status === "OK") {
+      if (loginRes.status === 'OK') {
         triggerDialog({
-          title: "Way to Go!! 😁",
+          title: 'Way to Go!! 😁',
           body: `Welcome Back ${userName}`,
           auto: true,
           time: 3000
-        });
+        })
 
         const data = {
           userAvatar: loginRes.data.userAvatar,
@@ -78,49 +78,49 @@ class Login extends Component {
           userID: loginRes.data._id,
           userType: loginRes.data.userType,
           userFullName: loginRes.data.userFullName
-        };
-        this.props.onLogIn(data);
-        return;
+        }
+        this.props.onLogIn(data)
+        return
       }
 
-      triggerDialog({ title: "Ups 😅", body: loginRes.status });
-      return;
+      triggerDialog({title: 'Ups 😅', body: loginRes.status})
+      return
     }
 
     triggerDialog({
-      title: "Ups 😅",
-      body: "Please, fill all the required values"
-    });
-  };
+      title: 'Ups 😅',
+      body: 'Please, fill all the required values'
+    })
+  }
 
   render() {
     if (this.props.isUserLoggedIn) {
-      return <Redirect to="/cms/dashboard" />;
+      return <Redirect to='/cms/dashboard' />
     }
     return (
-      <div className="loginLayout">
+      <div className='loginLayout'>
         {this.props.isDialog && <Dialog />}
-        <div className="loginCont">
-          <div className="loginInputLayout">
+        <div className='loginCont'>
+          <div className='loginInputLayout'>
             <label>User</label>
             <input
-              name="userName"
+              name='userName'
               value={this.state.userName}
               onChange={this.handleFormInputChange}
-              type="text"
+              type='text'
             />
             <label>Password</label>
             <input
-              name="userPassword"
+              name='userPassword'
               value={this.state.userPassword}
               onChange={this.handleFormInputChange}
-              type="password"
+              type='password'
             />
           </div>
           <button onClick={this.loginClickHandler}>Login</button>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -128,18 +128,15 @@ const mapStateToProps = state => {
   return {
     isUserLoggedIn: state.login.isUserLoggedIn,
     isDialog: state.dialog.show
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: payload => dispach({ type: "LOGGED_IN", payload: payload })
-  };
-};
+    onLogIn: payload => dispach({type: 'LOGGED_IN', payload: payload})
+  }
+}
 
-const Login2 = connect(
-  mapStateToProps,
-  mapDispachToProps
-)(Login);
+const Login2 = connect(mapStateToProps, mapDispachToProps)(Login)
 
-export default Login2;
+export default Login2

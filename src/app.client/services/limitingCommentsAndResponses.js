@@ -1,37 +1,37 @@
 export const limitingResponses = (responses, responsesCount) => {
-  const RESPONSES_LIMIT = 3;
-  let resultResponsesArr = [];
-  responsesCount = parseInt(responsesCount, 10);
+  const RESPONSES_LIMIT = 3
+  let resultResponsesArr = []
+  responsesCount = parseInt(responsesCount, 10)
 
   if (RESPONSES_LIMIT + responsesCount < responses.length) {
-    resultResponsesArr = responses.slice(0, RESPONSES_LIMIT + responsesCount);
+    resultResponsesArr = responses.slice(0, RESPONSES_LIMIT + responsesCount)
   } else {
-    resultResponsesArr = responses;
+    resultResponsesArr = responses
   }
 
-  return resultResponsesArr;
-};
+  return resultResponsesArr
+}
 
 export const limitingComments = (commentsArr, commentsCount) => {
-  const COMMENT_LIMIT = 5;
-  commentsCount = parseInt(commentsCount, 10);
+  const COMMENT_LIMIT = 5
+  commentsCount = parseInt(commentsCount, 10)
 
-  const totalCommentsCount = commentsArr.length;
+  const totalCommentsCount = commentsArr.length
 
-  let resultArr = [];
+  let resultArr = []
 
   for (
     let i = 0;
     i < commentsCount + COMMENT_LIMIT && i < commentsArr.length;
     i++
   ) {
-    const comment = commentsArr[i];
+    const comment = commentsArr[i]
     //counting responses
-    const responsesCount = comment.responses.length;
+    const responsesCount = comment.responses.length
 
     //limiting responses
 
-    commentsArr[i].responses = limitingResponses(comment.responses, 0);
+    commentsArr[i].responses = limitingResponses(comment.responses, 0)
 
     commentsArr[i] = {
       _id: commentsArr[i]._id,
@@ -42,20 +42,16 @@ export const limitingComments = (commentsArr, commentsCount) => {
       responses: commentsArr[i].responses,
       claps: commentsArr[i].claps,
       responsesCount
-    };
+    }
   }
 
-  ;
   //limiting Comments
 
-
   if (commentsCount + COMMENT_LIMIT <= commentsArr.length) {
-    resultArr = commentsArr.slice(0, COMMENT_LIMIT + commentsCount);
+    resultArr = commentsArr.slice(0, COMMENT_LIMIT + commentsCount)
   } else {
-    resultArr = commentsArr;
+    resultArr = commentsArr
   }
 
-
-
-  return { totalCommentsCount, commentsArr: resultArr };
-};
+  return {totalCommentsCount, commentsArr: resultArr}
+}

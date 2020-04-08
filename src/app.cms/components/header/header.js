@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 //componets
-import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
+import ElementCustomEdit from '../elementCustomEdit/elementCustomEdit'
 
 //react map
 /*
@@ -24,17 +24,17 @@ const Header = props => {
   //   return <li key={i}>{clase}</li>;
   // });
   return (
-    <div className="elementContentLayout">
-      <div className="elementInput">
+    <div className='elementContentLayout'>
+      <div className='elementInput'>
         <label>
           Header
           <textarea
-            style={{ display: "block" }}
-            type="text"
+            style={{display: 'block'}}
+            type='text'
             onChange={e => {
-              props.inputTextHTMLHandler(e);
+              props.inputTextHTMLHandler(e)
             }}
-            name="HTMLElementContent"
+            name='HTMLElementContent'
             value={props.HTMLElementContent}
           />
         </label>
@@ -91,7 +91,7 @@ const Header = props => {
       </div>
     */}
     </div>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

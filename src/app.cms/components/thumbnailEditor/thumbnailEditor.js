@@ -1,33 +1,31 @@
-import React, { Component } from "react";
-import { SketchPicker } from "react-color";
-import { connect } from "react-redux";
+import React, {Component} from 'react'
+import {SketchPicker} from 'react-color'
+import {connect} from 'react-redux'
 //components
-import UploadImage from "../uploadImage/uploadImage";
-import compressImage from "../../../services/compressImage";
-import PostCard from "../../../app.client/components/postCard/PostCard";
-import { StyleRoot } from "radium";
+import UploadImage from '../uploadImage/uploadImage'
+import compressImage from '../../../services/compressImage'
+import PostCard from '../../../app.client/components/postCard/PostCard'
+import {StyleRoot} from 'radium'
 
 //apiCalls
-import uploadPostImage from "../../../apiCalls/uploadPostImage";
-import blobToBase64 from "../../../services/blobToBase64";
+import uploadPostImage from '../../../apiCalls/uploadPostImage'
+import blobToBase64 from '../../../services/blobToBase64'
 
 class ThumbNailEditor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       isImageUploaded: false,
       imagePreview: this.props.thumbnail
-        ? `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${
-            this.props.thumbnail.name
-          })`
+        ? `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${this.props.thumbnail.name})`
         : null,
-      uploadMessage: "Upload Thunbnail",
+      uploadMessage: 'Upload Thunbnail',
       imgW: 200,
       imgQuality: 0.6,
       imageFile: null,
       compressedImg: null
-    };
+    }
   }
 
   imageUploadErr = err => {
@@ -35,54 +33,48 @@ class ThumbNailEditor extends Component {
       return {
         imagePreview: undefined,
         uploadMessage: `${err}`
-      };
-    });
-  };
+      }
+    })
+  }
 
   imageUpload = image => {
-    image.name = "thumb-" + image.name;
+    image.name = 'thumb-' + image.name
 
-    this.props.onProjectChange();
-    this.props.onThumbnailChange(image);
+    this.props.onProjectChange()
+    this.props.onThumbnailChange(image)
 
     this.setState({
       imagePreview: `url(${URL.createObjectURL(image)})`,
       isImageUploaded: true,
       compressedImg: image
-    });
-    alert("file Uploaded successfully");
-  };
+    })
+    alert('file Uploaded successfully')
+  }
 
   uploadingToServerHandler = () => {
-    const file = new File(
-      [this.state.compressedImg],
-      this.props.thumbnail.name
-    );
+    const file = new File([this.state.compressedImg], this.props.thumbnail.name)
     // const file = this.state.compressedImg;
     const dataToUploadFromFile = {
       file: file,
       name: this.props.thumbnail.name,
       url: this.props.project.url
-    };
+    }
 
     const successUpload = (fileNamesArr, filename) => {
-      console.log("successUpload fileNamesArr", fileNamesArr);
+      console.log('successUpload fileNamesArr', fileNamesArr)
 
       fileNamesArr = fileNamesArr.filter(el => {
-        return !el.match(/thumb-.*/g);
-      });
-      fileNamesArr.push(filename);
+        return !el.match(/thumb-.*/g)
+      })
+      fileNamesArr.push(filename)
 
-
-      this.props.onAddDeleteFile(fileNamesArr);
+      this.props.onAddDeleteFile(fileNamesArr)
       this.setState({
-        imagePreview: `url(${process.env.CDN_URL}/articles/${
-          this.props.project.url
-        }/${filename})`
-      });
-    };
+        imagePreview: `url(${process.env.CDN_URL}/articles/${this.props.project.url}/${filename})`
+      })
+    }
 
-    let fileNamesArr = this.props.fileNames;
+    let fileNamesArr = this.props.fileNames
 
     blobToBase64(this.state.compressedImg, base64Obj => {
       uploadPostImage(
@@ -90,41 +82,40 @@ class ThumbNailEditor extends Component {
         this.props.project.url,
         this.props.thumbnail.name,
         res => {
-
-          successUpload(fileNamesArr, dataToUploadFromFile.name);
+          successUpload(fileNamesArr, dataToUploadFromFile.name)
         },
         err => {
-          console.log("An error has ocurred during image Upload", err);
+          console.log('An error has ocurred during image Upload', err)
         },
         true
-      );
-    });
-  };
+      )
+    })
+  }
 
   originalImageSaver = image => {
-    this.setState({ imageFile: image });
-  };
+    this.setState({imageFile: image})
+  }
   imgPropertiesHandler = e => {
     const {
-      target: { name, value }
-    } = e;
+      target: {name, value}
+    } = e
 
     this.setState({
       [name]: value
-    });
+    })
 
-    if (name === "imgQuality" && this.state.imageFile) {
+    if (name === 'imgQuality' && this.state.imageFile) {
       compressImage(
         this.state.imageFile,
         value,
         this.state.imgW,
         this.imageUpload,
         this.imageUploadErr
-      );
+      )
     }
-  };
+  }
   imgWidthHandler = e => {
-    const value = e.target.value;
+    const value = e.target.value
     this.state.imageFile &&
       compressImage(
         this.state.imageFile,
@@ -132,23 +123,23 @@ class ThumbNailEditor extends Component {
         value,
         this.imageUpload,
         this.imageUploadErr
-      );
-  };
+      )
+  }
   colorHandler = (color, e) => {
-    const { h, s, l, a } = color.hsl;
-    this.props.onProjectChange();
-    this.props.setThumbnailColor(`hsla(${h},${s * 100}%,${l * 100}%,${a})`);
-    this.setState({ thumbnailColor: color });
-  };
+    const {h, s, l, a} = color.hsl
+    this.props.onProjectChange()
+    this.props.setThumbnailColor(`hsla(${h},${s * 100}%,${l * 100}%,${a})`)
+    this.setState({thumbnailColor: color})
+  }
   render() {
     return (
       <div
-        className="style-7"
+        className='style-7'
         style={{
-          width: "60%",
-          overflowY: "scroll",
-          padding: "20px",
-          boxSizing: "border-box"
+          width: '60%',
+          overflowY: 'scroll',
+          padding: '20px',
+          boxSizing: 'border-box'
         }}
       >
         <React.Fragment>
@@ -172,9 +163,9 @@ class ThumbNailEditor extends Component {
         </React.Fragment>
 
         <button
-          className="cmsBtn"
+          className='cmsBtn'
           onClick={this.uploadingToServerHandler}
-          type="button"
+          type='button'
         >
           Upload Image
         </button>
@@ -186,15 +177,13 @@ class ThumbNailEditor extends Component {
               postImg={this.state.imagePreview}
               postGradient={
                 this.props.thumbnail &&
-                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${
-                  this.props.thumbnail.color
-                } 73.79%)`
+                `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${this.props.thumbnail.color} 73.79%)`
               }
             />
           )}
         </StyleRoot>
       </div>
-    );
+    )
   }
 }
 const mapStateToProps = state => {
@@ -208,23 +197,20 @@ const mapStateToProps = state => {
     date: state.postCreation.date,
     postCreation: state.postCreation,
     thumbnail: state.postCreation.thumbnail
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     onThumbnailChange: payload => {
-      dispach({ type: "THUMBNAIL_CHANGE", payload: payload });
+      dispach({type: 'THUMBNAIL_CHANGE', payload: payload})
     },
     setThumbnailColor: color => {
-      dispach({ type: "THUMBNAIL_COLOR", payload: color });
+      dispach({type: 'THUMBNAIL_COLOR', payload: color})
     },
     onAddDeleteFile: payload =>
-      dispach({ type: "ADD_DELETE_FILE", payload: payload }),
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
-  };
-};
+      dispach({type: 'ADD_DELETE_FILE', payload: payload}),
+    onProjectChange: () => dispach({type: 'CHANGE_PROJECT'})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(ThumbNailEditor);
+export default connect(mapStateToProps, mapDispachToProps)(ThumbNailEditor)

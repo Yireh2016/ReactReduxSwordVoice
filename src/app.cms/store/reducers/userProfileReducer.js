@@ -1,21 +1,21 @@
 const initialState = {
   userProfile: {}
-};
+}
 //estado inicial viene del CONFIG REDUCER.JS
 const userProfileReducer = (state = initialState, action) => {
-  let newState = state;
+  let newState = state
 
   switch (action.type) {
-    case "SET_USER_PROFILE": {
-      newState.userProfile = action.payload;
-      break;
+    case 'SET_USER_PROFILE': {
+      newState.userProfile = action.payload
+      break
     }
 
     default:
-      break;
+      break
   }
 
-  return newState;
-};
+  return newState
+}
 
-export default userProfileReducer;
+export default userProfileReducer

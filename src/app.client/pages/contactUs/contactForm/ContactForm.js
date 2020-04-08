@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import InputPlaceholder from "./inputPlacehoder/InputPlaceholder";
+import React, {useState} from 'react'
+import styled from 'styled-components'
+import InputPlaceholder from './inputPlacehoder/InputPlaceholder'
 
 //components
-import Loading from "../../../components/loading/loading";
+import Loading from '../../../components/loading/loading'
 
 const Form = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const Form = styled.div`
     padding: 25px 18px;
     margin: 59px 0px 35px 0;
   }
-`;
+`
 
 const Button = styled.button`
   position: relative;
@@ -70,130 +70,130 @@ const Button = styled.button`
     left: 50%;
     transform: translate(-50%, -50%);
   }
-`;
+`
 
 const CheckBoxContainer = styled.div`
   border-right: ${props => {
-    const { valid } = props;
-    let result;
+    const {valid} = props
+    let result
 
     switch (valid) {
       case true: {
-        result = "5px solid #4caf50";
-        break;
+        result = '5px solid #4caf50'
+        break
       }
 
       case false: {
-        result = "5px solid #e91e63";
-        break;
+        result = '5px solid #e91e63'
+        break
       }
 
       default: {
-        result = "5px solid transparent";
-        break;
+        result = '5px solid transparent'
+        break
       }
     }
-    return result;
+    return result
   }};
   border-radius: 0 5px 5px 0;
-`;
+`
 
 const inputStyleObj = {
-  background: " transparent",
-  borderLeft: "none",
-  borderTop: "none",
-  borderBottom: " 1px solid #2e9ac2",
-  fontSize: "24px",
-  color: " #2e9ac2"
-};
+  background: ' transparent',
+  borderLeft: 'none',
+  borderTop: 'none',
+  borderBottom: ' 1px solid #2e9ac2',
+  fontSize: '24px',
+  color: ' #2e9ac2'
+}
 
 const textareaStyleObj = {
   ...inputStyleObj,
-  height: "200px",
-  width: "100%",
-  padding: "10px",
-  boxSizing: "border-box"
-};
+  height: '200px',
+  width: '100%',
+  padding: '10px',
+  boxSizing: 'border-box'
+}
 
 const placeholderStyleObj = {
-  color: "#2e9ac2",
-  colorOnFocus: "#f95f0b",
-  fontSize: "18px"
-};
+  color: '#2e9ac2',
+  colorOnFocus: '#f95f0b',
+  fontSize: '18px'
+}
 
-const ContactForm = ({ onSubmit }) => {
-  const [emailValid, setEmailValid] = useState({ valid: " " });
-  const [email, setEmail] = useState("");
+const ContactForm = ({onSubmit}) => {
+  const [emailValid, setEmailValid] = useState({valid: ' '})
+  const [email, setEmail] = useState('')
 
-  const [nameValid, setNameValid] = useState({ valid: " " });
-  const [name, setName] = useState("");
+  const [nameValid, setNameValid] = useState({valid: ' '})
+  const [name, setName] = useState('')
 
-  const [messageValid, setMessageValid] = useState({ valid: " " });
-  const [message, setMessage] = useState("");
+  const [messageValid, setMessageValid] = useState({valid: ' '})
+  const [message, setMessage] = useState('')
 
-  const [termsValid, setTermsValid] = useState(true);
-  const [newsletter, setNewsletter] = useState(true);
+  const [termsValid, setTermsValid] = useState(true)
+  const [newsletter, setNewsletter] = useState(true)
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   // const [submitHandler,submitHandler]
   const submitHandler = async () => {
-    let totalValid;
+    let totalValid
     if (
       emailValid.valid === true &&
       nameValid.valid === true &&
       messageValid.valid === true &&
       termsValid === true
     ) {
-      totalValid = true;
+      totalValid = true
     } else {
-      totalValid = false;
+      totalValid = false
     }
 
     if (!totalValid) {
-      console.log("mensaje no enviado");
-      onSubmit(totalValid, { message: "Please fill all the required inputs" });
-      return;
+      console.log('mensaje no enviado')
+      onSubmit(totalValid, {message: 'Please fill all the required inputs'})
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     const submitResponse = await onSubmit(totalValid, {
       name,
       email,
       message,
       newsletter
-    });
+    })
 
-    if (submitResponse === "OK") {
-      setEmailValid({ valid: " " });
-      setNameValid({ valid: " " });
-      setMessageValid({ valid: " " });
+    if (submitResponse === 'OK') {
+      setEmailValid({valid: ' '})
+      setNameValid({valid: ' '})
+      setMessageValid({valid: ' '})
 
-      setEmail("");
-      setName("");
-      setMessage("");
+      setEmail('')
+      setName('')
+      setMessage('')
 
-      setTermsValid(true);
-      setNewsletter(true);
+      setTermsValid(true)
+      setNewsletter(true)
     }
-    setIsLoading(false);
-  };
+    setIsLoading(false)
+  }
 
   const handleFormInputChange = event => {
     const {
-      target: { name, value }
-    } = event;
+      target: {name, value}
+    } = event
 
     switch (name) {
-      case "email": {
-        setEmail(value);
+      case 'email': {
+        setEmail(value)
 
         if (value.match(/^$/)) {
           setEmailValid({
-            valid: " ",
+            valid: ' ',
             message: ``
-          });
-          return;
+          })
+          return
         }
 
         if (
@@ -204,57 +204,57 @@ const ContactForm = ({ onSubmit }) => {
         ) {
           setEmailValid({
             valid: false,
-            message: "Please, insert a valid Email"
-          });
-          return;
+            message: 'Please, insert a valid Email'
+          })
+          return
         } else {
           setEmailValid({
             valid: true,
-            message: ""
-          });
+            message: ''
+          })
         }
 
-        break;
+        break
       }
 
-      case "name": {
-        setName(value);
+      case 'name': {
+        setName(value)
 
         if (value.match(/^$/)) {
-          setNameValid({ valid: " " });
-          return;
+          setNameValid({valid: ' '})
+          return
         }
 
         if (!value || !value.match(/[a-zA-Z\sñáéíóú]{3,30}/g)) {
           setNameValid({
             valid: false
-          });
-          return;
+          })
+          return
         } else {
           setNameValid({
             valid: true
-          });
+          })
         }
 
-        break;
+        break
       }
 
-      case "message": {
-        setMessage(value);
+      case 'message': {
+        setMessage(value)
 
         if (value.match(/^$/)) {
-          setMessageValid({ valid: " " });
-          return;
+          setMessageValid({valid: ' '})
+          return
         } else {
           setMessageValid({
             valid: true
-          });
+          })
         }
 
-        break;
+        break
       }
     }
-  };
+  }
 
   return (
     <Form>
@@ -263,9 +263,9 @@ const ContactForm = ({ onSubmit }) => {
           placeholderStyle={placeholderStyleObj}
           inputStyle={inputStyleObj}
           onChange={handleFormInputChange}
-          placeholder="Name"
-          type="text"
-          name="name"
+          placeholder='Name'
+          type='text'
+          name='name'
           value={name}
           valid={nameValid.valid}
         />
@@ -274,10 +274,10 @@ const ContactForm = ({ onSubmit }) => {
         <InputPlaceholder
           placeholderStyle={placeholderStyleObj}
           inputStyle={inputStyleObj}
-          placeholder="Email"
+          placeholder='Email'
           onChange={handleFormInputChange}
-          type="email"
-          name="email"
+          type='email'
+          name='email'
           value={email}
           valid={emailValid.valid}
         />
@@ -286,9 +286,9 @@ const ContactForm = ({ onSubmit }) => {
         <InputPlaceholder
           placeholderStyle={placeholderStyleObj}
           inputStyle={textareaStyleObj}
-          placeholder="Your Message"
-          type="textarea"
-          name="message"
+          placeholder='Your Message'
+          type='textarea'
+          name='message'
           value={message}
           onChange={handleFormInputChange}
           valid={messageValid.valid}
@@ -297,45 +297,45 @@ const ContactForm = ({ onSubmit }) => {
 
       <div
         style={{
-          color: "white",
-          fontSize: "18px"
+          color: 'white',
+          fontSize: '18px'
         }}
       >
         <input
-          type="checkbox"
-          id="newsletter"
-          name="newsletter"
+          type='checkbox'
+          id='newsletter'
+          name='newsletter'
           checked={newsletter}
           onChange={() => {
-            setNewsletter(!newsletter);
+            setNewsletter(!newsletter)
           }}
         />
-        <label htmlFor="newsletter">Subscribe to our Newsletter</label>
+        <label htmlFor='newsletter'>Subscribe to our Newsletter</label>
       </div>
       <CheckBoxContainer
         valid={termsValid}
         style={{
-          color: "white",
-          fontSize: "18px"
+          color: 'white',
+          fontSize: '18px'
         }}
       >
         <input
-          type="checkbox"
-          id="terms"
-          name="terms"
+          type='checkbox'
+          id='terms'
+          name='terms'
           checked={termsValid}
           onChange={() => {
-            setTermsValid(!termsValid);
+            setTermsValid(!termsValid)
           }}
         />
-        <label htmlFor="terms">Accept Terms</label>
+        <label htmlFor='terms'>Accept Terms</label>
       </CheckBoxContainer>
 
       <Button onClick={submitHandler}>
-        {isLoading ? <Loading color="white" /> : "send"}
+        {isLoading ? <Loading color='white' /> : 'send'}
       </Button>
     </Form>
-  );
-};
+  )
+}
 
-export default ContactForm;
+export default ContactForm

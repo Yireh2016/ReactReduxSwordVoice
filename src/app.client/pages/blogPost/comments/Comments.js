@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
+import styled from 'styled-components'
 
 //component
-import Comment from "../../../components/comment/Comment";
-import NewComment from "./newComment/NewComment";
-import EnableComment from "./enableComment/EnableComment";
-import Loading from "../../../components/loading/loading";
+import Comment from '../../../components/comment/Comment'
+import NewComment from './newComment/NewComment'
+import EnableComment from './enableComment/EnableComment'
+import Loading from '../../../components/loading/loading'
 
 //api calls
-import getNewComments from "../../../../apiCalls/getNewComments";
+import getNewComments from '../../../../apiCalls/getNewComments'
 
 const MoreComments = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   margin-top: 40px;
-  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  padding: ${props => (props.noPadding ? '0' : '15px 30px 20px 15px')};
   text-align: center;
   box-sizing: border-box;
   width: 100%;
@@ -26,7 +26,7 @@ const MoreComments = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 const CommentsCont = styled.div`
   padding: 50px;
@@ -117,24 +117,24 @@ const CommentsCont = styled.div`
       margin: 0 0 0 10px;
     }
   }
-`;
+`
 
-const Comments = ({ article, isUserLoggedIn, setComments }) => {
-  const [isLoading, setIsLoading] = useState(false);
+const Comments = ({article, isUserLoggedIn, setComments}) => {
+  const [isLoading, setIsLoading] = useState(false)
 
   const moreCommentsHandler = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     const getNewCommentsRes = await getNewComments(
       article.id,
       article.comments.length
-    );
+    )
 
-    console.log("getNewCommentsRes", getNewCommentsRes);
-    if (getNewCommentsRes.status === "OK") {
-      setComments(getNewCommentsRes.comments);
+    console.log('getNewCommentsRes', getNewCommentsRes)
+    if (getNewCommentsRes.status === 'OK') {
+      setComments(getNewCommentsRes.comments)
     }
-    setIsLoading(false);
-  };
+    setIsLoading(false)
+  }
 
   const commentsMap = article.comments.map((comment, i) => {
     return (
@@ -147,13 +147,13 @@ const Comments = ({ article, isUserLoggedIn, setComments }) => {
         replies={comment.responses}
         index={i}
       />
-    );
-  });
+    )
+  })
 
   return (
     <CommentsCont>
       <section>
-        <h2 id="commentsSection">Leave your comments:</h2>
+        <h2 id='commentsSection'>Leave your comments:</h2>
 
         {isUserLoggedIn ? (
           <React.Fragment>
@@ -185,16 +185,16 @@ const Comments = ({ article, isUserLoggedIn, setComments }) => {
         {article.commentsCount > article.comments.length && (
           <MoreComments
             onClick={moreCommentsHandler}
-            id="MoreComments"
+            id='MoreComments'
             noPadding={isLoading}
           >
-            {isLoading ? <Loading /> : "More Comments..."}
+            {isLoading ? <Loading /> : 'More Comments...'}
           </MoreComments>
         )}
       </section>
     </CommentsCont>
-  );
-};
+  )
+}
 
 const mapStateToProps2 = state => {
   return {
@@ -202,17 +202,14 @@ const mapStateToProps2 = state => {
     isUserLoggedIn: state.logInStatus.isUserLoggedIn,
     loggedUserAvatar: state.logInStatus.loggedUserAvatar,
     article: state.article
-  };
-};
+  }
+}
 
 const mapActionsToProps = dispatch => {
   return {
     setComments: commentsArr =>
-      dispatch({ type: "SET_COMMENTS", payload: commentsArr })
-  };
-};
+      dispatch({type: 'SET_COMMENTS', payload: commentsArr})
+  }
+}
 
-export default connect(
-  mapStateToProps2,
-  mapActionsToProps
-)(Comments);
+export default connect(mapStateToProps2, mapActionsToProps)(Comments)

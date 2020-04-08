@@ -104,5 +104,5 @@ export default ({
 
       ${scriptTags}
     </html>
-  `;
-};
+  `
+}

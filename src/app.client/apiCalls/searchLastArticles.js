@@ -1,21 +1,21 @@
-import axios from "axios";
+import axios from 'axios'
 
 const searchLastArticles = () => {
   return axios
     .get(`api/searchLastArticles`)
     .then(res => {
-      if (res.statusText === "OK") {
+      if (res.statusText === 'OK') {
         return {
-          statusText: "OK",
+          statusText: 'OK',
           articlesArr: res.data.articlesArr,
           articlesTotalCount: res.data.articlesTotalCount
-        };
+        }
       }
     })
     .catch(err => {
-      console.log("err on searchLastArticles", err);
-      return { statusText: err };
-    });
-};
+      console.log('err on searchLastArticles', err)
+      return {statusText: err}
+    })
+}
 
-export default searchLastArticles;
+export default searchLastArticles

@@ -1,6 +1,6 @@
 const validateEmail = value => {
   if (value.match(/^$/)) {
-    return " ";
+    return ' '
   }
   if (
     !value ||
@@ -8,8 +8,8 @@ const validateEmail = value => {
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
     )
   ) {
-    return false;
+    return false
   }
-  return true;
-};
-export default validateEmail;
+  return true
+}
+export default validateEmail

@@ -1,14 +1,14 @@
-import { combineReducers } from "redux";
-import { connectRouter } from "connected-react-router";
+import {combineReducers} from 'redux'
+import {connectRouter} from 'connected-react-router'
 
 //other Reducers
-import login from "./login";
-import article from "./article";
-import blog from "./blogReducer";
-import responsiveDialog from "./responsiveDialog";
-import dialog from "./dialogReducer";
-import scroll from "./scrollReducer";
-import resize from "./resizeReducer";
+import login from './login'
+import article from './article'
+import blog from './blogReducer'
+import responsiveDialog from './responsiveDialog'
+import dialog from './dialogReducer'
+import scroll from './scrollReducer'
+import resize from './resizeReducer'
 
 export default history =>
   combineReducers({
@@ -20,4 +20,4 @@ export default history =>
     dialog: dialog,
     resize: resize,
     scroll: scroll
-  });
+  })

@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Container = styled.div`
   display: flex;
@@ -12,9 +12,9 @@ const Container = styled.div`
   > div:nth-child(1) {
     margin-left: 0;
   }
-`;
+`
 
-const FlexLayout = ({ children }) => {
-  return <Container>{children}</Container>;
-};
-export default FlexLayout;
+const FlexLayout = ({children}) => {
+  return <Container>{children}</Container>
+}
+export default FlexLayout

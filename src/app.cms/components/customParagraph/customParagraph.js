@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
 
-import { connect } from "react-redux";
+import {connect} from 'react-redux'
 //services
-import HTLMtoParagraph from "../../../services/HTLMtoParagraph";
-import paragraphService from "../../../services/paragraphService";
+import HTLMtoParagraph from '../../../services/HTLMtoParagraph'
+import paragraphService from '../../../services/paragraphService'
 //react map
 /*
 
@@ -20,73 +20,70 @@ DashBoard
 */
 class CustomParagraph extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       customElementContent: this.props.elements[this.props.HTMLid - 1]
         ? HTLMtoParagraph(
             this.props.elements[this.props.HTMLid - 1].HTMLPreviewStr
           )
-        : "", //dynamic textarea content
-      customJSX: "", //all JSX
-      customTagElement: "",
+        : '', //dynamic textarea content
+      customJSX: '', //all JSX
+      customTagElement: '',
       customTagWordList: [], //word list inside tag
-      customTagWord: "", //tag word
-      HTMLCopy: "",
+      customTagWord: '', //tag word
+      HTMLCopy: '',
       isTag: false,
       isClosingTag: false
-    };
+    }
   }
 
   HMTLCheckHandler = () => {
-    let HTMLContent = this.state.customElementContent;
-    HTMLContent = paragraphService(HTMLContent);
-    this.props.sendWordToJSXHandler(HTMLContent);
-  };
+    let HTMLContent = this.state.customElementContent
+    HTMLContent = paragraphService(HTMLContent)
+    this.props.sendWordToJSXHandler(HTMLContent)
+  }
 
   inputTextHTMLHandler = e => {
-    this.props.onProjectChange();
+    this.props.onProjectChange()
     const {
-      target: { value }
-    } = e;
+      target: {value}
+    } = e
 
     this.setState(() => {
-      return { customElementContent: value };
-    });
-  };
+      return {customElementContent: value}
+    })
+  }
   render() {
     return (
       <div style={this.props.style}>
         <div>
           <textarea
             value={this.state.customElementContent}
-            name="HTMLElementContent"
+            name='HTMLElementContent'
             onChange={this.inputTextHTMLHandler}
           />
-          <button className="cmsBtn" onClick={this.HMTLCheckHandler}>
+          <button className='cmsBtn' onClick={this.HMTLCheckHandler}>
             Check Text
           </button>
         </div>
       </div>
-    );
+    )
   }
 }
 
 const mapStateToProps = state => {
   return {
     elements: state.postCreation.elements
-  };
-};
+  }
+}
 
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
-  };
-};
+    onProjectChange: () => dispach({type: 'CHANGE_PROJECT'})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(CustomParagraph);
+export default connect(mapStateToProps, mapDispachToProps)(CustomParagraph)

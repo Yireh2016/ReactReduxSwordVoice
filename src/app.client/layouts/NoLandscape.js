@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, {useEffect} from 'react'
+import {connect} from 'react-redux'
 
-import { store } from "../../app.redux.store/store/configStore";
+import {store} from '../../app.redux.store/store/configStore'
 
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Container = styled.div`
   position: fixed;
@@ -21,7 +21,7 @@ const Container = styled.div`
   @media (orientation: portrait) {
     display: none;
   }
-`;
+`
 
 const NoLandscape = ({
   children,
@@ -30,19 +30,19 @@ const NoLandscape = ({
 }) => {
   useEffect(() => {
     const setPostDimensions = () => {
-      const windowWidth = window.outerWidth;
-      const windowHeight = window.outerHeight;
+      const windowWidth = window.outerWidth
+      const windowHeight = window.outerHeight
 
-      let state = store.getState();
+      let state = store.getState()
 
-      const { showLogIn, showSignUp } = state.logInStatus;
-      const { ableWarning } = state.responsiveDialog;
+      const {showLogIn, showSignUp} = state.logInStatus
+      const {ableWarning} = state.responsiveDialog
 
       if (
         (showLogIn || showSignUp || !ableWarning) &&
         windowHeight / windowWidth <= 1.2
       ) {
-        return;
+        return
       }
 
       if (
@@ -58,46 +58,43 @@ const NoLandscape = ({
         if (windowWidth > windowHeight) {
           //landscape
 
-          setShowResolutionWarning(true);
+          setShowResolutionWarning(true)
         } else {
-          setShowResolutionWarning(false);
+          setShowResolutionWarning(false)
         }
       }
-    };
+    }
 
-    window.addEventListener("resize", setPostDimensions);
-    setPostDimensions();
-  }, []);
+    window.addEventListener('resize', setPostDimensions)
+    setPostDimensions()
+  }, [])
 
   return (
     <React.Fragment>
       {showResolutionWarning && (
-        <Container id="nolandscape">
+        <Container id='nolandscape'>
           <span>This site is not landscape friendly</span>
           <span>Please, turn your device to portrait position. Thanks </span>
         </Container>
       )}
       {children}
     </React.Fragment>
-  );
-};
+  )
+}
 
 const stateToProps = state => {
   return {
     showResolutionWarning: state.responsiveDialog.showResolutionWarning
     // showSignUp: state.logInStatus.showSignUp,
     // showLogIn: state.logInStatus.showLogIn
-  };
-};
+  }
+}
 const actionsToProps = dispatch => {
   return {
     setShowResolutionWarning: show => {
-      dispatch({ type: "SET_WARNING", payload: show });
+      dispatch({type: 'SET_WARNING', payload: show})
     }
-  };
-};
+  }
+}
 
-export default connect(
-  stateToProps,
-  actionsToProps
-)(NoLandscape);
+export default connect(stateToProps, actionsToProps)(NoLandscape)

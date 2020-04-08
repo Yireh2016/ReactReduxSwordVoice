@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import showdown from "showdown";
-import ReactHtmlParser from "react-html-parser";
+import React from 'react'
+import {connect} from 'react-redux'
+import styled from 'styled-components'
+import showdown from 'showdown'
+import ReactHtmlParser from 'react-html-parser'
 
 const Container = styled.div`
   position: fixed;
@@ -14,7 +14,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   top: 0;
-`;
+`
 
 const Layout = styled.div`
   background-color: aliceblue;
@@ -29,18 +29,18 @@ const Layout = styled.div`
   @media (max-width: 700px) {
     width: 100%;
   }
-`;
+`
 
 const Title = styled.h2`
-  font-family: "Work Sans", "sans-serif";
+  font-family: 'Work Sans', 'sans-serif';
   color: coral;
-`;
+`
 
 const Control = styled.div`
   button {
     float: right;
   }
-`;
+`
 
 const Button = styled.button`
   min-width: 80px;
@@ -61,24 +61,23 @@ const Button = styled.button`
     background-color: #fff;
     cursor: pointer;
   }
-`;
-const Dialog = ({ title, body, status, showDialog }) => {
-  let converter = new showdown.Converter();
+`
+const Dialog = ({title, body, status, showDialog}) => {
+  let converter = new showdown.Converter()
 
-  const bodyHTMLContent = converter.makeHtml(body);
-  const bodyJsx = ReactHtmlParser(bodyHTMLContent);
-
+  const bodyHTMLContent = converter.makeHtml(body)
+  const bodyJsx = ReactHtmlParser(bodyHTMLContent)
 
   return (
-    <Container id="dialogCont">
-      <Layout id="dialogLayout">
-        <Title id="dialogTitle"> {title}</Title>
-        <div id="dialogBody"> {bodyJsx}</div>
-        <Control id="dialogCtrlCont">
+    <Container id='dialogCont'>
+      <Layout id='dialogLayout'>
+        <Title id='dialogTitle'> {title}</Title>
+        <div id='dialogBody'> {bodyJsx}</div>
+        <Control id='dialogCtrlCont'>
           <Button
-            className="cmsBtn"
+            className='cmsBtn'
             onClick={() => {
-              showDialog(false);
+              showDialog(false)
             }}
           >
             Ok
@@ -86,23 +85,20 @@ const Dialog = ({ title, body, status, showDialog }) => {
         </Control>
       </Layout>
     </Container>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
   return {
     title: state.dialog.title,
     body: state.dialog.body,
     status: state.dialog.status
-  };
-};
+  }
+}
 const mapDispachToProps = dispatch => {
   return {
     //acciones
-    showDialog: show => dispatch({ type: "SET_DIALOG_SHOW", payload: show })
-  };
-};
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(Dialog);
+    showDialog: show => dispatch({type: 'SET_DIALOG_SHOW', payload: show})
+  }
+}
+export default connect(mapStateToProps, mapDispachToProps)(Dialog)

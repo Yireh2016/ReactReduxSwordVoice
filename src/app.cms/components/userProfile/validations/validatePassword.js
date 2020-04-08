@@ -5,13 +5,13 @@ const validatePassword = value => {
       /^.*(?=.{10,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/g
     )
   ) {
-    return true;
+    return true
   }
 
   if (value.match(/^$/)) {
-    return " ";
+    return ' '
   }
-  return false;
-};
+  return false
+}
 
-export default validatePassword;
+export default validatePassword

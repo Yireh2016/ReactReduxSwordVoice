@@ -1,73 +1,72 @@
-import React, { Component } from "react";
-import Compressor from "compressorjs";
-import isBrowser from "../../../../../services/isBrowser";
+import React, {Component} from 'react'
+import Compressor from 'compressorjs'
+import isBrowser from '../../../../../services/isBrowser'
 
 class UploadImage extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.inputFile = React.createRef();
+    this.inputFile = React.createRef()
   }
 
   handleImgUpload = files => {
-    let Uploadfunction = this.props.imageUpload;
-    const browser = isBrowser();
-    const shouldCompress =
-      browser === "ie" || browser === "edge" ? false : true;
+    let Uploadfunction = this.props.imageUpload
+    const browser = isBrowser()
+    const shouldCompress = browser === 'ie' || browser === 'edge' ? false : true
 
     if (shouldCompress) {
       new Compressor(files[0], {
         quality: 0.6,
-        mimeType: "jpg",
+        mimeType: 'jpg',
         convertSize: 200000,
         success(result) {
-          console.log("imageUpload", result);
-          Uploadfunction(result);
+          console.log('imageUpload', result)
+          Uploadfunction(result)
         },
         error(err) {
-          console.log("error", err);
-          this.props.imageUploadErr(err);
+          console.log('error', err)
+          this.props.imageUploadErr(err)
 
-          return;
+          return
         }
-      });
+      })
     } else {
-      Uploadfunction(files[0]);
+      Uploadfunction(files[0])
     }
-  };
+  }
   render() {
     return (
-      <div className=" avatarContForm">
+      <div className=' avatarContForm'>
         <input
           ref={this.inputFile}
           style={{
-            display: "none"
+            display: 'none'
           }}
-          type="file"
-          name="avatar"
-          id="avatar"
-          accept="image/*"
+          type='file'
+          name='avatar'
+          id='avatar'
+          accept='image/*'
           onChange={e => {
-            this.handleImgUpload(e.target.files);
+            this.handleImgUpload(e.target.files)
           }}
         />
 
         <div
           onClick={() => {
-            this.inputFile.current.click();
+            this.inputFile.current.click()
           }}
-          className="avatarLoad"
+          className='avatarLoad'
           style={{
             backgroundImage: this.props.userAvatarPreview,
-            backgroundSize: "cover",
-            backgroundPosition: "center center"
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center'
           }}
         >
           <span>{this.props.uploadMessage}</span>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default UploadImage;
+export default UploadImage

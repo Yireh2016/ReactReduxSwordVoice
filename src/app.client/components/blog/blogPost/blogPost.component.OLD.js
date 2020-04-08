@@ -1,39 +1,39 @@
 //modulos
-import React, { Component } from "react";
-import ReactHtmlParser from "react-html-parser";
-import { connect } from "react-redux";
-import Radium from "radium";
-import styled from "styled-components";
-import Helmet from "react-helmet";
+import React, {Component} from 'react'
+import ReactHtmlParser from 'react-html-parser'
+import {connect} from 'react-redux'
+import Radium from 'radium'
+import styled from 'styled-components'
+import Helmet from 'react-helmet'
 //css
-import "./blogPost.css";
+import './blogPost.css'
 
 //componentes
-import AsidePost from "../asidePost/asidePost.component";
-import NewComment from "./newComment/NewComment";
-import EnableComment from "./enableComment/enableComment.component";
-import Navbar from "../../navbar/navbar.component";
-import Comment from "../../comment/Comment";
-import Call2Action from "../../general/call2action.component";
-import FooterApp from "../../footer/footer.component";
-import Logo from "../../general/logo.component";
-import SignUpForm from "./signUpForm/signUpForm.component";
-import LogInForm from "./logInForm/logInForm.component";
-import SocialBar from "../../socialBar/SocialBar";
-import PostCard from "../../../components/postCard/PostCard";
-import Loading from "../../loading/loading";
+import AsidePost from '../asidePost/asidePost.component'
+import NewComment from './newComment/NewComment'
+import EnableComment from './enableComment/enableComment.component'
+import Navbar from '../../navbar/navbar.component'
+import Comment from '../../comment/Comment'
+import Call2Action from '../../general/call2action.component'
+import FooterApp from '../../footer/footer.component'
+import Logo from '../../general/logo.component'
+import SignUpForm from './signUpForm/signUpForm.component'
+import LogInForm from './logInForm/logInForm.component'
+import SocialBar from '../../socialBar/SocialBar'
+import PostCard from '../../../components/postCard/PostCard'
+import Loading from '../../loading/loading'
 
 //services
-import keywordsToArr from "../../../../services/keywordsToArr";
-import countingHTMLwords from "../../../services/countingHTMLwords";
+import keywordsToArr from '../../../../services/keywordsToArr'
+import countingHTMLwords from '../../../services/countingHTMLwords'
 //apiCalls
-import getNewComments from "../../../../apiCalls/getNewComments";
+import getNewComments from '../../../../apiCalls/getNewComments'
 
 const MoreComments = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   margin-top: 40px;
-  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  padding: ${props => (props.noPadding ? '0' : '15px 30px 20px 15px')};
   text-align: center;
   box-sizing: border-box;
   width: 100%;
@@ -44,110 +44,110 @@ const MoreComments = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 class BlogArticle extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      device: "",
+      device: '',
       summaryTextHeight: null,
-      similPostSectionHeight: "200vh ",
+      similPostSectionHeight: '200vh ',
       similPostContWidth: null,
       isUserLoggedIn: false,
       showSignUp: false,
       showLogIn: false,
       similPostsArray: [],
-      loggedUserAvatar: "",
-      loggedUserName: "",
-      authorAvatar: "",
+      loggedUserAvatar: '',
+      loggedUserName: '',
+      authorAvatar: '',
       similarPostsWidth: 341,
       isLoading: false
-    };
+    }
   }
   componentDidMount() {
-    const FETCH_POSTS = this.props.article.similarPosts.length;
-    let similarPostsWidth;
-    if (this.props.device === "pc") {
-      similarPostsWidth = ((window.outerWidth * 4) / 12) * 0.8;
-    } else if (this.props.device === "tablet") {
-      similarPostsWidth = window.outerWidth / 2;
+    const FETCH_POSTS = this.props.article.similarPosts.length
+    let similarPostsWidth
+    if (this.props.device === 'pc') {
+      similarPostsWidth = ((window.outerWidth * 4) / 12) * 0.8
+    } else if (this.props.device === 'tablet') {
+      similarPostsWidth = window.outerWidth / 2
     } else {
-      similarPostsWidth = window.outerWidth * 0.7;
+      similarPostsWidth = window.outerWidth * 0.7
     }
     // this.setState({ device: device });
 
     // const similDataArray = this.fetchData();
 
-    const win = window.outerWidth * 0.6;
+    const win = window.outerWidth * 0.6
     //Redux: guardar en el store el tipo de dispositivo
     this.setState({
       similarPostsWidth,
 
       // isUserLoggedIn: isLoggedIn(),
       similPostContWidth:
-        this.props.device === "pc" ? "100%" : FETCH_POSTS * win + "px",
+        this.props.device === 'pc' ? '100%' : FETCH_POSTS * win + 'px',
 
       // similPostsArray: similDataArray,
-      authorAvatar: this.props.article.avatar.replace("_big.", "_small.")
-    });
+      authorAvatar: this.props.article.avatar.replace('_big.', '_small.')
+    })
   }
 
   static getDerivedStateFromProps(props) {
     if (props.isUserLoggedIn) {
-      return { loggedUserAvatar: props.loggedUserAvatar };
+      return {loggedUserAvatar: props.loggedUserAvatar}
     }
-    return null;
+    return null
   }
 
   onSignUpClick = () => {
     this.setState(prevState => {
       return {
         showSignUp: prevState.showSignUp ? false : true
-      };
-    });
-  };
+      }
+    })
+  }
   onLogInClick = () => {
     this.setState(prevState => {
       return {
         showLogIn: prevState.showLogIn ? false : true
-      };
-    });
-  };
+      }
+    })
+  }
 
   moreCommentsHandler = async () => {
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true})
     const getNewCommentsRes = await getNewComments(
       this.props.article.id,
       this.props.article.comments.length
-    );
+    )
 
-    console.log("getNewCommentsRes", getNewCommentsRes);
-    if (getNewCommentsRes.status === "OK") {
-      this.props.setComments(getNewCommentsRes.comments);
+    console.log('getNewCommentsRes', getNewCommentsRes)
+    if (getNewCommentsRes.status === 'OK') {
+      this.props.setComments(getNewCommentsRes.comments)
     }
-    this.setState({ isLoading: false });
-  };
+    this.setState({isLoading: false})
+  }
 
   render() {
-    let keywordsMap = keywordsToArr(this.props.article.categories);
+    let keywordsMap = keywordsToArr(this.props.article.categories)
     keywordsMap = keywordsMap.map(word => {
       return (
         <span
           key={word}
           style={{
-            fontSize: 24 * 0.4 < 12 ? "10px" : 24 * 0.4 + "px",
-            backgroundColor: "hsla(196, 97%, 72%, 1)",
+            fontSize: 24 * 0.4 < 12 ? '10px' : 24 * 0.4 + 'px',
+            backgroundColor: 'hsla(196, 97%, 72%, 1)',
             padding: `${5}px`,
             margin: `0 ${10}px 0 0`,
-            borderRadius: "10px"
+            borderRadius: '10px'
           }}
         >
           {word}
         </span>
-      );
-    });
+      )
+    })
 
     const commentsMap = this.props.article.comments.map((comment, i) => {
       return (
@@ -160,38 +160,38 @@ class BlogArticle extends Component {
           replies={comment.responses}
           index={i}
         />
-      );
-    });
+      )
+    })
 
     const footerBlog = (
-      <footer className=" footerBlogLayoutContainer grid col-4 col-12-md">
-        <div className="footerBlogContainer">
+      <footer className=' footerBlogLayoutContainer grid col-4 col-12-md'>
+        <div className='footerBlogContainer'>
           <Logo
-            className="footerBlogLogo "
-            style={{ top: "100px" }}
-            logoWidth="20vw"
+            className='footerBlogLogo '
+            style={{top: '100px'}}
+            logoWidth='20vw'
           />
-          <Call2Action className="call2ActionBlog" text="Blog" link="/blog" />
+          <Call2Action className='call2ActionBlog' text='Blog' link='/blog' />
           <FooterApp
-            id="blogpostPage"
-            estilos="appear footer-blog "
-            size="redesSociales-blog"
+            id='blogpostPage'
+            estilos='appear footer-blog '
+            size='redesSociales-blog'
           />
         </div>
       </footer>
-    );
-    const similarPostArray = this.props.article.similarPosts;
+    )
+    const similarPostArray = this.props.article.similarPosts
 
     const similarPostsJSX = similarPostArray.map((post, i) => {
-      let avatar;
-      if (typeof post.avatar === "object") {
-        avatar = JSON.stringify(post.avatar);
-      } else if (typeof post.avatar === "string") {
-        avatar = post.avatar;
+      let avatar
+      if (typeof post.avatar === 'object') {
+        avatar = JSON.stringify(post.avatar)
+      } else if (typeof post.avatar === 'string') {
+        avatar = post.avatar
       }
 
       return (
-        <div key={i} className="popularPost-article">
+        <div key={i} className='popularPost-article'>
           <PostCard
             id={`${i}`}
             title={post.title}
@@ -200,7 +200,7 @@ class BlogArticle extends Component {
               `${post.postImg.match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]}`,
               `${post.postImg
                 .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
-                .replace(".", "_mobile.")}`
+                .replace('.', '_mobile.')}`
             )}
             postGradient={post.postGradient}
             hasSummary={true}
@@ -212,56 +212,56 @@ class BlogArticle extends Component {
             summaryTextHtml={post.summaryTextHtml}
           />
         </div>
-      );
-    });
+      )
+    })
     return (
       <React.Fragment>
         <Helmet>
-          <meta name="Description" content={`${this.props.article.summary}`} />
+          <meta name='Description' content={`${this.props.article.summary}`} />
         </Helmet>
-        <div id="blogPostPage">
-          <Navbar hasBackground="true" />
+        <div id='blogPostPage'>
+          <Navbar hasBackground='true' />
 
-          <div className="blogArticleContainer">
-            <div className="blogArticle grid col-8 col-12-md">
+          <div className='blogArticleContainer'>
+            <div className='blogArticle grid col-8 col-12-md'>
               <article>
                 <h1>{this.props.article.title}</h1>
                 <div
-                  id="articleDescriptionCard"
+                  id='articleDescriptionCard'
                   style={{
-                    padding: "15px"
+                    padding: '15px'
                   }}
                 >
                   <div
                     style={{
-                      display: "inline-flex",
-                      alignItems: "center"
+                      display: 'inline-flex',
+                      alignItems: 'center'
                     }}
                   >
                     <div
                       style={{
-                        width: "50px",
-                        height: "50px",
+                        width: '50px',
+                        height: '50px',
                         backgroundImage: `url(${this.state.authorAvatar})`,
-                        backgroundPosition: "center center",
-                        backgroundSize: "cover",
-                        borderRadius: "100%"
+                        backgroundPosition: 'center center',
+                        backgroundSize: 'cover',
+                        borderRadius: '100%'
                       }}
                     />
                     <div
                       style={{
-                        background: "white",
-                        display: "flex",
-                        flexDirection: "column",
-                        fontSize: ".7rem",
-                        color: "#004059",
-                        textAlign: "right",
-                        padding: "0 0 0 10px"
+                        background: 'white',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        fontSize: '.7rem',
+                        color: '#004059',
+                        textAlign: 'right',
+                        padding: '0 0 0 10px'
                       }}
                     >
                       <span
                         style={{
-                          fontWeight: "bold"
+                          fontWeight: 'bold'
                         }}
                       >
                         {this.props.article.author}
@@ -269,8 +269,8 @@ class BlogArticle extends Component {
                       <span>{this.props.article.date}</span>
                       <span
                         style={{
-                          color: "coral",
-                          fontWeight: "bold"
+                          color: 'coral',
+                          fontWeight: 'bold'
                         }}
                       >
                         {countingHTMLwords(this.props.article.html)} minutes
@@ -281,7 +281,7 @@ class BlogArticle extends Component {
                 </div>
 
                 {ReactHtmlParser(
-                  this.props.article.html.replace(/<h1>.*<\/h1>/g, "")
+                  this.props.article.html.replace(/<h1>.*<\/h1>/g, '')
                 )}
                 {/* <JsxParser
                 bindings={bindings}
@@ -289,19 +289,19 @@ class BlogArticle extends Component {
               /> */}
                 <div
                   style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignItems: "center",
-                    color: "#004059",
-                    background: "white"
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    color: '#004059',
+                    background: 'white'
                   }}
                 >
                   <span
                     style={{
-                      color: "#f95f0b",
-                      fontSize: ".7rem",
-                      fontWeight: "bold",
-                      marginRight: "10px"
+                      color: '#f95f0b',
+                      fontSize: '.7rem',
+                      fontWeight: 'bold',
+                      marginRight: '10px'
                     }}
                   >
                     Categories:
@@ -310,12 +310,12 @@ class BlogArticle extends Component {
                 </div>
                 <SocialBar />
               </article>
-              <div className="googleAdBanner grid col-12">
+              <div className='googleAdBanner grid col-12'>
                 Compra cosas que no quieres
               </div>
 
               <section>
-                <h2 id="commentsSection">Leave your comments:</h2>
+                <h2 id='commentsSection'>Leave your comments:</h2>
 
                 {this.props.isUserLoggedIn ? (
                   <React.Fragment>
@@ -352,19 +352,19 @@ class BlogArticle extends Component {
                   this.props.article.comments.length && (
                   <MoreComments
                     onClick={this.moreCommentsHandler}
-                    id="MoreComments"
+                    id='MoreComments'
                     noPadding={this.state.isLoading}
                   >
-                    {this.state.isLoading ? <Loading /> : "More Comments..."}
+                    {this.state.isLoading ? <Loading /> : 'More Comments...'}
                   </MoreComments>
                 )}
               </section>
             </div>
             {footerBlog}
 
-            <div className="grid col-4 col-12-md  asideContenedor">
+            <div className='grid col-4 col-12-md  asideContenedor'>
               <AsidePost
-                asideTitle="Similar Posts"
+                asideTitle='Similar Posts'
                 // onScroll={this.similPostScroll}
                 device={this.props.device}
                 postSectionHeight={this.state.similPostSectionHeight}
@@ -373,16 +373,16 @@ class BlogArticle extends Component {
                 {similarPostsJSX}
               </AsidePost>
             </div>
-            <div className="googleAdVertical grid col-4 col-12-md">
+            <div className='googleAdVertical grid col-4 col-12-md'>
               compra lo que no quieres
             </div>
-            <div className="googleAdVertical grid col-4 col-12-md ">
+            <div className='googleAdVertical grid col-4 col-12-md '>
               compra lo que no quieres
             </div>
           </div>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }
 const mapStateToProps2 = state => {
@@ -393,19 +393,16 @@ const mapStateToProps2 = state => {
     article: state.article,
     blog: state.blog,
     device: state.resize.device
-  };
-};
+  }
+}
 
 const mapActionsToProps = dispatch => {
   return {
     setComments: commentsArr =>
-      dispatch({ type: "SET_COMMENTS", payload: commentsArr })
-  };
-};
+      dispatch({type: 'SET_COMMENTS', payload: commentsArr})
+  }
+}
 
-const BlogArticle2 = Radium(BlogArticle);
-export default connect(
-  mapStateToProps2,
-  mapActionsToProps
-)(BlogArticle2);
+const BlogArticle2 = Radium(BlogArticle)
+export default connect(mapStateToProps2, mapActionsToProps)(BlogArticle2)
 // export default BlogArticle;

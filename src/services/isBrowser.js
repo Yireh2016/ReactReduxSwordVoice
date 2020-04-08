@@ -1,27 +1,27 @@
-import is from "is_js";
+import is from 'is_js'
 const isBrowser = () => {
-  let result;
+  let result
   if (is.chrome()) {
-    result = "chrome";
-    return result;
+    result = 'chrome'
+    return result
   }
 
   if (is.edge()) {
-    result = "edge";
-    return result;
+    result = 'edge'
+    return result
   }
 
   if (is.ie()) {
-    result = "ie";
-    return result;
+    result = 'ie'
+    return result
   }
 
   if (is.firefox()) {
-    result = "firefox";
-    return result;
+    result = 'firefox'
+    return result
   }
 
-  return result;
-};
+  return result
+}
 
-export default isBrowser;
+export default isBrowser

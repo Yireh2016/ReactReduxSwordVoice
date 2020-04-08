@@ -1,7 +1,7 @@
 export default (id, firstName) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
 
-  const webURL = process.env.WEB_URL;
+  const webURL = process.env.WEB_URL
 
   return `
   
@@ -234,5 +234,5 @@ target="_blank"><img alt="YouTube"
 </html>
 
 
-`;
-};
+`
+}

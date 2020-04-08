@@ -1,6 +1,6 @@
-import paragraphService from "../../services/paragraphService";
-import dbDateToNormalDate from "../../services/dbDateToNormalDate";
-import keywordsToArr from "../../services/keywordsToArr";
+import paragraphService from '../../services/paragraphService'
+import dbDateToNormalDate from '../../services/dbDateToNormalDate'
+import keywordsToArr from '../../services/keywordsToArr'
 
 const searchSimilarArticles = (
   articleModel,
@@ -9,38 +9,38 @@ const searchSimilarArticles = (
   successFn,
   errFn
 ) => {
-  console.log("searchValue", searchValue); //TODO rm
-  console.log("articlesShown", articlesShown); //TODO rm
+  console.log('searchValue', searchValue) //TODO rm
+  console.log('articlesShown', articlesShown) //TODO rm
   const query = {
     isPublished: true,
-    $text: { $search: `${searchValue}` }
-  };
+    $text: {$search: `${searchValue}`}
+  }
 
   const options = {
-    score: { $meta: "textScore" }
-  };
+    score: {$meta: 'textScore'}
+  }
   return articleModel
     .find(query, options)
-    .select("url thumbnail title date keywords description")
+    .select('url thumbnail title date keywords description')
     .populate({
-      path: "author",
-      select: "userFirstName userLastName userAvatar userName"
+      path: 'author',
+      select: 'userFirstName userLastName userAvatar userName'
     })
-    .sort({ score: { $meta: "textScore" } })
+    .sort({score: {$meta: 'textScore'}})
     .skip(articlesShown.count)
     .limit(7) // FIXME change it to 7
     .exec()
     .then(queryPosts => {
-      let posts;
+      let posts
       if (queryPosts.length > 1 && articlesShown.id) {
         posts = queryPosts.filter(post => {
-          return post._id !== articlesShown.id;
-        });
+          return post._id !== articlesShown.id
+        })
       } else {
-        posts = queryPosts;
+        posts = queryPosts
       }
 
-      let postMinimumData = [];
+      let postMinimumData = []
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {
           url: posts[i].url,
@@ -58,14 +58,14 @@ const searchSimilarArticles = (
           avatar: posts[i].author.userAvatar,
           date: dbDateToNormalDate(posts[i].date),
           keywords: keywordsToArr(posts[i].keywords[0])
-        };
+        }
       }
 
-      successFn(postMinimumData);
+      successFn(postMinimumData)
     })
     .catch(err => {
-      errFn(err);
-    });
-};
+      errFn(err)
+    })
+}
 
-export default searchSimilarArticles;
+export default searchSimilarArticles

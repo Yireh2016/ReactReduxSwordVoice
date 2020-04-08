@@ -1,27 +1,27 @@
-import paragraphService from "../../services/paragraphService";
-import dbDateToNormalDate from "../../services/dbDateToNormalDate";
-import keywordsToArr from "../../services/keywordsToArr";
+import paragraphService from '../../services/paragraphService'
+import dbDateToNormalDate from '../../services/dbDateToNormalDate'
+import keywordsToArr from '../../services/keywordsToArr'
 
 const searchLastArticlesQuery = (articleModel, successFn, errFn) => {
   return articleModel
-    .find({ isPublished: true })
+    .find({isPublished: true})
     .countDocuments((err, count) => {
       if (err) {
-        errFn(err);
+        errFn(err)
       }
 
       articleModel
-        .find({ isPublished: true })
-        .select("url thumbnail title date keywords description")
+        .find({isPublished: true})
+        .select('url thumbnail title date keywords description')
         .limit(7)
         .populate({
-          path: "author",
-          select: "userFirstName userLastName userAvatar userName"
+          path: 'author',
+          select: 'userFirstName userLastName userAvatar userName'
         })
-        .sort({ _id: "descending" })
+        .sort({_id: 'descending'})
         .exec()
         .then(posts => {
-          let postMinimumData = [];
+          let postMinimumData = []
           for (let i = 0; i < posts.length; i++) {
             postMinimumData[i] = {
               url: posts[i].url,
@@ -39,18 +39,18 @@ const searchLastArticlesQuery = (articleModel, successFn, errFn) => {
               avatar: posts[i].author.userAvatar,
               date: dbDateToNormalDate(posts[i].date),
               keywords: keywordsToArr(posts[i].keywords[0])
-            };
+            }
           }
 
-          successFn(count, postMinimumData);
+          successFn(count, postMinimumData)
         })
         .catch(err => {
-          errFn(err);
-        });
+          errFn(err)
+        })
     })
     .catch(err => {
-      errFn(err);
-    });
-};
+      errFn(err)
+    })
+}
 
-export default searchLastArticlesQuery;
+export default searchLastArticlesQuery

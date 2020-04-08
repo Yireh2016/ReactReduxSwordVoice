@@ -1,36 +1,36 @@
-import React from "react";
-import ReactHtmlParser from "react-html-parser";
-import "simplebar"; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
+import React from 'react'
+import ReactHtmlParser from 'react-html-parser'
+import 'simplebar' // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
 //css
 
-import "./summary.css";
+import './summary.css'
 //components
 
 class Summary extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     /*creo una referencia para acceder a un elemento hijo del DOM virtual*/
-    this.myRef = React.createRef();
+    this.myRef = React.createRef()
 
     this.state = {
-      summaryHeight: "10",
+      summaryHeight: '10',
       isPC: undefined,
       summaryTextH: 0
-    };
+    }
   }
 
   componentDidMount() {
-    this.handleResize();
+    this.handleResize()
 
-    window.addEventListener("resize", this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this))
 
     this.setState(() => {
       return {
         isPC: window.innerWidth > 1050 ? true : false,
         summaryTextH: this.myRef.current.clientHeight
-      };
-    });
+      }
+    })
   }
   componentDidUpdate() {}
   getSnapshotBeforeUpdate() {
@@ -38,16 +38,16 @@ class Summary extends React.Component {
       this.setState(() => {
         return {
           summaryTextH: this.myRef.current.clientHeight
-        };
-      });
+        }
+      })
     }
-    return null;
+    return null
   }
 
   handleResize() {
-    const node = this.myRef.current;
-    const height = node.clientWidth * this.props.widthHeightRatio;
-    this.setState({ summaryHeight: height + "px" });
+    const node = this.myRef.current
+    const height = node.clientWidth * this.props.widthHeightRatio
+    this.setState({summaryHeight: height + 'px'})
   }
   render() {
     const categoryContent = this.props.categories.map((data, i) => {
@@ -55,22 +55,22 @@ class Summary extends React.Component {
         <React.Fragment key={i}>
           <div>{data.category}</div>
         </React.Fragment>
-      );
-    });
+      )
+    })
 
     const readMore = this.props.hasReadMore ? (
       <a
-        aria-label="go and read more about this article"
+        aria-label='go and read more about this article'
         style={{
-          fontWeight: "bold",
-          paddingLeft: "20px",
-          fontSize: "initial"
+          fontWeight: 'bold',
+          paddingLeft: '20px',
+          fontSize: 'initial'
         }}
-        href="/blog/post"
+        href='/blog/post'
       >
         📚 Read More ...
       </a>
-    ) : null;
+    ) : null
 
     const summaryText =
       this.state.isPC === true ? (
@@ -81,33 +81,34 @@ class Summary extends React.Component {
         <div className={this.props.summaryText}>
           {ReactHtmlParser(this.props.summary)}
         </div>
-      );
+      )
 
     return (
       <div
         className={this.props.className}
         ref={this.myRef}
         style={{
-          backgroundColor: "white",
-          borderRadius: "0px 30px",
+          backgroundColor: 'white',
+          borderRadius: '0px 30px',
           height: this.props.summaryTextHeight,
           // height:
           //   this.state.isPC === true
           //     ? `${this.props.summaryTextHeight}px`
           //     : "auto",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around"
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around'
         }}
       >
         {this.props.hasSummaryTitle === true && (
-          <h3 className="summaryTitle">Summary</h3>
+          <h3 className='summaryTitle'>Summary</h3>
         )}
         {this.summaryAdaptableText}
         <section
           style={{
-            height: `${this.props.summaryParagraphHeight *
-              this.state.summaryTextH}px`
+            height: `${
+              this.props.summaryParagraphHeight * this.state.summaryTextH
+            }px`
             // height:
             //   this.state.isPC === true
             //     ? `${this.props.summaryTextHeight - 250 - 39}px`
@@ -118,36 +119,36 @@ class Summary extends React.Component {
         </section>
 
         <div>{readMore}</div>
-        <div className="categories fila">{categoryContent}</div>
+        <div className='categories fila'>{categoryContent}</div>
 
         <div
           style={{
-            width: "100%",
-            paddingBottom: "20px"
+            width: '100%',
+            paddingBottom: '20px'
           }}
         >
-          <span className="summaryDate">{this.props.date}</span>
+          <span className='summaryDate'>{this.props.date}</span>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "row",
-              clear: "both",
-              padding: "10px 0 0 20px"
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row',
+              clear: 'both',
+              padding: '10px 0 0 20px'
             }}
           >
             <span
-              className="summaryAvatar"
+              className='summaryAvatar'
               style={{
-                backgroundImage: "url(" + this.props.avatar + ")"
+                backgroundImage: 'url(' + this.props.avatar + ')'
               }}
             />
-            <span className="summaryAuthor">By {this.props.author}</span>
+            <span className='summaryAuthor'>By {this.props.author}</span>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Summary;
+export default Summary

@@ -1,14 +1,14 @@
-import editEmailVerificationTemplate from "../templates/editEmailVerificationTemplate";
-import sendNoReplyEmail from "../services/sendNoReplyEmail";
+import editEmailVerificationTemplate from '../templates/editEmailVerificationTemplate'
+import sendNoReplyEmail from '../services/sendNoReplyEmail'
 
 const sendUserVerificationCode = async (code, user) => {
-  const html = editEmailVerificationTemplate(code, user.firstName);
+  const html = editEmailVerificationTemplate(code, user.firstName)
 
   try {
-    return await sendNoReplyEmail(html, "Email Verification 📧", user.email);
+    return await sendNoReplyEmail(html, 'Email Verification 📧', user.email)
   } catch (err) {
-    return err;
+    return err
   }
-};
+}
 
-export default sendUserVerificationCode;
+export default sendUserVerificationCode

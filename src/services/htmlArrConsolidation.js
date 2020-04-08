@@ -1,11 +1,11 @@
 const htmlArrCosolidation = arr => {
-  let arrElements = arr;
+  let arrElements = arr
 
-  let finalHTMLElement = "";
+  let finalHTMLElement = ''
   for (let i = 0; i < arrElements.length; i++) {
-    finalHTMLElement = finalHTMLElement + "" + arrElements[i].finalHTMLElement;
+    finalHTMLElement = finalHTMLElement + '' + arrElements[i].finalHTMLElement
   }
-  return finalHTMLElement;
-};
+  return finalHTMLElement
+}
 
-export default htmlArrCosolidation;
+export default htmlArrCosolidation

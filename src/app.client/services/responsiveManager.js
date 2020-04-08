@@ -1,14 +1,14 @@
 const whichDevice = windowObjWidth => {
   if (windowObjWidth > 1050) {
-    return "pc";
+    return 'pc'
     //pc
   } else if (windowObjWidth > 700) {
     //tablet
-    return "tablet";
+    return 'tablet'
   } else {
     //movil
-    return "movil";
+    return 'movil'
   }
-};
+}
 
-export default whichDevice;
+export default whichDevice

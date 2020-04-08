@@ -1,40 +1,40 @@
-import React, { Component } from "react";
-import MenuItem from "../menuItem/menuItem";
+import React, {Component} from 'react'
+import MenuItem from '../menuItem/menuItem'
 class Menu extends Component {
   constructor(props) {
-    super(props);
-    this.state = { itemToggle: [] };
+    super(props)
+    this.state = {itemToggle: []}
   }
   componentDidMount() {
-    let itemToggle = [];
+    let itemToggle = []
     if (this.props.children.length) {
-      const arrLen = this.props.children.length;
+      const arrLen = this.props.children.length
 
       for (let i = 0; i < arrLen; i++) {
-        itemToggle[i] = false;
+        itemToggle[i] = false
       }
     } else {
-      itemToggle[0] = false;
+      itemToggle[0] = false
     }
-    this.setState({ itemToggle: itemToggle });
+    this.setState({itemToggle: itemToggle})
   }
 
   adminClickHandler = id => {
     this.setState(prevState => {
-      const arrLen = prevState.itemToggle.length;
-      let newState = [];
+      const arrLen = prevState.itemToggle.length
+      let newState = []
       for (let i = 0; i < arrLen; i++) {
         if (i === id) {
-          newState[i] = !prevState.itemToggle[i];
+          newState[i] = !prevState.itemToggle[i]
         } else {
-          newState[i] = false;
+          newState[i] = false
         }
       }
       return {
         itemToggle: newState
-      };
-    });
-  };
+      }
+    })
+  }
 
   render() {
     const items = this.props.children.length ? (
@@ -50,7 +50,7 @@ class Menu extends Component {
             >
               {items}
             </MenuItem>
-          );
+          )
         }
       })
     ) : (
@@ -63,10 +63,10 @@ class Menu extends Component {
       >
         {this.props.children}
       </MenuItem>
-    );
+    )
 
-    return <div className="menuItem">{items}</div>;
+    return <div className='menuItem'>{items}</div>
   }
 }
 
-export default Menu;
+export default Menu

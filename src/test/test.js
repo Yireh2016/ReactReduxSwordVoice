@@ -1,2 +1,2 @@
 // const styles = require();
-import styles from "./test.css";
+import styles from './test.css'

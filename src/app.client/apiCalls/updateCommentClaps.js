@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const updateCommentClaps = (id, index, claps) => {
   return new Promise((resolve, reject) => {
@@ -8,14 +8,14 @@ const updateCommentClaps = (id, index, claps) => {
         claps
       })
       .then(res => {
-        console.log(res);
-        resolve(res.data);
+        console.log(res)
+        resolve(res.data)
       })
       .catch(err => {
-        console.log(err);
-        reject(err);
-      });
-  });
-};
+        console.log(err)
+        reject(err)
+      })
+  })
+}
 
-export default updateCommentClaps;
+export default updateCommentClaps

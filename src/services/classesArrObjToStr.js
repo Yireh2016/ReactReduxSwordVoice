@@ -1,18 +1,18 @@
 const classesArrObjToStr = (classesArr, suffix) => {
-  let resultStr = "";
+  let resultStr = ''
 
   for (let i = 0; i < classesArr.length; i++) {
-    let tempStr = "";
-    tempStr = classesArr[i].name.replace(/\s/g, "-");
+    let tempStr = ''
+    tempStr = classesArr[i].name.replace(/\s/g, '-')
 
-    tempStr = `.${tempStr}-${suffix} {\n`;
+    tempStr = `.${tempStr}-${suffix} {\n`
 
     tempStr = `${tempStr}${classesArr[i].styles
-      .replace(/\n/g, "")
-      .replace(/;/g, ";\n")}}\n`;
-    resultStr = resultStr + tempStr;
+      .replace(/\n/g, '')
+      .replace(/;/g, ';\n')}}\n`
+    resultStr = resultStr + tempStr
   }
-  return resultStr;
-};
+  return resultStr
+}
 
-export default classesArrObjToStr;
+export default classesArrObjToStr

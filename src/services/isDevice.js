@@ -1,15 +1,15 @@
 const isDevice = () => {
-  const winWidth = window.outerWidth;
-  let device;
+  const winWidth = window.outerWidth
+  let device
 
   if (winWidth <= 700) {
-    device = "phone";
+    device = 'phone'
   } else if (winWidth > 700 && winWidth < 1050) {
-    device = "tablet";
+    device = 'tablet'
   } else {
-    device = "pc";
+    device = 'pc'
   }
-  return device;
-};
+  return device
+}
 
-export default isDevice;
+export default isDevice

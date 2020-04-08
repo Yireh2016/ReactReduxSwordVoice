@@ -1,17 +1,17 @@
-import axios from "axios";
+import axios from 'axios'
 
 const updateSocialCount = (id, prop, socialCount) => {
   return new Promise((resolve, reject) => {
     axios
-      .put(`api/socialCounter?id=${id}&prop=${prop}`, { socialCount })
+      .put(`api/socialCounter?id=${id}&prop=${prop}`, {socialCount})
       .then(res => {
-        resolve({ status: "OK", result: res.data });
+        resolve({status: 'OK', result: res.data})
       })
       .catch(err => {
-        console.log(err);
-        reject({ status: "ERR", result: err.message });
-      });
-  });
-};
+        console.log(err)
+        reject({status: 'ERR', result: err.message})
+      })
+  })
+}
 
-export default updateSocialCount;
+export default updateSocialCount
