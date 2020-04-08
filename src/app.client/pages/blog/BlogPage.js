@@ -15,7 +15,7 @@ import {
   claps as claps2,
   comments as comments2,
   share as share2,
-  views as view2
+  views as view2,
 } from "../../assets/svgIcons/SvgIcons";
 
 import "./blog.css";
@@ -57,7 +57,7 @@ const MorePosts = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   margin: 0 0 40px 0;
-  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  padding: ${(props) => (props.noPadding ? "0" : "15px 30px 20px 15px")};
   text-align: center;
   box-sizing: border-box;
   width: 50%;
@@ -77,7 +77,7 @@ const RecentPostCont = styled.section`
   background-color: white;
   z-index: 4;
   justify-content: space-around;
-  padding: ${props => {
+  padding: ${(props) => {
     if (props.scrollTop > window.outerHeight)
       return props.delta < 0 ? "30px 0 15px 0" : "15px 0";
 
@@ -86,7 +86,7 @@ const RecentPostCont = styled.section`
 
   transition: transform 1.5s ease;
 
-  transform: ${props => {
+  transform: ${(props) => {
     if (props.scrollTop > window.outerHeight)
       return props.delta < 0 ? "translateY(71px)" : "translateY(0)";
 
@@ -131,29 +131,29 @@ const LastPostCont = styled.div`
 const styles = {
   tablet: {
     "@media (max-width: 150px)": {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   layout: {
     flex: { display: "flex" },
     flexRight: {
-      justifyContent: "flex-end"
+      justifyContent: "flex-end",
     },
     flexCenter: {
-      justifyContent: "center"
+      justifyContent: "center",
     },
     fullCenter: {
       display: "flex",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     },
     fullContainerHeight: { height: "100%" },
     fullContainerWidth: { width: "100%" },
     halfContainerWidth: {
-      width: "50%"
+      width: "50%",
     },
     flexRow: { flexDirection: "row" },
-    flexColumn: { flexDirection: "column" }
+    flexColumn: { flexDirection: "column" },
   },
   header: {
     container: {
@@ -170,21 +170,21 @@ const styles = {
         height: `calc(100vh - 14vw)`,
         alignItems: "center",
         justifyContent: "center",
-        display: "block"
+        display: "block",
       },
       "@media (max-width: 700px)": {
         marginTop: "21.4vw",
         height: `calc(100vh - 21.4vw)`,
-        borderRadius: ` 0px ${headerRadius / 2}px 0px 0px`
-      }
-    }
+        borderRadius: ` 0px ${headerRadius / 2}px 0px 0px`,
+      },
+    },
   },
   footer: {
     layout: {
       "@media (max-width: 1050px)": {
-        paddingBottom: "20px"
-      }
-    }
+        paddingBottom: "20px",
+      },
+    },
   },
   aside: {
     postsContainer: {
@@ -192,8 +192,8 @@ const styles = {
       flexDirection: "column",
       alignItems: "center",
       "@media (max-width: 1050px)": {
-        flexDirection: "row"
-      }
+        flexDirection: "row",
+      },
     },
     title: {
       borderRadius: "5px",
@@ -207,8 +207,8 @@ const styles = {
       "@media (max-width: 1050px)": {
         textAlign: "left",
         position: "sticky",
-        left: "0"
-      }
+        left: "0",
+      },
     },
     layout: {
       margin: "5vmin 0 0 0",
@@ -217,20 +217,20 @@ const styles = {
       "@media (max-width: 1050px)": {
         height: "auto",
         margin: "0",
-        borderRadius: "0"
-      }
-    }
+        borderRadius: "0",
+      },
+    },
   },
   headerPostLayout: {
     "@media (max-width: 1050px)": {
       width: "auto",
-      display: "block"
-    }
+      display: "block",
+    },
   },
   headerSummaryLayout: {
     "@media (max-width: 1050px)": {
-      display: "none"
-    }
+      display: "none",
+    },
   },
   recentPostTitleContainer: {
     display: "flex",
@@ -242,15 +242,15 @@ const styles = {
     padding: "15px 0",
 
     "@media (max-width: 1050px)": {
-      position: "relative"
+      position: "relative",
     },
     "@media (max-width: 700px)": {
-      flexDirection: "column"
+      flexDirection: "column",
     },
     title: {
       fontWeight: "normal",
-      color: "#f95f0b"
-    }
+      color: "#f95f0b",
+    },
   },
   recentPostLayout: {
     padding: "2.5vmin",
@@ -263,16 +263,16 @@ const styles = {
       flexWrap: "nowrap",
       overflow: "scroll",
       width: "100vw",
-      justifyContent: "flex-start"
-    }
+      justifyContent: "flex-start",
+    },
   },
   popularPostLayout: {
     overflow: "hidden",
     height: "calc(100vh - 7vmin)",
     "@media (max-width: 1050px)": {
-      height: "auto"
-    }
-  }
+      height: "auto",
+    },
+  },
 };
 
 const FilterLayout = styled.div`
@@ -299,9 +299,9 @@ const Icon = styled.span`
   }
   svg {
     fill: coral;
-    width: ${props => (props.selected ? "30px" : "25px")};
+    width: ${(props) => (props.selected ? "30px" : "25px")};
     padding-bottom: 5px;
-    border-bottom: ${props => (props.selected ? "3px solid coral" : "none")};
+    border-bottom: ${(props) => (props.selected ? "3px solid coral" : "none")};
     transition: all ease 500ms;
   }
 `;
@@ -371,8 +371,8 @@ class BlogPage extends React.Component {
           author: "",
           date: "",
           avatar: "",
-          keywords: [""]
-        }
+          keywords: [""],
+        },
       ],
       popPostsArray: [
         {
@@ -383,8 +383,8 @@ class BlogPage extends React.Component {
           author: "",
           date: "",
           avatar: "",
-          keywords: [""]
-        }
+          keywords: [""],
+        },
       ],
       newPostArray: [
         {
@@ -395,9 +395,9 @@ class BlogPage extends React.Component {
           author: "",
           date: "",
           avatar: "",
-          keywords: [""]
-        }
-      ]
+          keywords: [""],
+        },
+      ],
     };
 
     this.asidePostsRef = React.createRef();
@@ -440,7 +440,7 @@ class BlogPage extends React.Component {
     this.setState({
       mainPostH: postH,
       asidePostW,
-      lastPostW: windowHeight > windowWidth * 1.3 ? lastPostW : 5
+      lastPostW: windowHeight > windowWidth * 1.3 ? lastPostW : 5,
     });
   };
 
@@ -455,7 +455,7 @@ class BlogPage extends React.Component {
 
     setTimeout(() => {
       this.setState({
-        isLoading: false
+        isLoading: false,
       });
     }, 1.5 * 1000);
   }
@@ -473,7 +473,7 @@ class BlogPage extends React.Component {
     if (getMorePostsRes.status === "OK") {
       let articlesArr = [
         ...this.props.blog.articlesArr,
-        ...getMorePostsRes.articles
+        ...getMorePostsRes.articles,
       ];
       this.props.setArticlesArr(articlesArr);
     }
@@ -485,27 +485,27 @@ class BlogPage extends React.Component {
 
     this.setState({ isLoadingPosts: true });
 
-    const successSearch = response => {
+    const successSearch = (response) => {
       const arr = response.data.searchArr;
       this.props.setSearchArr([...this.props.blog.searchArticles, ...arr]);
       this.setState({ isLoadingPosts: false });
     };
 
-    const errorSearch = err => {
+    const errorSearch = (err) => {
       console.log("error finding articles", err);
       this.setState({ isLoadingPosts: false });
     };
 
     apiCtrl(
       {
-        url: `api/searchArticle?searchValue=${this.props.blog.searchValue}&count=${this.props.blog.searchArticles.length}`
+        url: `api/searchArticle?searchValue=${this.props.blog.searchValue}&count=${this.props.blog.searchArticles.length}`,
       },
       successSearch,
       errorSearch
     );
   };
 
-  onFilterIconClick = async filter => {
+  onFilterIconClick = async (filter) => {
     const lastFilter = this.props.blog.popularFilter;
 
     switch (filter) {
@@ -514,7 +514,7 @@ class BlogPage extends React.Component {
           views: true,
           shares: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
       case "claps":
@@ -522,7 +522,7 @@ class BlogPage extends React.Component {
           claps: true,
           views: false,
           shares: false,
-          comments: false
+          comments: false,
         });
         break;
       case "shares":
@@ -530,7 +530,7 @@ class BlogPage extends React.Component {
           shares: true,
           views: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
       case "comments":
@@ -538,7 +538,7 @@ class BlogPage extends React.Component {
           comments: true,
           shares: false,
           views: false,
-          claps: false
+          claps: false,
         });
 
         break;
@@ -548,13 +548,13 @@ class BlogPage extends React.Component {
           views: true,
           shares: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
     }
 
     this.setState({
-      isFilterLoading: true
+      isFilterLoading: true,
     });
 
     apiCtrl(
@@ -563,14 +563,14 @@ class BlogPage extends React.Component {
         data: {
           filter,
           popularTotalCount: this.props.blog.articlesCount,
-          popularCount: 0
+          popularCount: 0,
         },
-        method: "put"
+        method: "put",
       },
-      res => {
+      (res) => {
         if (res.data.status === "OK") {
           this.setState({
-            isFilterLoading: false
+            isFilterLoading: false,
           });
           this.props.setPopularArr([...res.data.popularArr]);
           return;
@@ -579,18 +579,18 @@ class BlogPage extends React.Component {
         console.log("Error changing filter", res.data.status);
         this.props.setFilter(lastFilter);
         this.setState({
-          isFilterLoading: false
+          isFilterLoading: false,
         });
       },
-      err => {
+      (err) => {
         console.log("Error changing filter err", err);
         const message = err.response.data.message;
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`
+          body: `There was a error : ${message}. Please, try again later`,
         });
         this.setState({
-          isFilterLoading: false
+          isFilterLoading: false,
         });
         this.props.setFilter(lastFilter);
       }
@@ -603,7 +603,7 @@ class BlogPage extends React.Component {
     let filter;
     const filterObj = this.props.blog.popularFilter;
 
-    Object.keys(filterObj).forEach(key => {
+    Object.keys(filterObj).forEach((key) => {
       let value = filterObj[key];
 
       if (value === true) {
@@ -618,18 +618,18 @@ class BlogPage extends React.Component {
         data: {
           filter,
           popularTotalCount: this.props.blog.articlesCount,
-          popularCount: this.props.blog.popularArticlesArr.length
+          popularCount: this.props.blog.popularArticlesArr.length,
         },
-        method: "put"
+        method: "put",
       },
-      res => {
+      (res) => {
         if (res.data.status === "OK") {
           this.props.setPopularArr([
             ...this.props.blog.popularArticlesArr,
-            ...res.data.popularArr
+            ...res.data.popularArr,
           ]);
           this.setState({
-            isFilterLoading: false
+            isFilterLoading: false,
           });
           return;
         }
@@ -637,31 +637,31 @@ class BlogPage extends React.Component {
         console.log("Error searching filter", res.data.status);
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${res.data.message}. Please, try again later`
+          body: `There was a error : ${res.data.message}. Please, try again later`,
         });
         this.setState({
-          isFilterLoading: false
+          isFilterLoading: false,
         });
       },
-      err => {
+      (err) => {
         console.log("Error changing filter err", err);
         console.log("navbar logoutclickhandler  Err", err);
         const message = err.response.data.message;
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`
+          body: `There was a error : ${message}. Please, try again later`,
         });
         this.setState({
-          isFilterLoading: false
+          isFilterLoading: false,
         });
       }
     );
   };
 
-  onSearch = async value => {
+  onSearch = async (value) => {
     console.log("onSearch value ", value);
 
-    const successSearch = response => {
+    const successSearch = (response) => {
       const arr = response.data.searchArr;
 
       response.data.searchCount > 0 && this.setState({ searchMode: true });
@@ -669,12 +669,12 @@ class BlogPage extends React.Component {
       this.props.setSearchCount(response.data.searchCount);
     };
 
-    const errorSearch = err => {
+    const errorSearch = (err) => {
       console.log("error finding articles", err);
     };
 
     const searchObj = {
-      url: `api/searchArticle?searchValue=${value}&count=${this.props.blog.searchCount}`
+      url: `api/searchArticle?searchValue=${value}&count=${this.props.blog.searchCount}`,
     };
     apiCtrl(searchObj, successSearch, errorSearch);
   };
@@ -699,9 +699,9 @@ class BlogPage extends React.Component {
   };
 
   onAdvancedSearchClick = () => {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return {
-        isAdvancedSearch: !prevState.isAdvancedSearch
+        isAdvancedSearch: !prevState.isAdvancedSearch,
       };
     });
   };
@@ -710,7 +710,7 @@ class BlogPage extends React.Component {
       text,
       author,
       dateFrom,
-      dateTo
+      dateTo,
     });
 
     if (advancedSearchDbRes.statusText === "OK") {
@@ -719,7 +719,7 @@ class BlogPage extends React.Component {
       // this.props.setArticlesCount(advancedSearchDbRes.advancedCount);
       this.props.setSearchCount(advancedSearchDbRes.advancedCount);
       this.setState({
-        searchMode: true
+        searchMode: true,
       });
       // setSearchCount
 
@@ -739,7 +739,7 @@ class BlogPage extends React.Component {
     if (articlesArr.length === 0) {
       articlesArr = [
         {
-          title: "",
+          title: null,
           postImg: "",
           postGradient: "",
           keywords: [],
@@ -747,8 +747,8 @@ class BlogPage extends React.Component {
           date: "",
           url: "",
           avatar: "",
-          summaryTextHtml: ""
-        }
+          summaryTextHtml: "",
+        },
       ];
 
       recentPostsArray = newPostArray = [];
@@ -761,7 +761,7 @@ class BlogPage extends React.Component {
     if (popularArticlesArr.length === 0) {
       popularArticlesArr = [
         {
-          title: "",
+          title: null,
           postImg: "",
           postGradient: "",
           keywords: [],
@@ -769,8 +769,8 @@ class BlogPage extends React.Component {
           date: "",
           url: "",
           avatar: "",
-          summaryTextHtml: ""
-        }
+          summaryTextHtml: "",
+        },
       ];
       popPostsArray = [];
     } else {
@@ -823,67 +823,68 @@ class BlogPage extends React.Component {
       </footer>
     );
 
-    const asidePosts =
-      popPostsArray.length > 0
-        ? popPostsArray.map((post, i, arr) => {
-            // const arrLen = arr.length;
-            const {
-              title,
-              keywords,
-              author,
-              date,
-              url,
-              summaryTextHtml,
-              postImg,
-              postGradient
-            } = post;
+    const asidePosts = popPostsArray.map((post, i) => {
+      // const arrLen = arr.length;
+      console.log("post", post);
+      if (post.title === null) {
+        return null;
+      }
+      const {
+        title,
+        keywords,
+        author,
+        date,
+        url,
+        summaryTextHtml,
+        postImg,
+        postGradient,
+      } = post;
 
-            let avatar;
+      let avatar;
 
-            avatar = post.avatar;
-            const size = this.state.asidePostW;
-            const showLoading = this.state.isLoadingPopularPosts;
+      avatar = post.avatar;
+      const size = this.state.asidePostW;
+      const showLoading = this.state.isLoadingPopularPosts;
 
-            if (post.moreBtn && post.moreBtn === "exist") {
-              return (
-                <FlexItem key={i} size={size}>
-                  <MorePostsCont>
-                    <MorePosts
-                      onClick={this.MorePopularPostsHandler}
-                      id="MorePopularPosts"
-                      noPadding={showLoading}
-                    >
-                      {showLoading ? <Loading /> : "More..."}
-                    </MorePosts>
-                  </MorePostsCont>
-                </FlexItem>
-              );
-            }
+      if (post.moreBtn && post.moreBtn === "exist") {
+        return (
+          <FlexItem key={i} size={size}>
+            <MorePostsCont>
+              <MorePosts
+                onClick={this.MorePopularPostsHandler}
+                id="MorePopularPosts"
+                noPadding={showLoading}
+              >
+                {showLoading ? <Loading /> : "More..."}
+              </MorePosts>
+            </MorePostsCont>
+          </FlexItem>
+        );
+      }
 
-            const postH = this.asidePostsRef.current
-              ? (this.asidePostsRef.current.clientWidth * 0.8) / 1.028
-              : 0;
+      const postH = this.asidePostsRef.current
+        ? (this.asidePostsRef.current.clientWidth * 0.8) / 1.028
+        : 0;
 
-            return (
-              <FlexItem key={i} size={size}>
-                <PostCard
-                  id={`PopPostCard${i}`}
-                  postH={postH}
-                  hasSummary={true}
-                  title={title}
-                  postImg={postImg}
-                  postGradient={postGradient}
-                  keywords={keywords}
-                  author={author}
-                  date={date}
-                  url={`/blog/post/${url}`}
-                  avatar={avatar}
-                  summaryTextHtml={summaryTextHtml}
-                />{" "}
-              </FlexItem>
-            );
-          })
-        : null;
+      return (
+        <FlexItem key={i} size={size}>
+          <PostCard
+            id={`PopPostCard${i}`}
+            postH={postH}
+            hasSummary={true}
+            title={title}
+            postImg={postImg}
+            postGradient={postGradient}
+            keywords={keywords}
+            author={author}
+            date={date}
+            url={`/blog/post/${url}`}
+            avatar={avatar}
+            summaryTextHtml={summaryTextHtml}
+          />{" "}
+        </FlexItem>
+      );
+    });
 
     const aside = (
       <React.Fragment>
@@ -954,7 +955,7 @@ class BlogPage extends React.Component {
                   styles.layout.fullCenter,
                   styles.layout.flex,
                   styles.layout.flexColumn,
-                  styles.footer.layout
+                  styles.footer.layout,
                 ]}
               >
                 <div style={{ top: "100px" }}>
@@ -991,7 +992,7 @@ class BlogPage extends React.Component {
               author,
               date,
               url,
-              summaryTextHtml
+              summaryTextHtml,
             } = post;
 
             let postImg = {
@@ -1007,8 +1008,8 @@ class BlogPage extends React.Component {
                   `${post.postImg
                     .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
                     .replace(".", "_mobile.")}`
-                )
-              }
+                ),
+              },
             };
 
             let avatar;
@@ -1052,7 +1053,7 @@ class BlogPage extends React.Component {
               author,
               date,
               url,
-              summaryTextHtml
+              summaryTextHtml,
             } = post;
 
             let postImg = {
@@ -1068,8 +1069,8 @@ class BlogPage extends React.Component {
                   `${post.postImg
                     .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
                     .replace(".", "_mobile.")}`
-                )
-              }
+                ),
+              },
             };
 
             let avatar;
@@ -1112,8 +1113,8 @@ class BlogPage extends React.Component {
                   `${post.postImg
                     .match(/\/([\w-\s]+\.[a-z]{3,4})\)$/)[1]
                     .replace(".", "_mobile.")}`
-                )
-              }
+                ),
+              },
             };
 
             return (
@@ -1163,7 +1164,7 @@ class BlogPage extends React.Component {
               backgroundColor: "white",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center"
+              justifyContent: "center",
             }}
           >
             <LoadingLogo />
@@ -1179,8 +1180,8 @@ class BlogPage extends React.Component {
               marginTop: `${navBarHeight}`,
               height: `calc(100vh - ${navBarHeight})`,
               borderRadius: ` 0px ${headerRadius}px 0px 0px`,
-              backgroundImage: `radial-gradient(216.57px at 79.43% 71.15%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.41) 100%),url(${blogBackground})`
-            }
+              backgroundImage: `radial-gradient(216.57px at 79.43% 71.15%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.41) 100%),url(${blogBackground})`,
+            },
           ]}
         >
           <section
@@ -1189,7 +1190,7 @@ class BlogPage extends React.Component {
               styles.layout.fullCenter,
               styles.layout.flexRight,
               styles.headerPostLayout,
-              { width: "50vw" }
+              { width: "50vw" },
             ]}
           >
             {this.props.resize.device === "pc" ? (
@@ -1241,20 +1242,20 @@ class BlogPage extends React.Component {
                   display: "none",
                   position: "absolute",
                   left: "50%",
-                  transform: "translate( -50% , -100%)"
+                  transform: "translate( -50% , -100%)",
                 },
                 {
                   "@media (max-width: 1050px)": {
-                    display: "block"
+                    display: "block",
                   },
                   "@media (max-width: 700px)": {
                     position: "absolute",
                     bottom: "0",
                     left: "50%",
                     top: "initial",
-                    transform: "translateX( -50% )"
-                  }
-                }
+                    transform: "translateX( -50% )",
+                  },
+                },
               ]}
             >
               <ScrollMouse />
@@ -1266,7 +1267,7 @@ class BlogPage extends React.Component {
             style={[
               styles.layout.fullCenter,
               styles.headerSummaryLayout,
-              { width: "50vw" }
+              { width: "50vw" },
             ]}
           >
             <div
@@ -1277,8 +1278,8 @@ class BlogPage extends React.Component {
                   height: " 520px",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center"
-                }
+                  justifyContent: "center",
+                },
               ]}
             >
               {newPostArray.length > 0 && (
@@ -1296,7 +1297,7 @@ class BlogPage extends React.Component {
                   }
                   summaryTextHtml={newPostArray[0].summaryTextHtml}
                   style={{
-                    borderRadius: "5px"
+                    borderRadius: "5px",
                   }}
                 />
               )}
@@ -1308,21 +1309,8 @@ class BlogPage extends React.Component {
             delta={this.props.scroll.delta}
             scrollTop={this.props.scroll.scrollTop}
             id="recentPostTitleContainer"
-            // style={[
-            //   styles.recentPostTitleContainer,
-            //   {
-            //     transform:
-            //       this.props.scroll.delta < 0
-            //         ? "translateY(71px)"
-            //         : "translateY(0)",
-            //     transition: "transform 500ms ease"
-            //   }
-            // ]}
           >
-            <h2
-              id="recentPostTitleText"
-              // style={styles.recentPostTitleContainer.title}
-            >
+            <h2 id="recentPostTitleText">
               {this.state.searchMode ? "Search Results" : "Recent Posts"}
             </h2>
             <div
@@ -1330,7 +1318,7 @@ class BlogPage extends React.Component {
                 display: " flex",
                 padding: " 0 0 0 5vmin",
                 alignItems: " center",
-                color: "#f95f0b"
+                color: "#f95f0b",
               }}
             >
               <SearchBar
@@ -1348,7 +1336,7 @@ class BlogPage extends React.Component {
               id="recentPostContainer"
               style={{
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
               }}
             >
               <div id="recentPostLayout" style={styles.recentPostLayout}>
@@ -1370,10 +1358,10 @@ class BlogPage extends React.Component {
             </section>
           ) : (
             <section
-              id="searchtPostContainer"
+              id="searchPostContainer"
               style={{
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
               }}
             >
               <div id="searchPostLayout" style={styles.recentPostLayout}>
@@ -1400,34 +1388,31 @@ class BlogPage extends React.Component {
   }
 }
 
-const mapStateToProps2 = state => {
+const mapStateToProps2 = (state) => {
   return {
     blog: state.blog,
     scroll: state.scroll,
     resize: state.resize,
-    isLoggedIn: state.logInStatus.isUserLoggedIn
+    isLoggedIn: state.logInStatus.isUserLoggedIn,
   };
 };
-const mapDispachToProps = dispatch => {
+const mapDispachToProps = (dispatch) => {
   return {
     //acciones
-    setArticlesArr: arr => dispatch({ type: "ARTICLES_ARR", payload: arr }),
-    setArticlesCount: count =>
+    setArticlesArr: (arr) => dispatch({ type: "ARTICLES_ARR", payload: arr }),
+    setArticlesCount: (count) =>
       dispatch({ type: "SET_ARTICLES_COUNT", payload: count }),
-    setPopularArr: arr => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
-    setFilter: filter =>
+    setPopularArr: (arr) => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
+    setFilter: (filter) =>
       dispatch({ type: "SET_POPULAR_FILTER", payload: filter }),
-    setSearchArr: arr =>
+    setSearchArr: (arr) =>
       dispatch({ type: "SET_SEARCH_ARTICLES", payload: arr }),
-    setSearchCount: count =>
+    setSearchCount: (count) =>
       dispatch({ type: "SET_SEARCH_COUNT", payload: count }),
-    showSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
+    showSignUp: (show) => dispatch({ type: "SET_SHOW_SIGNUP", payload: show }),
   };
 };
 
 const BlogPage2 = Radium(BlogPage);
 
-export default connect(
-  mapStateToProps2,
-  mapDispachToProps
-)(BlogPage2);
+export default connect(mapStateToProps2, mapDispachToProps)(BlogPage2);

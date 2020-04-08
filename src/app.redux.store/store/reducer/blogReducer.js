@@ -6,11 +6,11 @@ const initialState = {
     views: true,
     shares: false,
     comments: false,
-    claps: false
+    claps: false,
   },
   popularArticlesArr: [
     {
-      title: "",
+      title: null,
       postImg: "",
       postGradient: "",
       keywords: [],
@@ -18,12 +18,12 @@ const initialState = {
       date: "",
       url: "",
       avatar: "",
-      summaryTextHtml: ""
-    }
+      summaryTextHtml: "",
+    },
   ],
   articlesArr: [
     {
-      title: "",
+      title: null,
       postImg: "",
       postGradient: "",
       keywords: [],
@@ -31,10 +31,10 @@ const initialState = {
       date: "",
       url: "",
       avatar: "",
-      summaryTextHtml: ""
-    }
+      summaryTextHtml: "",
+    },
   ],
-  searchArticles: []
+  searchArticles: [],
 };
 //estado inicial viene del CONFIG REDUCER.JS
 const blogReducer = (state = initialState, action) => {

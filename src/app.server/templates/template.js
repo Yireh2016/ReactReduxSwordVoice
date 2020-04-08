@@ -7,7 +7,6 @@ export default ({
   initialState,
   seoID,
   ogTags,
-  preloadedState
 }) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `

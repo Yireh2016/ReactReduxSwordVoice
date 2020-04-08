@@ -22,7 +22,7 @@ import {
   claps as claps2,
   comments as comments2,
   share as share2,
-  views as view2
+  views as view2,
 } from "../../../assets/svgIcons/SvgIcons";
 
 const Layout = styled.div`
@@ -66,16 +66,16 @@ const Icon = styled.span`
   }
   svg {
     fill: coral;
-    width: ${props => (props.selected ? "30px" : "25px")};
+    width: ${(props) => (props.selected ? "30px" : "25px")};
     padding-bottom: 5px;
-    border-bottom: ${props => (props.selected ? "3px solid coral" : "none")};
+    border-bottom: ${(props) => (props.selected ? "3px solid coral" : "none")};
     transition: all ease 500ms;
   }
 `;
 
 const AsidePostsCont = styled.div`
   display: flex;
-  width: ${props => props.popWidth + "px"};
+  width: ${(props) => props.popWidth + "px"};
 `;
 
 const MorePostsCont = styled.div`
@@ -86,7 +86,7 @@ const MorePostsCont = styled.div`
 const MorePosts = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  padding: ${props => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  padding: ${(props) => (props.noPadding ? "0" : "15px 30px 20px 15px")};
   text-align: center;
   box-sizing: border-box;
   background: #00171f;
@@ -104,7 +104,7 @@ const PostsLay = styled.div`
 `;
 
 const LoadingCont = styled.div`
-  height: ${props => props.postsLayH + 1 + "px"};
+  height: ${(props) => props.postsLayH + 1 + "px"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +145,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         break;
       }
     }
-  }, [device]);
+  }, [blog.popularArticlesArr.length, device]);
 
   useEffect(() => {
     console.log(
@@ -154,10 +154,10 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
     );
 
     postsLayRef.current && setPostsLayH(postsLayRef.current.clientHeight);
-  }, [postsLayH]);
+  }, [postsLayH, postsLayRef]);
 
   // Event Handlers
-  const onFilterIconClick = async filter => {
+  const onFilterIconClick = async (filter) => {
     const lastFilter = blog.popularFilter;
 
     switch (filter) {
@@ -166,7 +166,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           views: true,
           shares: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
       case "claps":
@@ -174,7 +174,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           claps: true,
           views: false,
           shares: false,
-          comments: false
+          comments: false,
         });
         break;
       case "shares":
@@ -182,7 +182,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           shares: true,
           views: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
       case "comments":
@@ -190,7 +190,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           comments: true,
           shares: false,
           views: false,
-          claps: false
+          claps: false,
         });
 
         break;
@@ -200,7 +200,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
           views: true,
           shares: false,
           comments: false,
-          claps: false
+          claps: false,
         });
         break;
     }
@@ -213,11 +213,11 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         data: {
           filter,
           popularTotalCount: blog.articlesCount,
-          popularCount: 0
+          popularCount: 0,
         },
-        method: "put"
+        method: "put",
       },
-      res => {
+      (res) => {
         if (res.data.status === "OK") {
           setIsFilterLoading(false);
           setPopularArr([...res.data.popularArr]);
@@ -228,12 +228,12 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         setFilter(lastFilter);
         setIsFilterLoading(false);
       },
-      err => {
+      (err) => {
         console.log("Error changing filter err", err);
         const message = err.response.data.message;
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`
+          body: `There was a error : ${message}. Please, try again later`,
         });
         setIsFilterLoading(false);
         setFilter(lastFilter);
@@ -247,7 +247,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
     let filter;
     const filterObj = blog.popularFilter;
 
-    Object.keys(filterObj).forEach(key => {
+    Object.keys(filterObj).forEach((key) => {
       let value = filterObj[key];
 
       if (value === true) {
@@ -262,11 +262,11 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         data: {
           filter,
           popularTotalCount: blog.articlesCount,
-          popularCount: blog.popularArticlesArr.length
+          popularCount: blog.popularArticlesArr.length,
         },
-        method: "put"
+        method: "put",
       },
-      res => {
+      (res) => {
         if (res.data.status === "OK") {
           setPopularArr([...blog.popularArticlesArr, ...res.data.popularArr]);
           setIsFilterLoading(false);
@@ -276,17 +276,17 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         console.log("Error searching filter", res.data.status);
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${res.data.message}. Please, try again later`
+          body: `There was a error : ${res.data.message}. Please, try again later`,
         });
         setIsFilterLoading(false);
       },
-      err => {
+      (err) => {
         console.log("Error changing filter err", err);
         console.log("navbar logoutclickhandler  Err", err);
         const message = err.response.data.message;
         triggerDialog({
           title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`
+          body: `There was a error : ${message}. Please, try again later`,
         });
         setIsFilterLoading(false);
       }
@@ -301,7 +301,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
   if (popularArticlesArr.length === 0) {
     popularArticlesArr = [
       {
-        title: "",
+        title: null,
         postImg: "",
         postGradient: "",
         keywords: [],
@@ -309,8 +309,8 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         date: "",
         url: "",
         avatar: "",
-        summaryTextHtml: ""
-      }
+        summaryTextHtml: "",
+      },
     ];
     popPostsArray = [];
   } else {
@@ -333,7 +333,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
             url,
             summaryTextHtml,
             postImg,
-            postGradient
+            postGradient,
           } = post;
 
           let avatar;
@@ -347,7 +347,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
                 key={i}
                 size={size}
@@ -448,23 +448,20 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
   );
 };
 
-const mapStateToProps2 = state => {
+const mapStateToProps2 = (state) => {
   return {
     blog: state.blog,
-    device: state.resize.device
+    device: state.resize.device,
   };
 };
 
-const mapDispachToProps = dispatch => {
+const mapDispachToProps = (dispatch) => {
   return {
     //acciones
-    setPopularArr: arr => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
-    setFilter: filter =>
-      dispatch({ type: "SET_POPULAR_FILTER", payload: filter })
+    setPopularArr: (arr) => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
+    setFilter: (filter) =>
+      dispatch({ type: "SET_POPULAR_FILTER", payload: filter }),
   };
 };
 
-export default connect(
-  mapStateToProps2,
-  mapDispachToProps
-)(Popular);
+export default connect(mapStateToProps2, mapDispachToProps)(Popular);

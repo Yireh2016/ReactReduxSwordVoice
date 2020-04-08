@@ -138,9 +138,6 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
     imageType = imageType.match(/.*\.(.*)/)[1];
   }
 
-  console.log("process.env.WEB_URL", process.env.WEB_URL); //TODO rm
-  console.log("{req.url", req.url); //TODO rm
-
   let ogTags = `
   <meta property="og:url" content='${process.env.WEB_URL}${req.url}' />
   <meta property="og:type" content=${isBlogPost ? "article" : "website"}>
@@ -182,7 +179,7 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
   let blogMetaTags = "";
 
   if (isBlogPost) {
-    const keywordsMeta = preloadedState.article.categories.map(category => {
+    const keywordsMeta = preloadedState.article.categories.map((category) => {
       return `<meta  property="article:tag" content=${category}></meta>`;
     }); // {keywordsMeta}
 
@@ -221,7 +218,7 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
       styleTags,
       preloadedState,
       initialState: safeStringify(preloadedState),
-      seoID: process.env.SEO_ID
+      seoID: process.env.SEO_ID,
     })
   );
 };
@@ -247,10 +244,10 @@ const swordvoiceWeb = async (req, res) => {
           )
           .populate({
             path: "author",
-            select: "userFirstName userLastName userAvatar"
+            select: "userFirstName userLastName userAvatar",
           }) //traer solo lo que necesito firstname y lastname
           .exec()
-          .then(async completeArticle => {
+          .then(async (completeArticle) => {
             if (completeArticle && completeArticle.isPublished) {
               let commentsArr = [...completeArticle.comments];
               const commentsCount = commentsArr.length;
@@ -279,7 +276,7 @@ const swordvoiceWeb = async (req, res) => {
                   date: commentsArr[i].date,
                   responses: commentsArr[i].responses,
                   claps: commentsArr[i].claps,
-                  responsesCount
+                  responsesCount,
                 };
               }
               //limiting Comments
@@ -298,7 +295,7 @@ const swordvoiceWeb = async (req, res) => {
                 keywords,
                 socialCount,
                 url,
-                thumbnail
+                thumbnail,
               } = completeArticle;
 
               const id = completeArticle._id;
@@ -316,7 +313,7 @@ const swordvoiceWeb = async (req, res) => {
                 date: dbDateToNormalDate(date),
                 categories: keywordsToArr(keywords),
                 avatar: author.userAvatar,
-                thumbnail: `${process.env.CDN_URL}/articles/${url}/${thumbnail.name}`
+                thumbnail: `${process.env.CDN_URL}/articles/${url}/${thumbnail.name}`,
               };
 
               store.dispatch({ type: "SET_ARTICLE", payload: article });
@@ -325,7 +322,7 @@ const swordvoiceWeb = async (req, res) => {
 
               let searchStr = `${title} `;
               let keyArr = keywordsToArr(keywords);
-              keyArr.forEach(keyword => {
+              keyArr.forEach((keyword) => {
                 searchStr = `${searchStr}${keyword} `;
               });
 
@@ -334,10 +331,10 @@ const swordvoiceWeb = async (req, res) => {
                   $and: [
                     {
                       _id: { $ne: id },
-                      $text: { $search: `${searchStr}` }
+                      $text: { $search: `${searchStr}` },
                     },
-                    { isPublished: true }
-                  ]
+                    { isPublished: true },
+                  ],
                 })
                 .countDocuments((err, similCount) => {
                   if (err) {
@@ -350,14 +347,14 @@ const swordvoiceWeb = async (req, res) => {
                   }
                   store.dispatch({
                     type: "SET_SIMILAR_ARTICLES_COUNT",
-                    payload: similCount
+                    payload: similCount,
                   });
 
                   searchSimilarArticles(
                     articleModel,
                     { id, count: 0 },
                     searchStr,
-                    arr => {
+                    (arr) => {
                       let similarArticlesArr;
                       if (arr.length > 1) {
                         similarArticlesArr = arr.splice(1);
@@ -366,7 +363,7 @@ const swordvoiceWeb = async (req, res) => {
                       }
                       store.dispatch({
                         type: "SET_SIMILAR_ARTICLES",
-                        payload: similarArticlesArr
+                        payload: similarArticlesArr,
                       });
 
                       //Getting popular Articles
@@ -375,14 +372,14 @@ const swordvoiceWeb = async (req, res) => {
                         .countDocuments((err, count) => {
                           store.dispatch({
                             type: "SET_ARTICLES_COUNT",
-                            payload: count
+                            payload: count,
                           });
                           getPopularPosts(
                             articleModel,
                             "views",
                             count,
                             0,
-                            posts => {
+                            (posts) => {
                               let postMinimumData = [];
                               for (let i = 0; i < posts.length; i++) {
                                 postMinimumData[i] = {
@@ -400,28 +397,28 @@ const swordvoiceWeb = async (req, res) => {
                                     `${posts[i].author.userLastName}`,
                                   avatar: posts[i].author.userAvatar,
                                   date: dbDateToNormalDate(posts[i].date),
-                                  keywords: keywordsToArr(posts[i].keywords[0])
+                                  keywords: keywordsToArr(posts[i].keywords[0]),
                                 };
                               }
 
                               store.dispatch({
                                 type: "SET_POPULAR_ARR",
-                                payload: postMinimumData
+                                payload: postMinimumData,
                               });
                               resolve();
                             },
-                            err => {
+                            (err) => {
                               console.log("error en blog ", err);
                               reject(err);
                             }
                           );
                         })
-                        .catch(err => {
+                        .catch((err) => {
                           console.log("error en blog ", err);
                           reject(err);
                         });
                     },
-                    err => {
+                    (err) => {
                       reject(err);
                     }
                   );
@@ -432,7 +429,7 @@ const swordvoiceWeb = async (req, res) => {
               res.redirect("/notFound"); //FIXME it must be reject
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.log("error on finding article", err);
           });
       } else if (req._parsedUrl.pathname.match("/blog")) {
@@ -448,11 +445,11 @@ const swordvoiceWeb = async (req, res) => {
             articleModel
               .find({ isPublished: true })
               .select("url thumbnail title date keywords description")
-              .limit(7)
+              .limit(1)
               .populate("author")
               .sort({ _id: "descending" })
               .exec()
-              .then(posts => {
+              .then((posts) => {
                 let postMinimumData = [];
                 for (let i = 0; i < posts.length; i++) {
                   postMinimumData[i] = {
@@ -470,13 +467,13 @@ const swordvoiceWeb = async (req, res) => {
                       `${posts[i].author.userLastName}`,
                     avatar: posts[i].author.userAvatar,
                     date: dbDateToNormalDate(posts[i].date),
-                    keywords: keywordsToArr(posts[i].keywords[0])
+                    keywords: keywordsToArr(posts[i].keywords[0]),
                   };
                 }
 
                 store.dispatch({
                   type: "ARTICLES_ARR",
-                  payload: postMinimumData
+                  payload: postMinimumData,
                 });
 
                 getPopularPosts(
@@ -484,7 +481,7 @@ const swordvoiceWeb = async (req, res) => {
                   "views",
                   count,
                   0,
-                  posts => {
+                  (posts) => {
                     let postMinimumData = [];
                     for (let i = 0; i < posts.length; i++) {
                       postMinimumData[i] = {
@@ -502,28 +499,28 @@ const swordvoiceWeb = async (req, res) => {
                           `${posts[i].author.userLastName}`,
                         avatar: posts[i].author.userAvatar,
                         date: dbDateToNormalDate(posts[i].date),
-                        keywords: keywordsToArr(posts[i].keywords[0])
+                        keywords: keywordsToArr(posts[i].keywords[0]),
                       };
                     }
 
-                    store.dispatch({
-                      type: "SET_POPULAR_ARR",
-                      payload: postMinimumData
-                    });
+                    // store.dispatch({
+                    //   type: "SET_POPULAR_ARR",
+                    //   payload: postMinimumData,
+                    // });
                     resolve();
                   },
-                  err => {
+                  (err) => {
                     console.log("error en blog ", err);
                     reject(err);
                   }
                 );
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log("error en blog ", err);
                 reject(err);
               });
           })
-          .catch(err => {
+          .catch((err) => {
             reject(err);
           });
       } else {
@@ -533,11 +530,11 @@ const swordvoiceWeb = async (req, res) => {
   };
 
   const userLoggedInPromise = () =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       if (req.signedCookies.sessionID) {
         const tokenData = readToken(req.signedCookies.sessionID, {
           encryptKey: `${process.env.ENCRYPTKEY}`,
-          encryptAlgorithm: "aes-256-cbc"
+          encryptAlgorithm: "aes-256-cbc",
         });
 
         const userName = tokenData.data.userName;
