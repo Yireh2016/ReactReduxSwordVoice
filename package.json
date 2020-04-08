@@ -40,7 +40,7 @@
     "htmlparser-to-html": "0.0.6",
     "jwt-token-encrypt": "^1.0.4",
     "mini-css-extract-plugin": "^0.8.0",
-    "mongoose": "^5.2.8",
+    "mongoose": "^5.7.5",
     "multer": "^1.4.1",
     "nodemailer": "^6.3.0",
     "passport": "^0.4.0",
