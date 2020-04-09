@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Layout = styled.div`
   display: grid;
@@ -17,7 +17,7 @@ const Layout = styled.div`
       90px auto auto auto auto auto
       auto;
   }
-`;
+`
 
 const NavbarWrapper = styled.div`
   grid-column-start: 1;
@@ -33,7 +33,7 @@ const NavbarWrapper = styled.div`
     grid-row-start: 1;
     grid-row-end: 2;
   }
-`;
+`
 
 const ArtcleCont = styled.section`
   grid-column-start: 1;
@@ -49,7 +49,7 @@ const ArtcleCont = styled.section`
     grid-row-start: 2;
     grid-row-end: 3;
   }
-`;
+`
 
 const SimilPostCont = styled.section`
   grid-column-start: 2;
@@ -65,7 +65,7 @@ const SimilPostCont = styled.section`
     grid-row-start: 3;
     grid-row-end: 4;
   }
-`;
+`
 
 const Footer = styled.footer`
   grid-column-start: 2;
@@ -81,7 +81,7 @@ const Footer = styled.footer`
     grid-row-start: 6;
     grid-row-end: 7;
   }
-`;
+`
 
 const CommentsCont = styled.section`
   grid-column-start: 1;
@@ -97,7 +97,7 @@ const CommentsCont = styled.section`
     grid-row-start: 4;
     grid-row-end: 5;
   }
-`;
+`
 
 const PopularPostsCont = styled.section`
   grid-column-start: 1;
@@ -113,7 +113,7 @@ const PopularPostsCont = styled.section`
     grid-row-start: 7;
     grid-row-end: 8;
   }
-`;
+`
 
 const VerticalAd = styled.section`
   grid-column-start: 2;
@@ -128,7 +128,7 @@ const VerticalAd = styled.section`
     grid-row-start: 5;
     grid-row-end: 6;
   }
-`;
+`
 
 const BlogPostLayout = ({
   article,
@@ -154,7 +154,7 @@ const BlogPostLayout = ({
       <PopularPostsCont>{popPosts}</PopularPostsCont>
       <VerticalAd>{ad2}</VerticalAd>
     </Layout>
-  );
-};
+  )
+}
 
-export default BlogPostLayout;
+export default BlogPostLayout

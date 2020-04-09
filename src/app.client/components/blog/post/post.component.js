@@ -1,61 +1,61 @@
-import React from "react";
+import React from 'react'
 //assets
-import threeDotsButton from "../../../assets/img/general/threeDots.svg";
-import splash from "../../../assets/img/general/splash.svg";
-import "./post.css";
+import threeDotsButton from '../../../assets/img/general/threeDots.svg'
+import splash from '../../../assets/img/general/splash.svg'
+import './post.css'
 // services
-import whichDevice from "../../../services/responsiveManager";
+import whichDevice from '../../../services/responsiveManager'
 /*Props
 Imagen dentro del componente: postImage
 Titulo del componente: postTitle
 */
 class Post extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     /*creo una referencia para acceder a un elemento hijo del DOM virtual*/
-    this.myNewPostRef = React.createRef();
-    this.postTitleH2 = React.createRef();
+    this.myNewPostRef = React.createRef()
+    this.postTitleH2 = React.createRef()
 
     this.state = {
-      newPostHeight: "0",
-      newPostWidth: "100%",
-      postOpacity: "1",
-      postTitle: "",
-      unModifiedPostTitle: "",
+      newPostHeight: '0',
+      newPostWidth: '100%',
+      postOpacity: '1',
+      postTitle: '',
+      unModifiedPostTitle: '',
       hasThreeDots:
         this.props.hasThreeDots === undefined ? true : this.props.hasThreeDots,
       isDetailsOpen: false
-    };
+    }
   }
 
   spaceThreeDots(postTitle, space) {
     // if (postTitle.length > space) {
-    let lastSpaceIndex;
-    let title = postTitle + ".";
-    let newTitle = "";
+    let lastSpaceIndex
+    let title = postTitle + '.'
+    let newTitle = ''
     for (let i = 0; i < space; i++) {
-      newTitle = newTitle + title[i];
-      if (title[i] === " ") {
-        lastSpaceIndex = i;
+      newTitle = newTitle + title[i]
+      if (title[i] === ' ') {
+        lastSpaceIndex = i
       }
     }
 
-    return newTitle.substr(0, lastSpaceIndex) + "...";
+    return newTitle.substr(0, lastSpaceIndex) + '...'
     // }
     // return postTitle;
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (state.postTitle === "") {
-      return { postTitle: props.postTitle };
+    if (state.postTitle === '') {
+      return {postTitle: props.postTitle}
     }
 
-    return null;
+    return null
   }
 
   componentDidUpdate() {
     if (this.postTitleH2.current) {
-      this.checkPostTitleOverflow();
+      this.checkPostTitleOverflow()
     }
   }
   threeDotsButtonClickHandler = () => {
@@ -67,50 +67,50 @@ class Post extends React.Component {
     this.setState(prevState => {
       return {
         isDetailsOpen: prevState.isDetailsOpen ? false : true
-      };
-    });
+      }
+    })
 
     // this.setState(prevState => {
     //   console.log("prevState", prevState);
     //   return { isDetailsOpen: !prevState.isDetailsOpen };
     // });
-  };
+  }
   checkPostTitleOverflow() {
-    const element = this.postTitleH2.current;
+    const element = this.postTitleH2.current
 
-    const hasOverflowingChildren = element.offsetHeight < element.scrollHeight;
+    const hasOverflowingChildren = element.offsetHeight < element.scrollHeight
     if (!hasOverflowingChildren) {
-      return;
+      return
     } else {
-      let title = this.state.postTitle;
-      const space = title.length - 5 > 55 ? 55 : title.length - 5;
+      let title = this.state.postTitle
+      const space = title.length - 5 > 55 ? 55 : title.length - 5
 
-      title = this.spaceThreeDots(title, space);
-      this.setState({ postTitle: title });
+      title = this.spaceThreeDots(title, space)
+      this.setState({postTitle: title})
     }
   }
   componentDidMount() {
-    this.handleResize();
+    this.handleResize()
 
     /*Para que mi newPost sea Fluido al resize la pantalla, creo un event handler que calcule el nuevo height*/
     if (window.addEventListener) {
-      window.addEventListener("resize", this.handleResize.bind(this), false);
+      window.addEventListener('resize', this.handleResize.bind(this), false)
     } else if (window.attachEvent) {
-      window.attachEvent("onresize", this.handleResize.bind(this));
+      window.attachEvent('onresize', this.handleResize.bind(this))
     }
 
-    window.addEventListener("resize", this.handleResize.bind(this));
+    window.addEventListener('resize', this.handleResize.bind(this))
 
-    const device = whichDevice(window.innerWidth);
+    const device = whichDevice(window.innerWidth)
 
     if (this.state.hasThreeDots) {
-      device === "movil"
-        ? this.setState({ postTitleHeight: "calc(100% - 28px)" })
-        : this.setState({ postTitleHeight: "calc(100% - 44px)" });
+      device === 'movil'
+        ? this.setState({postTitleHeight: 'calc(100% - 28px)'})
+        : this.setState({postTitleHeight: 'calc(100% - 44px)'})
 
       // si es movil this.setState({ postTitleHeight: "calc(100% - 32px)" });
     } else {
-      this.setState({ postTitleHeight: "100%" });
+      this.setState({postTitleHeight: '100%'})
     }
   }
   // handleOnMouseOver() {
@@ -125,16 +125,16 @@ class Post extends React.Component {
 
   handleResize() {
     /*invocando el metodo "current" de la referencia encuentro el nodo seleccionado */
-    const node = this.myNewPostRef.current;
+    const node = this.myNewPostRef.current
     /*Calculo el alto de mi elelemtno, basandome en el ancho sabiendo que el ratio de mi newPost es 1.3*/
-    const height = node.clientWidth * this.props.widthHeightRatio;
+    const height = node.clientWidth * this.props.widthHeightRatio
     if (this.props.postHeight) {
-      this.props.postHeight(height + (height * 2) / 59.57);
+      this.props.postHeight(height + (height * 2) / 59.57)
     }
 
     this.setState({
       newPostHeight: height
-    });
+    })
   }
   render() {
     /*Relaciones o Ratios para componente fluido*/
@@ -142,26 +142,24 @@ class Post extends React.Component {
     const fontRatioCalc =
       this.state.newPostHeight / 20.48766794439927 < 16
         ? 16
-        : this.state.newPostHeight / 20.48766794439927; //15.48766794439927
+        : this.state.newPostHeight / 20.48766794439927 //15.48766794439927
     const lineHeightRatioCalc =
       this.state.newPostHeight / 20.48766794439927 >= 16
         ? this.state.newPostHeight / 10.76
-        : 24.3; //9.76   13.9
-    const paddingDerIzq = this.state.newPostHeight / 18.95467515634779;
-    const paddingArr = this.state.newPostHeight / 30.97;
-    const borderWidth = this.state.newPostHeight / 205.57; //59.57;
+        : 24.3 //9.76   13.9
+    const paddingDerIzq = this.state.newPostHeight / 18.95467515634779
+    const paddingArr = this.state.newPostHeight / 30.97
+    const borderWidth = this.state.newPostHeight / 205.57 //59.57;
     const spacing =
       this.state.newPostHeight / 20.48766794439927 >= 16
         ? this.state.newPostHeight / 146
-        : 2.63425;
+        : 2.63425
     const border =
-      this.props.hasBorder === false
-        ? "none"
-        : borderWidth + "px solid #f95f0b";
-    const threeDotsWidth = this.state.newPostHeigh / 9.72;
+      this.props.hasBorder === false ? 'none' : borderWidth + 'px solid #f95f0b'
+    const threeDotsWidth = this.state.newPostHeigh / 9.72
     return (
       <div
-        className="postCompCont "
+        className='postCompCont '
         // + this.props.className
         // onMouseOver={() => {
         //   this.handleOnMouseOver();
@@ -178,23 +176,23 @@ class Post extends React.Component {
         }}
       >
         <div
-          className="postCompImg"
+          className='postCompImg'
           style={{
             backgroundImage: `url(${this.props.postImage}`
             // border: border
           }}
         />
         <div
-          className="postCompInnerTitle"
+          className='postCompInnerTitle'
           /*.postCompInnerTitle height: 100%; */
           /* transform: translateY(-68%); */
 
           style={{
             opacity: this.state.postOpacity,
-            height: this.state.isDetailsOpen ? "100%" : "32%",
-            transform: this.state.isDetailsOpen && "translateY(-68%)",
-            backgroundColor: this.state.isDetailsOpen ? "white" : "transparent",
-            border: this.state.isDetailsOpen ? "3px solid  #f95f0b" : "none"
+            height: this.state.isDetailsOpen ? '100%' : '32%',
+            transform: this.state.isDetailsOpen && 'translateY(-68%)',
+            backgroundColor: this.state.isDetailsOpen ? 'white' : 'transparent',
+            border: this.state.isDetailsOpen ? '3px solid  #f95f0b' : 'none'
             // border: 3px solid rgb(151, 196, 236);
 
             // position: "absolute",
@@ -212,17 +210,17 @@ class Post extends React.Component {
               ref={this.postTitleH2}
               title={this.state.unModifiedPostTitle}
               style={{
-                fontSize: fontRatioCalc + "px",
-                padding: paddingArr + "px " + paddingDerIzq + "px " + "0",
-                lineHeight: lineHeightRatioCalc + "px",
-                letterSpacing: spacing + "px",
-                color: this.state.isDetailsOpen ? "#024259 " : "white ",
+                fontSize: fontRatioCalc + 'px',
+                padding: paddingArr + 'px ' + paddingDerIzq + 'px ' + '0',
+                lineHeight: lineHeightRatioCalc + 'px',
+                letterSpacing: spacing + 'px',
+                color: this.state.isDetailsOpen ? '#024259 ' : 'white ',
                 height: this.state.isDetailsOpen
-                  ? "auto"
+                  ? 'auto'
                   : this.state.postTitleHeight,
-                position: "absolute",
-                zIndex: " 1",
-                top: "-12%"
+                position: 'absolute',
+                zIndex: ' 1',
+                top: '-12%'
 
                 // margin: "0",
                 // fontWeight: "bold",
@@ -237,31 +235,31 @@ class Post extends React.Component {
           {this.state.isDetailsOpen &&
             this.props.summaryComponent(this.myNewPostRef.current.clientHeight)}
           {this.state.hasThreeDots && (
-            <div className="threeDotsCont">
+            <div className='threeDotsCont'>
               <button>
                 <img
                   onClick={this.threeDotsButtonClickHandler}
                   style={{
                     transform: this.state.isDetailsOpen
-                      ? "rotate(90deg)"
-                      : "rotate(0deg)",
+                      ? 'rotate(90deg)'
+                      : 'rotate(0deg)',
                     width: `${threeDotsWidth}`
                   }}
                   src={threeDotsButton}
-                  alt="three Dots Button"
+                  alt='three Dots Button'
                 />
               </button>
             </div>
           )}
           {!this.state.isDetailsOpen && (
-            <div className="postTitleSplash">
+            <div className='postTitleSplash'>
               <img src={splash} />
             </div>
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default Post;
+export default Post

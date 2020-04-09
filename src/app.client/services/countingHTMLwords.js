@@ -1,10 +1,10 @@
 const countingHTMLwords = htmlStr => {
-  const newStr = htmlStr.replace(/<[^>]*>/g, " ");
-  const numberOfWords = newStr.split(" ").length;
-  const minutesToRead = numberOfWords / 200;
-  const minutesNormalize = Math.round(minutesToRead);
+  const newStr = htmlStr.replace(/<[^>]*>/g, ' ')
+  const numberOfWords = newStr.split(' ').length
+  const minutesToRead = numberOfWords / 200
+  const minutesNormalize = Math.round(minutesToRead)
 
-  return minutesNormalize;
-};
+  return minutesNormalize
+}
 
-export default countingHTMLwords;
+export default countingHTMLwords

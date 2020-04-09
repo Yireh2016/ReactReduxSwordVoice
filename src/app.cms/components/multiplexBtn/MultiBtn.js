@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react'
+import styled from 'styled-components'
 
 const Wrapper = styled.div`
   display: inline-block;
-`;
+`
 
 const Container = styled.div`
   min-width: 90px;
@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 
   /* justify-content: center; */
-`;
+`
 const DropDown = styled.div`
   top: 37px;
   left: 0;
@@ -48,31 +48,31 @@ const DropDown = styled.div`
   span:hover {
     color: coral;
   }
-`;
+`
 
 const Layout = styled.div`
   display: flex;
   justify-content: center;
   padding: 5px;
-`;
+`
 const Selector = styled.div`
   padding: 0 5px;
   display: flex;
   align-items: center;
   flex-grow: 10;
-`;
+`
 const Button = styled.div`
   position: relative;
   padding: 5px 10px;
   text-align: center;
   flex-grow: 90;
-`;
+`
 const Arrow = styled.div`
   transition: all ease 300ms;
   border-top: 10px solid white;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-`;
+`
 
 const MapOption = styled.span`
   border: 1px solid coral;
@@ -86,25 +86,25 @@ const MapOption = styled.span`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
-const MultiBtn = ({ options, clickHandler }) => {
+const MultiBtn = ({options, clickHandler}) => {
   //state declaration
-  const [option, setOption] = useState(options[0]);
-  const [showDropDown, setShowDropDown] = useState(false);
+  const [option, setOption] = useState(options[0])
+  const [showDropDown, setShowDropDown] = useState(false)
 
   useEffect(() => {
-    setShowDropDown(false);
-    setOption(options[0]);
-  }, [options]);
+    setShowDropDown(false)
+    setOption(options[0])
+  }, [options])
 
   //handlers
 
   const dropOtionHandler = value => {
-    clickHandler(value);
-    setOption(value);
-    setShowDropDown(false);
-  };
+    clickHandler(value)
+    setOption(value)
+    setShowDropDown(false)
+  }
 
   //maps
   const mapOptions = options.map(optionEl => {
@@ -112,41 +112,41 @@ const MultiBtn = ({ options, clickHandler }) => {
       <MapOption
         key={optionEl}
         onClick={() => {
-          dropOtionHandler(optionEl);
+          dropOtionHandler(optionEl)
         }}
       >
         {optionEl}
       </MapOption>
-    );
-  });
+    )
+  })
 
   //render
   return (
     <Wrapper>
-      <Container id="Container">
-        <Layout id="Layout" className="btn">
+      <Container id='Container'>
+        <Layout id='Layout' className='btn'>
           <Button
-            id="Button"
+            id='Button'
             onClick={() => {
-              clickHandler(option);
+              clickHandler(option)
             }}
           >
             {option}
           </Button>
-          <Selector id="Selector">
+          <Selector id='Selector'>
             <Arrow
-              id="arrow"
+              id='arrow'
               onClick={() => {
-                setShowDropDown(!showDropDown);
+                setShowDropDown(!showDropDown)
               }}
             />
           </Selector>
         </Layout>
       </Container>
 
-      {showDropDown && <DropDown id="dropDown">{mapOptions}</DropDown>}
+      {showDropDown && <DropDown id='dropDown'>{mapOptions}</DropDown>}
     </Wrapper>
-  );
-};
+  )
+}
 
-export default MultiBtn;
+export default MultiBtn

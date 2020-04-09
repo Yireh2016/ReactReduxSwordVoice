@@ -1,12 +1,12 @@
-import React, { Component, Suspense, lazy } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, {Component, Suspense, lazy} from 'react'
+import {Route, Switch} from 'react-router-dom'
 //components
-import Login from "./components/login/login";
-import Preview from "./components/preview/preview";
+import Login from './components/login/login'
+import Preview from './components/preview/preview'
 // import Dashboard from "./components/dashboard/dashboard";
-import Loading from "./components/loading/loading";
+import Loading from './components/loading/loading'
 //lazy components SPA
-const Dashboard = lazy(() => import("./components/dashboard/dashboard"));
+const Dashboard = lazy(() => import('./components/dashboard/dashboard'))
 
 class App extends Component {
   render() {
@@ -14,14 +14,14 @@ class App extends Component {
 
     return (
       <Switch>
-        <Route exact path="/cms" render={() => <Login />} />
+        <Route exact path='/cms' render={() => <Login />} />
         <Route
           exact
-          path="/cms/preview"
+          path='/cms/preview'
           render={props => <Preview props={props} />}
         />
         <Route
-          path="/cms/*"
+          path='/cms/*'
           render={() => (
             <Suspense fallback={<Loading fullscreen={true} />}>
               <Dashboard />
@@ -29,8 +29,8 @@ class App extends Component {
           )}
         />
       </Switch>
-    );
+    )
   }
 }
 
-export default App;
+export default App

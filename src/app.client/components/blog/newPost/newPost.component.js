@@ -1,67 +1,67 @@
 //modules
-import React from "react";
+import React from 'react'
 //components
-import Summary2 from "../common/summary/summary2.component";
-import Post from "../post/post.component";
+import Summary2 from '../common/summary/summary2.component'
+import Post from '../post/post.component'
 
 class NewPost extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.newPostSectionHeight = React.createRef();
-    this.summaryCursorMove = React.createRef();
+    this.newPostSectionHeight = React.createRef()
+    this.summaryCursorMove = React.createRef()
     this.state = {
       postHeight: 0,
       newPostTitleContStyle: {},
-      device: ""
-    };
+      device: ''
+    }
   }
   componentDidMount() {
     if (window.innerWidth > 1050) {
       //PC
-      this.setState({ device: "pc" });
-      return;
+      this.setState({device: 'pc'})
+      return
     }
 
     if (window.innerWidth > 750) {
       //tablet
       this.setState({
-        device: "tablet",
+        device: 'tablet',
         summaryW: window.innerWidth,
         summaryH: window.innerWidth * 0.6
-      });
-      return;
+      })
+      return
     }
     //movil
     this.setState({
-      device: "movil",
+      device: 'movil',
       summaryW: window.innerWidth,
       summaryH: window.innerWidth * 0.888
-    });
+    })
   }
 
   changeHeight = height => {
-    this.setState({ postHeight: height });
-  };
+    this.setState({postHeight: height})
+  }
   render() {
     const newPostJSX = this.props.newPost.map((newPostArrayContent, i) => {
       return (
         <Post
           hasThreeDots={false}
           postHeight={h => {
-            this.changeHeight(h);
+            this.changeHeight(h)
           }}
           key={i}
           postImage={newPostArrayContent.articleProps.image}
           postTitle={newPostArrayContent.articleProps.title}
           widthHeightRatio={0.8}
         />
-      );
-    });
+      )
+    })
 
     const newPostSummaryJSX = this.props.newPost.map(
       (newPostArrayContent, i) => {
-        if (this.state.device === "pc") {
+        if (this.state.device === 'pc') {
           return (
             <div ref={this.summaryCursorMove} key={i}>
               <Summary2
@@ -76,7 +76,7 @@ class NewPost extends React.Component {
               />
             </div>
             // </LightShadow>
-          );
+          )
         } else {
           return (
             <Summary2
@@ -90,20 +90,20 @@ class NewPost extends React.Component {
               width={this.state.summaryW}
               height={this.state.summaryH}
             />
-          );
+          )
         }
       }
-    );
+    )
 
     return (
       <div>
         <section
           ref={this.newPostSectionHeight}
-          className="newPost grid col-8 col-12-md"
+          className='newPost grid col-8 col-12-md'
         >
-          <div className="fila newPostTitleLayout">
+          <div className='fila newPostTitleLayout'>
             <div
-              className="newPostTitleCont grid "
+              className='newPostTitleCont grid '
               style={this.state.newPostTitleContStyle}
             >
               {newPostJSX}
@@ -111,7 +111,7 @@ class NewPost extends React.Component {
             {/* <LightShadow factor={5}> */}
             <div
               style={this.state.newPostTitleContStyle}
-              className="newPostSummaryCont  grid"
+              className='newPostSummaryCont  grid'
             >
               {newPostSummaryJSX}
             </div>
@@ -119,8 +119,8 @@ class NewPost extends React.Component {
           </div>
         </section>
       </div>
-    );
+    )
   }
 }
 
-export default NewPost;
+export default NewPost

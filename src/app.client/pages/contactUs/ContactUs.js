@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import Helmet from "react-helmet";
+import React, {useState, useEffect} from 'react'
+import {connect} from 'react-redux'
+import Helmet from 'react-helmet'
 
-import styled from "styled-components";
+import styled from 'styled-components'
 // import Helmet from "react-helmet";
 
 //layout
-import NavBarLayout from "../../layouts/NavBarLayout";
+import NavBarLayout from '../../layouts/NavBarLayout'
 
 //compoenents
-import ContactForm from "./contactForm/ContactForm";
-import SocialNet from "./socialNet/SocialNet";
+import ContactForm from './contactForm/ContactForm'
+import SocialNet from './socialNet/SocialNet'
 
 //assets
-import image from "../../assets/svgIcons/bottleMessage.svg";
+import image from '../../assets/svgIcons/bottleMessage.svg'
 
 //api call
-import sendContactForm from "../../../apiCalls/sendContactForm";
+import sendContactForm from '../../../apiCalls/sendContactForm'
 
 const MainLayout = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const MainLayout = styled.div`
   transform: rotate(0deg);
 
   transition: transform ease 1000ms;
-`;
+`
 
 const LeftAside = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ const LeftAside = styled.div`
     height: initial;
     margin: -3vh 0 0 0;
   }
-`;
+`
 
 const NoPCTitleLay = styled.div`
   display: none;
@@ -62,13 +62,13 @@ const NoPCTitleLay = styled.div`
     display: flex;
     width: calc(12 * 100% / 12);
   }
-`;
+`
 
 const NoPCContactTitle = styled.h1`
-  font-family: "Work sans", sans-serif;
+  font-family: 'Work sans', sans-serif;
   color: var(--orange);
   margin-left: 15px;
-`;
+`
 
 const RightAside = styled.div`
   display: flex;
@@ -93,12 +93,12 @@ const RightAside = styled.div`
     justify-content: center;
     background: rgb(23, 43, 51);
   }
-`;
+`
 
 const ContactTitle = styled.h1`
-  font-family: "Work sans", sans-serif;
+  font-family: 'Work sans', sans-serif;
   color: var(--orange);
-`;
+`
 
 const SocialNetCont = styled.div`
   display: flex;
@@ -114,7 +114,7 @@ const SocialNetCont = styled.div`
   @media (max-width: 700px) {
     width: 100%;
   }
-`;
+`
 const BackgroundCont = styled.div`
   left: -4px;
   top: -30px;
@@ -143,11 +143,11 @@ const BackgroundCont = styled.div`
       height: 630px;
     }
   }
-`;
+`
 
 const Call2ActionBtnCont = styled.div`
   margin-top: 20px;
-`;
+`
 
 const Button = styled.button`
   min-width: 90px;
@@ -174,63 +174,63 @@ const Button = styled.button`
   @media (max-width: 1050px) {
     font-size: 20px;
   }
-`;
+`
 
-const ContactUs = ({ setDialog, setSignUp, isLoggedIn }) => {
-  const [animation, setAnimation] = useState(false);
+const ContactUs = ({setDialog, setSignUp, isLoggedIn}) => {
+  const [animation, setAnimation] = useState(false)
 
   useEffect(() => {
     setTimeout(() => {
-      setAnimation(true);
-    }, 2000);
-  }, []);
+      setAnimation(true)
+    }, 2000)
+  }, [])
 
   const triggerDialog = (title, body) => {
-    setDialog({ title, body, show: true, status: "" });
+    setDialog({title, body, show: true, status: ''})
     // :dialogObj=>{dispatch({type:"SET_DIALOG",payload:dialogObj})}
 
     // setDialogTitle(title);
     // setDialogBody(body);
     // setShowDialog(true);
-  };
+  }
   const submitHandler = async (isFormValid, form) => {
     if (!isFormValid) {
-      const title = "Ups 😅 ";
-      const body = form.message;
+      const title = 'Ups 😅 '
+      const body = form.message
 
-      triggerDialog(title, body);
-      return;
+      triggerDialog(title, body)
+      return
     }
 
     try {
-      var sendContactFormRes = await sendContactForm(form);
+      var sendContactFormRes = await sendContactForm(form)
     } catch (err) {
-      triggerDialog("Error 🤬", `There was an error status: ${err}`);
-      return;
+      triggerDialog('Error 🤬', `There was an error status: ${err}`)
+      return
     }
 
-    if (sendContactFormRes.status === "OK") {
-      triggerDialog("Way to Go!! 😁", sendContactFormRes.message);
-      return sendContactFormRes.status;
+    if (sendContactFormRes.status === 'OK') {
+      triggerDialog('Way to Go!! 😁', sendContactFormRes.message)
+      return sendContactFormRes.status
     }
-    console.log("error sendContactFormRes", sendContactFormRes);
+    console.log('error sendContactFormRes', sendContactFormRes)
     triggerDialog(
-      "Error 🤬",
+      'Error 🤬',
       `There was an error status: ${err} ${sendContactFormRes.message}`
-    );
-    return sendContactFormRes.status;
-  };
+    )
+    return sendContactFormRes.status
+  }
 
   return (
     <div>
       <Helmet>
         <title>Contact Us Dude</title>
         <meta
-          name="Description"
+          name='Description'
           content="Send your Questions, Suggestions, Feedback or whatever you want to tell and we will hit you back in no time. Hey, don't forget to follow us on Social Medi"
         />
       </Helmet>
-      <NavBarLayout id="navbar">
+      <NavBarLayout id='navbar'>
         {/* <Helmet>
         <title>SwordVoice.com &#183; 💌 Contact Us Here</title>
         <meta
@@ -238,33 +238,33 @@ const ContactUs = ({ setDialog, setSignUp, isLoggedIn }) => {
           content="SwordVoice | Do you wanna write us? Have any questions? Have any project you want us to do? Don't hesitate and contact us HERE!...Hey wait!, don't forget to follow us on our social media channels!"
         />
       </Helmet> */}
-        <MainLayout animation={animation} id="mainLayout">
+        <MainLayout animation={animation} id='mainLayout'>
           <NoPCTitleLay>
-            <NoPCContactTitle id="NoPCcontactTitle">
+            <NoPCContactTitle id='NoPCcontactTitle'>
               Contact Us
             </NoPCContactTitle>
           </NoPCTitleLay>
-          <LeftAside id="leftAside">
+          <LeftAside id='leftAside'>
             <BackgroundCont>
-              <img src={image} alt="SwordVoice Symbol" />
+              <img src={image} alt='SwordVoice Symbol' />
             </BackgroundCont>
 
-            <ContactForm id="ContactForm" onSubmit={submitHandler} />
+            <ContactForm id='ContactForm' onSubmit={submitHandler} />
           </LeftAside>
-          <RightAside id="RightAside">
-            <ContactTitle id="ContactTitle">Follow Us</ContactTitle>
-            <SocialNetCont id="SocialNetCont">
-              <SocialNet id="SocialNet" />
+          <RightAside id='RightAside'>
+            <ContactTitle id='ContactTitle'>Follow Us</ContactTitle>
+            <SocialNetCont id='SocialNetCont'>
+              <SocialNet id='SocialNet' />
             </SocialNetCont>
             <Call2ActionBtnCont>
               {isLoggedIn ? (
-                <a href="/blog" rel="go to Blog page">
+                <a href='/blog' rel='go to Blog page'>
                   <Button>Blog</Button>
                 </a>
               ) : (
                 <Button
                   onClick={() => {
-                    setSignUp(true);
+                    setSignUp(true)
                   }}
                 >
                   Sign Up
@@ -275,23 +275,20 @@ const ContactUs = ({ setDialog, setSignUp, isLoggedIn }) => {
         </MainLayout>
       </NavBarLayout>
     </div>
-  );
-};
+  )
+}
 
 const stateToProps = state => {
   return {
     isLoggedIn: state.logInStatus.isUserLoggedIn
-  };
-};
+  }
+}
 const actionsToProps = dispatch => {
   return {
     setDialog: dialogObj => {
-      dispatch({ type: "SET_DIALOG", payload: dialogObj });
+      dispatch({type: 'SET_DIALOG', payload: dialogObj})
     },
-    setSignUp: show => dispatch({ type: "SET_SHOW_SIGNUP", payload: show })
-  };
-};
-export default connect(
-  stateToProps,
-  actionsToProps
-)(ContactUs);
+    setSignUp: show => dispatch({type: 'SET_SHOW_SIGNUP', payload: show})
+  }
+}
+export default connect(stateToProps, actionsToProps)(ContactUs)

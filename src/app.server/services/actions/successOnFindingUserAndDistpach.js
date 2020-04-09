@@ -1,5 +1,5 @@
 const successOnFindingUserAndDistpach = (user, store) => {
-  let payload;
+  let payload
   if (user) {
     payload = {
       userName: user.userName,
@@ -7,10 +7,10 @@ const successOnFindingUserAndDistpach = (user, store) => {
       userType: user.userType,
       userFullName: user.userFullName,
       userAvatar: user.userAvatar
-    };
-    store.dispatch({ type: "LOGGED_IN", payload });
+    }
+    store.dispatch({type: 'LOGGED_IN', payload})
   }
-  return;
-};
+  return
+}
 
-export default successOnFindingUserAndDistpach;
+export default successOnFindingUserAndDistpach

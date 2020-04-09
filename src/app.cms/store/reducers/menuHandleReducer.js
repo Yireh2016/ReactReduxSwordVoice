@@ -1,20 +1,20 @@
 const initialState = {
   main: true,
   create: false,
-  exitBtn: ["Blog", "Home", "Log Out"]
-};
+  exitBtn: ['Blog', 'Home', 'Log Out']
+}
 //estado inicial viene del CONFIG REDUCER.JS
 const menuHandleReducer = (state = initialState, action) => {
-  let newState = state;
+  let newState = state
 
   switch (action.type) {
-    case "CHANGE_MENU": {
-      newState = action.payload;
-      break;
+    case 'CHANGE_MENU': {
+      newState = action.payload
+      break
     }
   }
 
-  return newState;
-};
+  return newState
+}
 
-export default menuHandleReducer;
+export default menuHandleReducer

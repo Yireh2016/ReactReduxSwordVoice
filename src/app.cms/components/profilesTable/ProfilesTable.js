@@ -1,92 +1,92 @@
-import React, { useEffect, useState } from "react";
-import ReactTable from "react-table";
-import "react-table/react-table.css";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, {useEffect, useState} from 'react'
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+import styled from 'styled-components'
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router-dom'
 
 //apiCalls
-import getUsers from "../../apiCalls/getUsers";
+import getUsers from '../../apiCalls/getUsers'
 
-const Layout = styled.div``;
+const Layout = styled.div``
 
-const ProfilesTable = ({ setUserProfile, history, device }) => {
-  const [users, setUsers] = useState([]);
+const ProfilesTable = ({setUserProfile, history, device}) => {
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
     const asyncFn = async () => {
       try {
-        var usersObj = await getUsers();
+        var usersObj = await getUsers()
       } catch (err) {
-        console.error("error", err);
+        console.error('error', err)
       }
 
-      if (usersObj.status === "OK") {
-        setUsers(usersObj.data);
-        return;
+      if (usersObj.status === 'OK') {
+        setUsers(usersObj.data)
+        return
       }
-      console.log("error", usersObj.data);
-    };
-    asyncFn();
-  }, []);
+      console.log('error', usersObj.data)
+    }
+    asyncFn()
+  }, [])
 
   const userNameHandler = tableIndex => {
-    setUserProfile(users[tableIndex]);
-    history.push("/cms/userProfile");
-  };
+    setUserProfile(users[tableIndex])
+    history.push('/cms/userProfile')
+  }
 
   const columns = [
     {
-      Header: "Username",
-      accessor: "userName",
+      Header: 'Username',
+      accessor: 'userName',
       maxWidth: 300,
       Cell: props => {
         return (
           <div
             onClick={e => {
-              userNameHandler(props.index);
+              userNameHandler(props.index)
             }}
-            className="tableColumnElement tableNameElement"
+            className='tableColumnElement tableNameElement'
           >
             {props.value}
           </div>
-        );
+        )
       } // Custom cell components!
     },
     {
-      Header: "Name",
-      accessor: "userFirstName",
+      Header: 'Name',
+      accessor: 'userFirstName',
       maxWidth: 300,
       Cell: props => {
         return (
-          <div className="talbeColumnElement" title={props.value}>
+          <div className='talbeColumnElement' title={props.value}>
             {props.value}
           </div>
-        );
+        )
       } // Custom cell components
     },
     {
-      Header: "Last Name",
-      accessor: "userLastName",
+      Header: 'Last Name',
+      accessor: 'userLastName',
       maxWidth: 300,
       Cell: props => {
         return (
-          <div className="talbeColumnElement" title={props.value}>
+          <div className='talbeColumnElement' title={props.value}>
             {props.value}
           </div>
-        );
+        )
       } // Custom cell components
     },
     {
-      Header: "Email",
-      accessor: "userEmail",
+      Header: 'Email',
+      accessor: 'userEmail',
       maxWidth: 300,
       Cell: props => {
         return (
-          <div className="talbeColumnElement" title={props.value}>
+          <div className='talbeColumnElement' title={props.value}>
             {props.value}
           </div>
-        );
+        )
       }
     }
     // {
@@ -115,43 +115,40 @@ const ProfilesTable = ({ setUserProfile, history, device }) => {
     //     // );
     //   } // Custom cell components
     // }
-  ];
+  ]
 
   return (
-    <Layout className="reactTableLay">
+    <Layout className='reactTableLay'>
       <ReactTable
         filterable
         style={
-          device === "phone"
-            ? { border: "none", padding: "0 3vmin" }
-            : { border: "none", padding: "0 10vmin" }
+          device === 'phone'
+            ? {border: 'none', padding: '0 3vmin'}
+            : {border: 'none', padding: '0 10vmin'}
         }
         data={users}
         columns={columns}
-        className="-striped -highlight"
+        className='-striped -highlight'
         defaultPageSize={10}
       />
     </Layout>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
   return {
     device: state.resize.device
-  };
-};
+  }
+}
 const mapDispachToProps = dispatch => {
   return {
     //acciones
 
     setUserProfile: profile =>
-      dispatch({ type: "SET_USER_PROFILE", payload: profile })
-  };
-};
+      dispatch({type: 'SET_USER_PROFILE', payload: profile})
+  }
+}
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispachToProps
-  )(ProfilesTable)
-);
+  connect(mapStateToProps, mapDispachToProps)(ProfilesTable)
+)

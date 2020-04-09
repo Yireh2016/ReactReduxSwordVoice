@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react'
+import {connect} from 'react-redux'
+import styled from 'styled-components'
 
 //components
-import Loading from "../../../components/loading/loading";
-import Post from "../../../components/post/Post";
-import PostCard from "../../../components/postCard/PostCard";
+import Loading from '../../../components/loading/loading'
+import Post from '../../../components/post/Post'
+import PostCard from '../../../components/postCard/PostCard'
 
 //api calls
-import apiCtrl from "../../../../apiCalls/generic/apiCtrl";
+import apiCtrl from '../../../../apiCalls/generic/apiCtrl'
 
 //services
-import triggerDialog from "../../../services/triggerDialog";
+import triggerDialog from '../../../services/triggerDialog'
 
 //layputs
-import FlexItem from "../../../layouts/FlexItem";
+import FlexItem from '../../../layouts/FlexItem'
 
 //assets
 //assets
@@ -22,17 +22,17 @@ import {
   claps as claps2,
   comments as comments2,
   share as share2,
-  views as view2,
-} from "../../../assets/svgIcons/SvgIcons";
+  views as view2
+} from '../../../assets/svgIcons/SvgIcons'
 
 const Layout = styled.div`
   overflow: hidden;
-`;
+`
 
 const PopLayout = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
 
 const Title = styled.h3`
   textalign: left;
@@ -40,7 +40,7 @@ const Title = styled.h3`
   color: #f95f0b;
   background-color: #00171f;
   padding: 15px 10px;
-`;
+`
 
 const FilterLayout = styled.div`
   display: flex;
@@ -49,15 +49,15 @@ const FilterLayout = styled.div`
 
   h5 {
     color: #00171f;
-    font-family: "Work Sans", sans-serif;
+    font-family: 'Work Sans', sans-serif;
   }
-`;
+`
 
 const IconsCont = styled.div`
   margin: 0 0 0 10px;
   display: flex;
   align-items: center;
-`;
+`
 
 const Icon = styled.span`
   padding: 15px;
@@ -66,27 +66,27 @@ const Icon = styled.span`
   }
   svg {
     fill: coral;
-    width: ${(props) => (props.selected ? "30px" : "25px")};
+    width: ${props => (props.selected ? '30px' : '25px')};
     padding-bottom: 5px;
-    border-bottom: ${(props) => (props.selected ? "3px solid coral" : "none")};
+    border-bottom: ${props => (props.selected ? '3px solid coral' : 'none')};
     transition: all ease 500ms;
   }
-`;
+`
 
 const AsidePostsCont = styled.div`
   display: flex;
-  width: ${(props) => props.popWidth + "px"};
-`;
+  width: ${props => props.popWidth + 'px'};
+`
 
 const MorePostsCont = styled.div`
   display: flex;
   justify-content: center;
-`;
+`
 
 const MorePosts = styled.div`
   box-shadow: 0px 0px 12px 0 rgba(0, 0, 0, 0.25);
   border-radius: 8px;
-  padding: ${(props) => (props.noPadding ? "0" : "15px 30px 20px 15px")};
+  padding: ${props => (props.noPadding ? '0' : '15px 30px 20px 15px')};
   text-align: center;
   box-sizing: border-box;
   background: #00171f;
@@ -96,228 +96,228 @@ const MorePosts = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 const PostsLay = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
-`;
+`
 
 const LoadingCont = styled.div`
-  height: ${(props) => props.postsLayH + 1 + "px"};
+  height: ${props => props.postsLayH + 1 + 'px'};
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
-const Popular = ({ blog, setFilter, setPopularArr, device }) => {
+const Popular = ({blog, setFilter, setPopularArr, device}) => {
   //state Managment
-  const [isFilterLoading, setIsFilterLoading] = useState(false);
-  const [isLoadingPopularPosts, setIsLoadingPopularPosts] = useState(false);
-  const [popWidth, setPopWidth] = useState(0);
+  const [isFilterLoading, setIsFilterLoading] = useState(false)
+  const [isLoadingPopularPosts, setIsLoadingPopularPosts] = useState(false)
+  const [popWidth, setPopWidth] = useState(0)
 
-  const [postsLayH, setPostsLayH] = useState(251);
-  const postsLayRef = React.createRef();
+  const [postsLayH, setPostsLayH] = useState(251)
+  const postsLayRef = React.createRef()
 
   useEffect(() => {
     switch (device) {
-      case "pc": {
-        const PostWidth = ((window.outerWidth * 8) / 12) * 0.3;
+      case 'pc': {
+        const PostWidth = ((window.outerWidth * 8) / 12) * 0.3
 
-        setPopWidth(PostWidth * blog.popularArticlesArr.length);
+        setPopWidth(PostWidth * blog.popularArticlesArr.length)
 
-        break;
+        break
       }
 
-      case "tablet": {
-        const PostWidth = ((window.outerWidth * 12) / 12) * 0.35;
+      case 'tablet': {
+        const PostWidth = ((window.outerWidth * 12) / 12) * 0.35
 
-        setPopWidth(PostWidth * blog.popularArticlesArr.length);
+        setPopWidth(PostWidth * blog.popularArticlesArr.length)
 
-        break;
+        break
       }
 
       default: {
-        const PostWidth = ((window.outerWidth * 12) / 12) * 0.8;
+        const PostWidth = ((window.outerWidth * 12) / 12) * 0.8
 
-        setPopWidth(PostWidth * blog.popularArticlesArr.length);
+        setPopWidth(PostWidth * blog.popularArticlesArr.length)
 
-        break;
+        break
       }
     }
-  }, [blog.popularArticlesArr.length, device]);
+  }, [blog.popularArticlesArr.length, device])
 
   useEffect(() => {
     console.log(
-      "postsLayRef.current.clientHeight",
+      'postsLayRef.current.clientHeight',
       postsLayRef.current.clientHeight
-    );
+    )
 
-    postsLayRef.current && setPostsLayH(postsLayRef.current.clientHeight);
-  }, [postsLayH, postsLayRef]);
+    postsLayRef.current && setPostsLayH(postsLayRef.current.clientHeight)
+  }, [postsLayH, postsLayRef])
 
   // Event Handlers
-  const onFilterIconClick = async (filter) => {
-    const lastFilter = blog.popularFilter;
+  const onFilterIconClick = async filter => {
+    const lastFilter = blog.popularFilter
 
     switch (filter) {
-      case "views":
+      case 'views':
         setFilter({
           views: true,
           shares: false,
           comments: false,
-          claps: false,
-        });
-        break;
-      case "claps":
+          claps: false
+        })
+        break
+      case 'claps':
         setFilter({
           claps: true,
           views: false,
           shares: false,
-          comments: false,
-        });
-        break;
-      case "shares":
+          comments: false
+        })
+        break
+      case 'shares':
         setFilter({
           shares: true,
           views: false,
           comments: false,
-          claps: false,
-        });
-        break;
-      case "comments":
+          claps: false
+        })
+        break
+      case 'comments':
         setFilter({
           comments: true,
           shares: false,
           views: false,
-          claps: false,
-        });
+          claps: false
+        })
 
-        break;
+        break
 
       default:
         setFilter({
           views: true,
           shares: false,
           comments: false,
-          claps: false,
-        });
-        break;
+          claps: false
+        })
+        break
     }
 
-    setIsFilterLoading(true);
+    setIsFilterLoading(true)
 
     apiCtrl(
       {
-        url: "api/filterPopular",
+        url: 'api/filterPopular',
         data: {
           filter,
           popularTotalCount: blog.articlesCount,
-          popularCount: 0,
+          popularCount: 0
         },
-        method: "put",
+        method: 'put'
       },
-      (res) => {
-        if (res.data.status === "OK") {
-          setIsFilterLoading(false);
-          setPopularArr([...res.data.popularArr]);
-          return;
+      res => {
+        if (res.data.status === 'OK') {
+          setIsFilterLoading(false)
+          setPopularArr([...res.data.popularArr])
+          return
         }
 
-        console.log("Error changing filter", res.data.status);
-        setFilter(lastFilter);
-        setIsFilterLoading(false);
+        console.log('Error changing filter', res.data.status)
+        setFilter(lastFilter)
+        setIsFilterLoading(false)
       },
-      (err) => {
-        console.log("Error changing filter err", err);
-        const message = err.response.data.message;
+      err => {
+        console.log('Error changing filter err', err)
+        const message = err.response.data.message
         triggerDialog({
-          title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`,
-        });
-        setIsFilterLoading(false);
-        setFilter(lastFilter);
+          title: 'Error 🤬',
+          body: `There was a error : ${message}. Please, try again later`
+        })
+        setIsFilterLoading(false)
+        setFilter(lastFilter)
       }
-    );
-  };
+    )
+  }
 
   const MorePopularPostsHandler = async () => {
-    setIsLoadingPopularPosts(true);
+    setIsLoadingPopularPosts(true)
 
-    let filter;
-    const filterObj = blog.popularFilter;
+    let filter
+    const filterObj = blog.popularFilter
 
-    Object.keys(filterObj).forEach((key) => {
-      let value = filterObj[key];
+    Object.keys(filterObj).forEach(key => {
+      let value = filterObj[key]
 
       if (value === true) {
-        filter = key;
-        return;
+        filter = key
+        return
       }
-    });
+    })
 
     apiCtrl(
       {
-        url: "api/filterPopular",
+        url: 'api/filterPopular',
         data: {
           filter,
           popularTotalCount: blog.articlesCount,
-          popularCount: blog.popularArticlesArr.length,
+          popularCount: blog.popularArticlesArr.length
         },
-        method: "put",
+        method: 'put'
       },
-      (res) => {
-        if (res.data.status === "OK") {
-          setPopularArr([...blog.popularArticlesArr, ...res.data.popularArr]);
-          setIsFilterLoading(false);
-          return;
+      res => {
+        if (res.data.status === 'OK') {
+          setPopularArr([...blog.popularArticlesArr, ...res.data.popularArr])
+          setIsFilterLoading(false)
+          return
         }
 
-        console.log("Error searching filter", res.data.status);
+        console.log('Error searching filter', res.data.status)
         triggerDialog({
-          title: "Error 🤬",
-          body: `There was a error : ${res.data.message}. Please, try again later`,
-        });
-        setIsFilterLoading(false);
+          title: 'Error 🤬',
+          body: `There was a error : ${res.data.message}. Please, try again later`
+        })
+        setIsFilterLoading(false)
       },
-      (err) => {
-        console.log("Error changing filter err", err);
-        console.log("navbar logoutclickhandler  Err", err);
-        const message = err.response.data.message;
+      err => {
+        console.log('Error changing filter err', err)
+        console.log('navbar logoutclickhandler  Err', err)
+        const message = err.response.data.message
         triggerDialog({
-          title: "Error 🤬",
-          body: `There was a error : ${message}. Please, try again later`,
-        });
-        setIsFilterLoading(false);
+          title: 'Error 🤬',
+          body: `There was a error : ${message}. Please, try again later`
+        })
+        setIsFilterLoading(false)
       }
-    );
-  };
+    )
+  }
 
   //redering variables
-  let { popularArticlesArr } = blog;
+  let {popularArticlesArr} = blog
 
-  let popPostsArray;
+  let popPostsArray
 
   if (popularArticlesArr.length === 0) {
     popularArticlesArr = [
       {
         title: null,
-        postImg: "",
-        postGradient: "",
+        postImg: '',
+        postGradient: '',
         keywords: [],
-        author: "",
-        date: "",
-        url: "",
-        avatar: "",
-        summaryTextHtml: "",
-      },
-    ];
-    popPostsArray = [];
+        author: '',
+        date: '',
+        url: '',
+        avatar: '',
+        summaryTextHtml: ''
+      }
+    ]
+    popPostsArray = []
   } else {
     if (blog.articlesCount > popularArticlesArr.length) {
-      popPostsArray = [...popularArticlesArr, { moreBtn: "exist" }];
+      popPostsArray = [...popularArticlesArr, {moreBtn: 'exist'}]
     } else {
-      popPostsArray = [...popularArticlesArr];
+      popPostsArray = [...popularArticlesArr]
     }
   }
 
@@ -333,21 +333,21 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
             url,
             summaryTextHtml,
             postImg,
-            postGradient,
-          } = post;
+            postGradient
+          } = post
 
-          let avatar;
+          let avatar
 
-          avatar = post.avatar;
-          const size = 4;
+          avatar = post.avatar
+          const size = 4
 
-          if (post.moreBtn && post.moreBtn === "exist") {
+          if (post.moreBtn && post.moreBtn === 'exist') {
             return (
               <FlexItem
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center'
                 }}
                 key={i}
                 size={size}
@@ -355,17 +355,17 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
                 <MorePostsCont>
                   <MorePosts
                     onClick={MorePopularPostsHandler}
-                    id="MorePopularPosts"
+                    id='MorePopularPosts'
                     noPadding={showLoading}
                   >
-                    {showLoading ? <Loading /> : "More..."}
+                    {showLoading ? <Loading /> : 'More...'}
                   </MorePosts>
                 </MorePostsCont>
               </FlexItem>
-            );
+            )
           }
-          const showLoading = isLoadingPopularPosts;
-          console.log(`PopPostCard${i}`); //TODO rm
+          const showLoading = isLoadingPopularPosts
+          console.log(`PopPostCard${i}`) //TODO rm
           return (
             <FlexItem key={i}>
               <PostCard
@@ -383,12 +383,12 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
                 summaryTextHtml={summaryTextHtml}
               />
             </FlexItem>
-          );
+          )
         })
-      : null;
+      : null
 
   return (
-    <Layout id="asideLayout">
+    <Layout id='asideLayout'>
       <section>
         <PopLayout>
           <Title>Popular Posts</Title>
@@ -398,7 +398,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
             <IconsCont>
               <Icon
                 onClick={() => {
-                  onFilterIconClick("views");
+                  onFilterIconClick('views')
                 }}
                 selected={blog.popularFilter.views}
               >
@@ -406,7 +406,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
               </Icon>
               <Icon
                 onClick={() => {
-                  onFilterIconClick("claps");
+                  onFilterIconClick('claps')
                 }}
                 selected={blog.popularFilter.claps}
               >
@@ -414,7 +414,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
               </Icon>
               <Icon
                 onClick={() => {
-                  onFilterIconClick("shares");
+                  onFilterIconClick('shares')
                 }}
                 selected={blog.popularFilter.shares}
               >
@@ -422,7 +422,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
               </Icon>
               <Icon
                 onClick={() => {
-                  onFilterIconClick("comments");
+                  onFilterIconClick('comments')
                 }}
                 selected={blog.popularFilter.comments}
               >
@@ -437,7 +437,7 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
             </LoadingCont>
           ) : (
             <PostsLay ref={postsLayRef}>
-              <AsidePostsCont popWidth={popWidth} id="postsContainer">
+              <AsidePostsCont popWidth={popWidth} id='postsContainer'>
                 {asidePosts}
               </AsidePostsCont>
             </PostsLay>
@@ -445,23 +445,22 @@ const Popular = ({ blog, setFilter, setPopularArr, device }) => {
         </PopLayout>
       </section>
     </Layout>
-  );
-};
+  )
+}
 
-const mapStateToProps2 = (state) => {
+const mapStateToProps2 = state => {
   return {
     blog: state.blog,
-    device: state.resize.device,
-  };
-};
+    device: state.resize.device
+  }
+}
 
-const mapDispachToProps = (dispatch) => {
+const mapDispachToProps = dispatch => {
   return {
     //acciones
-    setPopularArr: (arr) => dispatch({ type: "SET_POPULAR_ARR", payload: arr }),
-    setFilter: (filter) =>
-      dispatch({ type: "SET_POPULAR_FILTER", payload: filter }),
-  };
-};
+    setPopularArr: arr => dispatch({type: 'SET_POPULAR_ARR', payload: arr}),
+    setFilter: filter => dispatch({type: 'SET_POPULAR_FILTER', payload: filter})
+  }
+}
 
-export default connect(mapStateToProps2, mapDispachToProps)(Popular);
+export default connect(mapStateToProps2, mapDispachToProps)(Popular)

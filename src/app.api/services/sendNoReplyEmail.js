@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer'
 
 const sendNoReplyEmail = (html, subject, email, attachments) => {
   return new Promise((resolve, reject) => {
@@ -7,13 +7,13 @@ const sendNoReplyEmail = (html, subject, email, attachments) => {
       // Generate test SMTP service account from ethereal.email
       // Only needed if you don't have a real mail account for testing
       let testAccount = {
-        user: "noreply@swordvoice.com",
+        user: 'noreply@swordvoice.com',
         pass: process.env.NOREPLYPWD
-      };
+      }
 
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
-        host: "swordvoice.com",
+        host: 'swordvoice.com',
         port: 587, //587,
         // secure: false, // true for 465, false for other ports
         auth: {
@@ -26,7 +26,7 @@ const sendNoReplyEmail = (html, subject, email, attachments) => {
         requireTLS: true,
         debug: false,
         logger: false
-      });
+      })
 
       // send mail with defined transport object
 
@@ -36,10 +36,10 @@ const sendNoReplyEmail = (html, subject, email, attachments) => {
         subject: `${subject}`, // Subject line
         html: `${html}`, // html body
         attachments
-      });
+      })
 
-      resolve("Message sent");
-      console.log("Message sent: %s", info.messageId);
+      resolve('Message sent')
+      console.log('Message sent: %s', info.messageId)
       // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
       // Preview only available when sending through an Ethereal account
@@ -47,12 +47,12 @@ const sendNoReplyEmail = (html, subject, email, attachments) => {
     }
 
     main().catch(err => {
-      console.log("error sending mail", err);
+      console.log('error sending mail', err)
       // res.status(404).json(err);
 
-      reject(err);
-    });
-  });
-};
+      reject(err)
+    })
+  })
+}
 
-export default sendNoReplyEmail;
+export default sendNoReplyEmail

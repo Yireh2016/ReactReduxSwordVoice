@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import updateReplyClaps from "../../../apiCalls/updateReplyClaps";
-import { connect } from "react-redux";
+import React, {useState} from 'react'
+import styled from 'styled-components'
+import updateReplyClaps from '../../../apiCalls/updateReplyClaps'
+import {connect} from 'react-redux'
 
 //assets
-import { claps as clapsIcon } from "../../../assets/svgIcons/SvgIcons";
+import {claps as clapsIcon} from '../../../assets/svgIcons/SvgIcons'
 
 const ReplyCard = styled.div`
   padding: 15px 30px 20px 15px;
@@ -14,7 +14,7 @@ const ReplyCard = styled.div`
   display: flex;
   box-sizing: border-box;
   width: 100%;
-`;
+`
 
 const AvatarCont = styled.div`
   width: 50px;
@@ -23,7 +23,7 @@ const AvatarCont = styled.div`
     margin: 0 10px 0 0;
     width: 30px;
   }
-`;
+`
 
 const Avatar = styled.div`
   width: 50px;
@@ -35,13 +35,13 @@ const Avatar = styled.div`
   border-radius: 100%;
   background-size: cover;
   background-position: center center;
-`;
+`
 
 const ReplyCont = styled.div`
   display: flex;
   flex-direction: column;
   width: 92%;
-`;
+`
 
 const UserInfo = styled.div`
   margin: 10px 0 10px 0;
@@ -50,7 +50,7 @@ const UserInfo = styled.div`
   }
   display: flex;
   flex-direction: column;
-`;
+`
 
 const UserName = styled.span`
   color: var(--orange);
@@ -59,14 +59,14 @@ const UserName = styled.span`
     font-size: 14px;
   }
   font-weight: bold;
-`;
+`
 const ReplyDate = styled.span`
   color: var(--blueDark);
   font-size: 12px;
   font-weight: 300;
 
   margin: 0 0 0 5px;
-`;
+`
 
 const Text = styled.div`
   font-weight: normal;
@@ -82,15 +82,15 @@ const Text = styled.div`
       font-size: 14px;
     }
   }
-`;
+`
 const ReplyFooter = styled.div`
   display: flex;
-`;
+`
 const SocialInteractions = styled.div`
   flex-grow: 1;
   display: flex;
   align-items: center;
-`;
+`
 const Icon = styled.span`
   position: relative;
 
@@ -103,20 +103,20 @@ const Icon = styled.span`
     fill: #ff9575;
     margin: 0 8px;
     transform: ${props =>
-      props.rotate === true ? "rotate(180deg)" : "rotate(0deg)"};
+      props.rotate === true ? 'rotate(180deg)' : 'rotate(0deg)'};
 
     &:hover {
       cursor: pointer;
     }
   }
-`;
+`
 
 const Counter = styled.span`
   color: #004059;
   font-weight: bold;
   font-size: 0.7rem;
   user-select: none;
-`;
+`
 
 const Reply = ({
   userAvatar,
@@ -128,40 +128,40 @@ const Reply = ({
   article,
   setResponsesClaps
 }) => {
-  const [clapsTimer, setClapsTimer] = useState();
-  const [clapsAdder, setClapsAdder] = useState(0);
+  const [clapsTimer, setClapsTimer] = useState()
+  const [clapsAdder, setClapsAdder] = useState(0)
 
   const clapsAdderHandler = () => {
     if (clapsTimer) {
-      clearTimeout(clapsTimer);
+      clearTimeout(clapsTimer)
     }
-    setClapsAdder(clapsAdder + 1);
+    setClapsAdder(clapsAdder + 1)
 
     const timer = setTimeout(async () => {
-      setClapsAdder(0);
+      setClapsAdder(0)
 
       console.log(
-        "article.comments[index].claps",
+        'article.comments[index].claps',
         article.comments[index].claps
-      );
+      )
       //api call
       const updateReplyClapsRes = await updateReplyClaps(
         article.id,
         commentIndex,
         index,
         clapsAdder + 1
-      );
+      )
 
-      console.log(" updateReplyClapsRes", updateReplyClapsRes);
+      console.log(' updateReplyClapsRes', updateReplyClapsRes)
 
-      if (updateReplyClapsRes.status === "OK") {
-        setResponsesClaps(commentIndex, index, updateReplyClapsRes.result);
+      if (updateReplyClapsRes.status === 'OK') {
+        setResponsesClaps(commentIndex, index, updateReplyClapsRes.result)
       }
 
-      return;
-    }, 1000);
-    setClapsTimer(timer);
-  };
+      return
+    }, 1000)
+    setClapsTimer(timer)
+  }
 
   return (
     // <ReplyCardLayout>
@@ -170,7 +170,7 @@ const Reply = ({
         <Avatar
           style={{
             backgroundImage:
-              userAvatar && `url('${userAvatar}`.replace("big", "small")
+              userAvatar && `url('${userAvatar}`.replace('big', 'small')
           }}
         />
       </AvatarCont>
@@ -187,14 +187,14 @@ const Reply = ({
             <Icon onClick={clapsAdderHandler}>
               {clapsAdder !== 0 && (
                 <Counter
-                  id="clapsAdderCounter"
+                  id='clapsAdderCounter'
                   style={{
-                    position: "absolute",
-                    backgroundColor: "#004059",
-                    color: "white",
-                    borderRadius: "100%",
-                    padding: "7px",
-                    top: "-33px"
+                    position: 'absolute',
+                    backgroundColor: '#004059',
+                    color: 'white',
+                    borderRadius: '100%',
+                    padding: '7px',
+                    top: '-33px'
                   }}
                 >
                   +{clapsAdder}
@@ -212,8 +212,8 @@ const Reply = ({
       </ReplyCont>
     </ReplyCard>
     // </ReplyCardLayout>
-  );
-};
+  )
+}
 
 // userAvatar={replyData.userAvatar}
 //             userName={replyData.userName}
@@ -225,21 +225,18 @@ const Reply = ({
 const mapStateToProps = state => {
   return {
     article: state.article
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
     setResponsesClaps: (iComment, iResponse, count) =>
       dispach({
-        type: "SET_RESPONSE_CLAPS",
-        payload: { iComment, iResponse, count }
+        type: 'SET_RESPONSE_CLAPS',
+        payload: {iComment, iResponse, count}
       })
-  };
-};
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(Reply);
+export default connect(mapStateToProps, mapDispachToProps)(Reply)

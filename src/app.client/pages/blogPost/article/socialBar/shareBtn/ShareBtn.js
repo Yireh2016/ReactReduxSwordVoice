@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react'
+import styled from 'styled-components'
 
-import CopyLink from "./copyLink/CopyLink";
+import CopyLink from './copyLink/CopyLink'
 
 import {
   FacebookShareButton,
@@ -28,7 +28,7 @@ import {
   // InstapaperShareButton,
   EmailShareButton,
   EmailIcon
-} from "react-share";
+} from 'react-share'
 
 const Layout = styled.div`
   position: fixed;
@@ -41,7 +41,7 @@ const Layout = styled.div`
   height: 100vh;
   z-index: 200;
   background-color: rgba(0, 0, 0, 0.5);
-`;
+`
 
 const Container = styled.div`
   display: flex;
@@ -49,17 +49,17 @@ const Container = styled.div`
   border-radius: 5px;
 
   background-color: white;
-`;
+`
 
 const ButtonCont = styled.div`
   display: flex;
   padding: 15px;
-`;
+`
 
 const Title = styled.h4`
   text-align: center;
   padding: 30px 15px 0 15px;
-`;
+`
 
 const Icon = styled.div`
   padding: 5px 15px 15px 15px;
@@ -78,13 +78,13 @@ const Icon = styled.div`
       cursor: pointer;
     }
   }
-`;
+`
 
 const Counter = styled.div`
   color: #004059;
   font-weight: bold;
   font-size: 0.7rem;
-`;
+`
 
 // const postData = {
 //   url: "https://swordvoice.com/blog/",
@@ -102,21 +102,21 @@ const ShareBtn = ({
   totalCount,
   postData
 }) => {
-  const [twitterCount, setTwitterCount] = useState(0);
-  const [linkedInCount, setLinkedInCount] = useState(0);
-  const [emailCount, setEmailCount] = useState(0);
-  const [copyLinkCount, setCopyLinkCount] = useState(0);
-  const [whatsappCount, setWhatsappCount] = useState(0);
-  const [facebookCount, setFacebookCount] = useState(0);
+  const [twitterCount, setTwitterCount] = useState(0)
+  const [linkedInCount, setLinkedInCount] = useState(0)
+  const [emailCount, setEmailCount] = useState(0)
+  const [copyLinkCount, setCopyLinkCount] = useState(0)
+  const [whatsappCount, setWhatsappCount] = useState(0)
+  const [facebookCount, setFacebookCount] = useState(0)
 
   useEffect(() => {
-    setTwitterCount(twitter);
-    setLinkedInCount(linkedIn);
-    setEmailCount(email);
-    setCopyLinkCount(copyLink);
-    setWhatsappCount(whatsapp);
-    setFacebookCount(facebook);
-  }, []);
+    setTwitterCount(twitter)
+    setLinkedInCount(linkedIn)
+    setEmailCount(email)
+    setCopyLinkCount(copyLink)
+    setWhatsappCount(whatsapp)
+    setFacebookCount(facebook)
+  }, [])
 
   useEffect(() => {
     totalCount &&
@@ -126,18 +126,18 @@ const ShareBtn = ({
           emailCount +
           copyLinkCount +
           whatsappCount
-      );
-  }, [twitterCount, linkedInCount, emailCount, copyLinkCount]);
+      )
+  }, [twitterCount, linkedInCount, emailCount, copyLinkCount])
 
   return (
     <Layout
       onClick={e => {
-        onClose();
+        onClose()
       }}
     >
       <Container
         onClick={e => {
-          e.stopPropagation();
+          e.stopPropagation()
         }}
       >
         <Title>Social Share Control Room</Title>
@@ -147,9 +147,9 @@ const ShareBtn = ({
               url={postData.url}
               title={postData.title}
               hashtags={postData.hashtag}
-              via="SwordVoice_1"
+              via='SwordVoice_1'
               onShareWindowClose={() => {
-                setTwitterCount(twitterCount + 1);
+                setTwitterCount(twitterCount + 1)
               }}
             >
               <TwitterIcon size={32} round />
@@ -164,7 +164,7 @@ const ShareBtn = ({
               windowWidth={750}
               windowHeight={600}
               onShareWindowClose={() => {
-                setLinkedInCount(linkedInCount + 1);
+                setLinkedInCount(linkedInCount + 1)
               }}
             >
               <LinkedinIcon size={32} round />
@@ -183,8 +183,8 @@ const ShareBtn = ({
 
             <FacebookShareCount url={postData.url}>
               {count => {
-                setFacebookCount(count + facebookCount);
-                return <Counter>{count + facebookCount}</Counter>;
+                setFacebookCount(count + facebookCount)
+                return <Counter>{count + facebookCount}</Counter>
               }}
             </FacebookShareCount>
           </Icon>
@@ -194,7 +194,7 @@ const ShareBtn = ({
               url={postData.url}
               subject={postData.emailSubject}
               beforeOnClick={() => {
-                setEmailCount(emailCount + 1);
+                setEmailCount(emailCount + 1)
               }}
             >
               <EmailIcon size={32} round />
@@ -207,7 +207,7 @@ const ShareBtn = ({
               url={postData.url}
               subject={postData.emailSubject}
               onShareWindowClose={() => {
-                setWhatsappCount(whatsappCount + 1);
+                setWhatsappCount(whatsappCount + 1)
               }}
             >
               <WhatsappIcon size={32} round />
@@ -220,7 +220,7 @@ const ShareBtn = ({
               url={postData.url}
               size={32}
               onClick={() => {
-                setCopyLinkCount(copyLinkCount + 1);
+                setCopyLinkCount(copyLinkCount + 1)
               }}
             />
             <Counter>{copyLinkCount}</Counter>
@@ -228,7 +228,7 @@ const ShareBtn = ({
         </ButtonCont>
       </Container>
     </Layout>
-  );
-};
+  )
+}
 
-export default ShareBtn;
+export default ShareBtn

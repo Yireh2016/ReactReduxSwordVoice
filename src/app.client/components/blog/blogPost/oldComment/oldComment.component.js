@@ -1,32 +1,32 @@
-import React from "react";
-import "./oldComment.css";
-import Response from "../../response/Response";
+import React from 'react'
+import './oldComment.css'
+import Response from '../../response/Response'
 
 const OldComment = props => {
   return (
-    <div className="oldCommentsLayout fila">
-      <div className="fila">
+    <div className='oldCommentsLayout fila'>
+      <div className='fila'>
         <div>
-          <div className="col-12 grid oldAvatarCont">
+          <div className='col-12 grid oldAvatarCont'>
             <div>
               <div
-                className="oldAvatarImg avatarImg"
+                className='oldAvatarImg avatarImg'
                 style={{
-                  backgroundImage: "url(" + props.userAvatar + ")"
+                  backgroundImage: 'url(' + props.userAvatar + ')'
                 }}
               />
             </div>
             <p>
-              <span className="userName">{props.userName} </span>
+              <span className='userName'>{props.userName} </span>
               <br />
-              <span className="verbName">wrote:</span>
+              <span className='verbName'>wrote:</span>
             </p>
           </div>
-          <div className="col-12 grid">
+          <div className='col-12 grid'>
             <p>{props.comments}</p>
           </div>
-          <div className="postDateCont">
-            <span className="postDate">{props.date}</span>
+          <div className='postDateCont'>
+            <span className='postDate'>{props.date}</span>
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@ const OldComment = props => {
       />
       <hr />
     </div>
-  );
-};
+  )
+}
 
-export default OldComment;
+export default OldComment

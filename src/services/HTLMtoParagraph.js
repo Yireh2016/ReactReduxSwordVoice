@@ -1,10 +1,10 @@
 const HTLMtoParagraph = htmlStr => {
   if (htmlStr) {
-    htmlStr = htmlStr.replace(/<\/p>/gi, "\n");
+    htmlStr = htmlStr.replace(/<\/p>/gi, '\n')
 
-    htmlStr = htmlStr.replace(/<p>/gi, "");
+    htmlStr = htmlStr.replace(/<p>/gi, '')
   }
-  return htmlStr;
-};
+  return htmlStr
+}
 
-export default HTLMtoParagraph;
+export default HTLMtoParagraph

@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Ad1Cont = styled.div`
   font-weight: bold;
@@ -15,7 +15,7 @@ const Ad1Cont = styled.div`
   @media (max-width: 700px) {
     margin-top: 0;
   }
-`;
+`
 
 const Ad2Cont = styled.div`
   font-weight: bold;
@@ -27,9 +27,9 @@ const Ad2Cont = styled.div`
   height: 26vh;
   justify-content: center;
   align-items: center;
-  ${"" /* background-color: #00405930; */}
+  ${'' /* background-color: #00405930; */}
   padding: 0 34px;
-`;
+`
 
 const AdLay = styled.section`
   height: calc(100vh);
@@ -44,11 +44,11 @@ const AdLay = styled.section`
     height: 100%;
     position: static;
   }
-`;
+`
 
 export const Ad1 = () => {
-  return <Ad1Cont>Our Courses are comming soon...</Ad1Cont>;
-};
+  return <Ad1Cont>Our Courses are comming soon...</Ad1Cont>
+}
 
 export const Ad2 = () => {
   return (
@@ -58,5 +58,5 @@ export const Ad2 = () => {
         tune
       </Ad2Cont>
     </AdLay>
-  );
-};
+  )
+}

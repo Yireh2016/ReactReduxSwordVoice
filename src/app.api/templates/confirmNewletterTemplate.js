@@ -1,7 +1,7 @@
-export default ({ name, id }) => {
+export default ({name, id}) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
 
-  const webURL = process.env.WEB_URL;
+  const webURL = process.env.WEB_URL
 
   return `
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -262,5 +262,5 @@ target="_blank"><img alt="YouTube"
 </body>
 </html>
 
-`;
-};
+`
+}

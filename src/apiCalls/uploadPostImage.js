@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const uploadPostImage = (
   base64,
@@ -8,7 +8,7 @@ const uploadPostImage = (
   errFn,
   thumbnail
 ) => {
-  console.log("uploadPostImage sending image");
+  console.log('uploadPostImage sending image')
 
   axios
     .post(`${process.env.CDN_URL}/cdn/uploadPostImage`, {
@@ -18,18 +18,18 @@ const uploadPostImage = (
       thumbnail
     })
     .then(res => {
-      alert("file uploaded");
-      console.log("file uploaded", res);
-      if (successFn) successFn(res);
+      alert('file uploaded')
+      console.log('file uploaded', res)
+      if (successFn) successFn(res)
     })
     .catch(err => {
-      alert("uploadPostImage error on file uploading");
-      console.log("uploadPostImage error on file uploading", err);
+      alert('uploadPostImage error on file uploading')
+      console.log('uploadPostImage error on file uploading', err)
 
       if (errFn) {
-        errFn(err);
+        errFn(err)
       }
-    });
-};
+    })
+}
 
-export default uploadPostImage;
+export default uploadPostImage

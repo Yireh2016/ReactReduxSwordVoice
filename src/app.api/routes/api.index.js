@@ -1,5 +1,5 @@
-import express from "express";
-import mongoose from "mongoose";
+import express from 'express'
+import mongoose from 'mongoose'
 // import fs from "fs";
 
 //controllers
@@ -15,7 +15,7 @@ import {
   logoutCtrl,
   autoLogin,
   sendUserTempImageCtrl
-} from "../controllers/client/user";
+} from '../controllers/client/user'
 
 import {
   createPostCtrl,
@@ -29,7 +29,7 @@ import {
   addToSiteMapCtrl,
   removeSiteMapCtrl,
   createSiteMapCtrl
-} from "../controllers/cms/postsControllers";
+} from '../controllers/cms/postsControllers'
 import {
   socialCtrl,
   getMoreCommentsCtrl,
@@ -45,21 +45,21 @@ import {
   searchArticleCtrl,
   searchLastArticlesCtrl,
   advancedSearchDbCtrl
-} from "../controllers/client/articleCtrl";
+} from '../controllers/client/articleCtrl'
 
 import {
   sendContactFormCtrl,
   emailNewsVerificationCtrl
-} from "../controllers/visitor/visitorCtrl";
+} from '../controllers/visitor/visitorCtrl'
 
-import { updateUserCtrl } from "../controllers/cms/usersControllers";
+import {updateUserCtrl} from '../controllers/cms/usersControllers'
 
-let routerAPI = express.Router();
-let usersModel = mongoose.model("User");
+let routerAPI = express.Router()
+let usersModel = mongoose.model('User')
 
 function authAPI(req, res, next) {
   if (req.signedCookies.sessionID) {
-    return next();
+    return next()
   }
 
   // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
@@ -68,7 +68,7 @@ function authAPI(req, res, next) {
 
 function guestAPI(req, res, next) {
   if (req.signedCookies.guestID) {
-    return next();
+    return next()
   }
 
   // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
@@ -85,22 +85,22 @@ function guestAPI(req, res, next) {
 
 // insertar usuario en la DB en el SIGN UP
 //se usa en: signUpForm
-routerAPI.post("/signup", guestAPI, signUpCtrl);
+routerAPI.post('/signup', guestAPI, signUpCtrl)
 
-routerAPI.post("/createSiteMap", createSiteMapCtrl); //FIXME erase
+routerAPI.post('/createSiteMap', createSiteMapCtrl) //FIXME erase
 
-routerAPI.post("/signUpEmailConfirm", signUpEmailConfirmCtrl);
+routerAPI.post('/signUpEmailConfirm', signUpEmailConfirmCtrl)
 
-routerAPI.post("/addToSiteMap", authAPI, addToSiteMapCtrl);
+routerAPI.post('/addToSiteMap', authAPI, addToSiteMapCtrl)
 // hacer Login
 //se usa en: logInForm
-routerAPI.post("/login", guestAPI, loginCtrl);
+routerAPI.post('/login', guestAPI, loginCtrl)
 
-routerAPI.post("/sendUserTempImage", guestAPI, sendUserTempImageCtrl);
+routerAPI.post('/sendUserTempImage', guestAPI, sendUserTempImageCtrl)
 
-routerAPI.post("/sendContactForm", guestAPI, sendContactFormCtrl);
+routerAPI.post('/sendContactForm', guestAPI, sendContactFormCtrl)
 
-routerAPI.post("/getMoreSimilarPosts/", guestAPI, getMoreSimilarPostsCtrl);
+routerAPI.post('/getMoreSimilarPosts/', guestAPI, getMoreSimilarPostsCtrl)
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -110,103 +110,103 @@ routerAPI.post("/getMoreSimilarPosts/", guestAPI, getMoreSimilarPostsCtrl);
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.get("/logout", guestAPI, logoutCtrl);
+routerAPI.get('/logout', guestAPI, logoutCtrl)
 
-routerAPI.get("/emailVerification", emailVerificationCtrl);
-routerAPI.get("/passwordRecover", passwordRecoverCtrl);
+routerAPI.get('/emailVerification', emailVerificationCtrl)
+routerAPI.get('/passwordRecover', passwordRecoverCtrl)
 
-routerAPI.get("/emailNewsVerification", emailNewsVerificationCtrl);
+routerAPI.get('/emailNewsVerification', emailNewsVerificationCtrl)
 
-routerAPI.get("/recoveryPasswd", guestAPI, recoveryPasswdCtrl);
-routerAPI.get("/recoveryUsername", guestAPI, recoveryUsernameCtrl);
+routerAPI.get('/recoveryPasswd', guestAPI, recoveryPasswdCtrl)
+routerAPI.get('/recoveryUsername', guestAPI, recoveryUsernameCtrl)
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
-routerAPI.get("/users", authAPI, (req, res) => {
-  const { limit, skip } = req.body;
+routerAPI.get('/users', authAPI, (req, res) => {
+  const {limit, skip} = req.body
   usersModel
     .find()
     .select(
-      "userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate"
+      'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
     )
     .limit(limit)
     .skip(skip)
     .exec((err, users) => {
       if (err) {
-        console.log("err", err);
-        res.status(404).json(err);
-        return;
+        console.log('err', err)
+        res.status(404).json(err)
+        return
       }
 
-      res.status(200).json(users);
-    });
+      res.status(200).json(users)
+    })
 
   // const users = await usersModel.find();
 
   // console.log('users', users);
   // res.status().json(users);
-});
+})
 
 // obtener usuario especifico must be AUTH
 //se usa en: signUpForm
-routerAPI.get("/users/:userId", authAPI, (req, res) => {
+routerAPI.get('/users/:userId', authAPI, (req, res) => {
   usersModel
     .findById(req.params.userId)
     .select(
-      "userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate"
+      'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
     )
     .exec((err, user) => {
       if (err) {
-        res.status(501).json(`thre was an error: ${err}`);
+        res.status(501).json(`thre was an error: ${err}`)
       } else {
-        res.status(200).json(user);
+        res.status(200).json(user)
       }
-    });
-});
+    })
+})
 
 // Obtener email
 //se usa en: signUpForm
 // para verificar, en tiempo real, que el email del usuario no se encuentre duplicado
-routerAPI.get("/searchEmail/:email", guestAPI, (req, res) => {
-  const email = req.params.email;
-  usersModel.find({ userEmail: email }).exec((err, user) => {
+routerAPI.get('/searchEmail/:email', guestAPI, (req, res) => {
+  const email = req.params.email
+  usersModel.find({userEmail: email}).exec((err, user) => {
     if (err) {
-      res.status(501).json(`thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`)
     } else {
       user[0]
         ? res.status(200).json(user[0].userName)
-        : res.status(404).json("not found");
+        : res.status(404).json('not found')
     }
-  });
-});
+  })
+})
 
 //obtener  usuario especifico por username AUTH
 //se usa en: signUpForm
 // para verificar, en tiempo real, que el username del usuario no se encuentre duplicado
-routerAPI.get("/searchUser/:userName", guestAPI, (req, res) => {
-  const userName = req.params.userName;
-  usersModel.find({ userName: userName }).exec(function(err, userName) {
+routerAPI.get('/searchUser/:userName', guestAPI, (req, res) => {
+  const userName = req.params.userName
+  usersModel.find({userName: userName}).exec(function (err, userName) {
     if (err) {
-      res.status(501).json(`thre was an error: ${err}`);
+      res.status(501).json(`thre was an error: ${err}`)
     } else {
       userName[0]
         ? res.status(200).json(userName)
-        : res.status(404).json(userName);
+        : res.status(404).json(userName)
     }
-  });
-});
+  })
+})
 
 //obtener  usuario especifico por SessionID AUTH
 //se usa en: login del CMS
 // obtiene datos de usuario para hacer login en CMS
-routerAPI.get("/searchSessionID/", authAPI, autoLogin);
+routerAPI.get('/searchSessionID/', authAPI, autoLogin)
 
-routerAPI.get("/getMoreComments/", guestAPI, getMoreCommentsCtrl);
-routerAPI.get("/getMoreResponses/", guestAPI, getMoreResponsesCtrl);
-routerAPI.get("/getMorePosts/", guestAPI, getMorePostsCtrl);
-routerAPI.get("/searchArticle/", guestAPI, searchArticleCtrl);
-routerAPI.get("/searchLastArticles/", guestAPI, searchLastArticlesCtrl);
-routerAPI.get("/advancedSearchDb/", guestAPI, advancedSearchDbCtrl);
+routerAPI.get('/getMoreComments/', guestAPI, getMoreCommentsCtrl)
+routerAPI.get('/getMoreResponses/', guestAPI, getMoreResponsesCtrl)
+routerAPI.get('/getMorePosts/', guestAPI, getMorePostsCtrl)
+routerAPI.get('/searchArticle/', guestAPI, searchArticleCtrl)
+routerAPI.get('/searchLastArticles/', guestAPI, searchLastArticlesCtrl)
+routerAPI.get('/advancedSearchDb/', guestAPI, advancedSearchDbCtrl)
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -219,18 +219,18 @@ routerAPI.get("/advancedSearchDb/", guestAPI, advancedSearchDbCtrl);
 //se usa en contact y deberia usarse en PROFILE
 //para eliminar usuario de la DB
 
-routerAPI.delete("/removeSiteMap", authAPI, removeSiteMapCtrl);
-routerAPI.delete("/users/:userId", authAPI, (req, res) => {
-  usersModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
+routerAPI.delete('/removeSiteMap', authAPI, removeSiteMapCtrl)
+routerAPI.delete('/users/:userId', authAPI, (req, res) => {
+  usersModel.findOneAndDelete({userName: req.params.userId}).exec(err => {
     if (err) {
-      res.status(404).json(err);
-      return;
+      res.status(404).json(err)
+      return
     }
-    res.status(204).json({ message: "user removed" });
-  });
-});
+    res.status(204).json({message: 'user removed'})
+  })
+})
 
-routerAPI.delete("/deleteComment", authAPI, deleteCommentCtrl);
+routerAPI.delete('/deleteComment', authAPI, deleteCommentCtrl)
 
 // Eliminar todos
 //se usa en: DEVELOPMENT ONLY
@@ -252,38 +252,38 @@ routerAPI.delete("/deleteComment", authAPI, deleteCommentCtrl);
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.put("/sessionUpdate/:username", guestAPI, (req, res) => {
-  const username = req.params.username;
-  const sessionId = req.cookies.sessionId;
+routerAPI.put('/sessionUpdate/:username', guestAPI, (req, res) => {
+  const username = req.params.username
+  const sessionId = req.cookies.sessionId
   usersModel.findOneAndUpdate(
-    { userName: username },
+    {userName: username},
     {
       userSessionId: sessionId
     },
-    function(err) {
+    function (err) {
       if (err) {
-        console.log(err);
+        console.log(err)
       } else {
-        console.log("NEW SESSION ID ", sessionId);
+        console.log('NEW SESSION ID ', sessionId)
 
-        res.end("success");
+        res.end('success')
       }
     }
-  );
-});
+  )
+})
 
-routerAPI.put("/updatePasswd", updatePasswdCtrl);
+routerAPI.put('/updatePasswd', updatePasswdCtrl)
 
 //add comments
-routerAPI.put("/setComment", authAPI, setCommentCtrl);
-routerAPI.put("/updateCommentClaps", authAPI, updateCommentClaps);
-routerAPI.put("/updateReplyClaps", authAPI, updateReplyClaps);
+routerAPI.put('/setComment', authAPI, setCommentCtrl)
+routerAPI.put('/updateCommentClaps', authAPI, updateCommentClaps)
+routerAPI.put('/updateReplyClaps', authAPI, updateReplyClaps)
 
-routerAPI.put("/setReply", authAPI, setReplyCtrl);
+routerAPI.put('/setReply', authAPI, setReplyCtrl)
 
 //update post Social ej claps,share,comments
-routerAPI.put("/socialCounter", guestAPI, socialCtrl);
-routerAPI.put("/filterPopular", guestAPI, filterPopularCtrl);
+routerAPI.put('/socialCounter', guestAPI, socialCtrl)
+routerAPI.put('/filterPopular', guestAPI, filterPopularCtrl)
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -302,9 +302,9 @@ routerAPI.put("/filterPopular", guestAPI, filterPopularCtrl);
 //////////////////////////////////////
 
 //Crear un nuevo proyecto para crear un articulo
-routerAPI.post("/createPost", authAPI, createPostCtrl);
-routerAPI.post("/uploadTempFile", authAPI, uploadTempFileCtrl);
-routerAPI.post("/addClass", authAPI, addClassToPostCtrl);
+routerAPI.post('/createPost', authAPI, createPostCtrl)
+routerAPI.post('/uploadTempFile', authAPI, uploadTempFileCtrl)
+routerAPI.post('/addClass', authAPI, addClassToPostCtrl)
 // routerAPI.post("/deleteTempFile", authAPI, deleteTempFileCtrl);
 
 //////////////////////////////////////
@@ -317,13 +317,13 @@ routerAPI.post("/addClass", authAPI, addClassToPostCtrl);
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
-routerAPI.get("/getPosts", guestAPI, getPostCtrl);
+routerAPI.get('/getPosts', guestAPI, getPostCtrl)
 
-routerAPI.get("/getPosts/:projectName", authAPI, getPostCtrl);
+routerAPI.get('/getPosts/:projectName', authAPI, getPostCtrl)
 
-routerAPI.get("/getArticle/:projectName", guestAPI, getArticleCtrl);
+routerAPI.get('/getArticle/:projectName', guestAPI, getArticleCtrl)
 
-routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
+routerAPI.get('/getClasses/:filename', authAPI, getClassFromPostCtrl)
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -333,8 +333,8 @@ routerAPI.get("/getClasses/:filename", authAPI, getClassFromPostCtrl);
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.put("/updatePost", authAPI, updatePostCtrl);
-routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
+routerAPI.put('/updatePost', authAPI, updatePostCtrl)
+routerAPI.put('/updateUserProfile/:userName', authAPI, updateUserCtrl)
 
 //////////////////////////////////////
 //////////////////////////////////////
@@ -344,7 +344,7 @@ routerAPI.put("/updateUserProfile/:userName", authAPI, updateUserCtrl);
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.delete("/deletePost/:projectName", authAPI, deletePostCtrl);
+routerAPI.delete('/deletePost/:projectName', authAPI, deletePostCtrl)
 
 // routerAPI.get("/generateContent/", (req, res) => {
 //   articleModel.find({}).exec((err, articles) => {
@@ -369,4 +369,4 @@ routerAPI.delete("/deletePost/:projectName", authAPI, deletePostCtrl);
 //   });
 // });
 
-export default routerAPI;
+export default routerAPI

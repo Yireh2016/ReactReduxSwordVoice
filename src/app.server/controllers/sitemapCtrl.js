@@ -1,25 +1,25 @@
-import mongoose from "mongoose";
-import { createSitemap } from "sitemap";
+import mongoose from 'mongoose'
+import {createSitemap} from 'sitemap'
 
-let siteModel = mongoose.model("Site");
+let siteModel = mongoose.model('Site')
 
 const sitemapCtrl = (req, res) => {
   siteModel
     .find()
     .then(site => {
       if (site.length === 0) {
-        res.status(404).send("File Not Found");
-        return;
+        res.status(404).send('File Not Found')
+        return
       }
-      console.log("sitemap", site[0].sitemap);
-      const sitemapCreated = createSitemap(site[0].sitemap);
+      console.log('sitemap', site[0].sitemap)
+      const sitemapCreated = createSitemap(site[0].sitemap)
 
-      res.header("Content-Type", "application/xml");
-      res.status(200).send(sitemapCreated.toXML());
+      res.header('Content-Type', 'application/xml')
+      res.status(200).send(sitemapCreated.toXML())
     })
     .catch(() => {
-      res.status(404).send("File Not Found");
-    });
-};
+      res.status(404).send('File Not Found')
+    })
+}
 
-export default sitemapCtrl;
+export default sitemapCtrl

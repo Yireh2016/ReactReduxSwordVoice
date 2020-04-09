@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import styled from 'styled-components'
 //css
-import "./seoEditor.css";
-import keywordsToArr from "../../../services/keywordsToArr";
+import './seoEditor.css'
+import keywordsToArr from '../../../services/keywordsToArr'
 
 const SeoInputCont = styled.div`
   overflow: scroll;
@@ -15,52 +15,52 @@ const SeoInputCont = styled.div`
     overflow: hidden;
     width: 60%;
   }
-`;
+`
 
 class SeoEditor extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       title: this.props.elements[0].HTMLElementContent,
       keywords: this.props.seo.keywords,
       url: this.props.project.url,
       description: this.props.summary,
       tagList: this.props.seo.keywords
-    };
+    }
 
     this.tags = [
-      "Graphic Design",
-      "UX/UI",
-      "Web Design",
-      "Web Development",
-      "Programming",
-      "E-commerce",
-      "Digital Marketing",
-      "Mobile Apps"
-    ];
+      'Graphic Design',
+      'UX/UI',
+      'Web Design',
+      'Web Development',
+      'Programming',
+      'E-commerce',
+      'Digital Marketing',
+      'Mobile Apps'
+    ]
   }
 
   inputSEOHandler = e => {
     const {
-      target: { name, value }
-    } = e;
-    this.setState({ [name]: value });
-    if (name === "url") {
-      this.props.onProjectURLEdition(value);
-      return;
+      target: {name, value}
+    } = e
+    this.setState({[name]: value})
+    if (name === 'url') {
+      this.props.onProjectURLEdition(value)
+      return
     }
-    let arr = keywordsToArr(value);
-    this.props.onEditSEO({ keywords: value, keywordsList: arr });
-  };
+    let arr = keywordsToArr(value)
+    this.props.onEditSEO({keywords: value, keywordsList: arr})
+  }
   tagOptionHandler = e => {
     const {
-      target: { value }
-    } = e;
-    let arr = keywordsToArr(this.props.seo.keywords);
+      target: {value}
+    } = e
+    let arr = keywordsToArr(this.props.seo.keywords)
     // let arr = this.props.seo.keywords.match(/([^,])*,/g)
     //   ? this.props.seo.keywords.match(/([^,])*,/g)
     //   : [];
-    let arrLen = arr.length;
+    let arrLen = arr.length
     // for (let i = 0; i < arrLen; i++) {
     //   arr[i] = arr[i].substring(0, arr[i].length - 1);
     // }
@@ -68,31 +68,31 @@ class SeoEditor extends Component {
     for (let i = 0; i < arrLen; i++) {
       if (arr[i] === value) {
         arr = arr.filter(val => {
-          return val !== value;
-        });
+          return val !== value
+        })
       }
     }
     if (arrLen === arr.length) {
-      arr.push(value);
+      arr.push(value)
     }
 
-    let keywords = "";
+    let keywords = ''
     for (let i = 0; i < arr.length; i++) {
-      keywords = keywords + arr[i] + ",";
+      keywords = keywords + arr[i] + ','
     }
 
-    this.props.onEditSEO({ keywords: keywords, keywordsList: arr });
+    this.props.onEditSEO({keywords: keywords, keywordsList: arr})
 
-    this.setState({ tagList: arr });
-  };
+    this.setState({tagList: arr})
+  }
   render() {
     const tags = this.tags.map((tag, i) => {
-      let checked = false;
+      let checked = false
       if (this.props.seo.keywordsList.length > 0) {
-        let arr = this.props.seo.keywordsList;
+        let arr = this.props.seo.keywordsList
         for (let i = 0; i < arr.length; i++) {
           if (tag === arr[i]) {
-            checked = true;
+            checked = true
           }
         }
       }
@@ -101,69 +101,69 @@ class SeoEditor extends Component {
           <input
             onChange={this.tagOptionHandler}
             checked={checked}
-            type="checkbox"
-            name="tagsList"
+            type='checkbox'
+            name='tagsList'
             value={tag}
           />
           <span>{tag}</span>
         </div>
-      );
-    });
+      )
+    })
 
     return (
       <SeoInputCont>
-        <div className="readOnlySeoEditor">
+        <div className='readOnlySeoEditor'>
           <label>
             <span>Title</span>
             <textarea
               readOnly
               value={this.state.title}
-              style={{ backgroundColor: "transparent" }}
-              cols="30"
-              rows="10"
+              style={{backgroundColor: 'transparent'}}
+              cols='30'
+              rows='10'
             />
           </label>
           <label>
             <span>Description</span>
             <textarea
               readOnly
-              style={{ backgroundColor: "transparent" }}
+              style={{backgroundColor: 'transparent'}}
               value={this.state.description}
-              cols="30"
-              rows="10"
+              cols='30'
+              rows='10'
             />
           </label>
         </div>
-        <div className="readOnlySeoEditor">
+        <div className='readOnlySeoEditor'>
           <label>
             URL
             <textarea
-              type="text"
-              name="url"
+              type='text'
+              name='url'
               value={this.state.url}
               onChange={this.inputSEOHandler}
-              cols="30"
-              rows="10"
+              cols='30'
+              rows='10'
             />
           </label>
           <label>
             Keywords
             <textarea
-              type="text"
-              name="keywords"
+              type='text'
+              name='keywords'
               value={this.props.seo.keywords}
               onChange={this.inputSEOHandler}
-              cols="30"
-              rows="10"
+              cols='30'
+              rows='10'
             />
           </label>
         </div>
-        <div className="readOnlySeoEditor">
+        <div className='readOnlySeoEditor'>
           <h6>Tags:</h6>
-          <div className="tagList">{tags}</div>
+          <div className='tagList'>{tags}</div>
         </div>
       </SeoInputCont>
-    );
+    )
   }
 }
 
@@ -173,20 +173,17 @@ const mapStateToProps = state => {
     seo: state.postCreation.seo,
     summary: state.postCreation.summary,
     project: state.postCreation.project
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
-    onEditSEO: payload => dispach({ type: "SEO_EDITION", payload: payload }),
+    onEditSEO: payload => dispach({type: 'SEO_EDITION', payload: payload}),
 
     onProjectURLEdition: payload =>
-      dispach({ type: "PROJECT_URL_EDITION", payload: payload })
-  };
-};
+      dispach({type: 'PROJECT_URL_EDITION', payload: payload})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(SeoEditor);
+export default connect(mapStateToProps, mapDispachToProps)(SeoEditor)

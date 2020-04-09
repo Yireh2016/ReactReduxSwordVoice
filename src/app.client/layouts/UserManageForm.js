@@ -1,6 +1,6 @@
 //modules
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react'
+import styled from 'styled-components'
 //services
 
 const Layout = styled.div`
@@ -21,7 +21,7 @@ const Layout = styled.div`
     display: block;
     background-color: #f95f0b;
   }
-`;
+`
 
 const CloseBtn = styled.div`
   top: 20px;
@@ -33,7 +33,7 @@ const CloseBtn = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 const FormCard = styled.div`
   position: relative;
@@ -63,18 +63,18 @@ const FormCard = styled.div`
     max-width: 100%;
     box-sizing: border-box;
   }
-`;
+`
 /* max-width: none;
 max-height: none; */
-const UserManageForm = ({ children, onClick }) => {
-  const [formHeight, setFormHeight] = useState("");
+const UserManageForm = ({children, onClick}) => {
+  const [formHeight, setFormHeight] = useState('')
 
-  const formLayoutRef = React.createRef();
+  const formLayoutRef = React.createRef()
 
   useEffect(() => {
-    console.log("formLayoutRef.current", formLayoutRef.current);
-    setFormHeight(formLayoutRef.current.clientHeight);
-  }, []);
+    console.log('formLayoutRef.current', formLayoutRef.current)
+    setFormHeight(formLayoutRef.current.clientHeight)
+  }, [])
 
   return (
     <Layout //TODO: check in production
@@ -84,14 +84,14 @@ const UserManageForm = ({ children, onClick }) => {
       <FormCard
         layoutH={formHeight}
         onClick={e => {
-          e.stopPropagation();
+          e.stopPropagation()
         }}
       >
         <CloseBtn onClick={onClick}>X</CloseBtn>
         {children}
       </FormCard>
     </Layout>
-  );
-};
+  )
+}
 
-export default UserManageForm;
+export default UserManageForm

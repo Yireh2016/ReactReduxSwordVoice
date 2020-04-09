@@ -6,45 +6,45 @@ const getPopularPosts = (
   callback,
   errCallback
 ) => {
-  let sort;
+  let sort
 
   switch (filter) {
-    case "views":
-      sort = { "socialCount.views": "descending" };
-      break;
-    case "shares":
-      sort = { "socialCount.shares": "descending" };
-      break;
-    case "comments":
-      sort = { "socialCount.comments": "descending" };
-      break;
-    case "claps":
-      sort = { "socialCount.claps": "descending" };
-      break;
+    case 'views':
+      sort = {'socialCount.views': 'descending'}
+      break
+    case 'shares':
+      sort = {'socialCount.shares': 'descending'}
+      break
+    case 'comments':
+      sort = {'socialCount.comments': 'descending'}
+      break
+    case 'claps':
+      sort = {'socialCount.claps': 'descending'}
+      break
 
     // default:
     //   sort = { "socialCount.views": "descending" };
     //   break;
   }
-  const limit = totalCount - count >= 7 ? 7 : totalCount - count;
+  const limit = totalCount - count >= 7 ? 7 : totalCount - count
 
   return articleModel
-    .find({ isPublished: true })
-    .select("url thumbnail title date keywords description")
+    .find({isPublished: true})
+    .select('url thumbnail title date keywords description')
     .limit(limit)
     .skip(count)
     .populate({
-      path: "author",
-      select: "userFirstName userLastName userAvatar userName"
+      path: 'author',
+      select: 'userFirstName userLastName userAvatar userName'
     })
     .sort(sort)
     .exec()
     .then(posts => {
-      callback(posts);
+      callback(posts)
     })
     .catch(err => {
-      errCallback(err);
-    });
-};
+      errCallback(err)
+    })
+}
 
-export default getPopularPosts;
+export default getPopularPosts

@@ -1,22 +1,22 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import LinkIcon from "./linkIcon/LinkIcon";
+import LinkIcon from './linkIcon/LinkIcon'
 
-const CopyLink = ({ url, onClick }) => {
+const CopyLink = ({url, onClick}) => {
   const copyLink = () => {
     navigator.clipboard.writeText(url).then(() => {
-      alert(`${url} on clipboard`);
-    });
+      alert(`${url} on clipboard`)
+    })
 
-    onClick();
-  };
+    onClick()
+  }
 
   return (
     <div onClick={copyLink}>
       <LinkIcon size={32} />
     </div>
-  );
-};
+  )
+}
 
-export default CopyLink;
+export default CopyLink

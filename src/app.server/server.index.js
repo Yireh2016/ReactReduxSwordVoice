@@ -1,58 +1,58 @@
-import express from "express";
-import "@babel/polyfill"; //para que axios funcione en ie11
-import passport from "passport"; //modulo debe estar declarado antes que los modelos
-import cookieParser from "cookie-parser";
-require("dotenv").config();
-import morgan from "morgan";
-import compression from "compression";
+import express from 'express'
+import '@babel/polyfill' //para que axios funcione en ie11
+import passport from 'passport' //modulo debe estar declarado antes que los modelos
+import cookieParser from 'cookie-parser'
+require('dotenv').config()
+import morgan from 'morgan'
+import compression from 'compression'
 
 //modelos para DB
-import "../app.api/models/db";
-import "../app.api/config/passport"; //modulo debe estar importado despues de los modelos
+import '../app.api/models/db'
+import '../app.api/config/passport' //modulo debe estar importado despues de los modelos
 
 //controllers
-import swordvoiceWeb from "../app.server/controllers/swordvoiceWeb";
-import sitemapCtrl from "../app.server/controllers/sitemapCtrl";
-import notFoundCtrl from "../app.server/controllers/notFoundCtrl";
-import cms from "../app.server/controllers/cms";
-import checkProgramPost from "./controllers/checkProgramPost";
+import swordvoiceWeb from '../app.server/controllers/swordvoiceWeb'
+import sitemapCtrl from '../app.server/controllers/sitemapCtrl'
+import notFoundCtrl from '../app.server/controllers/notFoundCtrl'
+import cms from '../app.server/controllers/cms'
+import checkProgramPost from './controllers/checkProgramPost'
 
 //routes
-import routerAPI from "../app.api/routes/api.index";
+import routerAPI from '../app.api/routes/api.index'
 
-const server = express();
+const server = express()
 
 //middlewares
-server.use(compression());
-server.use(morgan("dev"));
-server.use(express.json({ limit: "50mb", extended: true }));
-server.use(cookieParser(process.env.COOKEYS));
+server.use(compression())
+server.use(morgan('dev'))
+server.use(express.json({limit: '50mb', extended: true}))
+server.use(cookieParser(process.env.COOKEYS))
 
 //static files
-server.use(express.static("dist/assets"));
+server.use(express.static('dist/assets'))
 //Passport initializing for authentication
-server.use(passport.initialize());
+server.use(passport.initialize())
 
 //routes
-server.get("/sitemap.xml", sitemapCtrl);
-server.use("/api", routerAPI);
-server.get("/cms*", cms);
-server.get("/", swordvoiceWeb);
-server.get("/home", (req, res) => {
-  res.redirect("/");
-});
-server.get("/about", swordvoiceWeb);
-server.get("/passwdRecoveryForm", swordvoiceWeb);
-server.get("/contact", swordvoiceWeb);
-server.get("/courses", swordvoiceWeb);
-server.get("/portfolio", swordvoiceWeb);
-server.get("/newBlog", swordvoiceWeb);
-server.get("/blog", swordvoiceWeb);
-server.get("/blog/post/*", swordvoiceWeb);
-server.get("*", notFoundCtrl);
+server.get('/sitemap.xml', sitemapCtrl)
+server.use('/api', routerAPI)
+server.get('/cms*', cms)
+server.get('/', swordvoiceWeb)
+server.get('/home', (req, res) => {
+  res.redirect('/')
+})
+server.get('/about', swordvoiceWeb)
+server.get('/passwdRecoveryForm', swordvoiceWeb)
+server.get('/contact', swordvoiceWeb)
+server.get('/courses', swordvoiceWeb)
+server.get('/portfolio', swordvoiceWeb)
+server.get('/newBlog', swordvoiceWeb)
+server.get('/blog', swordvoiceWeb)
+server.get('/blog/post/*', swordvoiceWeb)
+server.get('*', notFoundCtrl)
 
-checkProgramPost(1); //every minute
+checkProgramPost(1) //every minute
 
 //starting server
-server.listen(8080);
-console.log("listening");
+server.listen(8080)
+console.log('listening')

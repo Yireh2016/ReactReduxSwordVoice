@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, {useState, useEffect} from 'react'
+import styled from 'styled-components'
 
-import Calendar from "./icons/Calendar";
-import Up from "./icons/UpArrow";
+import Calendar from './icons/Calendar'
+import Up from './icons/UpArrow'
 
 const Layout = styled.div`
   position: relative;
   display: inline-block;
-  font-family: "Work sans", sans-serif;
-`;
+  font-family: 'Work sans', sans-serif;
+`
 
 const InputContainer = styled.div`
   background: #00b7fb;
@@ -17,11 +17,11 @@ const InputContainer = styled.div`
   align-items: center;
   box-sizing: border-box;
   border-left: ${props =>
-    props.isValid ? "5px solid #00ff00" : "5px solid red"};
+    props.isValid ? '5px solid #00ff00' : '5px solid red'};
 
   font-size: 13.3px;
   color: #004059;
-`;
+`
 
 const Container = styled.div`
   padding: 8px 0 8px 15px;
@@ -29,7 +29,7 @@ const Container = styled.div`
     font-weight: bold;
     user-select: none;
   }
-`;
+`
 
 const YearShownInput = styled.input`
   font-weight: 700;
@@ -44,7 +44,7 @@ const YearShownInput = styled.input`
   ::selection {
     background: transparent;
   }
-`;
+`
 
 const Btn = styled.div`
   margin-left: 10px;
@@ -57,7 +57,7 @@ const Btn = styled.div`
   svg {
     width: 15px;
   }
-`;
+`
 const MonthYearContainer = styled.div`
   position: absolute;
   top: 40px;
@@ -69,7 +69,7 @@ const MonthYearContainer = styled.div`
   font-size: 13.3px;
   color: #004059;
   z-index: 50;
-`;
+`
 
 const MonthCont = styled.div`
   width: 150px;
@@ -89,7 +89,7 @@ const MonthCont = styled.div`
       background: black;
     }
   }
-`;
+`
 
 const YearCont = styled.div`
   display: flex;
@@ -101,7 +101,7 @@ const YearCont = styled.div`
   padding: 0 10px;
   background: white;
   border-radius: 0 10px 10px 0;
-`;
+`
 
 const UpArrow = styled.div`
   color: white;
@@ -118,7 +118,7 @@ const UpArrow = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 const DownArrow = styled.div`
   color: white;
 
@@ -135,45 +135,45 @@ const DownArrow = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
-const MonthlyInput = ({ setFinalDate, actualDate }) => {
-  const [year, setYear] = useState(1990);
-  const [yearChanged, setYearChanged] = useState(false);
-  const [isControl, setIsControl] = useState(false);
-  const [isValid, setIsValid] = useState(false);
-  const [timer, setTimer] = useState(null);
-  const [monthState, setMonth] = useState("Month");
+const MonthlyInput = ({setFinalDate, actualDate}) => {
+  const [year, setYear] = useState(1990)
+  const [yearChanged, setYearChanged] = useState(false)
+  const [isControl, setIsControl] = useState(false)
+  const [isValid, setIsValid] = useState(false)
+  const [timer, setTimer] = useState(null)
+  const [monthState, setMonth] = useState('Month')
 
   useEffect(() => {
     if (isValid) {
-      timer && clearTimeout(timer);
+      timer && clearTimeout(timer)
 
       const timerVal = setTimeout(() => {
-        setIsControl(false);
-        setTimer(null);
-        const finalDate = new Date(year, months.indexOf(monthState), 1);
+        setIsControl(false)
+        setTimer(null)
+        const finalDate = new Date(year, months.indexOf(monthState), 1)
 
-        const compareActualDate = new Date(actualDate);
+        const compareActualDate = new Date(actualDate)
 
         compareActualDate.toString() !== finalDate.toString() &&
-          setFinalDate(finalDate);
-      }, 1.5 * 1000);
+          setFinalDate(finalDate)
+      }, 1.5 * 1000)
 
-      setTimer(timerVal);
+      setTimer(timerVal)
     }
-  }, [year, monthState]);
+  }, [year, monthState])
 
   useEffect(() => {
     if (actualDate) {
-      const date = new Date(actualDate);
+      const date = new Date(actualDate)
 
-      setYearChanged(true);
-      setYear(parseInt(date.getFullYear()));
-      setMonth(months[date.getMonth()]);
-      setIsValid(true);
+      setYearChanged(true)
+      setYear(parseInt(date.getFullYear()))
+      setMonth(months[date.getMonth()])
+      setIsValid(true)
     }
-  }, []);
+  }, [])
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -182,83 +182,83 @@ const MonthlyInput = ({ setFinalDate, actualDate }) => {
   // }, [isControl]);
 
   var months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
 
   const mapMonths = months.map((month, i) => {
     return (
       <span
         key={i}
         onClick={e => {
-          const monthClicked = e.target.innerHTML;
-          console.log(monthClicked);
+          const monthClicked = e.target.innerHTML
+          console.log(monthClicked)
 
-          setMonth(monthClicked);
+          setMonth(monthClicked)
         }}
       >
         {month}
       </span>
-    );
-  });
+    )
+  })
 
   const yearShownHandler = e => {
-    let year = e.target.value;
-    const actualDate = new Date();
+    let year = e.target.value
+    const actualDate = new Date()
 
-    year = !isNaN(year) ? parseInt(year, 10) : year;
+    year = !isNaN(year) ? parseInt(year, 10) : year
 
-    !isNaN(year) && year <= actualDate.getFullYear() && setYear(year);
-  };
-
-  let yearShown;
-  if (yearChanged) {
-    yearShown = year;
-  } else {
-    yearShown = "Year";
+    !isNaN(year) && year <= actualDate.getFullYear() && setYear(year)
   }
 
-  if (yearChanged && monthState !== "Month") {
-    !isValid && setIsValid(true);
+  let yearShown
+  if (yearChanged) {
+    yearShown = year
+  } else {
+    yearShown = 'Year'
+  }
+
+  if (yearChanged && monthState !== 'Month') {
+    !isValid && setIsValid(true)
   }
 
   return (
-    <Layout id="Layout">
-      <InputContainer isValid={isValid} id="InputContainer">
-        <Container id="Container">
+    <Layout id='Layout'>
+      <InputContainer isValid={isValid} id='InputContainer'>
+        <Container id='Container'>
           <span
             onClick={() => {
-              setIsControl(!isControl);
+              setIsControl(!isControl)
             }}
           >
             {monthState}
-          </span>{" "}
+          </span>{' '}
           <YearShownInput
-            id="YearShownInput"
+            id='YearShownInput'
             onClick={() => {
               // yearShown==="Year" && setYear(year);
-              !yearChanged && setYearChanged(true);
+              !yearChanged && setYearChanged(true)
             }}
-            type="text"
+            type='text'
             value={yearShown}
-            name="year"
+            name='year'
             onChange={yearShownHandler}
-          />{" "}
+          />{' '}
         </Container>
         <Btn
-          id="Btn"
+          id='Btn'
           onClick={e => {
-            setIsControl(!isControl);
+            setIsControl(!isControl)
           }}
         >
           <Calendar />
@@ -266,25 +266,25 @@ const MonthlyInput = ({ setFinalDate, actualDate }) => {
       </InputContainer>
 
       {isControl && (
-        <MonthYearContainer id="MonthYearContainer">
-          <MonthCont id="MonthCont">{mapMonths}</MonthCont>
+        <MonthYearContainer id='MonthYearContainer'>
+          <MonthCont id='MonthCont'>{mapMonths}</MonthCont>
 
           <YearCont>
             <UpArrow
-              id="UpArrow"
+              id='UpArrow'
               onClick={() => {
-                !yearChanged && setYearChanged(true);
-                setYear(year + 1);
+                !yearChanged && setYearChanged(true)
+                setYear(year + 1)
               }}
             >
               <Up />
             </UpArrow>
             {year}
             <DownArrow
-              id="DownArrow"
+              id='DownArrow'
               onClick={() => {
-                !yearChanged && setYearChanged(true);
-                year > 0 && setYear(year - 1);
+                !yearChanged && setYearChanged(true)
+                year > 0 && setYear(year - 1)
               }}
             >
               <Up />
@@ -293,7 +293,7 @@ const MonthlyInput = ({ setFinalDate, actualDate }) => {
         </MonthYearContainer>
       )}
     </Layout>
-  );
-};
+  )
+}
 
-export default MonthlyInput;
+export default MonthlyInput

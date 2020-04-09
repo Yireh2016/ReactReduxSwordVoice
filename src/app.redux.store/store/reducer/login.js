@@ -4,60 +4,60 @@ const initialState = {
   loggedUserAvatar: undefined,
   loggedUserName: undefined,
   loggedUserID: undefined,
-  userType: "user",
+  userType: 'user',
   showSignUp: false,
   showLogIn: false
-};
+}
 //estado inicial viene del CONFIG REDUCER.JS
 const login = (state = initialState, action) => {
-  const newState = { ...state };
+  const newState = {...state}
   switch (action.type) {
-    case "LOGGED_IN": {
-      newState.isUserLoggedIn = true;
-      newState.loggedFullName = action.payload.userFullName;
-      newState.loggedUserAvatar = action.payload.userAvatar;
-      newState.loggedUserName = action.payload.userName;
-      newState.loggedUserID = action.payload.userID;
-      newState.userType = action.payload.userType;
+    case 'LOGGED_IN': {
+      newState.isUserLoggedIn = true
+      newState.loggedFullName = action.payload.userFullName
+      newState.loggedUserAvatar = action.payload.userAvatar
+      newState.loggedUserName = action.payload.userName
+      newState.loggedUserID = action.payload.userID
+      newState.userType = action.payload.userType
 
-      break;
+      break
     }
 
-    case "SET_AVATAR": {
-      newState.loggedUserAvatar = action.payload;
-      break;
+    case 'SET_AVATAR': {
+      newState.loggedUserAvatar = action.payload
+      break
     }
 
-    case "LOGGED_OUT": {
-      newState.isUserLoggedIn = false;
-      newState.loggedUserAvatar = undefined;
-      newState.loggedUserName = "";
-      newState.loggedUserID = undefined;
+    case 'LOGGED_OUT': {
+      newState.isUserLoggedIn = false
+      newState.loggedUserAvatar = undefined
+      newState.loggedUserName = ''
+      newState.loggedUserID = undefined
 
-      break;
+      break
     }
 
-    case "SET_SHOW_SIGNUP": {
-      newState.showSignUp = action.payload;
+    case 'SET_SHOW_SIGNUP': {
+      newState.showSignUp = action.payload
 
-      break;
+      break
     }
 
-    case "SET_SHOW_LOGIN": {
-      newState.showLogIn = action.payload;
+    case 'SET_SHOW_LOGIN': {
+      newState.showLogIn = action.payload
 
-      break;
+      break
     }
 
-    case "DEFAULT": {
-      newState.isUserLoggedIn = false;
-      newState.loggedUserAvatar = undefined;
-      newState.loggedUserName = "";
-      break;
+    case 'DEFAULT': {
+      newState.isUserLoggedIn = false
+      newState.loggedUserAvatar = undefined
+      newState.loggedUserName = ''
+      break
     }
   }
 
-  return newState;
-};
+  return newState
+}
 
-export default login;
+export default login

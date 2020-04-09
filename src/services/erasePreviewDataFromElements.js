@@ -1,9 +1,9 @@
 const erasePreviewDataFromElements = elementsArr => {
   elementsArr.forEach(element => {
-    if (element.imgFile) element.imgFile.previewURL = "";
-  });
+    if (element.imgFile) element.imgFile.previewURL = ''
+  })
 
-  return elementsArr;
-};
+  return elementsArr
+}
 
-export default erasePreviewDataFromElements;
+export default erasePreviewDataFromElements

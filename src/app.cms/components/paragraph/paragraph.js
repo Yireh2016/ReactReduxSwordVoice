@@ -1,5 +1,5 @@
-import React from "react";
-import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
+import React from 'react'
+import ElementCustomEdit from '../elementCustomEdit/elementCustomEdit'
 
 //react map
 /*
@@ -14,13 +14,13 @@ DashBoard
 
 const Paragraph = props => {
   return (
-    <div className="elementContentLayout">
-      <div className="elementInput">
+    <div className='elementContentLayout'>
+      <div className='elementInput'>
         <textarea
           value={props.HTMLElementContent}
-          name="HTMLElementContent"
+          name='HTMLElementContent'
           onChange={e => {
-            props.inputTextHTMLHandler(e);
+            props.inputTextHTMLHandler(e)
           }}
         >
           {props.HTMLElementContent}
@@ -41,7 +41,7 @@ const Paragraph = props => {
         classesHTMLHandler={props.classesHTMLHandler}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Paragraph;
+export default Paragraph

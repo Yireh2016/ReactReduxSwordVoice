@@ -1,4 +1,4 @@
-export default ({ title }) => {
+export default ({title}) => {
   return `
     <!DOCTYPE html lang="en">
     <html>
@@ -26,5 +26,5 @@ export default ({ title }) => {
      
 
     </html>
-  `;
-};
+  `
+}

@@ -1,4 +1,4 @@
-export default ({ body, title, styleTags }) => {
+export default ({body, title, styleTags}) => {
   //aqui se introduce todo lo de SEO preferiblemente otra opcion es helmet pero en el server ojo
   return `
     <!DOCTYPE html>
@@ -26,5 +26,5 @@ export default ({ body, title, styleTags }) => {
 
 
     </html>
-  `;
-};
+  `
+}

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
 const Test = props => {
   return (
@@ -9,23 +9,20 @@ const Test = props => {
         Action dispach {`${props.LoggedIn}`}
       </button>
     </div>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => {
   return {
     LoggedIn: state.isUserLoggedIn
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onLogIn: () => dispach({ type: "LOGGED_IN" }),
-    onLogOut: () => dispach({ type: "LOGGED_OUT" })
-  };
-};
+    onLogIn: () => dispach({type: 'LOGGED_IN'}),
+    onLogOut: () => dispach({type: 'LOGGED_OUT'})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(Test);
+export default connect(mapStateToProps, mapDispachToProps)(Test)

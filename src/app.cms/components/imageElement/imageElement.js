@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import React, {Component} from 'react'
 // import Compressor from "compressorjs";
-import { connect } from "react-redux";
+import {connect} from 'react-redux'
 //components
-import ElementCustomEdit from "../elementCustomEdit/elementCustomEdit";
-import UploadImage from "../uploadImage/uploadImage";
+import ElementCustomEdit from '../elementCustomEdit/elementCustomEdit'
+import UploadImage from '../uploadImage/uploadImage'
 
 //services
-import isBrowser from "../../../services/isBrowser";
-import compressImage from "../../../services/compressImage";
-import blobToBase64 from "../../../services/blobToBase64";
+import isBrowser from '../../../services/isBrowser'
+import compressImage from '../../../services/compressImage'
+import blobToBase64 from '../../../services/blobToBase64'
 
 //react map
 /*
@@ -22,19 +22,19 @@ DashBoard
 
 class ImageElement extends Component {
   constructor(props) {
-    super(props);
-    isBrowser;
+    super(props)
+    isBrowser
     this.state = {
-      uploadMessage: "Upload Image",
+      uploadMessage: 'Upload Image',
       imgW: 200,
       imgQuality: 0.6,
       imageFile: null,
       compressedImg: null,
       oldFilename: this.props.imgFile && this.props.imgFile.filename
-    };
+    }
   }
   imgWidthHandler = e => {
-    const value = e.target.value;
+    const value = e.target.value
     this.state.imageFile &&
       compressImage(
         this.state.imageFile,
@@ -42,16 +42,16 @@ class ImageElement extends Component {
         value,
         this.imageUpload,
         this.imageUploadErr
-      );
-  };
+      )
+  }
   qualityHandler = e => {
-    this.props.onProjectChange();
+    this.props.onProjectChange()
 
     const {
-      target: { name, value }
-    } = e;
-    this.setState({ [name]: value });
-  };
+      target: {name, value}
+    } = e
+    this.setState({[name]: value})
+  }
 
   // handleImgUpload = files => {
   //   this.props.onProjectChange();
@@ -61,43 +61,41 @@ class ImageElement extends Component {
     this.setState(() => {
       return {
         uploadMessage: `${err}`
-      };
-    });
-  };
+      }
+    })
+  }
 
   imageUpload = image => {
     blobToBase64(image, base64Obj => {
-      const file = new File([image], image.name);
+      const file = new File([image], image.name)
       // this.props.onProjectChange();
       this.props.imgFileSet(
         `${URL.createObjectURL(image)}`,
-        `${process.env.CDN_URL}/articles/${this.props.project.url}/${
-          image.name
-        }`,
+        `${process.env.CDN_URL}/articles/${this.props.project.url}/${image.name}`,
         base64Obj.url
-      );
+      )
       this.setState({
         // uploadMessage: undefined,
         isImageUploaded: true,
         compressedImg: file
-      });
-      alert("file Uploaded successfully");
-    });
-  };
+      })
+      alert('file Uploaded successfully')
+    })
+  }
 
   originalImageSaver = image => {
-    this.setState({ imageFile: image });
-  };
+    this.setState({imageFile: image})
+  }
   imgPropertiesHandler = e => {
     const {
-      target: { name, value }
-    } = e;
+      target: {name, value}
+    } = e
 
     this.setState({
       [name]: value
-    });
+    })
 
-    if (name === "imgQuality") {
+    if (name === 'imgQuality') {
       this.state.imageFile &&
         compressImage(
           this.state.imageFile,
@@ -105,11 +103,11 @@ class ImageElement extends Component {
           this.state.imgW,
           this.imageUpload,
           this.imageUploadErr
-        );
+        )
     }
-  };
+  }
   imgWidthHandler = e => {
-    const value = e.target.value;
+    const value = e.target.value
     this.state.imageFile &&
       compressImage(
         this.state.imageFile,
@@ -117,24 +115,24 @@ class ImageElement extends Component {
         value,
         this.imageUpload,
         this.imageUploadErr
-      );
-  };
+      )
+  }
 
   uploadingToServerHandler = () => {
     if (this.state.compressedImg) {
-      const file = [this.state.compressedImg];
-      const e = { target: { files: file } };
+      const file = [this.state.compressedImg]
+      const e = {target: {files: file}}
       if (this.state.oldFilename) {
         //se esta editando la imagen por ende se debe borrar el archivo de la lista de archivos
-        let oldFilename = this.state.oldFilename.match(/[\w\s-]+\.\w*/g);
-        this.props.uploadFileHandler(e, oldFilename[0]);
+        let oldFilename = this.state.oldFilename.match(/[\w\s-]+\.\w*/g)
+        this.props.uploadFileHandler(e, oldFilename[0])
       } else {
-        this.props.uploadFileHandler(e); //add to la lista de files disponibles y subo file al server
+        this.props.uploadFileHandler(e) //add to la lista de files disponibles y subo file al server
       }
     }
 
-    this.props.editionBtnHandler();
-  };
+    this.props.editionBtnHandler()
+  }
   render() {
     return (
       <div>
@@ -151,7 +149,7 @@ class ImageElement extends Component {
             compressedImg={this.state.compressedImg}
           />
 
-          <div className="elementContentLayout">
+          <div className='elementContentLayout'>
             <ElementCustomEdit
               HTMLAtributes={this.props.HTMLAtributes}
               HTMLAtributesArr={this.props.HTMLAtributesArr}
@@ -198,9 +196,9 @@ class ImageElement extends Component {
           {this.state.compressedImg && (
             <div>
               <button
-                className="cmsBtn"
+                className='cmsBtn'
                 onClick={this.uploadingToServerHandler}
-                type="button"
+                type='button'
               >
                 Upload Image
               </button>
@@ -208,7 +206,7 @@ class ImageElement extends Component {
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -222,18 +220,15 @@ const mapStateToProps = state => {
     fileNames: state.postCreation.files,
     date: state.postCreation.date,
     postCreation: state.postCreation
-  };
-};
+  }
+}
 
 const mapDispachToProps = dispach => {
   return {
     //acciones
 
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" })
-  };
-};
+    onProjectChange: () => dispach({type: 'CHANGE_PROJECT'})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(ImageElement);
+export default connect(mapStateToProps, mapDispachToProps)(ImageElement)

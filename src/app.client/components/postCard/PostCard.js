@@ -1,50 +1,50 @@
-import React from "react";
-import { connect } from "react-redux";
-import Radium from "radium";
-import PropTypes from "prop-types";
-import styled from "styled-components";
+import React from 'react'
+import {connect} from 'react-redux'
+import Radium from 'radium'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 //assets
-import threeDotsButton from "../../assets/img/general/threeDots.svg";
-import SummaryCard from "./summaryCard/SummaryCard";
+import threeDotsButton from '../../assets/img/general/threeDots.svg'
+import SummaryCard from './summaryCard/SummaryCard'
 
 //service
 
 const styles = {
   post: {
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    maxHeight: "100%",
-    position: "relative",
-    borderRadius: "5px ",
-    overflow: "hidden"
+    backgroundPosition: 'center center',
+    backgroundSize: 'cover',
+    maxHeight: '100%',
+    position: 'relative',
+    borderRadius: '5px ',
+    overflow: 'hidden'
   },
   postLayout: {
-    display: "flex",
-    position: "relative",
-    justifyContent: "center"
+    display: 'flex',
+    position: 'relative',
+    justifyContent: 'center'
   }
-};
+}
 
 const ThreeDots = styled.div`
   :hover {
     cursor: pointer;
   }
-`;
+`
 
 class PostCard extends React.Component {
   constructor(props) {
-    super(props);
-    this.threedotsRef = React.createRef();
-    this.state = { isDetail: false };
+    super(props)
+    this.threedotsRef = React.createRef()
+    this.state = {isDetail: false}
   }
 
   threeDotsHandler = () => {
     this.setState(prevState => {
       return {
         isDetail: !prevState.isDetail
-      };
-    });
-  };
+      }
+    })
+  }
 
   render() {
     const {
@@ -59,28 +59,28 @@ class PostCard extends React.Component {
       date,
       title,
       summaryTextHtml
-    } = this.props;
+    } = this.props
 
-    const { isDetail } = this.state;
+    const {isDetail} = this.state
 
-    let conditionStyle;
+    let conditionStyle
     if (hasSummary) {
       conditionStyle = {
         padding:
-          this.props.device === "pc"
+          this.props.device === 'pc'
             ? `0 0 ${postH * 0.18681318681318681318681318681319}px 0`
             : `0 10px ${postH * 0.18681318681318681318681318681319}px 10px`
-      };
+      }
     } else {
-      conditionStyle = {};
+      conditionStyle = {}
     }
     return (
       <div
-        id={`${this.props.id}` + "postLayout"}
+        id={`${this.props.id}` + 'postLayout'}
         style={[styles.postLayout, conditionStyle]}
       >
         <div
-          id={`${this.props.id}` + "postCont"}
+          id={`${this.props.id}` + 'postCont'}
           style={[
             styles.post,
             {
@@ -92,43 +92,43 @@ class PostCard extends React.Component {
             //   : postImg
           ]}
         >
-          <a aria-label="go and read this article" href={url}>
+          <a aria-label='go and read this article' href={url}>
             <img
               style={[
                 {
-                  width: "100%"
+                  width: '100%'
                 }
               ]}
               src={
-                typeof postImg === "string"
+                typeof postImg === 'string'
                   ? postImg.match(/url\("?(.*)"?\)/)[1]
                   : postImg.backgroundImage.match(/url\("?(.*)"?\)/)[1]
               }
-              alt="Article Thumbnail"
+              alt='Article Thumbnail'
             />
             <div
-              id={`${this.props.id}` + "gradientBackground"}
+              id={`${this.props.id}` + 'gradientBackground'}
               style={[
                 // styles.gradientBackground,
                 {
-                  position: "absolute",
-                  top: "0",
-                  left: "0",
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
                   backgroundImage: postGradient,
-                  width: "100%",
-                  height: "100%"
+                  width: '100%',
+                  height: '100%'
                 }
               ]}
             >
               <h2
-                id={`${this.props.id}` + "postTitle"}
+                id={`${this.props.id}` + 'postTitle'}
                 style={[
                   {
-                    bottom: "0",
+                    bottom: '0',
                     padding: `${postH * 0.05494505494505494505494505494505}px`,
-                    position: "absolute",
-                    color: "white",
-                    fontFamily: "Work Sans",
+                    position: 'absolute',
+                    color: 'white',
+                    fontFamily: 'Work Sans',
                     fontSize: `${
                       parseInt(postH * 0.07) < 12 ? 12 : parseInt(postH * 0.07)
                     }px`
@@ -141,13 +141,13 @@ class PostCard extends React.Component {
           </a>
 
           <div
-            id={`${this.props.id}` + "summaryCont"}
+            id={`${this.props.id}` + 'summaryCont'}
             style={{
-              position: "absolute",
-              zIndex: "1",
-              top: isDetail ? "0" : "100%",
-              left: "0",
-              transition: "all 500ms cubic-bezier(0.75, -0.6, 0.35, 1.65)"
+              position: 'absolute',
+              zIndex: '1',
+              top: isDetail ? '0' : '100%',
+              left: '0',
+              transition: 'all 500ms cubic-bezier(0.75, -0.6, 0.35, 1.65)'
             }}
           >
             {hasSummary && (
@@ -161,7 +161,7 @@ class PostCard extends React.Component {
                 url={url}
                 avatar={avatar}
                 fontSize={postH * 0.06593406593406593406593406593407}
-                style={{ borderRadius: "4px", border: "1px solid #f95f0b" }}
+                style={{borderRadius: '4px', border: '1px solid #f95f0b'}}
                 summaryTextHtml={summaryTextHtml}
               />
             )}
@@ -170,16 +170,16 @@ class PostCard extends React.Component {
         {hasSummary && (
           <ThreeDots
             ref={this.threedotsRef}
-            id={`${this.props.id}` + "threeDots"}
+            id={`${this.props.id}` + 'threeDots'}
             style={{
               top: isDetail
                 ? `${this.threedotsRef.current.clientWidth / 2 - 5}px`
                 : `${postH + 5}px`,
-              position: " absolute",
-              right: " 5%",
-              zIndex: " 3",
-              transform: isDetail ? "rotate(90deg)" : "rotate(0deg)",
-              transition: "all 500ms cubic-bezier(0.75, -0.6, 0.35, 1.65)"
+              position: ' absolute',
+              right: ' 5%',
+              zIndex: ' 3',
+              transform: isDetail ? 'rotate(90deg)' : 'rotate(0deg)',
+              transition: 'all 500ms cubic-bezier(0.75, -0.6, 0.35, 1.65)'
             }}
           >
             <img
@@ -188,12 +188,12 @@ class PostCard extends React.Component {
                 width: `${postH * 0.12019230769230769230769230769231}px`
               }}
               src={threeDotsButton}
-              alt="three Dots Button"
+              alt='three Dots Button'
             />
           </ThreeDots>
         )}
       </div>
-    );
+    )
   }
 }
 PostCard.propTypes = {
@@ -209,18 +209,18 @@ PostCard.propTypes = {
   summaryTextHtml: PropTypes.string,
   style: PropTypes.object,
   id: PropTypes.string
-};
+}
 
 PostCard.defaultProps = {
   hasSummary: false
-};
+}
 
 const mapStateToProps2 = state => {
   return {
     device: state.resize.device
-  };
-};
+  }
+}
 
-const PostCard2 = Radium(PostCard);
+const PostCard2 = Radium(PostCard)
 
-export default connect(mapStateToProps2)(PostCard2);
+export default connect(mapStateToProps2)(PostCard2)

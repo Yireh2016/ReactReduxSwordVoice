@@ -1,5 +1,5 @@
-import React from "react";
-import Radium from "radium";
+import React from 'react'
+import Radium from 'radium'
 
 // // Stuff that matters.
 // @keyframes scroll {
@@ -26,59 +26,59 @@ import Radium from "radium";
 
 const keyframes = Radium.keyframes(
   {
-    "0%": {
-      transform: "translateY(0)"
+    '0%': {
+      transform: 'translateY(0)'
     },
-    "30%": {
-      transform: "translateY(60px)"
+    '30%': {
+      transform: 'translateY(60px)'
     }
   },
-  "pulse"
-);
+  'pulse'
+)
 
 const styles = {
   svg: {
     wheel: {
-      animation: "x ease 2s infinite",
+      animation: 'x ease 2s infinite',
       animationName: keyframes,
-      fill: "none",
-      stroke: "#fff",
-      strokeWidth: "20px"
+      fill: 'none',
+      stroke: '#fff',
+      strokeWidth: '20px'
     }
   }
-};
+}
 
 const ScrollMouse = () => {
   return (
-    <div id="svgCont">
+    <div id='svgCont'>
       <svg
-        width="30px"
-        height="100%"
-        viewBox="0 0 247 390"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
+        width='30px'
+        height='100%'
+        viewBox='0 0 247 390'
+        version='1.1'
+        xmlns='http://www.w3.org/2000/svg'
         style={{
-          fillRule: "evenodd",
-          clipRule: "evenodd",
-          strokeLinecap: "round",
-          strokeLinejoin: "round",
-          strokeMiterlimit: "1.5"
+          fillRule: 'evenodd',
+          clipRule: 'evenodd',
+          strokeLinecap: 'round',
+          strokeLinejoin: 'round',
+          strokeMiterlimit: '1.5'
         }}
       >
         <path
           style={styles.svg.wheel}
-          id="wheel"
-          d="M123.359,79.775l0,72.843"
+          id='wheel'
+          d='M123.359,79.775l0,72.843'
           // style="fill:none;stroke:#fff;stroke-width:20px;"
         />
         <path
-          id="mouse"
-          d="M236.717,123.359c0,-62.565 -50.794,-113.359 -113.358,-113.359c-62.565,0 -113.359,50.794 -113.359,113.359l0,143.237c0,62.565 50.794,113.359 113.359,113.359c62.564,0 113.358,-50.794 113.358,-113.359l0,-143.237Z"
-          style={{ fill: "none", stroke: "#fff", strokeWidth: "20px" }}
+          id='mouse'
+          d='M236.717,123.359c0,-62.565 -50.794,-113.359 -113.358,-113.359c-62.565,0 -113.359,50.794 -113.359,113.359l0,143.237c0,62.565 50.794,113.359 113.359,113.359c62.564,0 113.358,-50.794 113.358,-113.359l0,-143.237Z'
+          style={{fill: 'none', stroke: '#fff', strokeWidth: '20px'}}
         />
       </svg>
     </div>
-  );
-};
+  )
+}
 
-export default Radium(ScrollMouse);
+export default Radium(ScrollMouse)

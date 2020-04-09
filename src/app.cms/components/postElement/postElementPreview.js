@@ -1,17 +1,17 @@
-import React, { PureComponent } from "react";
-import JsxParser from "react-jsx-parser";
-import ReactHtmlParser from "react-html-parser";
-import { connect } from "react-redux";
+import React, {PureComponent} from 'react'
+import JsxParser from 'react-jsx-parser'
+import ReactHtmlParser from 'react-html-parser'
+import {connect} from 'react-redux'
 //assets
-import "./postElement.css";
-import edit from "../../assets/createPost/edit.svg";
+import './postElement.css'
+import edit from '../../assets/createPost/edit.svg'
 // import paint from "../../assets/createPost/paint.svg";
-import del from "../../assets/createPost/delete.svg";
-import copy from "../../assets/createPost/copy.svg";
-import up from "../../assets/createPost/up.svg";
-import down from "../../assets/createPost/down.svg";
+import del from '../../assets/createPost/delete.svg'
+import copy from '../../assets/createPost/copy.svg'
+import up from '../../assets/createPost/up.svg'
+import down from '../../assets/createPost/down.svg'
 //services
-import responsiveImages from "../../../services/responsiveImages";
+import responsiveImages from '../../../services/responsiveImages'
 
 //react map
 /*
@@ -27,9 +27,9 @@ DashBoard
 
 class PostElementPreview extends PureComponent {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.postElement = React.createRef();
+    this.postElement = React.createRef()
   }
 
   // PROPS
@@ -66,12 +66,12 @@ class PostElementPreview extends PureComponent {
         `postElement${this.props.HTMLid}OffSetTop`
       )}` === `${this.postElement.current.offsetTop}`
     ) {
-      return;
+      return
     }
     window.localStorage.setItem(
       `postElement${this.props.HTMLid}OffSetTop`,
       `${this.postElement.current.offsetTop}`
-    );
+    )
   }
   componentDidUpdate() {
     if (
@@ -79,69 +79,69 @@ class PostElementPreview extends PureComponent {
         `postElement${this.props.HTMLid}OffSetTop`
       )}` === `${this.postElement.current.offsetTop}`
     ) {
-      return;
+      return
     }
     window.localStorage.setItem(
       `postElement${this.props.HTMLid}OffSetTop`,
       `${this.postElement.current.offsetTop}`
-    );
+    )
   }
   editionBtnHandler = e => {
-    e.preventDefault();
+    e.preventDefault()
 
     //este codigo almacena la posicion de scroll con el fin de mostrar al usuario el elemento editado al salir del modo edicion
-    const el = this.postElement.current;
+    const el = this.postElement.current
     // const postState = this.props;
-    this.props.scrollTopSaveHandler(el.offsetTop, this.props.HTMLid);
+    this.props.scrollTopSaveHandler(el.offsetTop, this.props.HTMLid)
     !this.props.isEditionMode
       ? this.props.editionBtnHandler(this.props)
-      : this.props.editionBtnHandler("");
-  };
+      : this.props.editionBtnHandler('')
+  }
 
   delBtnHandler = () => {
     let payload = this.props.elements.filter((el, i, arr) => {
-      return this.props.HTMLid !== arr[i].HTMLid;
-    });
+      return this.props.HTMLid !== arr[i].HTMLid
+    })
 
     for (let i = 0; i < payload.length; i++) {
-      payload[i].HTMLid = i + 1;
+      payload[i].HTMLid = i + 1
     }
 
-    this.props.onDelElement(payload);
-  };
+    this.props.onDelElement(payload)
+  }
 
   upDownHandler = direction => {
-    const actualPosition = this.props.HTMLid - 1;
-    const actualID = this.props.HTMLid;
-    let arr = this.props.elements;
-    const mem = arr[actualPosition];
+    const actualPosition = this.props.HTMLid - 1
+    const actualID = this.props.HTMLid
+    let arr = this.props.elements
+    const mem = arr[actualPosition]
 
-    if (direction === "up") {
-      arr[actualPosition].HTMLid = actualID - 1;
-      arr[actualPosition - 1].HTMLid = actualID;
+    if (direction === 'up') {
+      arr[actualPosition].HTMLid = actualID - 1
+      arr[actualPosition - 1].HTMLid = actualID
 
-      arr[actualPosition] = arr[actualPosition - 1];
-      arr[actualPosition - 1] = mem;
-      window.localStorage.setItem("postActiveElID", actualID - 1);
+      arr[actualPosition] = arr[actualPosition - 1]
+      arr[actualPosition - 1] = mem
+      window.localStorage.setItem('postActiveElID', actualID - 1)
       window.localStorage.setItem(
-        "postElTop",
+        'postElTop',
         `postElement${this.props.HTMLid - 1}OffSetTop`
-      );
+      )
     } else {
-      arr[actualPosition].HTMLid = actualID + 1;
-      arr[actualPosition + 1].HTMLid = actualID;
+      arr[actualPosition].HTMLid = actualID + 1
+      arr[actualPosition + 1].HTMLid = actualID
 
-      arr[actualPosition] = arr[actualPosition + 1];
-      arr[actualPosition + 1] = mem;
-      window.localStorage.setItem("postActiveElID", actualID + 1);
+      arr[actualPosition] = arr[actualPosition + 1]
+      arr[actualPosition + 1] = mem
+      window.localStorage.setItem('postActiveElID', actualID + 1)
       window.localStorage.setItem(
-        "postElTop",
+        'postElTop',
         `postElement${this.props.HTMLid + 1}OffSetTop`
-      );
+      )
     }
 
-    this.props.onMoveElement(arr);
-  };
+    this.props.onMoveElement(arr)
+  }
 
   // finishEditionHandler = e => {
   //   this.editionBtnHandler(e);
@@ -149,17 +149,17 @@ class PostElementPreview extends PureComponent {
   render() {
     const parser = () => {
       if (
-        this.props.HTMLElementType === "custom" ||
-        this.props.HTMLElementType === "manyParagraph"
+        this.props.HTMLElementType === 'custom' ||
+        this.props.HTMLElementType === 'manyParagraph'
       ) {
-        return ReactHtmlParser(this.props.HTMLPreviewStr);
+        return ReactHtmlParser(this.props.HTMLPreviewStr)
       } else if (this.props.HTMLElementType.match(/figure/g)) {
-        let imgFileTablet = "";
-        let imgFileMobile = "";
+        let imgFileTablet = ''
+        let imgFileMobile = ''
 
-        const responsiveImg = responsiveImages(this.props.imgFile.filename);
-        imgFileTablet = responsiveImg.tablet;
-        imgFileMobile = responsiveImg.mobile;
+        const responsiveImg = responsiveImages(this.props.imgFile.filename)
+        imgFileTablet = responsiveImg.tablet
+        imgFileMobile = responsiveImg.mobile
 
         return (
           <JsxParser
@@ -174,7 +174,7 @@ class PostElementPreview extends PureComponent {
               imgFigcaption: this.props.imgFigcaption
             }}
           />
-        );
+        )
       } else {
         return (
           <JsxParser
@@ -185,38 +185,38 @@ class PostElementPreview extends PureComponent {
               classes: this.props.HTMLClassesStr
             }}
           />
-        );
+        )
       }
-    };
+    }
     return (
       <div className={this.props.className}>
         <div
           style={this.props.style}
           ref={this.postElement}
-          className="elementEditionLayoutPreview"
+          className='elementEditionLayoutPreview'
         >
-          <div className="elementSelect">
-            <div className="elementSelectLayout">
+          <div className='elementSelect'>
+            <div className='elementSelectLayout'>
               <span>Element</span>
             </div>
 
             <div
               onDoubleClick={e => {
-                this.editionBtnHandler(e);
+                this.editionBtnHandler(e)
               }}
-              className="elementPreview blogArticle"
+              className='elementPreview blogArticle'
             >
               {parser()}
             </div>
           </div>
 
-          <div className="elementEditionBtn">
+          <div className='elementEditionBtn'>
             <div>
               <img
                 onClick={this.editionBtnHandler}
                 src={edit}
-                style={{ opacity: "1", cursor: "pointer" }}
-                alt="edit"
+                style={{opacity: '1', cursor: 'pointer'}}
+                alt='edit'
               />
 
               {!this.props.HTMLElementType.match(/h1/g) && (
@@ -224,44 +224,44 @@ class PostElementPreview extends PureComponent {
                   <img
                     style={
                       this.props.isEditionMode
-                        ? { opacity: ".2" }
-                        : { opacity: "1", cursor: "pointer" }
+                        ? {opacity: '.2'}
+                        : {opacity: '1', cursor: 'pointer'}
                     }
                     src={del}
                     onClick={this.delBtnHandler}
-                    alt="delete"
+                    alt='delete'
                   />
                   <img
                     style={
                       this.props.isEditionMode
-                        ? { opacity: ".2" }
-                        : { opacity: "1", cursor: "pointer" }
+                        ? {opacity: '.2'}
+                        : {opacity: '1', cursor: 'pointer'}
                     }
                     src={copy}
-                    alt="copy"
+                    alt='copy'
                   />
                   {this.props.HTMLid !== 2 && (
                     <img
-                      onClick={() => this.upDownHandler("up")}
+                      onClick={() => this.upDownHandler('up')}
                       style={
                         this.props.isEditionMode
-                          ? { opacity: ".2" }
-                          : { opacity: "1", cursor: "pointer" }
+                          ? {opacity: '.2'}
+                          : {opacity: '1', cursor: 'pointer'}
                       }
                       src={up}
-                      alt="up"
+                      alt='up'
                     />
                   )}
                   {this.props.HTMLid !== this.props.elements.length && (
                     <img
-                      onClick={() => this.upDownHandler("down")}
+                      onClick={() => this.upDownHandler('down')}
                       style={
                         this.props.isEditionMode
-                          ? { opacity: ".2" }
-                          : { opacity: "1", cursor: "pointer" }
+                          ? {opacity: '.2'}
+                          : {opacity: '1', cursor: 'pointer'}
                       }
                       src={down}
-                      alt="down"
+                      alt='down'
                     />
                   )}
                 </React.Fragment>
@@ -270,7 +270,7 @@ class PostElementPreview extends PureComponent {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -278,22 +278,17 @@ const mapStateToProps = state => {
   return {
     elements: state.postCreation.elements,
     project: state.postCreation.project
-  };
-};
+  }
+}
 const mapDispachToProps = dispach => {
   return {
     //acciones
-    onAddElement: payload => dispach({ type: "ADD_ELEMENT", payload: payload }),
-    onEditElement: payload =>
-      dispach({ type: "EDIT_ELEMENT", payload: payload }),
-    onProjectChange: () => dispach({ type: "CHANGE_PROJECT" }),
-    onDelElement: payload => dispach({ type: "DEL_ELEMENT", payload: payload }),
-    onMoveElement: payload =>
-      dispach({ type: "MOVE_ELEMENT", payload: payload })
-  };
-};
+    onAddElement: payload => dispach({type: 'ADD_ELEMENT', payload: payload}),
+    onEditElement: payload => dispach({type: 'EDIT_ELEMENT', payload: payload}),
+    onProjectChange: () => dispach({type: 'CHANGE_PROJECT'}),
+    onDelElement: payload => dispach({type: 'DEL_ELEMENT', payload: payload}),
+    onMoveElement: payload => dispach({type: 'MOVE_ELEMENT', payload: payload})
+  }
+}
 
-export default connect(
-  mapStateToProps,
-  mapDispachToProps
-)(PostElementPreview);
+export default connect(mapStateToProps, mapDispachToProps)(PostElementPreview)
