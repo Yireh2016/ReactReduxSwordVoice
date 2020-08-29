@@ -6,7 +6,6 @@ const errorFn = (err, reject) => {
 }
 
 const successFn = (res, resolve) => {
-  console.log('successFn res', res)
   resolve(res)
 }
 

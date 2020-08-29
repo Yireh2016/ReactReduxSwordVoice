@@ -6,8 +6,6 @@ const uploadAvatar = (userName, base64) => {
       base64
     })
     .then(res => {
-      console.log('uploadAvatar res.data', res.data)
-      console.log('uploadAvatar res', res)
       return {status: 'OK', avatarURL: res.data.avatarURL}
     })
     .catch(err => {

@@ -8,8 +8,6 @@ const uploadPostImage = (
   errFn,
   thumbnail
 ) => {
-  console.log('uploadPostImage sending image')
-
   axios
     .post(`${process.env.CDN_URL}/cdn/uploadPostImage`, {
       base64,
@@ -19,7 +17,6 @@ const uploadPostImage = (
     })
     .then(res => {
       alert('file uploaded')
-      console.log('file uploaded', res)
       if (successFn) successFn(res)
     })
     .catch(err => {

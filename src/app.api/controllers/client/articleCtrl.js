@@ -271,7 +271,6 @@ export const setCommentCtrl = (req, res) => {
       }
 
       if (typeof commentIndex === 'number') {
-        console.log('Edit comment commentIndex', commentIndex)
         //edit comment
         let comment
         comment = article[0].comments[commentIndex]
@@ -292,8 +291,6 @@ export const setCommentCtrl = (req, res) => {
       }
 
       //create Comment
-
-      console.log('create comment commentIndex', commentIndex)
 
       comments = article[0].comments
 
@@ -329,7 +326,6 @@ export const deleteCommentCtrl = (req, res) => {
       return
     }
 
-    console.log('articleArr', articleArr)
     if (articleArr.length > 0) {
       articleArr[0].comments.id(id).remove()
 
@@ -366,8 +362,6 @@ export const filterPopularCtrl = (req, res) => {
     popularTotalCount,
     popularCount,
     posts => {
-      console.log('filter posts', posts)
-
       let postMinimumData = []
       for (let i = 0; i < posts.length; i++) {
         postMinimumData[i] = {
@@ -401,7 +395,6 @@ export const filterPopularCtrl = (req, res) => {
 export const searchArticleCtrl = (req, res) => {
   const {searchValue, count} = req.query
   const errHandler = err => {
-    console.log('searchArticleCtrl err', err)
     res.status(404).json(err)
   }
 
@@ -538,8 +531,6 @@ export const advancedSearchDbCtrl = (req, res) => {
     .populate(populateObj)
     .exec((err, posts) => {
       if (err) {
-        console.log('advancedSearchDbCtrl err ', err)
-
         res.status(404).send(err)
         return
       }

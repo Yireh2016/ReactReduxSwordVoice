@@ -22,8 +22,6 @@ export const createPostCtrl = (req, res) => {
   axios
     .post(`${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`)
     .then(result => {
-      console.log('respuesta correcta del post', result)
-
       article.save(err => {
         if (err) {
           console.log(`hubo error creando articulo ${err}`)
@@ -313,7 +311,6 @@ export const updatePostCtrl = (req, res) => {
 }
 
 export const deletePostCtrl = (req, res) => {
-  console.log('req.params.projectName', req.params.projectName)
   articleModel
     .findOneAndDelete({projectName: req.params.projectName})
     .exec(err => {

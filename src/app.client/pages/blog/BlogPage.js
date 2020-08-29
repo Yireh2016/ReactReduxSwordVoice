@@ -752,10 +752,8 @@ class BlogPage extends React.Component {
       recentPostsArray = newPostArray = []
     } else {
       recentPostsArray = articlesArr.slice(1)
-
       newPostArray = articlesArr.slice(0, 1)
     }
-
     if (popularArticlesArr.length === 0) {
       popularArticlesArr = [
         {

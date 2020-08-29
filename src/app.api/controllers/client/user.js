@@ -271,7 +271,6 @@ export const signUpEmailConfirmCtrl = (req, res) => {
         console.log(error)
         res.status(404).json(error)
       } else {
-        console.log('Server is ready to take our messages')
         res.status(200).send('Server is ready to take our messages')
       }
     })

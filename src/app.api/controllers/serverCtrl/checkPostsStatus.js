@@ -13,8 +13,6 @@ const checkPostStatus = () => {
         return
       }
       articles.forEach(article => {
-        console.log('article.programDate  ', article.programDate)
-        console.log('article.title where programDate< now  ', article.title)
         article.isPublished = true
         article.programDate = null
         article.date = now

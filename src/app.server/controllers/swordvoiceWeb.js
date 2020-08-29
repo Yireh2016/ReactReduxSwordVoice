@@ -88,7 +88,6 @@ const renderTemplate = (req, store) => {
 
 const renderWithPreloadedState = (req, res, store, isBlogPost) => {
   let preloadedState = store.getState()
-
   let siteTitle = ''
   let siteDesc = ''
 
@@ -205,7 +204,10 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
  
  `
   }
-  console.log('RENDERING preloadedState to send to templeta preloadedState')
+  console.log(
+    'RENDERING preloadedState to send to templeta preloadedState',
+    safeStringify(preloadedState)
+  )
 
   const {body, scriptTags, linkTags, styleTags} = renderTemplate(req, store)
   res.send(
@@ -230,7 +232,7 @@ const swordvoiceWeb = async (req, res) => {
     if (!req.signedCookies.guestID) {
       guestCookie(req, res)
     }
-
+    console.log('is routerPromise', req)
     return new Promise((resolve, reject) => {
       if (req._parsedUrl.pathname.match('/blog/post/')) {
         const RESPONSES_LIMIT = 3
@@ -445,7 +447,7 @@ const swordvoiceWeb = async (req, res) => {
             articleModel
               .find({isPublished: true})
               .select('url thumbnail title date keywords description')
-              .limit(1)
+              .limit(7)
               .populate('author')
               .sort({_id: 'descending'})
               .exec()
@@ -470,7 +472,6 @@ const swordvoiceWeb = async (req, res) => {
                     keywords: keywordsToArr(posts[i].keywords[0])
                   }
                 }
-
                 store.dispatch({
                   type: 'ARTICLES_ARR',
                   payload: postMinimumData
@@ -503,10 +504,10 @@ const swordvoiceWeb = async (req, res) => {
                       }
                     }
 
-                    // store.dispatch({
-                    //   type: "SET_POPULAR_ARR",
-                    //   payload: postMinimumData,
-                    // });
+                    store.dispatch({
+                      type: 'SET_POPULAR_ARR',
+                      payload: postMinimumData
+                    })
                     resolve()
                   },
                   err => {
@@ -556,7 +557,6 @@ const swordvoiceWeb = async (req, res) => {
 
   try {
     // await dbRegular();
-
     //preparing the ssr redux data for state management on server side
     await routerPromise()
     await userLoggedInPromise()
