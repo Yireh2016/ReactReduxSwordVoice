@@ -403,7 +403,7 @@ class BlogPage extends React.Component {
     this.asidePostsRef = React.createRef()
   }
 
-  setPostDimensions = () => {
+  setPostDimensions() {
     const isDeviceResult = this.props.resize.device
     let postH
     let asidePostW = 9

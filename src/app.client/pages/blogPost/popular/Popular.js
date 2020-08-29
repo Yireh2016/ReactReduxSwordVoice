@@ -365,7 +365,6 @@ const Popular = ({blog, setFilter, setPopularArr, device}) => {
             )
           }
           const showLoading = isLoadingPopularPosts
-          console.log(`PopPostCard${i}`) //TODO rm
           return (
             <FlexItem key={i}>
               <PostCard

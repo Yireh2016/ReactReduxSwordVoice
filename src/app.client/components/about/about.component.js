@@ -144,7 +144,6 @@ class About extends React.Component {
     }
     let deltaY
     if (this.props.device === 'pc') {
-      console.log('controlScrollSection', this.props.device)
       if (e.deltaY) {
         deltaY = e.deltaY
 

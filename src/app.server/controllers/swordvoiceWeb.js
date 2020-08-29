@@ -424,7 +424,7 @@ const swordvoiceWeb = async (req, res) => {
                   )
                 })
             } else {
-              console.log(' ARTICLE NOT FOUND')
+              console.log('ARTICLE NOT FOUND')
               store.dispatch({type: 'DEFAULT_ARTICLE'})
               res.redirect('/notFound') //FIXME it must be reject
             }
