@@ -7,7 +7,6 @@ let dbURI = process.env.MONGOLAB_URI //"mongodb://biza:J16032309.@ds157946.mlab.
 //   dbURI = process.env.MONGOLAB_URI; //MONGOLAB_URI es una variable de ENV creada en la nube
 // } //si esta en produccion se conecta a la db de la nube MLAB AWS
 
-console.log('dbURI', dbURI)
 mongoose.connect(dbURI, {useNewUrlParser: true})
 mongoose.set('useCreateIndex', true)
 mongoose.set('useFindAndModify', false)

@@ -204,10 +204,6 @@ const renderWithPreloadedState = (req, res, store, isBlogPost) => {
  
  `
   }
-  console.log(
-    'RENDERING preloadedState to send to templeta preloadedState',
-    safeStringify(preloadedState)
-  )
 
   const {body, scriptTags, linkTags, styleTags} = renderTemplate(req, store)
   res.send(
@@ -232,7 +228,6 @@ const swordvoiceWeb = async (req, res) => {
     if (!req.signedCookies.guestID) {
       guestCookie(req, res)
     }
-    console.log('is routerPromise', req)
     return new Promise((resolve, reject) => {
       if (req._parsedUrl.pathname.match('/blog/post/')) {
         const RESPONSES_LIMIT = 3
@@ -319,8 +314,6 @@ const swordvoiceWeb = async (req, res) => {
               }
 
               store.dispatch({type: 'SET_ARTICLE', payload: article})
-
-              console.log('SEARCHING SIMILAR ARTICLES')
 
               let searchStr = `${title} `
               let keyArr = keywordsToArr(keywords)
@@ -410,13 +403,11 @@ const swordvoiceWeb = async (req, res) => {
                               resolve()
                             },
                             err => {
-                              console.log('error en blog ', err)
                               reject(err)
                             }
                           )
                         })
                         .catch(err => {
-                          console.log('error en blog ', err)
                           reject(err)
                         })
                     },
@@ -426,20 +417,18 @@ const swordvoiceWeb = async (req, res) => {
                   )
                 })
             } else {
-              console.log('ARTICLE NOT FOUND')
               store.dispatch({type: 'DEFAULT_ARTICLE'})
               res.redirect('/notFound') //FIXME it must be reject
             }
           })
           .catch(err => {
-            console.log('error on finding article', err)
+            console.error('error on finding article', err)
           })
       } else if (req._parsedUrl.pathname.match('/blog')) {
         articleModel
           .find({isPublished: true})
           .countDocuments((err, count) => {
             if (err) {
-              console.log('error en blog ', err)
               reject(err)
               return
             }
@@ -511,13 +500,11 @@ const swordvoiceWeb = async (req, res) => {
                     resolve()
                   },
                   err => {
-                    console.log('error en blog ', err)
                     reject(err)
                   }
                 )
               })
               .catch(err => {
-                console.log('error en blog ', err)
                 reject(err)
               })
           })
@@ -568,7 +555,7 @@ const swordvoiceWeb = async (req, res) => {
       renderWithPreloadedState(req, res, store)
     }
   } catch (err) {
-    console.log('errors on promises', err)
+    console.error('errors on promises', err)
   }
 }
 
