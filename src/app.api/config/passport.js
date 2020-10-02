@@ -20,7 +20,7 @@ passport.use(
         }
         if (!user) {
           return done(null, false, {
-            message: 'Incorrect username or password.'
+            message: 'Incorrect username or password. '
           })
         }
         if (!user.verifyPassword(password)) {
