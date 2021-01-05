@@ -21,7 +21,7 @@
     "@loadable/component": "^5.10.2",
     "@loadable/server": "^5.10.2",
     "@loadable/webpack-plugin": "^5.7.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "b64-to-blob": "^1.2.19",
     "babel-plugin-css-modules-transform": "^1.6.1",
     "babel-plugin-file-loader": "^1.1.1",
