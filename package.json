@@ -33,7 +33,7 @@
     "connected-react-router": "^6.0.0",
     "cookie-parser": "^1.4.3",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-formidable": "^1.2.0",
     "he": "^1.2.0",
     "htmlparser": "^1.7.7",
