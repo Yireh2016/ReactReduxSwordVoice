@@ -70,7 +70,7 @@
     "universal-cookie-express": "^3.0.7",
     "uuid": "^3.3.2",
     "webpack": "^4.20.0",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",
