@@ -1,20 +1,19 @@
-
 :global(.appear) {
-	opacity: 0;
-	margin-bottom: 100px;
-	-webkit-animation: animFill 1s ease 1s normal forwards;
-	-o-animation: animFill 1s ease 1s normal forwards;
-	animation: animFill 1s ease 1s normal forwards;
+  opacity: 0;
+  margin-bottom: 100px;
+  -webkit-animation: animFill 1s ease 1s normal forwards;
+  -o-animation: animFill 1s ease 1s normal forwards;
+  animation: animFill 1s ease 1s normal forwards;
 }
 @keyframes animFill {
-	to {
-		opacity: 1;
-		margin-bottom: 0;
-	}
+  to {
+    opacity: 1;
+    margin-bottom: 0;
+  }
 }
 
 :global(.relleno) {
-	height: 1px;
+  height: 1px;
 }
 
 :global(.bordeAnim) {
@@ -108,7 +107,7 @@
   box-sizing: border-box;
 }
 :global(.fila:after) {
-  content: "";
+  content: '';
   overflow: auto;
   display: block;
   clear: both;
