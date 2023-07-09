@@ -321,101 +321,102 @@ const swordvoiceWeb = async (req, res) => {
                 searchStr = `${searchStr}${keyword} `
               })
 
-              articleModel
-                .find({
-                  $and: [
-                    {
-                      _id: {$ne: id},
-                      $text: {$search: `${searchStr}`}
-                    },
-                    {isPublished: true}
-                  ]
-                })
-                .countDocuments((err, similCount) => {
-                  if (err) {
-                    errFn(err) //FIXME errFn not exist
-                    return
-                  }
-
-                  if (similCount === 0) {
-                    similCount = 1
-                  }
-                  store.dispatch({
-                    type: 'SET_SIMILAR_ARTICLES_COUNT',
-                    payload: similCount
+              try {
+                const similCount = await articleModel
+                  .find({
+                    $and: [
+                      {
+                        _id: {$ne: id},
+                        $text: {$search: `${searchStr}`}
+                      },
+                      {isPublished: true}
+                    ]
                   })
+                  .countDocuments()
 
-                  searchSimilarArticles(
-                    articleModel,
-                    {id, count: 0},
-                    searchStr,
-                    arr => {
-                      let similarArticlesArr
-                      if (arr.length > 1) {
-                        similarArticlesArr = arr.splice(1)
-                      } else {
-                        similarArticlesArr = arr
-                      }
-                      store.dispatch({
-                        type: 'SET_SIMILAR_ARTICLES',
-                        payload: similarArticlesArr
-                      })
-
-                      //Getting popular Articles
-                      articleModel
-                        .find({isPublished: true})
-                        .countDocuments((err, count) => {
-                          store.dispatch({
-                            type: 'SET_ARTICLES_COUNT',
-                            payload: count
-                          })
-                          getPopularPosts(
-                            articleModel,
-                            'views',
-                            count,
-                            0,
-                            posts => {
-                              let postMinimumData = []
-                              for (let i = 0; i < posts.length; i++) {
-                                postMinimumData[i] = {
-                                  url: posts[i].url,
-                                  postImg:
-                                    posts[i].thumbnail &&
-                                    `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
-                                  postGradient:
-                                    posts[i].thumbnail &&
-                                    `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
-                                  title: posts[i].title,
-                                  summaryTextHtml: posts[i].description,
-                                  author:
-                                    `${posts[i].author.userFirstName} ` +
-                                    `${posts[i].author.userLastName}`,
-                                  avatar: posts[i].author.userAvatar,
-                                  date: dbDateToNormalDate(posts[i].date),
-                                  keywords: keywordsToArr(posts[i].keywords[0])
-                                }
-                              }
-
-                              store.dispatch({
-                                type: 'SET_POPULAR_ARR',
-                                payload: postMinimumData
-                              })
-                              resolve()
-                            },
-                            err => {
-                              reject(err)
-                            }
-                          )
-                        })
-                        .catch(err => {
-                          reject(err)
-                        })
-                    },
-                    err => {
-                      reject(err)
-                    }
-                  )
+                if (similCount === 0) {
+                  similCount = 1
+                }
+                store.dispatch({
+                  type: 'SET_SIMILAR_ARTICLES_COUNT',
+                  payload: similCount
                 })
+
+                searchSimilarArticles(
+                  articleModel,
+                  {id, count: 0},
+                  searchStr,
+                  articlesArray => {
+                    let similarArticlesArr
+                    if (articlesArray.length > 1) {
+                      similarArticlesArr = articlesArray.splice(1)
+                    } else {
+                      similarArticlesArr = articlesArray
+                    }
+                    store.dispatch({
+                      type: 'SET_SIMILAR_ARTICLES',
+                      payload: similarArticlesArr
+                    })
+
+                    //Getting popular Articles
+                    articleModel
+                      .find({isPublished: true})
+                      .countDocuments()
+                      .then(count => {
+                        store.dispatch({
+                          type: 'SET_ARTICLES_COUNT',
+                          payload: count
+                        })
+                        getPopularPosts(
+                          articleModel,
+                          'views',
+                          count,
+                          0,
+                          posts => {
+                            let postMinimumData = []
+                            for (let i = 0; i < posts.length; i++) {
+                              postMinimumData[i] = {
+                                url: posts[i].url,
+                                postImg:
+                                  posts[i].thumbnail &&
+                                  `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
+                                postGradient:
+                                  posts[i].thumbnail &&
+                                  `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
+                                title: posts[i].title,
+                                summaryTextHtml: posts[i].description,
+                                author:
+                                  `${posts[i].author.userFirstName} ` +
+                                  `${posts[i].author.userLastName}`,
+                                avatar: posts[i].author.userAvatar,
+                                date: dbDateToNormalDate(posts[i].date),
+                                keywords: keywordsToArr(posts[i].keywords[0])
+                              }
+                            }
+
+                            store.dispatch({
+                              type: 'SET_POPULAR_ARR',
+                              payload: postMinimumData
+                            })
+                            resolve()
+                          },
+                          err => {
+                            reject(err)
+                          }
+                        )
+                      })
+                      .catch(err => {
+                        reject(err)
+                      })
+                  },
+                  err => {
+                    reject(err)
+                  }
+                )
+              } catch (err) {
+                reject(err)
+                return
+              }
             } else {
               store.dispatch({type: 'DEFAULT_ARTICLE'})
               res.redirect('/notFound') //FIXME it must be reject
@@ -427,11 +428,8 @@ const swordvoiceWeb = async (req, res) => {
       } else if (req._parsedUrl.pathname.match('/blog')) {
         articleModel
           .find({isPublished: true})
-          .countDocuments((err, count) => {
-            if (err) {
-              reject(err)
-              return
-            }
+          .countDocuments()
+          .then(count => {
             store.dispatch({type: 'SET_ARTICLES_COUNT', payload: count})
             articleModel
               .find({isPublished: true})

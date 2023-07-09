@@ -1,6 +1,5 @@
 //modules
 import React, {Component} from 'react'
-import styled from 'styled-components'
 import axios from 'axios'
 import 'simplebar' // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 import {connect} from 'react-redux'
@@ -251,11 +250,19 @@ class SignUpForm extends Component {
         break
       }
       case 'userName': {
+        console.log(
+          '🚀 ~ file: signUpForm.component.js:255 ~ SignUpForm ~ value:',
+          value
+        )
         if (value && value.match(/^(\w){1,20}$/g)) {
           //username has to be 1 to 20 chars long including hyphen and underscore
 
           axios(`/api/searchUser/${value}`)
             .then(res => {
+              console.log(
+                '🚀 ~ file: signUpForm.component.js:263 ~ SignUpForm ~ res:',
+                res
+              )
               if (res.status === 200) {
                 this.setState({
                   userNameIsValid: {

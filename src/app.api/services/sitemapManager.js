@@ -3,111 +3,91 @@ import mongoose from 'mongoose'
 let siteModel = mongoose.model('Site')
 
 export const removeSiteMap = ({url}) => {
-  return new Promise((resolve, reject) => {
-    siteModel
-      .find()
-      .then(site => {
-        if (site.length === 0) {
-          resolve('no site created yet')
-          return
-        }
-        const urlsArr = site[0].sitemap.urls
-        console.log('urlsArr', urlsArr)
+  return new Promise(async (resolve, reject) => {
+    try {
+      const [site] = await siteModel.find()
 
-        //`${process.env.WEB_URL}/blog/post/${url}`
-        const urlsFilterArr = urlsArr.filter(link => {
-          return link.url !== `${process.env.WEB_URL}/blog/post/${url}`
-        })
+      if (!site) {
+        resolve('no site created yet')
+        return
+      }
+      const urlsArr = site.sitemap.urls
+      console.log('urlsArr', urlsArr)
 
-        console.log('urlsFilterArr', urlsFilterArr)
-
-        site[0].sitemap.urls = urlsFilterArr
-
-        site[0].save(err => {
-          if (err) {
-            reject(err)
-            return
-          }
-
-          resolve()
-        })
+      const urlsFilterArr = urlsArr.filter(link => {
+        return link.url !== `${process.env.WEB_URL}/blog/post/${url}`
       })
-      .catch(err => {
-        reject(err)
-      })
+
+      console.log('urlsFilterArr', urlsFilterArr)
+
+      site.sitemap.urls = urlsFilterArr
+
+      await site.save()
+      resolve()
+    } catch (err) {
+      reject(err)
+    }
   })
 }
 
 export const addToSiteMap = ({url, date}) => {
-  return new Promise((resolve, reject) => {
-    siteModel
-      .find()
-      .then(site => {
-        if (site.length === 0) {
-          const urlArr = [
-            {
-              url: `${process.env.WEB_URL}`,
-              changefreq: 'monthly',
-              priority: 1,
-              lastmod: '2019-09-07T14:09:33+00:00'
-            },
-            {
-              url: `${process.env.WEB_URL}/about`,
-              changefreq: 'monthly',
-              priority: 0.8,
-              lastmod: '2019-09-07T14:09:33+00:00'
-            },
-            {
-              url: `${process.env.WEB_URL}/blog`,
-              changefreq: 'monthly',
-              priority: 0.8,
-              lastmod: '2019-09-07T14:09:33+00:00'
-            },
-            {
-              url: `${process.env.WEB_URL}/contact`,
-              changefreq: 'monthly',
-              priority: 0.8,
-              lastmod: '2019-09-07T14:09:33+00:00'
-            },
-            {
-              url: `${process.env.WEB_URL}/blog/post/${url}`,
-              changefreq: 'monthly',
-              priority: 0.64,
-              lastmod: date
-            }
-          ]
-          const siteInstance = new siteModel()
-          siteInstance.sitemap.urls = urlArr
-          siteInstance.save(err => {
-            if (err) {
-              reject(err)
-              return
-            }
-          })
+  return new Promise(async (resolve, reject) => {
+    try {
+      const [site] = await siteModel.find()
 
-          resolve()
-          return
-        }
-
-        const newUrl = {
-          url: `${process.env.WEB_URL}/blog/post/${url}`,
-          changefreq: 'monthly',
-          priority: 0.64,
-          lastmod: date
-        }
-
-        site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl]
-        site[0].save(err => {
-          if (err) {
-            reject(err)
-            return
+      if (!site) {
+        const urlArr = [
+          {
+            url: `${process.env.WEB_URL}`,
+            changefreq: 'monthly',
+            priority: 1,
+            lastmod: '2019-09-07T14:09:33+00:00'
+          },
+          {
+            url: `${process.env.WEB_URL}/about`,
+            changefreq: 'monthly',
+            priority: 0.8,
+            lastmod: '2019-09-07T14:09:33+00:00'
+          },
+          {
+            url: `${process.env.WEB_URL}/blog`,
+            changefreq: 'monthly',
+            priority: 0.8,
+            lastmod: '2019-09-07T14:09:33+00:00'
+          },
+          {
+            url: `${process.env.WEB_URL}/contact`,
+            changefreq: 'monthly',
+            priority: 0.8,
+            lastmod: '2019-09-07T14:09:33+00:00'
+          },
+          {
+            url: `${process.env.WEB_URL}/blog/post/${url}`,
+            changefreq: 'monthly',
+            priority: 0.64,
+            lastmod: date
           }
+        ]
+        const siteInstance = new siteModel()
+        siteInstance.sitemap.urls = urlArr
+        await siteInstance.save()
 
-          resolve()
-        })
-      })
-      .catch(err => {
-        reject(err)
-      })
+        resolve()
+        return
+      }
+
+      const newUrl = {
+        url: `${process.env.WEB_URL}/blog/post/${url}`,
+        changefreq: 'monthly',
+        priority: 0.64,
+        lastmod: date
+      }
+
+      site.sitemap.urls = [...site.sitemap.urls, newUrl]
+      await site.save()
+      resolve()
+    } catch (error) {
+      reject(err)
+    }
   })
 }

@@ -1,4 +1,3 @@
-import paragraphService from '../../services/paragraphService'
 import dbDateToNormalDate from '../../services/dbDateToNormalDate'
 import keywordsToArr from '../../services/keywordsToArr'
 
@@ -9,8 +8,6 @@ const searchSimilarArticles = (
   successFn,
   errFn
 ) => {
-  console.log('searchValue', searchValue) //TODO rm
-  console.log('articlesShown', articlesShown) //TODO rm
   const query = {
     isPublished: true,
     $text: {$search: `${searchValue}`}
@@ -28,7 +25,7 @@ const searchSimilarArticles = (
     })
     .sort({score: {$meta: 'textScore'}})
     .skip(articlesShown.count)
-    .limit(7) // FIXME change it to 7
+    .limit(7)
     .exec()
     .then(queryPosts => {
       let posts

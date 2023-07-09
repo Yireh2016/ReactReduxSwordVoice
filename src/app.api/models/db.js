@@ -8,8 +8,7 @@ let dbURI = process.env.MONGOLAB_URI //"mongodb://biza:J16032309.@ds157946.mlab.
 // } //si esta en produccion se conecta a la db de la nube MLAB AWS
 
 mongoose.connect(dbURI, {useNewUrlParser: true})
-mongoose.set('useCreateIndex', true)
-mongoose.set('useFindAndModify', false)
+
 mongoose.connection.on('connected', function () {
   console.log('Mongoose connected to ' + dbURI)
 })

@@ -15,11 +15,12 @@ const getAvatarFromDb = id => {
     userModel
       .find({_id: id})
       .select('userAvatar')
-      .exec((err, user) => {
-        if (err) {
-          reject({status: 'err', result: err})
-        }
+      .exec()
+      .then(user => {
         resolve({status: 'OK', result: user[0].userAvatar})
+      })
+      .catch(err => {
+        reject({status: 'err', result: err})
       })
   })
 }

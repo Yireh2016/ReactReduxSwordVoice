@@ -12,12 +12,10 @@ passport.use(
       usernameField: 'userName',
       passwordField: 'userPassword'
     },
-    function (username, password, done) {
-      User.findOne({userName: username}, function (err, user) {
-        if (err) {
-          console.log('error encontrando usuario', err)
-          return done(err)
-        }
+    async function (username, password, done) {
+      try {
+        const user = await User.findOne({userName: username})
+
         if (!user) {
           return done(null, false, {
             message: 'Incorrect username or password. '
@@ -29,7 +27,12 @@ passport.use(
           })
         }
         return done(null, user)
-      })
+      } catch (error) {
+        if (error) {
+          console.log('error encontrando usuario', error)
+          return done(error)
+        }
+      }
     }
   )
 )

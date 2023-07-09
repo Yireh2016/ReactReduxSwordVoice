@@ -689,9 +689,6 @@ class PostElement extends Component {
                   HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
                   HTMLStylesArrRemove={this.HTMLStylesArrRemove}
                   HTMLClassesArrRemove={this.HTMLClassesArrRemove}
-                  HTMLAtributesArrRemove={this.HTMLAtributesArrRemove}
-                  HTMLStylesArrRemove={this.HTMLStylesArrRemove}
-                  HTMLClassesArrRemove={this.HTMLClassesArrRemove}
                 />
               )}
               {this.state.isFinishEnabled &&

@@ -178,6 +178,7 @@ class LogInForm extends Component {
     }
     return res
   }
+
   tryLogIn = () => {
     const {userName, userPassword} = this.state
     const data = {
