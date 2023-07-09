@@ -122,78 +122,78 @@ routerAPI.get('/recoveryUsername', guestAPI, recoveryUsernameCtrl)
 
 // obtener todos MUST BE AUTH
 //se usa en: DEVELOPMENT ONLY
-routerAPI.get('/users', authAPI, (req, res) => {
+routerAPI.get('/users', authAPI, async (req, res) => {
   const {limit, skip} = req.body
-  usersModel
-    .find()
-    .select(
-      'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
-    )
-    .limit(limit)
-    .skip(skip)
-    .exec((err, users) => {
-      if (err) {
-        console.log('err', err)
-        res.status(404).json(err)
-        return
-      }
 
-      res.status(200).json(users)
-    })
+  try {
+    const users = await usersModel
+      .find()
+      .select(
+        'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
+      )
+      .limit(limit)
+      .skip(skip)
+      .exec()
 
-  // const users = await usersModel.find();
-
-  // console.log('users', users);
-  // res.status().json(users);
+    res.status(200).json(users)
+  } catch (err) {
+    console.log('err', err)
+    res.status(404).json(err)
+    return
+  }
 })
 
 // obtener usuario especifico must be AUTH
 //se usa en: signUpForm
-routerAPI.get('/users/:userId', authAPI, (req, res) => {
-  usersModel
-    .findById(req.params.userId)
-    .select(
-      'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
-    )
-    .exec((err, user) => {
-      if (err) {
-        res.status(501).json(`thre was an error: ${err}`)
-      } else {
-        res.status(200).json(user)
-      }
-    })
+routerAPI.get('/users/:userId', authAPI, async (req, res) => {
+  try {
+    const user = await usersModel
+      .findById(req.params.userId)
+      .select(
+        'userName _id userAvatar userCountry userFirstName userLastName userEmail userBirthDate userGender userInterests userOtherInterests userType isUserActive userCreationDate'
+      )
+      .exec()
+
+    res.status(200).json(user)
+  } catch (err) {
+    res.status(501).json(`there was an error: ${err}`)
+  }
 })
 
 // Obtener email
 //se usa en: signUpForm
 // para verificar, en tiempo real, que el email del usuario no se encuentre duplicado
-routerAPI.get('/searchEmail/:email', guestAPI, (req, res) => {
+routerAPI.get('/searchEmail/:email', guestAPI, async (req, res) => {
   const email = req.params.email
-  usersModel.find({userEmail: email}).exec((err, user) => {
-    if (err) {
-      res.status(501).json(`thre was an error: ${err}`)
-    } else {
-      user[0]
-        ? res.status(200).json(user[0].userName)
-        : res.status(404).json('not found')
-    }
-  })
+
+  try {
+    const user = await usersModel.find({userEmail: email}).exec()
+
+    user[0]
+      ? res.status(200).json(user[0].userName)
+      : res.status(404).json('not found')
+  } catch (err) {
+    res.status(501).json(`there was an error: ${err}`)
+  }
 })
 
 //obtener  usuario especifico por username AUTH
 //se usa en: signUpForm
 // para verificar, en tiempo real, que el username del usuario no se encuentre duplicado
-routerAPI.get('/searchUser/:userName', guestAPI, (req, res) => {
+routerAPI.get('/searchUser/:userName', guestAPI, async (req, res) => {
   const userName = req.params.userName
-  usersModel.find({userName: userName}).exec(function (err, userName) {
-    if (err) {
-      res.status(501).json(`thre was an error: ${err}`)
-    } else {
-      userName[0]
-        ? res.status(200).json(userName)
-        : res.status(404).json(userName)
+
+  try {
+    const [user] = await usersModel.find({userName: userName}).exec()
+
+    if (!user) {
+      res.status(404).json({message: 'user not found'})
+      return
     }
-  })
+    res.status(200).json(user)
+  } catch (err) {
+    res.status(501).json(`there was an error: ${err}`)
+  }
 })
 
 //obtener  usuario especifico por SessionID AUTH
@@ -220,14 +220,15 @@ routerAPI.get('/advancedSearchDb/', guestAPI, advancedSearchDbCtrl)
 //para eliminar usuario de la DB
 
 routerAPI.delete('/removeSiteMap', authAPI, removeSiteMapCtrl)
-routerAPI.delete('/users/:userId', authAPI, (req, res) => {
-  usersModel.findOneAndDelete({userName: req.params.userId}).exec(err => {
-    if (err) {
-      res.status(404).json(err)
-      return
-    }
+routerAPI.delete('/users/:userId', authAPI, async (req, res) => {
+  try {
+    await usersModel.findOneAndDelete({userName: req.params.userId}).exec()
+
     res.status(204).json({message: 'user removed'})
-  })
+  } catch (err) {
+    res.status(404).json(err)
+    return
+  }
 })
 
 routerAPI.delete('/deleteComment', authAPI, deleteCommentCtrl)
@@ -252,24 +253,23 @@ routerAPI.delete('/deleteComment', authAPI, deleteCommentCtrl)
 //////////////////////////////////////
 //////////////////////////////////////
 
-routerAPI.put('/sessionUpdate/:username', guestAPI, (req, res) => {
+routerAPI.put('/sessionUpdate/:username', guestAPI, async (req, res) => {
   const username = req.params.username
   const sessionId = req.cookies.sessionId
-  usersModel.findOneAndUpdate(
-    {userName: username},
-    {
-      userSessionId: sessionId
-    },
-    function (err) {
-      if (err) {
-        console.log(err)
-      } else {
-        console.log('NEW SESSION ID ', sessionId)
 
-        res.end('success')
+  try {
+    await usersModel.findOneAndUpdate(
+      {userName: username},
+      {
+        userSessionId: sessionId
       }
-    }
-  )
+    )
+
+    console.log('NEW SESSION ID ', sessionId)
+    res.end('success')
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 routerAPI.put('/updatePasswd', updatePasswdCtrl)

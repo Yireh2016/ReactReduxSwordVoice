@@ -26,7 +26,7 @@
 
 .newPost {
   border-radius: 154px 0 351px 0;
-  background-image: url("../../assets/img/blog/fondoBlog.jpg");
+  background-image: url('../../assets/img/blog/fondoBlog.jpg');
   background-size: cover;
   background-position-y: 27%;
   display: flex;
@@ -228,7 +228,7 @@
   }
 
   .newPostTitleCont {
-    background-image: url("../../assets/img/blog/fondoBlog.jpg");
+    background-image: url('../../assets/img/blog/fondoBlog.jpg');
     background-position-x: center;
     background-size: cover;
   }

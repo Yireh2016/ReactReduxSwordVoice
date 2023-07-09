@@ -61,64 +61,65 @@ export const signUpCtrl = async (req, res) => {
 
   userData = {
     ...userData,
-    _id: mongoose.Types.ObjectId(),
+    _id: new mongoose.Types.ObjectId(),
     userVerificationCode
   }
 
-  let user = new usersModel(userData)
+  try {
+    let user = new usersModel(userData)
 
-  user.setPassword(userData.userPassword)
-  user.save(async (err, savedUser) => {
-    if (err) {
-      console.log(
-        `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-      )
-      res.status(400).json({
-        code: 400,
-        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-      })
-    } else {
-      try {
-        await sendUserVerificationCode(userVerificationCode, {
-          firstName: userData.userFirstName,
-          email: userData.userEmail
-        })
+    user.setPassword(userData.userPassword)
+    const savedUser = await user.save()
 
-        res.status(200).json({
-          code: 200,
-          message: `Verification email sent`
-        })
-      } catch (error) {
-        res.status(404).json({
-          code: 404,
-          message: `Error sending email ${error}`
-        })
-      }
+    //TODO this code create and send the cookie session
 
-      //TODO this code create and send the cookie session
+    // try {
+    //   await sessionCookie(req, res, {
+    //     userName: savedUser.userName,
+    //     id: savedUser._id,
+    //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+    //     userType: savedUser.userType
+    //   });
 
-      // try {
-      //   await sessionCookie(req, res, {
-      //     userName: savedUser.userName,
-      //     id: savedUser._id,
-      //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
-      //     userType: savedUser.userType
-      //   });
+    //   const responseUserData = {
+    //     id: savedUser._id,
+    //     userName: savedUser.userName,
+    //     userType: savedUser.userType,
+    //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
+    //     userAvatar: savedUser.userAvatar
+    //   };
+    //   console.log("sending responseUserData signup[] ", responseUserData);
+    //   res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
+    // } catch (err) {
+    //   console.log("err on user catch on login", err);
+    // }
+  } catch (err) {
+    console.log(
+      `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+    )
+    res.status(400).json({
+      code: 400,
+      message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+    })
+    return
+  }
 
-      //   const responseUserData = {
-      //     id: savedUser._id,
-      //     userName: savedUser.userName,
-      //     userType: savedUser.userType,
-      //     userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
-      //     userAvatar: savedUser.userAvatar
-      //   };
-      //   console.log("sending responseUserData signup[] ", responseUserData);
-      //   res.status(200).json(responseUserData); //user ID is returned to use it later for avatar upload
-      // } catch (err) {
-      //   console.log("err on user catch on login", err);
-      // }
-    }
-  })
+  try {
+    await sendUserVerificationCode(userVerificationCode, {
+      firstName: userData.userFirstName,
+      email: userData.userEmail
+    })
+
+    res.status(200).json({
+      code: 200,
+      message: `Verification email sent`
+    })
+  } catch (error) {
+    res.status(404).json({
+      code: 404,
+      message: `Error sending verification email ${error}`
+    })
+  }
 }
 
 export const loginCtrl = (req, res) => {
@@ -130,6 +131,10 @@ export const loginCtrl = (req, res) => {
   }
 
   passport.authenticate('local', async (err, user, info) => {
+    console.log(
+      '🚀 ~ file: user.js:133 ~ passport.authenticate ~ err, user, info:',
+      {err, user, info}
+    )
     if (err) {
       res.status(404).json(`${err.response.data}`)
       return
@@ -185,7 +190,7 @@ export const logoutCtrl = (req, res) => {
   res.status(200).json({status: 'OK', message: 'Log Out Successful'})
 }
 
-export const autoLogin = (req, res) => {
+export const autoLogin = async (req, res) => {
   if (req.signedCookies.sessionID) {
     const token = req.signedCookies.sessionID
 
@@ -195,20 +200,22 @@ export const autoLogin = (req, res) => {
     })
 
     const id = tokenData.data.id
-    usersModel
-      .find({_id: id})
-      .select('userAvatar userName _id userType userFirstName userLastName')
-      .exec(function (err, data) {
-        if (err) {
-          res.status(501).json(`thre was an error: ${err}`)
-          return
-        }
 
-        if (data.length > 0) {
-          res.status(200).send(data[0])
-          return
-        }
-      })
+    try {
+      const data = await usersModel
+        .find({_id: id})
+        .select('userAvatar userName _id userType userFirstName userLastName')
+        .exec()
+      if (data.length > 0) {
+        res.status(200).send(data[0])
+        return
+      }
+    } catch (error) {
+      if (error) {
+        res.status(501).json(`there was an error: ${err}`)
+        return
+      }
+    }
   } else {
     res.status(404).json('not found')
   }
@@ -300,7 +307,7 @@ export const signUpEmailConfirmCtrl = (req, res) => {
 export const emailVerificationCtrl = (req, res) => {
   const {id} = req.query
 
-  const success = user => {
+  const success = async user => {
     if (user.length === 0) {
       errFn(`User verification time expired`)
       return
@@ -312,15 +319,14 @@ export const emailVerificationCtrl = (req, res) => {
     }
 
     user[0].userEmailVerified = true
-
-    user[0].save((err, newUser) => {
-      if (err) {
-        errFn(`Email not verified error: ${err}`)
-        return
-      }
+    try {
+      const newUser = await user[0].save()
 
       emailVerified(newUser)
-    })
+    } catch (error) {
+      errFn(`Email not verified error: ${err}`)
+      return
+    }
   }
 
   const errFn = msg => {
@@ -354,36 +360,30 @@ export const emailVerificationCtrl = (req, res) => {
   verifyUserEmail(usersModel, id, success, errFn)
 }
 
-export const recoveryPasswdCtrl = (req, res) => {
+export const recoveryPasswdCtrl = async (req, res) => {
   const {email} = req.query
 
-  usersModel
-    .find({userEmail: email})
-    .exec()
-    .then(user => {
-      if (user.length === 0) {
-        res.status(401).send('Email not found')
-        return
-      }
+  try {
+    const user = await usersModel.find({userEmail: email}).exec()
 
-      user[0].userPasswdRecoverDate = new Date()
+    if (user.length === 0) {
+      res.status(401).send('Email not found')
+      return
+    }
 
-      user[0].save((err, newUser) => {
-        if (err) {
-          res.status(401).send(err)
-          return
-        }
-        sendNoReplyEmail(
-          passwdRecoveryTemplate(newUser._id, newUser.userFirstName),
-          'SwordVoice Password Recovery ✔',
-          email
-        )
-        res.status(200).send({status: 'OK', user})
-      })
-    })
-    .catch(err => {
-      res.status(401).send(err)
-    })
+    user[0].userPasswdRecoverDate = new Date()
+
+    const newUser = await user[0].save()
+
+    sendNoReplyEmail(
+      passwdRecoveryTemplate(newUser._id, newUser.userFirstName),
+      'SwordVoice Password Recovery ✔',
+      email
+    )
+    res.status(200).send({status: 'OK'})
+  } catch (err) {
+    res.status(401).send(err)
+  }
 }
 
 export const recoveryUsernameCtrl = (req, res) => {
@@ -436,14 +436,12 @@ export const passwordRecoverCtrl = (req, res) => {
     })
 }
 
-export const updatePasswdCtrl = (req, res) => {
+export const updatePasswdCtrl = async (req, res) => {
   const {passwd, id} = req.body
 
-  usersModel.find({_id: id}).exec((err, user) => {
-    if (err) {
-      res.status(401).send(err)
-      return
-    }
+  try {
+    const user = await usersModel.find({_id: id}).exec()
+
     const passwdRecoveryDate = user[0].userPasswdRecoverDate
 
     if (passwdRecoveryDate === '') {
@@ -469,32 +467,24 @@ export const updatePasswdCtrl = (req, res) => {
 
     user[0].userPasswdRecoverDate = ''
 
-    user[0].save(async (err, savedUser) => {
-      if (err) {
-        console.log(
-          `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-        )
-        res.status(400).json({
-          status: 'ERR',
-          message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
-        })
-      } else {
-        try {
-          // await sessionCookie(req, res, {
-          //   userName: savedUser.userName,
-          //   id: savedUser._id,
-          //   userFullName: `${savedUser.userFirstName} ${savedUser.userLastName}`,
-          //   userType: savedUser.userType
-          // });
+    try {
+      await user[0].save()
 
-          res.status(200).send({
-            status: 'OK',
-            message: 'Your password was successfully changed'
-          }) //user ID is returned to use it later for avatar upload
-        } catch (err) {
-          console.log('err on user catch on login', err)
-        }
-      }
-    })
-  })
+      res.status(200).send({
+        status: 'OK',
+        message: 'Your password was successfully changed'
+      }) //user ID is returned to use it later for avatar upload
+    } catch (err) {
+      console.log(
+        `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+      )
+      res.status(400).json({
+        status: 'ERR',
+        message: `ERROR FATAL ON DB when Saving DATA ...there was an error: ${err}`
+      })
+    }
+  } catch (err) {
+    res.status(401).send(err)
+    return
+  }
 }

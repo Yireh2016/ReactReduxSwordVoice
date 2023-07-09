@@ -4,12 +4,8 @@ import {
   limitingComments,
   limitingResponses
 } from '../../../app.client/services/limitingCommentsAndResponses'
-import {
-  updateArticleAvatars,
-  updateReplyAvatars
-} from '../../../services/updateArticleAvatars'
+import {updateReplyAvatars} from '../../../services/updateArticleAvatars'
 
-import paragraphService from '../../../services/paragraphService'
 import dbDateToNormalDate from '../../../services/dbDateToNormalDate'
 import keywordsToArr from '../../../services/keywordsToArr'
 import getPopularPosts from '../../../app.server/controllers/queries/getPopularPosts'
@@ -22,61 +18,39 @@ import searchSimilarArticles from '../../../common/queries/searchSimilarArticles
 const articleModel = mongoose.model('Article')
 const userModel = mongoose.model('User')
 
-export const socialCtrl = (req, res) => {
+export const socialCtrl = async (req, res) => {
   const {id, prop} = req.query
   const {socialCount} = req.body
 
-  articleModel.find({_id: id}).exec((err, article) => {
-    if (err) {
-      console.log(err)
-      res.send(err)
-    } else {
-      switch (prop) {
-        case 'claps':
-          article[0].socialCount.claps =
-            article[0].socialCount.claps + socialCount
-          break
+  try {
+    const article = await articleModel.find({_id: id}).exec()
 
-        case 'share':
-          article[0].socialCount.share =
-            article[0].socialCount.share + socialCount
-          break
+    switch (prop) {
+      case 'claps':
+      case 'share':
+      case 'comments':
+      case 'views':
+        article[0].socialCount[`${prop}`] =
+          article[0].socialCount[`${prop}`] + socialCount
+        break
 
-        case 'comments':
-          article[0].socialCount.comments =
-            article[0].socialCount.comments + socialCount
-          break
-
-        case 'views':
-          article[0].socialCount.views =
-            article[0].socialCount.views + socialCount
-          break
-
-        default:
-          break
-      }
-
-      article[0].save((err, article) => {
-        if (err) {
-          console.log(err)
-          res.send(err)
-        } else {
-          res.status(200).send(article.socialCount)
-        }
-      })
+      default:
+        break
     }
-  })
+
+    await article[0].save()
+    res.status(200).send(article.socialCount)
+  } catch (err) {
+    console.log(err)
+    res.send(err)
+  }
 }
 
-export const getMoreCommentsCtrl = (req, res) => {
+export const getMoreCommentsCtrl = async (req, res) => {
   const {id, commentsCount} = req.query
 
-  articleModel.findById(id, async (err, article) => {
-    if (err) {
-      res.status(404).json({status: 'not Found'})
-      return
-    }
-
+  try {
+    await articleModel.findById(id)
     let articleComments = article.comments
 
     let {commentsArr} = limitingComments(articleComments, commentsCount)
@@ -84,7 +58,10 @@ export const getMoreCommentsCtrl = (req, res) => {
     commentsArr = await updateArticleAvatars(commentsArr)
 
     res.status(200).send({status: 'OK', comments: commentsArr})
-  })
+  } catch (err) {
+    res.status(404).json({status: 'not Found'})
+    return
+  }
 }
 
 export const getMoreResponsesCtrl = (req, res) => {
@@ -148,7 +125,6 @@ export const getMorePostsCtrl = (req, res) => {
       console.log('err', err)
       res.status(404).json(err)
     })
-  // resolve();
 }
 
 export const setReplyCtrl = async (req, res) => {
@@ -159,13 +135,8 @@ export const setReplyCtrl = async (req, res) => {
   let responses
   let comments = []
 
-  articleModel.find({title}, (err, article) => {
-    if (err) {
-      console.log('err', err)
-      res.status(404).json(err)
-      return
-    }
-
+  try {
+    const article = await articleModel.find({title})
     comments = article[0].comments
     comments.forEach((comment, i) => {
       if (i === intIndex) {
@@ -177,180 +148,135 @@ export const setReplyCtrl = async (req, res) => {
 
     article[0].comments[intIndex].responses = responses
 
-    article[0].save((err, article) => {
-      if (err) {
-        console.log('err', err)
-        res.status(404).json(err)
-        return
-      }
-
-      res.status(200).json({
-        message: 'ok',
-        id: article.comments[intIndex].responses[0]._id
-      })
+    const savedArticle = article[0].save()
+    res.status(200).json({
+      message: 'ok',
+      id: savedArticle.comments[intIndex].responses[0]._id
     })
-  })
+  } catch (err) {
+    res.status(404).json(err)
+    return
+  }
 }
 
-export const updateCommentClaps = (req, res) => {
+export const updateCommentClaps = async (req, res) => {
   const {id, index} = req.query
   const {claps} = req.body
 
-  articleModel.find({_id: id}, (err, article) => {
-    if (err) {
-      console.log('err', err)
-      res.status(404).json({status: 'ERR', message: err.message})
-      return
-    }
+  try {
+    const article = await articleModel.find({_id: id})
 
     let comments = article[0].comments
 
     comments[index].claps = comments[index].claps + claps
 
-    articleModel.findOneAndUpdate({_id: id}, {comments}, (err, commnets) => {
-      if (err) {
-        console.log('err', err)
-        res.status(404).json({status: 'ERR', message: err.message})
-        return
-      }
-    })
+    await articleModel.findOneAndUpdate({_id: id}, {comments})
 
     res.status(200).json({status: 'OK', result: comments[index].claps})
-  })
-}
-
-export const updateReplyClaps = (req, res) => {
-  const {id, index, commentIndex} = req.query
-  const {claps} = req.body
-
-  articleModel.find({_id: id}, (err, article) => {
+  } catch (error) {
     if (err) {
       console.log('err', err)
       res.status(404).json({status: 'ERR', message: err.message})
       return
     }
+  }
+}
+
+export const updateReplyClaps = async (req, res) => {
+  const {id, index, commentIndex} = req.query
+  const {claps} = req.body
+
+  try {
+    const article = await articleModel.find({_id: id})
 
     let comments = article[0].comments
 
     comments[commentIndex].responses[index].claps =
       comments[commentIndex].responses[index].claps + claps
 
-    articleModel.findOneAndUpdate({_id: id}, {comments}, (err, commnets) => {
-      if (err) {
-        console.log('err', err)
-        res.status(404).json({status: 'ERR', message: err.message})
-        return
-      }
-    })
+    await articleModel.findOneAndUpdate({_id: id}, {comments})
 
     res.status(200).json({
       status: 'OK',
       result: comments[commentIndex].responses[index].claps
     })
-  })
+  } catch (err) {
+    console.log('err', err)
+    res.status(404).json({status: 'ERR', message: err.message})
+  }
 }
 
-export const setCommentCtrl = (req, res) => {
+export const setCommentCtrl = async (req, res) => {
   const {userID, userName, title, message, commentIndex} = req.body
 
-  userModel.findById(userID, (err, user) => {
-    if (err) {
-      console.log('err', err)
-      res.status(404).json(err)
-      return err
-    }
+  try {
+    const user = await userModel.findById(userID)
+
     let comment = {userAvatar: user.userAvatar, userID, userName, message}
 
     let comments = []
 
-    articleModel.find({title}, (err, article) => {
-      if (err) {
-        console.log('err', err)
-        res.status(404).json(err)
-        return
-      }
+    const article = await articleModel.find({title})
 
-      if (typeof commentIndex === 'number') {
-        //edit comment
-        let comment
-        comment = article[0].comments[commentIndex]
-        comment.message = message
-        article[0].comments[commentIndex] = comment
+    if (typeof commentIndex === 'number') {
+      //edit comment
+      let comment
+      comment = article[0].comments[commentIndex]
+      comment.message = message
+      article[0].comments[commentIndex] = comment
 
-        article[0].save((err, article) => {
-          if (err) {
-            console.log('err SAVING ARTICLE', err)
-            res.status(404).json(err)
-            return
-          }
+      const article = await article[0].save()
 
-          res.status(200).json({message: 'ok', id: article.comments[0]._id})
-        })
+      res.status(200).json({message: 'ok', id: article.comments[0]._id})
 
-        return
-      }
-
-      //create Comment
-
-      comments = article[0].comments
-
-      if (comments) {
-        article[0].comments = [comment, ...comments]
-      } else {
-        article[0].comments = [comment]
-      }
-
-      let socialCount = article[0].socialCount
-
-      article[0].socialCount.comments = socialCount.comments + 1
-
-      article[0].save((err, article) => {
-        if (err) {
-          console.log('err SAVING ARTICLE', err)
-          res.status(404).json(err)
-          return
-        }
-
-        res.status(200).json({message: 'ok', id: article.comments[0]._id})
-      })
-    })
-  })
-}
-
-export const deleteCommentCtrl = (req, res) => {
-  const {id} = req.query
-
-  articleModel.find({'comments._id': id}).exec((err, articleArr) => {
-    if (err) {
-      res.status(404).json(err)
       return
     }
+
+    //create Comment
+
+    comments = article[0].comments
+
+    if (comments) {
+      article[0].comments = [comment, ...comments]
+    } else {
+      article[0].comments = [comment]
+    }
+
+    let socialCount = article[0].socialCount
+
+    article[0].socialCount.comments = socialCount.comments + 1
+
+    const savedArticle = await article[0].save()
+
+    res.status(200).json({message: 'ok', id: savedArticle.comments[0]._id})
+  } catch (err) {
+    console.log('err', err)
+    res.status(404).json(err)
+    return err
+  }
+}
+
+export const deleteCommentCtrl = async (req, res) => {
+  const {id} = req.query
+
+  try {
+    const articleArr = await articleModel.find({'comments._id': id}).exec()
 
     if (articleArr.length > 0) {
       articleArr[0].comments.id(id).remove()
 
       articleArr[0].socialCount.comments = articleArr[0].comments.length
 
-      articleArr[0].save(err => {
-        if (err) {
-          res.status(404).json(err)
-          return
-        }
-      })
+      await articleArr[0].save()
 
       res.status(200).json({message: 'ok'})
     } else {
       res.status(404).json({message: 'no article found'})
     }
-  })
-
-  // articleModel.findOneAndDelete({ userName: req.params.userId }).exec(err => {
-  //   if (err) {
-  //     res.status(404).json(err);
-  //     return;
-  //   }
-  //   res.status(204).json({ message: "user removed" });
-  // }
+  } catch (err) {
+    res.status(404).json(err)
+    return
+  }
 }
 
 export const filterPopularCtrl = (req, res) => {
@@ -398,17 +324,17 @@ export const searchArticleCtrl = (req, res) => {
     res.status(404).json(err)
   }
 
-  const successHandler = arr => {
-    articleModel
-      .find({$text: {$search: `${searchValue}`}})
-      .countDocuments((err, searchCount) => {
-        if (err) {
-          errFn(err) //FIXME errFn not exist
-          return
-        }
+  const successHandler = async arr => {
+    try {
+      const searchCount = await articleModel
+        .find({$text: {$search: `${searchValue}`}})
+        .countDocuments()
 
-        res.status(200).send({status: 'OK', searchArr: arr, searchCount})
-      })
+      res.status(200).send({status: 'OK', searchArr: arr, searchCount})
+    } catch (err) {
+      errHandler(err)
+      return
+    }
   }
 
   searchSimilarArticles(
@@ -440,7 +366,7 @@ export const getMoreSimilarPostsCtrl = (req, res) => {
   )
 }
 
-export const searchLastArticlesCtrl = (req, res) => {
+export const searchLastArticlesCtrl = (_, res) => {
   searchLastArticlesQuery(
     articleModel,
     (articlesTotalCount, articlesArr) => {
@@ -452,7 +378,7 @@ export const searchLastArticlesCtrl = (req, res) => {
   )
 }
 
-export const advancedSearchDbCtrl = (req, res) => {
+export const advancedSearchDbCtrl = async (req, res) => {
   let {text, author, dateFrom, dateTo} = req.query
 
   if (!dateTo) {
@@ -524,38 +450,38 @@ export const advancedSearchDbCtrl = (req, res) => {
     }
   }
 
-  articleModel
-    .find(query)
-    .sort({date: 'descending'})
-    .select('url thumbnail title date keywords description')
-    .populate(populateObj)
-    .exec((err, posts) => {
-      if (err) {
-        res.status(404).send(err)
-        return
-      }
+  try {
+    const posts = await articleModel
+      .find(query)
+      .sort({date: 'descending'})
+      .select('url thumbnail title date keywords description')
+      .populate(populateObj)
+      .exec()
 
-      let postMinimumData = []
-      for (let i = 0; i < posts.length; i++) {
-        postMinimumData[i] = {
-          url: posts[i].url,
-          postImg:
-            posts[i].thumbnail &&
-            `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
-          postGradient:
-            posts[i].thumbnail &&
-            `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
-          title: posts[i].title,
-          summaryTextHtml: posts[i].description,
-          author:
-            `${posts[i].author.userFirstName} ` +
-            `${posts[i].author.userLastName}`,
-          avatar: posts[i].author.userAvatar,
-          date: dbDateToNormalDate(posts[i].date),
-          keywords: keywordsToArr(posts[i].keywords[0])
-        }
+    let postMinimumData = []
+    for (let i = 0; i < posts.length; i++) {
+      postMinimumData[i] = {
+        url: posts[i].url,
+        postImg:
+          posts[i].thumbnail &&
+          `url(${process.env.CDN_URL}/articles//${posts[i].url}/${posts[i].thumbnail.name})`,
+        postGradient:
+          posts[i].thumbnail &&
+          `linear-gradient(180.07deg, rgba(0, 0, 0, 0) 0.06%, ${posts[i].thumbnail.color} 73.79%)`,
+        title: posts[i].title,
+        summaryTextHtml: posts[i].description,
+        author:
+          `${posts[i].author.userFirstName} ` +
+          `${posts[i].author.userLastName}`,
+        avatar: posts[i].author.userAvatar,
+        date: dbDateToNormalDate(posts[i].date),
+        keywords: keywordsToArr(posts[i].keywords[0])
       }
+    }
 
-      res.status(200).send({advancedArr: postMinimumData})
-    })
+    res.status(200).send({advancedArr: postMinimumData})
+  } catch (err) {
+    res.status(404).send(err)
+    return
+  }
 }

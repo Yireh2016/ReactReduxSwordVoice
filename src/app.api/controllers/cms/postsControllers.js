@@ -4,39 +4,34 @@ import axios from 'axios'
 import {createSitemap} from 'sitemap'
 
 import {removeSiteMap, addToSiteMap} from '../../services/sitemapManager'
-// var fs = require('fs');
-// var dir = './tmp';
-
-// if (!fs.existsSync(dir)){
-//     fs.mkdirSync(dir);
-// }
 
 let articleModel = mongoose.model('Article')
 
 let siteModel = mongoose.model('Site')
 
-export const createPostCtrl = (req, res) => {
+export const createPostCtrl = async (req, res) => {
   const projectData = req.body
   let article = new articleModel(projectData.article)
+  try {
+    await axios.post(
+      `${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`
+    )
 
-  axios
-    .post(`${process.env.CDN_URL}/cdn/createPost/${projectData.article.url}`)
-    .then(result => {
-      article.save(err => {
-        if (err) {
-          console.log(`hubo error creando articulo ${err}`)
-          res.json(400, {code: 400, message: `there was an error: ${err}`})
-        } else {
-          //creando carpeta con nuevo proyecto
+    try {
+      await article.save()
+    } catch (err) {
+      console.log(`hubo error creando articulo ${err}`)
+      res.json(400, {code: 400, message: `there was an error: ${err}`})
+      return
+    }
 
-          res.status(200).send()
-        }
-      })
-    })
-    .catch(err => {
-      console.log('err en create post', err.message)
-      res.status(401).send(err.message)
-    })
+    //creando carpeta con nuevo proyecto
+
+    res.status(200).send()
+  } catch (err) {
+    console.log('err en create post', err.message)
+    res.status(401).send(err.message)
+  }
 }
 
 export const addClassToPostCtrl = (req, res) => {
@@ -58,19 +53,6 @@ export const addClassToPostCtrl = (req, res) => {
 export const getClassFromPostCtrl = (req, res) => {
   const {filename} = req.params
   const url = filename
-  // const readFile = () => {
-  //   fs.readFile(
-  //     "utf-8",
-  //     (err, data) => {
-  //       if (err) {
-  //         console.log("there was an error reading file", err);
-  //         res.status(404);
-  //       } else {
-  //         res.status(200).send(data);
-  //       }
-  //     }
-  //   );
-  // };
 
   axios
     .get(`${process.env.CDN_URL}/cdn/getClasses/${url}`)
@@ -80,7 +62,6 @@ export const getClassFromPostCtrl = (req, res) => {
       }
       if (apiRes.status === 200) {
         res.status(200).send(apiRes.data)
-        // res.status(200).send(data);
 
         fs.access(path, fs.F_OK, err => {
           if (err) {
@@ -88,8 +69,6 @@ export const getClassFromPostCtrl = (req, res) => {
             res.status(404).send()
             return
           }
-
-          // readFile();
         })
       }
     })
@@ -113,21 +92,21 @@ export const uploadTempFileCtrl = (req, res) => {
   // );
 }
 
-export const getPostCtrl = (req, res) => {
+export const getPostCtrl = async (req, res) => {
   let {skip} = req.query
 
   skip = skip ? parseInt(skip) : 0 //default number of post to fetch 7
 
   if (req.params.projectName) {
-    articleModel.findOne({projectName: req.params.projectName}, (err, post) => {
-      if (err) {
-        console.log('err', err)
-        res.status(401).json(err)
-        return
-      }
-
+    try {
+      const post = await articleModel.findOne({
+        projectName: req.params.projectName
+      })
       res.status(200).json(post)
-    })
+    } catch (err) {
+      res.status(401).json(err)
+      return
+    }
     return
   }
 
@@ -195,119 +174,112 @@ export const getArticleCtrl = (req, res) => {
       }
     })
 }
-export const updatePostCtrl = (req, res) => {
+export const updatePostCtrl = async (req, res) => {
   const {projectName, editionType} = req.query
   const data = req.body
 
-  articleModel
-    .find({projectName})
-    .then(article => {
-      let editionHistoryArr
-      if (data.editionHistory) {
-        editionHistoryArr = [...article[0].editionHistory, data.editionHistory]
-      }
-      data.editionHistory = editionHistoryArr
+  try {
+    const article = await articleModel.find({projectName})
 
-      const {
-        elements,
-        files,
-        keywords,
-        html,
-        projectName,
-        description,
-        title,
-        url,
-        thumbnail,
-        programDate,
-        date,
-        isPublished
-      } = data
+    let editionHistoryArr
+    if (data.editionHistory) {
+      editionHistoryArr = [...article[0].editionHistory, data.editionHistory]
+    }
+    data.editionHistory = editionHistoryArr
 
-      article[0].elements = elements ? elements : article[0].elements
-      article[0].files = files ? files : article[0].files
-      article[0].keywords = keywords ? keywords : article[0].keywords
+    const {
+      elements,
+      files,
+      keywords,
+      html,
+      projectName,
+      description,
+      title,
+      url,
+      thumbnail,
+      programDate,
+      date,
+      isPublished
+    } = data
 
-      article[0].html = html ? html : article[0].html
+    article[0].elements = elements ? elements : article[0].elements
+    article[0].files = files ? files : article[0].files
+    article[0].keywords = keywords ? keywords : article[0].keywords
 
-      //This code remove all html tag for a clear content
+    article[0].html = html ? html : article[0].html
 
-      if (html) {
-        const content = html.replace(
-          />undefined|<\/?html|<\/?xmp|<\/?wbr|<\/?video|<\/?var|<\/?ul|<\/?u|<\/?tt|<\/?track|<\/?tr|<\/?title|<\/?time|<\/?thead|<\/?th|<\/?tfoot|<\/?textarea|<\/?template|<\/?td|<\/?tbody|<\/?table|<\/?sup|<\/?summary|<\/?sub|<\/?style|<\/?strong|<\/?strike|<\/?span|<\/?spacer|<\/?source|<\/?small|<\/?slot|<\/?shadow|<\/?select|<\/?section|<\/?script|<\/?samp|<\/?s|<\/?ruby|<\/?rtc|<\/?rt|<\/?rp|<\/?rb|<\/?q|<\/?progress|<\/?pre|<\/?plaintext|<\/?picture|<\/?param|<\/?p|<\/?output|<\/?option|<\/?optgroup|<\/?ol|<\/?object|<\/?noscript|<\/?noframes|<\/?noembed|<\/?nobr|<\/?nextid|<\/?nav|<\/?multicol|<\/?meter|<\/?meta|<\/?menuitem|<\/?menu|<\/?marquee|<\/?mark|<\/?map|<\/?main|<\/?listing|<\/?link|<\/?li|<\/?legend|<\/?label|<\/?keygen|<\/?kbd|<\/?isindex|<\/?ins|<\/?input|<\/?img|<\/?image|<\/?iframe|<\/?i|<\/?hr|<\/?hgroup|<\/?header|<\/?head|<\/?frameset|<\/?frame|<\/?form|<\/?footer|<\/?font|<\/?figure|<\/?figcaption|<\/?fieldset|<\/?embed|<\/?em|<\/?element|<\/?dt|<\/?dl|<\/?div|<\/?dir|<\/?dialog|<\/?dfn|<\/?details|<\/?del|<\/?dd|<\/?datalist|<\/?data|<\/?content|<\/?command|<\/?colgroup|<\/?col|<\/?code|<\/?cite|<\/?center|<\/?caption|<\/?canvas|<\/?button|<\/?br|<\/?body|<\/?blockquote|<\/?blink|<\/?big|<\/?bgsound|<\/?bdo|<\/?bdi|<\/?basefont|<\/?base|<\/?b|<\/?audio|<\/?aside|<\/?article|<\/?area|<\/?applet|<\/?address|<\/?acronym|<\/?abbr|<\/?a|[\w-]+="?'?[\w:;.\/&()%#?@\s,\\-]*"?'?|<\/?h[1-6]|\/?>/gi,
-          ''
-        )
+    //This code remove all html tag for a clear content
 
-        article[0].content = content
-      }
+    if (html) {
+      const content = html.replace(
+        />undefined|<\/?html|<\/?xmp|<\/?wbr|<\/?video|<\/?var|<\/?ul|<\/?u|<\/?tt|<\/?track|<\/?tr|<\/?title|<\/?time|<\/?thead|<\/?th|<\/?tfoot|<\/?textarea|<\/?template|<\/?td|<\/?tbody|<\/?table|<\/?sup|<\/?summary|<\/?sub|<\/?style|<\/?strong|<\/?strike|<\/?span|<\/?spacer|<\/?source|<\/?small|<\/?slot|<\/?shadow|<\/?select|<\/?section|<\/?script|<\/?samp|<\/?s|<\/?ruby|<\/?rtc|<\/?rt|<\/?rp|<\/?rb|<\/?q|<\/?progress|<\/?pre|<\/?plaintext|<\/?picture|<\/?param|<\/?p|<\/?output|<\/?option|<\/?optgroup|<\/?ol|<\/?object|<\/?noscript|<\/?noframes|<\/?noembed|<\/?nobr|<\/?nextid|<\/?nav|<\/?multicol|<\/?meter|<\/?meta|<\/?menuitem|<\/?menu|<\/?marquee|<\/?mark|<\/?map|<\/?main|<\/?listing|<\/?link|<\/?li|<\/?legend|<\/?label|<\/?keygen|<\/?kbd|<\/?isindex|<\/?ins|<\/?input|<\/?img|<\/?image|<\/?iframe|<\/?i|<\/?hr|<\/?hgroup|<\/?header|<\/?head|<\/?frameset|<\/?frame|<\/?form|<\/?footer|<\/?font|<\/?figure|<\/?figcaption|<\/?fieldset|<\/?embed|<\/?em|<\/?element|<\/?dt|<\/?dl|<\/?div|<\/?dir|<\/?dialog|<\/?dfn|<\/?details|<\/?del|<\/?dd|<\/?datalist|<\/?data|<\/?content|<\/?command|<\/?colgroup|<\/?col|<\/?code|<\/?cite|<\/?center|<\/?caption|<\/?canvas|<\/?button|<\/?br|<\/?body|<\/?blockquote|<\/?blink|<\/?big|<\/?bgsound|<\/?bdo|<\/?bdi|<\/?basefont|<\/?base|<\/?b|<\/?audio|<\/?aside|<\/?article|<\/?area|<\/?applet|<\/?address|<\/?acronym|<\/?abbr|<\/?a|[\w-]+="?'?[\w:;.\/&()%#?@\s,\\-]*"?'?|<\/?h[1-6]|\/?>/gi,
+        ''
+      )
 
-      article[0].projectName = projectName
-        ? projectName
-        : article[0].projectName
-      article[0].description = description
-        ? description
-        : article[0].description
-      article[0].title = title ? title : article[0].title
-      article[0].url = url ? url : article[0].url
-      article[0].thumbnail = thumbnail ? thumbnail : article[0].thumbnail
+      article[0].content = content
+    }
 
-      article[0].editionHistory = data.editionHistory
-        ? data.editionHistory
-        : article[0].edtionHistory
-      article[0].programDate = programDate
-        ? programDate
-        : article[0].programDate
-      article[0].date = date ? date : article[0].date
-      article[0].isPublished =
-        isPublished === undefined ? article[0].isPublished : isPublished
+    article[0].projectName = projectName ? projectName : article[0].projectName
+    article[0].description = description ? description : article[0].description
+    article[0].title = title ? title : article[0].title
+    article[0].url = url ? url : article[0].url
+    article[0].thumbnail = thumbnail ? thumbnail : article[0].thumbnail
 
-      article[0].save(async err => {
-        if (err) {
-          res.status(401).send(err)
-          return
+    article[0].editionHistory = data.editionHistory
+      ? data.editionHistory
+      : article[0].edtionHistory
+    article[0].programDate = programDate ? programDate : article[0].programDate
+    article[0].date = date ? date : article[0].date
+    article[0].isPublished =
+      isPublished === undefined ? article[0].isPublished : isPublished
+
+    try {
+      await article[0].save()
+
+      switch (editionType) {
+        case 'unpublish': {
+          try {
+            await removeSiteMap({
+              url: `${process.env.WEB_URL}/blog/post/${article[0].url}`
+            })
+
+            res.status(200).send('Unpublishing ready')
+          } catch (err) {
+            res.status(200).send(err)
+          }
+
+          break
         }
 
-        switch (editionType) {
-          case 'unpublish': {
-            try {
-              await removeSiteMap({
-                url: `${process.env.WEB_URL}/blog/post/${article[0].url}`
-              })
-
-              res.status(200).send('Unpublishing ready')
-            } catch (error) {
-              res.status(200).send(error)
-            }
-
-            break
+        case 'publish': {
+          try {
+            await addToSiteMap({
+              url: `${article[0].url}`,
+              date:
+                article[0].date
+                  .toISOString()
+                  .match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) + '+00:00'
+            })
+            res.status(200).send('publish ready')
+          } catch (err) {
+            res.status(200).send(err)
           }
 
-          case 'publish': {
-            try {
-              await addToSiteMap({
-                url: `${article[0].url}`,
-                date:
-                  article[0].date
-                    .toISOString()
-                    .match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/g) + '+00:00'
-              })
-              res.status(200).send('publish ready')
-            } catch (error) {
-              res.status(200).send(error)
-            }
-
-            break
-          }
-          default: {
-            res.status(200).send('ok')
-            break
-          }
+          break
         }
-      })
-    })
-    .catch(err => {
-      console.log(err)
+        default: {
+          res.status(200).send('ok')
+          break
+        }
+      }
+    } catch (err) {
       res.status(401).send(err)
-    })
+      return
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(401).send(err)
+  }
 }
 
 export const deletePostCtrl = (req, res) => {
@@ -322,7 +294,7 @@ export const deletePostCtrl = (req, res) => {
     })
 }
 
-export const addToSiteMapCtrl = (req, res) => {
+export const addToSiteMapCtrl = async (req, res) => {
   const {date, url} = req.body
 
   const newUrl = {
@@ -332,62 +304,54 @@ export const addToSiteMapCtrl = (req, res) => {
     lastmod: date
   }
 
-  siteModel
-    .find()
-    .then(site => {
-      site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl]
-      site[0].save((err, newSite) => {
-        if (err) {
-          res.status(404).send(err)
-          return
-        }
+  try {
+    const site = await siteModel.find()
 
-        const sitemap = createSitemap(newSite.sitemap)
+    site[0].sitemap.urls = [...site[0].sitemap.urls, newUrl]
+    site[0].save((err, newSite) => {
+      if (err) {
+        res.status(404).send(err)
+        return
+      }
 
-        res.header('Content-Type', 'application/xml')
-        res.status(200).send(sitemap.toXML())
-      })
+      const sitemap = createSitemap(newSite.sitemap)
+
+      res.header('Content-Type', 'application/xml')
+      res.status(200).send(sitemap.toXML())
     })
-    .catch(err => {
-      res.status(404).send(err)
-    })
+  } catch (err) {
+    res.status(404).send(err)
+  }
 }
-export const removeSiteMapCtrl = (req, res) => {
+
+export const removeSiteMapCtrl = async (req, res) => {
   const {url} = req.body
 
-  siteModel
-    .find()
-    .then(site => {
-      const urlsArr = site[0].sitemap.urls
-      console.log('urlsArr', urlsArr)
+  try {
+    const site = await siteModel.find()
+    const urlsArr = site[0].sitemap.urls
+    console.log('urlsArr', urlsArr)
 
-      //`${process.env.WEB_URL}/blog/post/${url}`
-      const urlsFilterArr = urlsArr.filter(link => {
-        return link.url !== `${process.env.WEB_URL}/blog/post/${url}`
-      })
-
-      console.log('urlsFilterArr', urlsFilterArr)
-
-      site[0].sitemap.urls = urlsFilterArr
-
-      site[0].save((err, newSite) => {
-        if (err) {
-          res.status(404).send(err)
-          return
-        }
-
-        const sitemap = createSitemap(newSite.sitemap)
-
-        res.header('Content-Type', 'application/xml')
-        res.status(200).send(sitemap.toXML())
-      })
+    const urlsFilterArr = urlsArr.filter(link => {
+      return link.url !== `${process.env.WEB_URL}/blog/post/${url}`
     })
-    .catch(err => {
-      res.status(404).send(err)
-    })
+
+    console.log('urlsFilterArr', urlsFilterArr)
+
+    site[0].sitemap.urls = urlsFilterArr
+
+    const newSite = await site[0].save()
+
+    const sitemap = createSitemap(newSite.sitemap)
+
+    res.header('Content-Type', 'application/xml')
+    res.status(200).send(sitemap.toXML())
+  } catch (err) {
+    res.status(404).send(err)
+  }
 }
 
-export const createSiteMapCtrl = (req, res) => {
+export const createSiteMapCtrl = async (_, res) => {
   const urlArr = [
     {
       url: `${process.env.WEB_URL}`,
@@ -414,32 +378,27 @@ export const createSiteMapCtrl = (req, res) => {
       lastmod: '2019-09-07T14:09:33+00:00'
     }
   ]
-  siteModel
-    .find()
-    .then(site => {
-      if (site.length === 0) {
-        const siteInstance = new siteModel()
-        siteInstance.sitemap.urls = urlArr
-        siteInstance.save((err, newSite) => {
-          if (err) {
-            res.status(404).send(err)
-            return
-          }
 
-          const sitemap = createSitemap(newSite.sitemap)
+  try {
+    const site = await siteModel.find()
 
-          res.header('Content-Type', 'application/xml')
-          res.status(200).send(sitemap.toXML())
-        })
-        return
-      }
+    if (site.length === 0) {
+      const siteInstance = new siteModel()
+      siteInstance.sitemap.urls = urlArr
+      const newSite = await siteInstance.save()
 
-      const sitemap = createSitemap(site[0].sitemap)
+      const sitemap = createSitemap(newSite.sitemap)
 
       res.header('Content-Type', 'application/xml')
       res.status(200).send(sitemap.toXML())
-    })
-    .catch(err => {
-      res.status(404).send(err)
-    })
+      return
+    }
+
+    const sitemap = createSitemap(site[0].sitemap)
+
+    res.header('Content-Type', 'application/xml')
+    res.status(200).send(sitemap.toXML())
+  } catch (err) {
+    res.status(404).send(err)
+  }
 }

@@ -26,13 +26,13 @@ const userSchema = new Schema({
 userSchema.methods.setPassword = function (password) {
   this.userSalt = crypto.randomBytes(16).toString('hex')
   this.userPassword = crypto
-    .pbkdf2Sync(password, this.userSalt, 1000, 64, null)
+    .pbkdf2Sync(password, this.userSalt, 1000, 64, 'SHA1')
     .toString('hex')
 }
 
 userSchema.methods.verifyPassword = function (password) {
   let hash = crypto
-    .pbkdf2Sync(password, this.userSalt, 1000, 64, null)
+    .pbkdf2Sync(password, this.userSalt, 1000, 64, 'SHA1')
     .toString('hex')
   return this.userPassword === hash
 }

@@ -15,7 +15,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Work Sans", sans-serif;
+  font-family: 'Work Sans', sans-serif;
   background-color: #ffffff;
   background-color: var(--white);
   z-index: -1;
@@ -30,8 +30,8 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-family: "Work Sans";
-  font-family: "Sedgwick Ave", cursive;
+  font-family: 'Work Sans';
+  font-family: 'Sedgwick Ave', cursive;
 }
 
 /* responsive old ways */
@@ -117,7 +117,7 @@ h6 {
   box-sizing: border-box;
 }
 :global(.fila:after) {
-  content: "";
+  content: '';
   overflow: auto;
   display: block;
   clear: both;

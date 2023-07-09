@@ -6,13 +6,13 @@ let siteModel = mongoose.model('Site')
 const sitemapCtrl = (req, res) => {
   siteModel
     .find()
-    .then(site => {
-      if (site.length === 0) {
+    .then(([site]) => {
+      if (!site) {
         res.status(404).send('File Not Found')
         return
       }
-      console.log('sitemap', site[0].sitemap)
-      const sitemapCreated = createSitemap(site[0].sitemap)
+      console.log('sitemap', site.sitemap)
+      const sitemapCreated = createSitemap(site.sitemap)
 
       res.header('Content-Type', 'application/xml')
       res.status(200).send(sitemapCreated.toXML())
